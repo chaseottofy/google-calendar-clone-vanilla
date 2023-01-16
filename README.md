@@ -1,25 +1,25 @@
 # google calendar clone
 
-#### contact
-### ottofy@zohomail.com
+### contact: ottofy@zohomail.com
 
-### Jan 15, 23
-Project is still in development, I'll be periodically updating the documentation and would like to have it done by the end of the month.
+### Jan 15, 2023
+**Project is still in development.** 
+I'll be periodically updating the documentation and would like to have it done within three weeks. Note that what I've provided in ./dist is purely for development/viewing. The production build will be a fraction of the size.
 
-I've provided a dozen or so screenshots of the application on imgbb
+**Viewing**
+For now, you can view the app through screenshots (link below), or simply download the repo and open `./dist/testbundle.html` in your browser (or any live server extension). I will host on github pages shortly.
 
-**[SCREENSHOTS_LINK](https://ibb.co/album/fQrm1F)**.
-https://ibb.co/album/fQrm1F
+
+#### **[SCREENSHOTS](https://ibb.co/album/fQrm1F)** (https://ibb.co/album/fQrm1F)
 
 <br>
 
-## cloning this repo
+## Cloning this repo
 ### `git clone`
 ### `npm install`
 
 <br>
 
-open `./dist/testbundle.html` in browser for a preview example build
 
 
 ## Available Scripts
