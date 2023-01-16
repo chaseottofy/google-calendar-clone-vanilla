@@ -4963,6 +4963,23 @@ function setMonthView(context, store, datepickerContext) {
     cell.classList.add("monthview--daycontent__form-temp");
     cell.style.backgroundColor = offsetColor;
     const [x, y] = getCoordinatesFromCell(cell);
+    console.log(y)
+    
+    let offX = cell.offsetLeft;
+    let offY = cell.offsetTop;
+    let offH = cell.offsetHeight;
+    let offW = cell.offsetWidth;
+    console.log(offX, offY)
+
+    if (x >= 3) {
+      offX -= (offW * (x - 2));
+    }
+    if (y >= 2) {
+      offY -= (offH * 2);
+    } else {
+      offY += offH;
+    }
+    // console.log(x, y)
 
     // *** config & open form ***
     store.setFormResetHandle("month", handleMonthviewEditFormClose);
@@ -4979,6 +4996,9 @@ function setMonthView(context, store, datepickerContext) {
     // provide callback to finish setup and open form
     const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_2__["default"].getConfig(setup.getSetup());
     (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_4__["default"])(context, store, entry, datepickerContext, finishSetup);
+    const modal = document.querySelector(".entry__options")
+    modal.style.top = offY + "px";
+    modal.style.left = offX + "px";
     // *******************
   }
 
