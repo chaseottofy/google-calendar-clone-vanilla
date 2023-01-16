@@ -40,6 +40,7 @@ const sidebar = document.querySelector(".sidebar");
 const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
+const listviewBody = document.querySelector(".listview__body");
 
 export default function renderViews(context, datepickerContext, store) {
   function setColorScheme() {
@@ -231,6 +232,8 @@ export default function renderViews(context, datepickerContext, store) {
       viewsContainer.classList.remove("container__calendars-sb-active")
       sidebar.classList.add("hide-sidebar");
       dateTimeWrapper.classList.remove("datetime-inactive");
+      listviewBody.removeAttribute("style");
+      // listviewBody.style.width = "100%";
     } else {
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
@@ -239,6 +242,8 @@ export default function renderViews(context, datepickerContext, store) {
         resetdatepicker()
         store.setResetDatepickerCallback(null)
       }
+      listviewBody.style.width = "100%";
+      listviewBody.style.marginLeft = "0";
       toggleForm.classList.add("hide-toggle--form")
       viewsContainer.classList.add("container__calendars-sb-active")
       dateTimeWrapper.classList.add("datetime-inactive");

@@ -7,6 +7,9 @@
   width: calc(100% - 66px);
   background: var(--black1);
   border-left: var(--bordergrey);
+  transition-property: margin-left, width;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-duration: 0.3s;
 }
 
 .listview__rowgroup {
@@ -159,17 +162,19 @@
     margin-left: 4px;
   }
 
-
   .rowgroup-content {
     padding-left: 6px;
   }
+
   .rowgroup--cell__color {
     margin-right: 6px;
   }
+
   .rowgroup--cell__time {
     font-size: 11px;
     width: 118px;
   }
+
   .rowgroup--cell__title {
     font-size: 12px;
   }
@@ -178,7 +183,6 @@
 @media screen and (max-width: 530px) {
   .listview__body {
     margin-left: 0px;
-    width: 100%;
+    width: 100% !important;
   }
-  /* margin-left: 0px; */
 }
