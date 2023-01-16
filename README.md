@@ -18,8 +18,8 @@ open `./dist/testbundle.html` to preview example build
 
 ## Available Scripts
 
-###`npm run build`
+### `npm run build`
 Builds the app and necessary resources in the `dist` folder.
 
-###`npm run dev`
+### `npm run dev`
 Starts the webpack development server on `localhost:3000`.
