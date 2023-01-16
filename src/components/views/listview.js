@@ -225,8 +225,6 @@ export default function setListView(context, store, datepickerContext) {
       return acc;
     }, {})
 
-    // console.log(groupedEntries);
-    
     createRowGroups(groupedEntries);
     listview.onclick = delegateListview;
   }

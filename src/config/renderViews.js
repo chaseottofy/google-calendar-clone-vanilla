@@ -418,14 +418,9 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
-  /* ***************************** */
   /* configure keyboard shortcuts */
-  /* UPDATE: 2022-01-14
+  /* 2022-01-14
   * Google calendar has recently updated their app wide throttling from a global value of around 150 to the minimum of 4ms(might be 10) for period changes and (250-300) for view changes. 
-  * 
-  * I don't have too much of a personal preference for either, but I was taken aback by how fast it felt, and not in a good way. 
-  * If you want to see what I mean by 'jarring', go to google calendar month view and hold down "n" or "p". I'm almost certain this is some kind of bug as I'm also getting loads of "error caught in promise" responses in the console.
-  * 
   * For now, I'm keeping the throttle at 150ms. 
   */
   function delegateGlobalKeyDown(e) {
