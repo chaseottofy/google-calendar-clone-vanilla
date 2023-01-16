@@ -1,5 +1,4 @@
-# google-calendar-clone-vanilla
-google calendar clone
+# google calendar clone
 
 ### Jan 15, 23
 Project is still in development, I'll be periodically updating the documentation and would like to have it done by the end of the month.
