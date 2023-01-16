@@ -565,15 +565,27 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 150)
+  // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
+
+  // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
+  // Note that Each modal/popup has its own keydown close event on escape thats defined within the scope of its own function,
+  // once it is closed, the event listener is removed from the DOM.
+  let [lk, lk2] = ['', ''];
   function handleGlobalKeydown(e) {
-    // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
-
-    // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
-    // Note that Each modal/popup has its own keydown close event on escape thats defined within the scope of its own function,
-    // once it is closed, the event listener is removed from the DOM.
-
     if (!store.getShortcutsStatus()) return;
     if (store.hasActiveOverlay()) return;
+
+    // prevent ctrl + key shortcuts from triggering at all
+    lk = e.key
+    if (lk === "Control") {
+      lk2 = "Control"
+      return;
+    }
+
+    if (lk2 === "Control" && lk !== "Control") {
+      lk2 = ""
+      return;
+    }
     getKeyPressThrottled(e)
   }
 
