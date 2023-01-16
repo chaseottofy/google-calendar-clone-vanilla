@@ -4093,6 +4093,7 @@ function setListView(context, store, datepickerContext) {
     const activeCell = document?.querySelector(".rowgroup--cell-active");
     if (activeCell) {
       activeCell.classList.remove("rowgroup--cell-active");
+      activeCell.removeAttribute("style");
     }
   }
 
@@ -4102,21 +4103,26 @@ function setListView(context, store, datepickerContext) {
     const entry = store.getEntry(id);
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
+    cell.style.backgroundColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.hextorgba)(color, 0.2);
 
     const rect = cell.getBoundingClientRect();
     const height = cell.offsetHeight;
     const rectTop = parseInt(rect.top) + height;
     const rectLeft = parseInt(rect.left);
+    const modalHeight = 165;
 
-    let y = rectTop;
-    if (rectTop > window.innerHeight) {
-      y = window.innerHeight - rectTop;
+    let y = rectTop + 12;
+    if (rectTop + modalHeight > window.innerHeight) {
+      y = rectTop - modalHeight - height - 12;
     }
+
+    console.log(rectTop, window.innerHeight)
 
     let x = rectLeft;
     if (rectLeft + 150 > window.innerWidth) {
       x = window.innerWidth - 150;
     }
+
 
     // *** config & open form ***
     store.setFormResetHandle("list", resetCellActive);
@@ -4130,6 +4136,11 @@ function setListView(context, store, datepickerContext) {
 
     const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_3__["default"].getConfig(setup.getSetup());
     (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_0__["default"])(context, store, entry, datepickerContext, finishSetup);
+    const modal = document.querySelector(".entry__options")
+    modal.style.top = y + "px";
+    modal.style.left = x + "px";
+    // modal.style.top = offsettop + "px";
+    // modal.style.left = offsetleft + "px";
   }
 
 
@@ -6087,6 +6098,7 @@ const sidebar = document.querySelector(".sidebar");
 const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
+const listviewBody = document.querySelector(".listview__body");
 
 function renderViews(context, datepickerContext, store) {
   function setColorScheme() {
@@ -6141,7 +6153,6 @@ function renderViews(context, datepickerContext, store) {
   function setInitialAttributes() {
     selectElement.setAttribute("data-value", `${context.getComponent().slice(0, 1).toUpperCase()}`)
 
-    console.log(new Date().getDate())
     headerLogo.setAttribute("data-current-day-of-month", new Date().getDate())
   }
 
@@ -6278,6 +6289,8 @@ function renderViews(context, datepickerContext, store) {
       viewsContainer.classList.remove("container__calendars-sb-active")
       sidebar.classList.add("hide-sidebar");
       dateTimeWrapper.classList.remove("datetime-inactive");
+      listviewBody.removeAttribute("style");
+      // listviewBody.style.width = "100%";
     } else {
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
@@ -6286,6 +6299,8 @@ function renderViews(context, datepickerContext, store) {
         resetdatepicker()
         store.setResetDatepickerCallback(null)
       }
+      listviewBody.style.width = "100%";
+      listviewBody.style.marginLeft = "0";
       toggleForm.classList.add("hide-toggle--form")
       viewsContainer.classList.add("container__calendars-sb-active")
       dateTimeWrapper.classList.add("datetime-inactive");
@@ -7469,7 +7484,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-console.log(_testdata_json__WEBPACK_IMPORTED_MODULE_5__)
 const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 /*
   // entry methods

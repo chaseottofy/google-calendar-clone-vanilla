@@ -4,7 +4,6 @@ import { testDate, compareDates } from '../utilities/dateutils'
 import locales from "../locales/en"
 import defautlKeyboardShortcuts from "../locales/kbDefault"
 import testdata from "../testdata.json"
-console.log(testdata)
 const colors = locales.colors
 /*
   // entry methods

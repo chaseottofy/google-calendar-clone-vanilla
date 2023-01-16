@@ -2,7 +2,10 @@ import getEntryOptionModal from "../menus/entryOptions";
 import setViews from "../../config/setViews";
 import FormSetup from "../forms/setForm";
 import fullFormConfig from "../forms/formUtils";
-import { getClosest } from '../../utilities/helpers'
+import { 
+  getClosest,
+  hextorgba
+} from '../../utilities/helpers'
 import {
   getFormDateObject,
   getDateFromAttribute,
@@ -112,6 +115,7 @@ export default function setListView(context, store, datepickerContext) {
     const activeCell = document?.querySelector(".rowgroup--cell-active");
     if (activeCell) {
       activeCell.classList.remove("rowgroup--cell-active");
+      activeCell.removeAttribute("style");
     }
   }
 
@@ -121,21 +125,26 @@ export default function setListView(context, store, datepickerContext) {
     const entry = store.getEntry(id);
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
+    cell.style.backgroundColor = hextorgba(color, 0.2);
 
     const rect = cell.getBoundingClientRect();
     const height = cell.offsetHeight;
     const rectTop = parseInt(rect.top) + height;
     const rectLeft = parseInt(rect.left);
+    const modalHeight = 165;
 
-    let y = rectTop;
-    if (rectTop > window.innerHeight) {
-      y = window.innerHeight - rectTop;
+    let y = rectTop + 12;
+    if (rectTop + modalHeight > window.innerHeight) {
+      y = rectTop - modalHeight - height - 12;
     }
+
+    console.log(rectTop, window.innerHeight)
 
     let x = rectLeft;
     if (rectLeft + 150 > window.innerWidth) {
       x = window.innerWidth - 150;
     }
+
 
     // *** config & open form ***
     store.setFormResetHandle("list", resetCellActive);
@@ -149,6 +158,11 @@ export default function setListView(context, store, datepickerContext) {
 
     const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
+    const modal = document.querySelector(".entry__options")
+    modal.style.top = y + "px";
+    modal.style.left = x + "px";
+    // modal.style.top = offsettop + "px";
+    // modal.style.left = offsetleft + "px";
   }
 
 
