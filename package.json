@@ -1,0 +1,28 @@
+{
+  "name": "google-calendar-clone-vanilla",
+  "version": "1.0.0",
+  "description": "zero dependency clone of google calendar written in vanilla javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chaseottofy/google-calendar-clone-vanilla.git"
+  },
+  "keywords": [
+    "google-calendar",
+    "vanilla",
+    "calendar",
+    "clone",
+    "css",
+    "html",
+    "javascript"
+  ],
+  "author": "Chase Ottofy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chaseottofy/google-calendar-clone-vanilla/issues"
+  },
+  "homepage": "https://github.com/chaseottofy/google-calendar-clone-vanilla#readme"
+}
