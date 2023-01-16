@@ -668,6 +668,10 @@ class Store {
     }
   }
 
+  getCtgIndex(category) {
+    return Object.keys(this.ctg).indexOf(category);
+  }
+
   /**
    * 
    * @param {string} newName 

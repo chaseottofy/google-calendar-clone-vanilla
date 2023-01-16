@@ -50,6 +50,7 @@ import "./styles/aside/shortcuts.css"
 // * redo listview
 // * time picker form
 // * only show times from period of day in sidebar
+// * favicon
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -60,3 +61,4 @@ setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
 // console.log(store.ctg)
 // console.log(store.getDefaultCtg()[0])
+console.log()

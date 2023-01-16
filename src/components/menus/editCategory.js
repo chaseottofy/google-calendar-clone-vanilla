@@ -1,4 +1,6 @@
 import locales from "../../locales/en"
+import { createCheckIcon } from "../../utilities/svgs";
+const checkIcon = createCheckIcon('var(--taskcolor');
 const colors = Object.values(locales.colors)
 
 class CatFormHelper {
@@ -44,7 +46,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     colorOption.setAttribute("data-color-hex", color)
 
     if (color === selected) {
-      colorOption.classList.add("color-selected");
+      colorOption.append(checkIcon);
       formhelper.setColor(color);
     }
 
@@ -70,9 +72,9 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
     const colorOptions = document.querySelectorAll(".color-picker--option");
     colorOptions.forEach((option) => {
-      option.classList.remove("color-selected");
+      option.innerText = "";
     })
-    target.classList.add("color-selected");
+    target.appendChild(checkIcon);
     colorPickerTitle.style.background = color;
     formhelper.setColor(color);
   }
@@ -89,21 +91,28 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   function validateNewCategory(categoryName, color) {
     const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
     const origName = formhelper.getOriginalName();
-    
+    // const [origNameIdx, newNameIdx] = [
+    //   store.getCategoryIndex(origName)
+    // ]
+
     let errormsg = false;
     if (trimName.length < 1) {
       formhelper.setErrMsg("Category name is required");
       errormsg = true;
-    } else if (!editing && store.hasCtg(trimName)) {
-      formhelper.setErrMsg("Category already exists");
-      errormsg = true;
+    } else if (store.hasCtg(trimName)) {
+      if (!editing || (editing && origName !== trimName)) {
+        formhelper.setErrMsg("Category already exists");
+        errormsg = true;
+      }
     }
+
 
     if (errormsg) {
       ctgErrMsg.classList.remove("hide-ctg-err");
       handleInputErr(errormsg);
       return;
     } else {
+      console.log('ran')
       if (editing) {
         if (origName === trimName && formhelper.getOriginalColor() === color) {
           closeCategoryForm();

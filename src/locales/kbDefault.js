@@ -14,7 +14,8 @@ export default {
   12: {shortcut: "→", action: 'next period.'},
   13: { shortcut: 's', action: 'toggle sidebar' },
   14: { shortcut: 'f', action: 'open form' },
-  15: { shortcut: 'a', action: 'open settings' },
-  16: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
-  17: { shortcut: "esc", action: 'return to calendar' },
+  15: { shortcut: '+', action: 'open new category form' },
+  16: { shortcut: 'a', action: 'open settings' },
+  17: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
+  18: { shortcut: "esc", action: 'return to calendar' },
 }

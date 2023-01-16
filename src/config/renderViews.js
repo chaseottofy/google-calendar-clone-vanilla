@@ -8,6 +8,7 @@ import handleSidebarFooter from "../components/menus/sidebarFooter";
 import handleShortCutsModal from "../components/menus/shortcutsModal";
 import getSidebarSubMenu from "../components/menus/sidebarSubMenu";
 import createGoTo from "../components/forms/goto";
+import createCategoryForm from "../components/menus/editCategory";
 
 const appBody = document.querySelector(".body");
 const colorSchemeMeta = document.getElementsByName("color-scheme")[0];
@@ -559,6 +560,13 @@ export default function renderViews(context, datepickerContext, store) {
       case "g":
         createGoTo(context, store, datepickerContext);
         break;
+
+      case "+":
+        const targetcat = {
+          name: "new category",
+          color: "#2C52BA",
+        }
+        createCategoryForm(store, targetcat, false, null);
       default:
         break;
     }

@@ -1705,6 +1705,7 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
 
   function validateNewCategory(categoryName, color) {
     const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
+    const origName = formhelper.getOriginalName();
     
     let errormsg = false;
     if (trimName.length < 1) {
@@ -1721,11 +1722,15 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
       return;
     } else {
       if (editing) {
-        if (formhelper.getOriginalName() === trimName && formhelper.getOriginalColor() === color) {
+        if (origName === trimName && formhelper.getOriginalColor() === color) {
           closeCategoryForm();
           return;
         } else {
-          store.updateCtg(trimName, color, formhelper.getName());
+          if (origName !== trimName){
+            store.updateCtg(trimName, color, formhelper.getName());
+          } else {
+            store.updateCtgColor(origName, color);
+          }
         }
       } else {
         store.addNewCtg(trimName, color);
@@ -7812,8 +7817,13 @@ class Store {
     return hasctg;
   }
 
-  moveCategoryEntriesToNewCategory(category, newCategory) {
-    if (this.hasCtg(category)) {
+  /**
+   * 
+   * @param {string} category 
+   * @param {string} newCategory 
+   */
+  moveCategoryEntriesToNewCategory(category, newCategory, newName) {
+    if (this.hasCtg(category) || newName === true) {
       this.store.forEach(entry => {
         if (entry.category === category) {
           entry.category = newCategory;
@@ -7840,7 +7850,14 @@ class Store {
     }
   }
 
+  /**
+   * 
+   * @param {string} categoryName 
+   * @param {string} color 
+   * @desc updates the color of a category
+   */
   updateCtgColor(categoryName, color) {
+    console.log("ran new color")
     if (this.hasCtg(categoryName)) {
       this.ctg[categoryName].color = color;
       Store.setCtg(this.ctg)
@@ -7856,13 +7873,12 @@ class Store {
    * @desc note that 'value' @ [key, value] is necessary to segment the object, even if it is not directly referenced
    */
   updateCtg(newName, newColor, oldName) {
+    console.log('ran update everything')
     let entries = Object.entries(this.ctg);
     let hasColor = newColor !== null;
     let count = 0;
     let length = entries.length;
-    console.log(entries)
 
-    /*
     for (let [key, value] of entries) {
       count++
       if (count === 1) {
@@ -7886,9 +7902,13 @@ class Store {
       return;
     } else {
       this.ctg = Object.fromEntries(entries);
+      this.moveCategoryEntriesToNewCategory(
+        oldName, 
+        newName, 
+        true
+      )
       Store.setCtg(this.ctg)
     }
-    */
   }
   /* ********************* */
 
@@ -9913,9 +9933,10 @@ __webpack_require__.r(__webpack_exports__);
 
 // localStorage.clear()
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
+// store.moveCategoryEntriesToNewCategory("default", "computers", true)
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 // console.log(store.ctg)
-console.log(_context_store__WEBPACK_IMPORTED_MODULE_1__["default"].getDefaultCtg()[0])
+// console.log(store.getDefaultCtg()[0])
 })();
 
 /******/ })()
