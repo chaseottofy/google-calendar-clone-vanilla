@@ -17,7 +17,7 @@ For now, you can view the app through screenshots (link below), or simply downlo
 <ul>
 <li> 
 
-**build list/agenda view prototype -- [screenshot](https://ibb.co/3CCW8qn)** 
+**build list/agenda view prototype -- [screenshot](https://ibb.co/dPkFs8m)** 
 </li>
 
 <li>
