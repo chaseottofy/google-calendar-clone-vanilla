@@ -93,14 +93,14 @@ function formatStartEndDate(start, end, flag) {
     if (startmonth === endmonth) {
       if (startday === endday) {
         // same : day, month, year
-        return `${startmonth} ${startday} ${tempstartyear}`
+        return `${startmonth} ${startday} ${startyear}`
       } else {
         // same : month, year
-        return `${startmonth} ${startday} – ${endday}, ${tempstartyear}`
+        return `${startmonth} ${startday} – ${endday}, ${startyear}`
       }
     } else {
       // same : year
-      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${tempstartyear}`
+      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${startyear}`
     }
   } else {
     // same : nothing

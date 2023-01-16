@@ -1,6 +1,7 @@
 .listview__body {
   margin-left: 66px;
   height: auto;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   width: calc(100% - 66px);
@@ -14,6 +15,10 @@
   width: 100%;
   height: auto;
   flex-direction: row;
+}
+
+.listview__rowgroup:last-child {
+  border-bottom: none;
 }
             
 .rowgroup-header {

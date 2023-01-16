@@ -3,6 +3,8 @@ import localStoreKeyNames from "./constants"
 import { testDate, compareDates } from '../utilities/dateutils'
 import locales from "../locales/en"
 import defautlKeyboardShortcuts from "../locales/kbDefault"
+import testdata from "../testdata.json"
+console.log(testdata)
 const colors = locales.colors
 /*
   // entry methods
@@ -26,10 +28,6 @@ const colors = locales.colors
   "getWeekEntries",
   "getYearEntries",
   "getGroupedYearEntries",
-
-
-
-
   // category methods
   "addNewCtg",
   "deleteCategory",
@@ -49,33 +47,22 @@ const colors = locales.colors
   "removeCategoryAndEntries",
   "setCategoryStatus",
   "updateCtgColor",
-
-
-
   // keyboard shortcuts
   "getShortcuts",
   "setShortCut",
   "setShortcutsStatus",
   "getShortcutsStatus",
-
-
-
   // overlay management
   "addActiveOverlay",
   "removeActiveOverlay",
   "getActiveOverlay",
   "hasActiveOverlay",
-
-
-
   // user upload/download local storage
   "validateUserUpload",
   "setUserUpload",
   "setDataReconfigCallback",
   "getUserUpload",
   "getDataReconfigCallback",
-
-
   ***************************************
   // form management
   "setFormRenderHandle",
@@ -87,21 +74,16 @@ const colors = locales.colors
   "setRenderFormCallback",
   "getRenderFormCallback",
   ***************************************
-
-
   ***************************************
   // sidebar management
   "setRenderSidebarCallback",
   "getRenderSidebarCallback"
   ***************************************
-
-
   ***************************************
   // DATEPICKER MANAGEMENT
   "setResetDatepickerCallback",
   "getResetDatepickerCallback",
   ***************************************
-
   ***************************************
   // CALENDAR MANAGEMENT
   "setResizeHandle",
@@ -112,24 +94,11 @@ const colors = locales.colors
 // Store is passed to all calendar views in the following order : 
 // ./index > ./renderViews > ./setViews > component
 
-/**
- * local storage management
- * core crud
- * entry data sort/filter
- * entry data reducers
- * manage categories
- * manage keyboard shortcuts
- * overlay management
- * json upload/download
- * state management
- */
-// it is also passed to a number of other components including : 
-// datepicker, form, sidebar, sidebarDatepicker, 
 class Store {
 
   constructor() {
     this.store = localStorage.getItem("store") 
-    ? JSON.parse(localStorage.getItem("store")) : [];
+    ? JSON.parse(localStorage.getItem("store")) : testdata;
 
     this.userUpload;
 
@@ -311,12 +280,12 @@ class Store {
   
     if (direction === "desc") {
       return entries.sort((a, b) => {
-        if (type === "start" || type === "end") {
-          return new Date(a.start) - new Date(b.end)
-  
+        if (type === "start") {
+          return new Date(a.start) - new Date(b.start)
+        } else if (type === "end") {
+          return new Date(a.end) - new Date(b.end)
         } else if (type === "description" || type === "title" || type === "category") {
           return a[type].localeCompare(b[type])
-  
         } else {
           return a[type] - b[type]
         }
@@ -324,12 +293,12 @@ class Store {
   
     } else {
       return entries.sort((a, b) => {
-        if (type === "start" || type === "end") {
-          return new Date(b[type]) - new Date(a[type])
-  
+        if (type === "start") {
+          return new Date(b.start) - new Date(a.start)
+        } else if (type === "end") {
+          return new Date(b.end) - new Date(a.end)
         } else if (type === "description" || type === "title" || type === "category") {
           return b[type].localeCompare(a[type])
-  
         } else {
           return b[type] - a[type]
         }

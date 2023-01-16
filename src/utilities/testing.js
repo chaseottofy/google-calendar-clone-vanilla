@@ -18,7 +18,7 @@ const categoryNames = [
 let endYears = [2023, 2023]
 function generateStart() {
   let year = endYears[Math.floor(Math.random() * 1)];
-  let month = Math.floor(Math.random() * 12);
+  let month = Math.floor(Math.random() * 4);
   let day = Math.floor(Math.random() * 30);
   let hour = Math.floor(Math.random() * 4) + 8;
   let minute = Math.round((Math.floor(Math.random() * 46) / 15)
@@ -54,7 +54,7 @@ class FEntry {
 // const generateRandomEvents = () => {
 export default function generateRandomEvents() {
   const events = []
-  for (let i = 0; i < 240; i++) {
+  for (let i = 0; i < 100; i++) {
     const start = generateStart();
     const end = generateEnd(start);
     events.push(

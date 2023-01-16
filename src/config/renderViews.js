@@ -93,7 +93,9 @@ export default function renderViews(context, datepickerContext, store) {
 
   function setInitialAttributes() {
     selectElement.setAttribute("data-value", `${context.getComponent().slice(0, 1).toUpperCase()}`)
-    headerLogo.setAttribute("data-current-day-of-month", context.getDay())
+
+    console.log(new Date().getDate())
+    headerLogo.setAttribute("data-current-day-of-month", new Date().getDate())
   }
 
   function renderSidebarDatepicker() {

@@ -3,7 +3,7 @@ import setViews from "../../config/setViews";
 import FormSetup from "../forms/setForm";
 import fullFormConfig from "../forms/formUtils";
 import { getClosest } from '../../utilities/helpers'
-import { 
+import {
   getFormDateObject,
   getDateFromAttribute,
   getDuration,
@@ -36,7 +36,7 @@ export default function setListView(context, store, datepickerContext) {
 
       const [wn, mn] = [weekDayNames[dow], monthNames[month]];
       const rgheader = createRowGroupHeader(wn, mn, day, key, count === 1 ? true : false);
-      
+
       const rgContent = document.createElement("div");
       rgContent.classList.add("rowgroup-content");
       value.forEach((entry) => {
@@ -188,45 +188,58 @@ export default function setListView(context, store, datepickerContext) {
 
   const initListView = () => {
     listviewBody.innerText = "";
-    const entries = store.sortBy(store.getActiveEntries(), "start", "desc");
-    const today = new Date();
-    const [todayYear, todayMonth, todayDay] = [
-      today.getFullYear(),
-      today.getMonth() + 1,
-      today.getDate(),
-    ];
+    const activeEnt = store.getActiveEntries();
+    if (activeEnt.length === 0) {
+      console.log(true);
+      return;
+    } else {
 
-    const groupedEntries = entries.reduce((acc, curr) => {
-      const date = new Date(curr.start)
-      const [year, month, day] = [
-        +date.getFullYear(),
-        +date.getMonth() + 1,
-        +date.getDate(),
+      const entries = store.sortBy(activeEnt, "start", "desc");
+      const today = new Date();
+      const [todayYear, todayMonth, todayDay] = [
+        today.getFullYear(),
+        today.getMonth() + 1,
+        today.getDate(),
       ];
 
-      const datestring = `${year}-${month}-${day}` // for parse&group
+      const groupedEntries = entries.reduce((acc, curr) => {
+        const date = new Date(curr.start)
+        const [year, month, day] = [
+          +date.getFullYear(),
+          +date.getMonth() + 1,
+          +date.getDate(),
+        ];
 
-      if (year < todayYear) {
+        const datestring = `${year}-${month}-${day}` // for parse&group
+
+        if (year < todayYear) {
+          return acc;
+        }
+
+        if (year === todayYear && month < todayMonth) {
+          return acc;
+        }
+
+        if (year === todayYear && month === todayMonth && day < todayDay) {
+          return acc;
+        }
+
+        if (!acc[datestring]) {
+          acc[datestring] = []
+        }
+        acc[datestring].push(curr)
         return acc;
-      }
+      }, {})
 
-      if (year === todayYear && month < todayMonth) {
-        return acc;
+      const length = Object.keys(groupedEntries).length;
+      if (length === 0) {
+        const dateTimeTitle = document.querySelector(".datetime-content--title");
+        dateTimeTitle.textContent = "Schedule Clear"
       }
+      createRowGroups(groupedEntries);
+      listview.onclick = delegateListview;
+    }
 
-      if (year === todayYear && month === todayMonth && day < todayDay) {
-        return acc;
-      }
-    
-      if (!acc[datestring]) {
-        acc[datestring] = []
-      }
-      acc[datestring].push(curr)
-      return acc;
-    }, {})
-
-    createRowGroups(groupedEntries);
-    listview.onclick = delegateListview;
   }
 
   initListView();

@@ -2009,8 +2009,6 @@ function setHeader(context, component, store) {
 
   const configHeader = (borderstyle, componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
-    // btnprev.removeAttribute("style");
-    // btnnext.removeAttribute("style");
     datetimeWrapper.classList.remove("datetime-inactive");
     header.style.borderBottom = borderstyle;
     datetimeWrapper.style.paddingRight = "0";
@@ -2020,9 +2018,6 @@ function setHeader(context, component, store) {
   const configListHeader = (componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
     header.style.borderBottom = "1px solid var(--mediumgrey1)"
-    // btnprev.style.display = "none";
-    // btnnext.style.opacity = "0";
-    // btnnext.style.width = "8px";
     datetimeWrapper.classList.add("datetime-inactive");
   }
 
@@ -2057,7 +2052,7 @@ function setHeader(context, component, store) {
       let [start, end] = store.getFirstAndLastEntry();
       
       !start || !end 
-        ? configListHeader("No entries") 
+        ? configListHeader("Schedule Clear")
         : configListHeader((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_1__.formatStartEndDate)(new Date(), new Date(end), true));
       break;
     default:
@@ -4022,7 +4017,7 @@ function setListView(context, store, datepickerContext) {
 
       const [wn, mn] = [weekDayNames[dow], monthNames[month]];
       const rgheader = createRowGroupHeader(wn, mn, day, key, count === 1 ? true : false);
-      
+
       const rgContent = document.createElement("div");
       rgContent.classList.add("rowgroup-content");
       value.forEach((entry) => {
@@ -4174,45 +4169,58 @@ function setListView(context, store, datepickerContext) {
 
   const initListView = () => {
     listviewBody.innerText = "";
-    const entries = store.sortBy(store.getActiveEntries(), "start", "desc");
-    const today = new Date();
-    const [todayYear, todayMonth, todayDay] = [
-      today.getFullYear(),
-      today.getMonth() + 1,
-      today.getDate(),
-    ];
+    const activeEnt = store.getActiveEntries();
+    if (activeEnt.length === 0) {
+      console.log(true);
+      return;
+    } else {
 
-    const groupedEntries = entries.reduce((acc, curr) => {
-      const date = new Date(curr.start)
-      const [year, month, day] = [
-        +date.getFullYear(),
-        +date.getMonth() + 1,
-        +date.getDate(),
+      const entries = store.sortBy(activeEnt, "start", "desc");
+      const today = new Date();
+      const [todayYear, todayMonth, todayDay] = [
+        today.getFullYear(),
+        today.getMonth() + 1,
+        today.getDate(),
       ];
 
-      const datestring = `${year}-${month}-${day}` // for parse&group
+      const groupedEntries = entries.reduce((acc, curr) => {
+        const date = new Date(curr.start)
+        const [year, month, day] = [
+          +date.getFullYear(),
+          +date.getMonth() + 1,
+          +date.getDate(),
+        ];
 
-      if (year < todayYear) {
+        const datestring = `${year}-${month}-${day}` // for parse&group
+
+        if (year < todayYear) {
+          return acc;
+        }
+
+        if (year === todayYear && month < todayMonth) {
+          return acc;
+        }
+
+        if (year === todayYear && month === todayMonth && day < todayDay) {
+          return acc;
+        }
+
+        if (!acc[datestring]) {
+          acc[datestring] = []
+        }
+        acc[datestring].push(curr)
         return acc;
-      }
+      }, {})
 
-      if (year === todayYear && month < todayMonth) {
-        return acc;
+      const length = Object.keys(groupedEntries).length;
+      if (length === 0) {
+        const dateTimeTitle = document.querySelector(".datetime-content--title");
+        dateTimeTitle.textContent = "Schedule Clear"
       }
+      createRowGroups(groupedEntries);
+      listview.onclick = delegateListview;
+    }
 
-      if (year === todayYear && month === todayMonth && day < todayDay) {
-        return acc;
-      }
-    
-      if (!acc[datestring]) {
-        acc[datestring] = []
-      }
-      acc[datestring].push(curr)
-      return acc;
-    }, {})
-
-    createRowGroups(groupedEntries);
-    listview.onclick = delegateListview;
   }
 
   initListView();
@@ -6132,7 +6140,9 @@ function renderViews(context, datepickerContext, store) {
 
   function setInitialAttributes() {
     selectElement.setAttribute("data-value", `${context.getComponent().slice(0, 1).toUpperCase()}`)
-    headerLogo.setAttribute("data-current-day-of-month", context.getDay())
+
+    console.log(new Date().getDate())
+    headerLogo.setAttribute("data-current-day-of-month", new Date().getDate())
   }
 
   function renderSidebarDatepicker() {
@@ -7452,11 +7462,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utilities/dateutils */ "./src/utilities/dateutils.js");
 /* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../locales/en */ "./src/locales/en.js");
 /* harmony import */ var _locales_kbDefault__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../locales/kbDefault */ "./src/locales/kbDefault.js");
+/* harmony import */ var _testdata_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../testdata.json */ "./src/testdata.json");
 
 
 
 
 
+
+console.log(_testdata_json__WEBPACK_IMPORTED_MODULE_5__)
 const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 /*
   // entry methods
@@ -7480,10 +7493,6 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "getWeekEntries",
   "getYearEntries",
   "getGroupedYearEntries",
-
-
-
-
   // category methods
   "addNewCtg",
   "deleteCategory",
@@ -7503,33 +7512,22 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "removeCategoryAndEntries",
   "setCategoryStatus",
   "updateCtgColor",
-
-
-
   // keyboard shortcuts
   "getShortcuts",
   "setShortCut",
   "setShortcutsStatus",
   "getShortcutsStatus",
-
-
-
   // overlay management
   "addActiveOverlay",
   "removeActiveOverlay",
   "getActiveOverlay",
   "hasActiveOverlay",
-
-
-
   // user upload/download local storage
   "validateUserUpload",
   "setUserUpload",
   "setDataReconfigCallback",
   "getUserUpload",
   "getDataReconfigCallback",
-
-
   ***************************************
   // form management
   "setFormRenderHandle",
@@ -7541,21 +7539,16 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "setRenderFormCallback",
   "getRenderFormCallback",
   ***************************************
-
-
   ***************************************
   // sidebar management
   "setRenderSidebarCallback",
   "getRenderSidebarCallback"
   ***************************************
-
-
   ***************************************
   // DATEPICKER MANAGEMENT
   "setResetDatepickerCallback",
   "getResetDatepickerCallback",
   ***************************************
-
   ***************************************
   // CALENDAR MANAGEMENT
   "setResizeHandle",
@@ -7566,24 +7559,11 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 // Store is passed to all calendar views in the following order : 
 // ./index > ./renderViews > ./setViews > component
 
-/**
- * local storage management
- * core crud
- * entry data sort/filter
- * entry data reducers
- * manage categories
- * manage keyboard shortcuts
- * overlay management
- * json upload/download
- * state management
- */
-// it is also passed to a number of other components including : 
-// datepicker, form, sidebar, sidebarDatepicker, 
 class Store {
 
   constructor() {
     this.store = localStorage.getItem("store") 
-    ? JSON.parse(localStorage.getItem("store")) : [];
+    ? JSON.parse(localStorage.getItem("store")) : _testdata_json__WEBPACK_IMPORTED_MODULE_5__;
 
     this.userUpload;
 
@@ -7765,12 +7745,12 @@ class Store {
   
     if (direction === "desc") {
       return entries.sort((a, b) => {
-        if (type === "start" || type === "end") {
-          return new Date(a.start) - new Date(b.end)
-  
+        if (type === "start") {
+          return new Date(a.start) - new Date(b.start)
+        } else if (type === "end") {
+          return new Date(a.end) - new Date(b.end)
         } else if (type === "description" || type === "title" || type === "category") {
           return a[type].localeCompare(b[type])
-  
         } else {
           return a[type] - b[type]
         }
@@ -7778,12 +7758,12 @@ class Store {
   
     } else {
       return entries.sort((a, b) => {
-        if (type === "start" || type === "end") {
-          return new Date(b[type]) - new Date(a[type])
-  
+        if (type === "start") {
+          return new Date(b.start) - new Date(a.start)
+        } else if (type === "end") {
+          return new Date(b.end) - new Date(a.end)
         } else if (type === "description" || type === "title" || type === "category") {
           return b[type].localeCompare(a[type])
-  
         } else {
           return b[type] - a[type]
         }
@@ -9028,14 +9008,14 @@ function formatStartEndDate(start, end, flag) {
     if (startmonth === endmonth) {
       if (startday === endday) {
         // same : day, month, year
-        return `${startmonth} ${startday} ${tempstartyear}`
+        return `${startmonth} ${startday} ${startyear}`
       } else {
         // same : month, year
-        return `${startmonth} ${startday} – ${endday}, ${tempstartyear}`
+        return `${startmonth} ${startday} – ${endday}, ${startyear}`
       }
     } else {
       // same : year
-      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${tempstartyear}`
+      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${startyear}`
     }
   } else {
     // same : nothing
@@ -10069,6 +10049,16 @@ function calcTime(start, length) {
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calcTime);
 
+
+/***/ }),
+
+/***/ "./src/testdata.json":
+/*!***************************!*\
+  !*** ./src/testdata.json ***!
+  \***************************/
+/***/ ((module) => {
+
+module.exports = JSON.parse('[{"category":"misc","completed":true,"description":"random body","end":"2023-04-15T20:15:00.000Z","id":"lcyzz1b7xjg52g9oqr","start":"2023-04-15T15:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-11T19:15:00.000Z","id":"lcyzz1b7407g7llfyvn","start":"2023-04-11T17:15:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-16T21:15:00.000Z","id":"lcyzz1b7xtffrq8x4v","start":"2023-01-16T18:15:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-02-25T20:45:00.000Z","id":"lcyzz1b79kor7hmrctm","start":"2023-02-25T17:45:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-03-16T19:30:00.000Z","id":"lcyzz1b71k84n5phpwk","start":"2023-03-16T16:30:00.000Z","title":"aut"},{"category":"school","completed":true,"description":"random body","end":"2023-01-14T22:15:00.000Z","id":"lcyzz1b7nwkxf09f71n","start":"2023-01-14T18:15:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-02-09T21:30:00.000Z","id":"lcyzz1b7la0c9e75p5","start":"2023-02-09T16:30:00.000Z","title":"cupiditate"},{"category":"school","completed":true,"description":"random body","end":"2023-03-02T22:00:00.000Z","id":"lcyzz1b7gzwvc1dsfr","start":"2023-03-02T18:00:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-25T22:45:00.000Z","id":"lcyzz1b75xkzv4chxnv","start":"2023-02-25T18:45:00.000Z","title":"ut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-21T21:15:00.000Z","id":"lcyzz1b789qc02795fr","start":"2023-03-21T16:15:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-01-05T20:45:00.000Z","id":"lcyzz1b7i0lnwlp3vf9","start":"2023-01-05T18:45:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-05T22:00:00.000Z","id":"lcyzz1b767n4tsdgyfa","start":"2023-02-05T17:00:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-01-28T20:30:00.000Z","id":"lcyzz1b7w60bn9jabu","start":"2023-01-28T18:30:00.000Z","title":"aut"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-01T22:15:00.000Z","id":"lcyzz1b7uu2pbffmxi9","start":"2023-03-01T16:15:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-08T20:15:00.000Z","id":"lcyzz1b7q5nh9aiix6i","start":"2023-03-08T18:15:00.000Z","title":"ut"},{"category":"school","completed":true,"description":"random body","end":"2023-03-19T21:45:00.000Z","id":"lcyzz1b7py9dapvhdj","start":"2023-03-19T17:45:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-23T22:15:00.000Z","id":"lcyzz1b7w4cxu8q6m19","start":"2023-01-23T18:15:00.000Z","title":"amet"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-24T21:45:00.000Z","id":"lcyzz1b79fdbr3s7j1","start":"2023-01-24T17:45:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-20T21:00:00.000Z","id":"lcyzz1b70cqbpwyhzod","start":"2023-04-20T17:00:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-03-27T19:45:00.000Z","id":"lcyzz1b7ltydi5300gb","start":"2023-03-27T14:45:00.000Z","title":"aut"},{"category":"school","completed":true,"description":"random body","end":"2023-01-04T22:15:00.000Z","id":"lcyzz1b74nqhz7ggtds","start":"2023-01-04T17:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-11T21:00:00.000Z","id":"lcyzz1b7hqw154flvl","start":"2023-03-11T16:00:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-14T20:30:00.000Z","id":"lcyzz1b7jxw0rgf5p7l","start":"2023-02-14T15:30:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-12T22:00:00.000Z","id":"lcyzz1b7suc6pbfpfj","start":"2023-02-12T17:00:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-02-04T21:30:00.000Z","id":"lcyzz1b7bqwgb51pl4g","start":"2023-02-04T17:30:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-22T21:15:00.000Z","id":"lcyzz1b7er3ijvxs17n","start":"2023-02-22T15:15:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-19T19:30:00.000Z","id":"lcyzz1b7ydgl5w630wl","start":"2023-03-19T14:30:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-04T19:00:00.000Z","id":"lcyzz1b7em75utmslq","start":"2023-03-04T16:00:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-01-05T22:45:00.000Z","id":"lcyzz1b7elkzuui9j15","start":"2023-01-05T17:45:00.000Z","title":"aut"},{"category":"school","completed":true,"description":"random body","end":"2023-01-06T19:45:00.000Z","id":"lcyzz1b8jb0e8up08qk","start":"2023-01-06T18:45:00.000Z","title":"ut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-18T21:15:00.000Z","id":"lcyzz1b81rm6tgjli87","start":"2023-03-18T17:15:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-03-09T20:15:00.000Z","id":"lcyzz1b8944638sdqow","start":"2023-03-09T15:15:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-01-01T20:15:00.000Z","id":"lcyzz1b811u9k1n81j7c","start":"2023-01-01T17:15:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-01T19:15:00.000Z","id":"lcyzz1b8iwnoaer7h4","start":"2023-02-01T15:15:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-12T20:30:00.000Z","id":"lcyzz1b8kwqbt7l8uqq","start":"2023-04-12T16:30:00.000Z","title":"amet"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-05T21:00:00.000Z","id":"lcyzz1b8xgrfhnibxm","start":"2023-04-05T17:00:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-01-04T20:30:00.000Z","id":"lcyzz1b8sx988lxtqbj","start":"2023-01-04T18:30:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-05T21:00:00.000Z","id":"lcyzz1b8a39jfb85p34","start":"2023-03-05T15:00:00.000Z","title":"sequi"},{"category":"school","completed":true,"description":"random body","end":"2023-01-27T20:15:00.000Z","id":"lcyzz1b80h18szgwu7eg","start":"2023-01-27T15:15:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-03-03T19:00:00.000Z","id":"lcyzz1b8jbsw14dm4qh","start":"2023-03-03T15:00:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-15T19:00:00.000Z","id":"lcyzz1b8tiamqxlnn7b","start":"2023-02-15T18:00:00.000Z","title":"cupiditate"},{"category":"school","completed":true,"description":"random body","end":"2023-01-15T19:15:00.000Z","id":"lcyzz1b8ixa8qpwp32b","start":"2023-01-15T17:15:00.000Z","title":"veniam"},{"category":"school","completed":true,"description":"random body","end":"2023-03-10T22:00:00.000Z","id":"lcyzz1b83bw8wpp03n1","start":"2023-03-10T15:00:00.000Z","title":"aut"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-04T20:00:00.000Z","id":"lcyzz1b8p16xdz25yzd","start":"2023-04-04T15:00:00.000Z","title":"veniam"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-18T21:30:00.000Z","id":"lcyzz1b8mwtcbxttn0f","start":"2023-03-18T14:30:00.000Z","title":"ut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-01T20:15:00.000Z","id":"lcyzz1b8e60f3909m1","start":"2023-03-01T15:15:00.000Z","title":"numquam"},{"category":"default","completed":true,"description":"random body","end":"2023-03-24T18:15:00.000Z","id":"lcyzz1b8kp93ioso7cm","start":"2023-03-24T17:15:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-04-18T20:00:00.000Z","id":"lcyzz1b85ofx41z4mdq","start":"2023-04-18T15:00:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-03-10T22:30:00.000Z","id":"lcyzz1b8u9ib2hwj64i","start":"2023-03-10T15:30:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-04-14T20:00:00.000Z","id":"lcyzz1b827hdjhysoxp","start":"2023-04-14T16:00:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-01-12T19:15:00.000Z","id":"lcyzz1b8uoe7uwrgom","start":"2023-01-12T16:15:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-10T22:30:00.000Z","id":"lcyzz1b8gwja7vshfao","start":"2023-01-10T17:30:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-04-01T18:45:00.000Z","id":"lcyzz1b817w0g6nf6gi","start":"2023-04-01T17:45:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-13T19:30:00.000Z","id":"lcyzz1b8ovp6ugqqkb","start":"2023-02-13T17:30:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-02-25T19:30:00.000Z","id":"lcyzz1b8js5ux3ohvn","start":"2023-02-25T15:30:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-28T20:30:00.000Z","id":"lcyzz1b8tn32a56oya","start":"2023-02-28T17:30:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-04-18T20:45:00.000Z","id":"lcyzz1b8hgzvgsru4gd","start":"2023-04-18T15:45:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-02-01T21:45:00.000Z","id":"lcyzz1b80zh2ih2no7hh","start":"2023-02-01T16:45:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-04-29T20:30:00.000Z","id":"lcyzz1b8vf4836e4zt","start":"2023-04-29T17:30:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-26T22:15:00.000Z","id":"lcyzz1b80esjk0zdfv4k","start":"2023-02-26T17:15:00.000Z","title":"numquam"},{"category":"default","completed":true,"description":"random body","end":"2023-04-26T19:30:00.000Z","id":"lcyzz1b8qxk4ph55g6k","start":"2023-04-26T17:30:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-05T21:00:00.000Z","id":"lcyzz1b8funzwgb5wov","start":"2023-02-05T16:00:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-09T22:30:00.000Z","id":"lcyzz1b80s862yx55zem","start":"2023-02-09T16:30:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-01-06T21:15:00.000Z","id":"lcyzz1b84uik5hvhex4","start":"2023-01-06T16:15:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-12T19:00:00.000Z","id":"lcyzz1b8z2zq0cjen6n","start":"2023-03-12T15:00:00.000Z","title":"ut"},{"category":"school","completed":true,"description":"random body","end":"2023-02-14T20:45:00.000Z","id":"lcyzz1b84wx8fdjossv","start":"2023-02-14T17:45:00.000Z","title":"ut"},{"category":"school","completed":true,"description":"random body","end":"2023-04-27T18:30:00.000Z","id":"lcyzz1b8aw9ujxrmlgd","start":"2023-04-27T16:30:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-02-03T19:45:00.000Z","id":"lcyzz1b8qdxefp21ddk","start":"2023-02-03T17:45:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-05T19:30:00.000Z","id":"lcyzz1b87g3ccxbqaav","start":"2023-03-05T18:30:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-14T19:00:00.000Z","id":"lcyzz1b82nu4n6th2pj","start":"2023-04-14T15:00:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-02-27T20:15:00.000Z","id":"lcyzz1b8n4o3kp5hoag","start":"2023-02-27T16:15:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-04-28T20:30:00.000Z","id":"lcyzz1b8mn1l6zpmeu","start":"2023-04-28T15:30:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-15T22:30:00.000Z","id":"lcyzz1b8kb805gbvib","start":"2023-01-15T15:30:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-16T21:15:00.000Z","id":"lcyzz1b8idclct2pcn","start":"2023-04-16T15:15:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-12T20:00:00.000Z","id":"lcyzz1b8xyvee6qfjdt","start":"2023-01-12T18:00:00.000Z","title":"veniam"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-24T20:15:00.000Z","id":"lcyzz1b8iza0u2z8ta9","start":"2023-04-24T14:15:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-03-06T21:30:00.000Z","id":"lcyzz1b80edqilz9sl1s","start":"2023-03-06T16:30:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-03-28T21:00:00.000Z","id":"lcyzz1b8wr2qjtbt0hh","start":"2023-03-28T16:00:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-10T19:30:00.000Z","id":"lcyzz1b8u04mxgxyxq","start":"2023-04-10T14:30:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-01-28T20:00:00.000Z","id":"lcyzz1b8z3kgiina9in","start":"2023-01-28T17:00:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-15T20:15:00.000Z","id":"lcyzz1b8tb7ankosvff","start":"2023-02-15T16:15:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-02-02T22:15:00.000Z","id":"lcyzz1b8ygsv2ptyq6r","start":"2023-02-02T18:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-14T19:30:00.000Z","id":"lcyzz1b8vntxdf9lbx","start":"2023-02-14T16:30:00.000Z","title":"veniam"},{"category":"school","completed":true,"description":"random body","end":"2023-04-01T21:30:00.000Z","id":"lcyzz1b853wjfcgbrpw","start":"2023-04-01T17:30:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-01-31T19:00:00.000Z","id":"lcyzz1b80kz82u429wzd","start":"2023-01-31T17:00:00.000Z","title":"amet"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-03T21:15:00.000Z","id":"lcyzz1b8dos82soa5vh","start":"2023-01-03T17:15:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-03-07T19:15:00.000Z","id":"lcyzz1b8kn7cvh91q0m","start":"2023-03-07T16:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-02T19:15:00.000Z","id":"lcyzz1b8w0y9p8mck9","start":"2023-04-02T17:15:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-12T18:15:00.000Z","id":"lcyzz1b86kzh4wmy8o","start":"2023-03-12T16:15:00.000Z","title":"aut"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-12T20:30:00.000Z","id":"lcyzz1b88o12io1qctc","start":"2023-04-12T16:30:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-25T21:30:00.000Z","id":"lcyzz1b89mx9ijwsx7","start":"2023-03-25T17:30:00.000Z","title":"cupiditate"},{"category":"school","completed":true,"description":"random body","end":"2023-01-08T19:30:00.000Z","id":"lcyzz1b8litv2bbkrv","start":"2023-01-08T17:30:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-04-29T19:45:00.000Z","id":"lcyzz1b8idg7gmnjwi","start":"2023-04-29T15:45:00.000Z","title":"numquam"},{"category":"default","completed":true,"description":"random body","end":"2023-03-08T21:00:00.000Z","id":"lcyzz1b8lg81ocaz1ii","start":"2023-03-08T16:00:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-04-24T20:30:00.000Z","id":"lcyzz1b80305v16m33b8","start":"2023-04-24T14:30:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-02-01T19:15:00.000Z","id":"lcyzz1b8r24ytr1tg49","start":"2023-02-01T18:15:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-02-27T21:00:00.000Z","id":"lcyzz1b8k8c76lxdd0i","start":"2023-02-27T16:00:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-03-13T19:45:00.000Z","id":"lcyzz1b8gpy4rdrcvgt","start":"2023-03-13T14:45:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-09T19:45:00.000Z","id":"lcyzz1b8rklmd4gcl4m","start":"2023-02-09T16:45:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-01T22:45:00.000Z","id":"lcyzz1b8q84d5wezdu8","start":"2023-01-01T18:45:00.000Z","title":"numquam"}]');
 
 /***/ })
 

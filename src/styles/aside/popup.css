@@ -129,7 +129,7 @@ input[type="radio"] {
   min-width: 100px;
   width: auto;
   font-size: 16px;
-  color: var(--white3);
+  color: var(--white4);
   margin-left: 8px;
 }
 
@@ -148,7 +148,7 @@ input[type="radio"] {
 
 .popup-delete-ctg__option--remove span {
   padding-right: 8px;
-  color: var(--white3);
+  color: var(--white4);
 }
 
 /* *** */
