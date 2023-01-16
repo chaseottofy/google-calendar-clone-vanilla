@@ -641,7 +641,7 @@ function setEntryForm(context, store, datepickerContext) {
 
   function removeLastFormEntry() {
     store.removeLastEntry()
-    ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])(currentComponent,context,store,datepickerContext);
+    ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])(currentComponent, context, store, datepickerContext);
   }
 
   function handleFormClose(e) {
@@ -921,21 +921,21 @@ function setEntryForm(context, store, datepickerContext) {
   }
 
   function delegateFormKeyDown(e) {
-    const k = e.key.toLowerCase()
     if (!datepicker.classList.contains("hide-datepicker")) {
       return;
-    }
+    } else {
 
-    if (k === "escape") {
-      handleFormClose(e);
-    }
+      if (e.key === "Escape") {
+        handleFormClose(e);
+      }
 
-    if (e.key === "enter") {
-      handleFormSubmission(e);
+      if (e.key === "Enter") {
+        handleFormSubmission(e);
+      }
     }
   }
 
-  
+
   titleInput.blur()
   setFormInitialValues()
 }
@@ -2009,8 +2009,8 @@ function setHeader(context, component, store) {
 
   const configHeader = (borderstyle, componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
-    btnprev.removeAttribute("style");
-    btnnext.removeAttribute("style");
+    // btnprev.removeAttribute("style");
+    // btnnext.removeAttribute("style");
     datetimeWrapper.classList.remove("datetime-inactive");
     header.style.borderBottom = borderstyle;
     datetimeWrapper.style.paddingRight = "0";
@@ -2018,13 +2018,11 @@ function setHeader(context, component, store) {
   }
 
   const configListHeader = (componentTitle) => {
-    console.log("rna")
     dateTimeTitle.textContent = componentTitle;
-    // 1px solid var(--mediumgrey1)
     header.style.borderBottom = "1px solid var(--mediumgrey1)"
-    btnprev.style.display = "none";
-    btnnext.style.opacity = "0";
-    btnnext.style.width = "8px";
+    // btnprev.style.display = "none";
+    // btnnext.style.opacity = "0";
+    // btnnext.style.width = "8px";
     datetimeWrapper.classList.add("datetime-inactive");
   }
 
@@ -2060,7 +2058,7 @@ function setHeader(context, component, store) {
       
       !start || !end 
         ? configListHeader("No entries") 
-        : configListHeader((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_1__.formatStartEndDate)(new Date(start), new Date(end)));
+        : configListHeader((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_1__.formatStartEndDate)(new Date(), new Date(end), true));
       break;
     default:
       break;
@@ -3974,24 +3972,250 @@ function setDayView(context, store, datepickerContext) {
 
 /***/ }),
 
-/***/ "./src/components/views/listviewtwo.js":
-/*!*********************************************!*\
-  !*** ./src/components/views/listviewtwo.js ***!
-  \*********************************************/
+/***/ "./src/components/views/listview.js":
+/*!******************************************!*\
+  !*** ./src/components/views/listview.js ***!
+  \******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ setListView)
 /* harmony export */ });
+/* harmony import */ var _menus_entryOptions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../menus/entryOptions */ "./src/components/menus/entryOptions.js");
+/* harmony import */ var _config_setViews__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../config/setViews */ "./src/config/setViews.js");
+/* harmony import */ var _forms_setForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../forms/setForm */ "./src/components/forms/setForm.js");
+/* harmony import */ var _forms_formUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../forms/formUtils */ "./src/components/forms/formUtils.js");
+/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
+/* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utilities/dateutils */ "./src/utilities/dateutils.js");
+/* harmony import */ var _utilities_timeutils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/timeutils */ "./src/utilities/timeutils.js");
+/* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
 
 
 
 
 
+
+
+
+
+const monthNames = _locales_en__WEBPACK_IMPORTED_MODULE_7__["default"].labels.monthsShort.map(x => x.toUpperCase())
+const weekDayNames = _locales_en__WEBPACK_IMPORTED_MODULE_7__["default"].labels.weekdaysShort.map(x => x.toUpperCase())
+
+const listview = document.querySelector('.listview');
+const listviewBody = document.querySelector('.listview__body');
 
 function setListView(context, store, datepickerContext) {
+  /*************************************** */
+  /* CREATE ROW GROUPS*/
+  function createRowGroups(entries) {
+    let count = 0;
+    for (let [key, value] of Object.entries(entries)) {
+      count++
+      const tempdate = new Date(Date.parse(key))
+      const [year, month, day, dow] = [
+        tempdate.getFullYear(),
+        tempdate.getMonth(),
+        tempdate.getDate(),
+        tempdate.getDay()
+      ]
 
+      const [wn, mn] = [weekDayNames[dow], monthNames[month]];
+      const rgheader = createRowGroupHeader(wn, mn, day, key, count === 1 ? true : false);
+      
+      const rgContent = document.createElement("div");
+      rgContent.classList.add("rowgroup-content");
+      value.forEach((entry) => {
+        rgContent.append(createRowGroupCell(entry))
+      })
+      const rg = document.createElement('div');
+      rg.classList.add('listview__rowgroup');
+      rg.append(rgheader, rgContent);
+      listviewBody.appendChild(rg);
+
+    }
+  }
+
+  function createRowGroupHeader(weekname, monthname, day, date, settop) {
+    const rgHeader = document.createElement('div');
+    rgHeader.classList.add('rowgroup-header');
+    const rgHeaderDateNumber = document.createElement('div');
+
+    rgHeaderDateNumber.classList.add('rowgroup--header__datenumber');
+    rgHeaderDateNumber.textContent = day;
+    rgHeaderDateNumber.setAttribute("data-rgheader-date", date)
+    const rgHeaderDate = document.createElement('div');
+    rgHeaderDate.classList.add('rowgroup--header__monthdow');
+    rgHeaderDate.textContent = `${monthname}, ${weekname}`;
+    if (settop) {
+      rgHeaderDateNumber.classList.add("top-datenumber")
+      rgHeaderDate.classList.add("top-monthdow")
+
+    }
+    rgHeader.append(rgHeaderDateNumber, rgHeaderDate);
+    return rgHeader;
+  }
+
+  function createRowGroupCell(entry) {
+    const color = store.getCtgColor(entry.category);
+    const [start, end] = [new Date(entry.start), new Date(entry.end)]
+    let datetitle;
+    if ((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.longerThanDay)(start, end)) {
+      let tempyear;
+      if (start.getFullYear() !== end.getFullYear()) {
+        tempyear = +end.getFullYear() - 2000;
+      }
+
+      datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear ? tempyear : ""}`
+    } else {
+      datetitle = `${(0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_6__.formatStartEndTimes)(
+        [start.getHours(), end.getHours()],
+        [start.getMinutes(), end.getMinutes()]
+      )}`
+    }
+
+    const rgCell = document.createElement('div');
+    rgCell.classList.add('rowgroup--cell');
+    rgCell.setAttribute('data-rgcell-id', entry.id);
+    const rgCellColor = document.createElement("div");
+    rgCellColor.classList.add("rowgroup--cell__color");
+    rgCellColor.style.backgroundColor = color;
+    const rgCellTime = document.createElement("div");
+    rgCellTime.classList.add("rowgroup--cell__time");
+    rgCellTime.textContent = datetitle;
+    const rgCellTitle = document.createElement("div");
+    rgCellTitle.classList.add("rowgroup--cell__title");
+    rgCellTitle.textContent = entry.title;
+    rgCell.append(rgCellColor, rgCellTime, rgCellTitle);
+    return rgCell;
+  }
+  /*************************************** */
+
+
+  /*************************************** */
+  // EVENTS
+  function resetCellActive() {
+    const activeCell = document?.querySelector(".rowgroup--cell-active");
+    if (activeCell) {
+      activeCell.classList.remove("rowgroup--cell-active");
+    }
+  }
+
+  function getRgContextMenu(cell) {
+    const id = cell.getAttribute("data-rgcell-id");
+    cell.classList.add("rowgroup--cell-active");
+    const entry = store.getEntry(id);
+    const start = entry.start;
+    const color = store.getCtgColor(entry.category);
+
+    const rect = cell.getBoundingClientRect();
+    const height = cell.offsetHeight;
+    const rectTop = parseInt(rect.top) + height;
+    const rectLeft = parseInt(rect.left);
+
+    let y = rectTop;
+    if (rectTop > window.innerHeight) {
+      y = window.innerHeight - rectTop;
+    }
+
+    let x = rectLeft;
+    if (rectLeft + 150 > window.innerWidth) {
+      x = window.innerWidth - 150;
+    }
+
+    // *** config & open form ***
+    store.setFormResetHandle("list", resetCellActive);
+
+    const setup = new _forms_setForm__WEBPACK_IMPORTED_MODULE_2__["default"]();
+    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setCategory(entry.category, color, color);
+    setup.setPosition(x, [x, y], y);
+    setup.setDates((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.getFormDateObject)(start, entry.end));
+    _forms_formUtils__WEBPACK_IMPORTED_MODULE_3__["default"].setFormDatepickerDate(context, datepickerContext, start);
+
+    const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_3__["default"].getConfig(setup.getSetup());
+    (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_0__["default"])(context, store, entry, datepickerContext, finishSetup);
+  }
+
+
+  // SWITCH TO DAY VIEW
+  function setDayViewLV(target) {
+    let [year, month, day] = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.getDateFromAttribute)(target, 'data-rgheader-date', "month");
+    context.setDate(year, month, day);
+    context.setDateSelected(day);
+    if (context.getSidebarState() === "open") {
+      datepickerContext.setDate(year, month, day);
+      datepickerContext.setDateSelected(day);
+    }
+    context.setComponent("day")
+    ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_1__["default"])("day", context, store, datepickerContext)
+  }
+  /*************************************** */
+
+
+  /*************************************** */
+  // DELEGATION
+  function delegateListview(e) {
+    const headerNum = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".rowgroup--header__datenumber");
+    const rgCell = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".rowgroup--cell");
+
+    if (headerNum) {
+      setDayViewLV(e.target);
+      return;
+    }
+
+    if (rgCell) {
+      // console.log(rgCell)
+      // rgCell.classList.toggle("rowgroup--cell-active")
+      getRgContextMenu(rgCell)
+      return;
+    }
+  }
+
+  const initListView = () => {
+    listviewBody.innerText = "";
+    const entries = store.sortBy(store.getActiveEntries(), "start", "desc");
+    const today = new Date();
+    const [todayYear, todayMonth, todayDay] = [
+      today.getFullYear(),
+      today.getMonth() + 1,
+      today.getDate(),
+    ];
+
+    const groupedEntries = entries.reduce((acc, curr) => {
+      const date = new Date(curr.start)
+      const [year, month, day] = [
+        +date.getFullYear(),
+        +date.getMonth() + 1,
+        +date.getDate(),
+      ];
+
+      const datestring = `${year}-${month}-${day}` // for parse&group
+
+      if (year < todayYear) {
+        return acc;
+      }
+
+      if (year === todayYear && month < todayMonth) {
+        return acc;
+      }
+
+      if (year === todayYear && month === todayMonth && day < todayDay) {
+        return acc;
+      }
+    
+      if (!acc[datestring]) {
+        acc[datestring] = []
+      }
+      acc[datestring].push(curr)
+      return acc;
+    }, {})
+
+    createRowGroups(groupedEntries);
+    listview.onclick = delegateListview;
+  }
+
+  initListView();
 }
 
 /***/ }),
@@ -6233,14 +6457,9 @@ function renderViews(context, datepickerContext, store) {
     }
   }
 
-  /* ***************************** */
   /* configure keyboard shortcuts */
-  /* UPDATE: 2022-01-14
+  /* 2022-01-14
   * Google calendar has recently updated their app wide throttling from a global value of around 150 to the minimum of 4ms(might be 10) for period changes and (250-300) for view changes. 
-  * 
-  * I don't have too much of a personal preference for either, but I was taken aback by how fast it felt, and not in a good way. 
-  * If you want to see what I mean by 'jarring', go to google calendar month view and hold down "n" or "p". I'm almost certain this is some kind of bug as I'm also getting loads of "error caught in promise" responses in the console.
-  * 
   * For now, I'm keeping the throttle at 150ms. 
   */
   function delegateGlobalKeyDown(e) {
@@ -6454,7 +6673,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_views_monthview__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/views/monthview */ "./src/components/views/monthview.js");
 /* harmony import */ var _components_views_weekview__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/views/weekview */ "./src/components/views/weekview.js");
 /* harmony import */ var _components_views_dayview__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/views/dayview */ "./src/components/views/dayview.js");
-/* harmony import */ var _components_views_listviewtwo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/views/listviewtwo */ "./src/components/views/listviewtwo.js");
+/* harmony import */ var _components_views_listview__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/views/listview */ "./src/components/views/listview.js");
 
 
 
@@ -6468,7 +6687,6 @@ const monthComponent = document.querySelector(".monthview")
 const weekComponent = document.querySelector(".weekview")
 const dayComponent = document.querySelector(".dayview")
 const listComponent = document.querySelector(".listview")
-
 
 /**
  * 
@@ -6530,7 +6748,7 @@ function setViews(component, context, store, datepickerContext) {
       case "list":
         context.setComponent(component);
         (0,_components_menus_header__WEBPACK_IMPORTED_MODULE_0__["default"])(context, component, store);
-        (0,_components_views_listviewtwo__WEBPACK_IMPORTED_MODULE_5__["default"])(context, store, datepickerContext);
+        (0,_components_views_listview__WEBPACK_IMPORTED_MODULE_5__["default"])(context, store, datepickerContext);
         listComponent.classList.remove("hide-view");
         break;
       default:
@@ -7417,6 +7635,11 @@ class Store {
     this.keyboardShortcutsStatus = true;
   }
 
+  setStoreForTesting(store) {
+    this.store = store;
+    Store.setStore(this.store);
+  }
+
   getStoreStats() {
     return [this.store.length, this.getAllCtgNames().length] 
   }
@@ -7761,6 +7984,8 @@ class Store {
 
     return grouped;
   }
+
+  
   /* ************************************* */
 
 
@@ -8702,6 +8927,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getTimeFromAttribute": () => (/* binding */ getTimeFromAttribute),
 /* harmony export */   "isBeforeDate": () => (/* binding */ isBeforeDate),
 /* harmony export */   "isDate": () => (/* binding */ isDate),
+/* harmony export */   "longerThanDay": () => (/* binding */ longerThanDay),
 /* harmony export */   "sortDates": () => (/* binding */ sortDates),
 /* harmony export */   "testDate": () => (/* binding */ testDate)
 /* harmony export */ });
@@ -8776,7 +9002,7 @@ function formatDuration(seconds) {
   return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &' + '$1') : res[0]
 }
 
-function formatStartEndDate(start, end) {
+function formatStartEndDate(start, end, flag) {
   [start, end] = [testDate(start), testDate(end)]
 
   const [startday, startmonth, startyear] = [
@@ -8791,22 +9017,29 @@ function formatStartEndDate(start, end) {
     end.getFullYear()
   ]
 
+  let tempstartyear = startyear;
+  let tempendyear = endyear;
+  if (flag) {
+    tempstartyear = startyear.toString().slice(2, 4);
+    tempendyear = endyear.toString().slice(2, 4);
+  }
+
   if (startyear === endyear) {
     if (startmonth === endmonth) {
       if (startday === endday) {
         // same : day, month, year
-        return `${startmonth} ${startday} ${startyear}`
+        return `${startmonth} ${startday} ${tempstartyear}`
       } else {
         // same : month, year
-        return `${startmonth} ${startday} – ${endday}, ${startyear}`
+        return `${startmonth} ${startday} – ${endday}, ${tempstartyear}`
       }
     } else {
       // same : year
-      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${startyear}`
+      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${tempstartyear}`
     }
   } else {
     // same : nothing
-    return `${startmonth} ${startday}, ${startyear} – ${endmonth} ${endday}, ${endyear}`
+    return `${startmonth} ${startday}, ${tempstartyear} – ${endmonth} ${endday}, ${tempendyear}`
   }
 }
 
@@ -8836,6 +9069,8 @@ function getDuration(start, end) {
     return duration
   }
 }
+
+
 
 function createDateFromFormattedString(dateString) {
   const dateArray = dateString.split("-")
@@ -8981,6 +9216,10 @@ function createTimestamp() {
   const day = parseInt(date.getDate());
   return `${month}${day}`
   // return `${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`;
+}
+
+function longerThanDay(date1, date2) {
+  return getDurationSeconds(date1, date2) > 86400;
 }
 
 
@@ -9926,6 +10165,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// import generateRandomEvents from "./utilities/testing"
+// store.setStoreForTesting(generateRandomEvents())
 /*!*************************************!*\
 // (CSS) 
 /*!*************************************!*/
@@ -9962,7 +10203,6 @@ __webpack_require__.r(__webpack_exports__);
 // * finish settings
 // * finish privacy,terms,notes
 // * do a write up on all of the features that I've either added or changed
-// 
 
 // FIX;
 // * clicking on item in more modal and then escaping out of form causes error
@@ -9979,7 +10219,6 @@ __webpack_require__.r(__webpack_exports__);
 // localStorage.clear()
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-console.log()
 
 })();
 
