@@ -15,8 +15,8 @@ export default function setHeader(context, component, store) {
 
   const configHeader = (borderstyle, componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
-    btnprev.removeAttribute("style");
-    btnnext.removeAttribute("style");
+    // btnprev.removeAttribute("style");
+    // btnnext.removeAttribute("style");
     datetimeWrapper.classList.remove("datetime-inactive");
     header.style.borderBottom = borderstyle;
     datetimeWrapper.style.paddingRight = "0";
@@ -24,13 +24,11 @@ export default function setHeader(context, component, store) {
   }
 
   const configListHeader = (componentTitle) => {
-    console.log("rna")
     dateTimeTitle.textContent = componentTitle;
-    // 1px solid var(--mediumgrey1)
     header.style.borderBottom = "1px solid var(--mediumgrey1)"
-    btnprev.style.display = "none";
-    btnnext.style.opacity = "0";
-    btnnext.style.width = "8px";
+    // btnprev.style.display = "none";
+    // btnnext.style.opacity = "0";
+    // btnnext.style.width = "8px";
     datetimeWrapper.classList.add("datetime-inactive");
   }
 
@@ -66,7 +64,7 @@ export default function setHeader(context, component, store) {
       
       !start || !end 
         ? configListHeader("No entries") 
-        : configListHeader(formatStartEndDate(new Date(start), new Date(end)));
+        : configListHeader(formatStartEndDate(new Date(), new Date(end), true));
       break;
     default:
       break;

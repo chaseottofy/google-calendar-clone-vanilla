@@ -364,7 +364,7 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function removeLastFormEntry() {
     store.removeLastEntry()
-    setViews(currentComponent,context,store,datepickerContext);
+    setViews(currentComponent, context, store, datepickerContext);
   }
 
   function handleFormClose(e) {
@@ -644,21 +644,21 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function delegateFormKeyDown(e) {
-    const k = e.key.toLowerCase()
     if (!datepicker.classList.contains("hide-datepicker")) {
       return;
-    }
+    } else {
 
-    if (k === "escape") {
-      handleFormClose(e);
-    }
+      if (e.key === "Escape") {
+        handleFormClose(e);
+      }
 
-    if (e.key === "enter") {
-      handleFormSubmission(e);
+      if (e.key === "Enter") {
+        handleFormSubmission(e);
+      }
     }
   }
 
-  
+
   titleInput.blur()
   setFormInitialValues()
 }

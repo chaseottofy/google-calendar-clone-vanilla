@@ -67,7 +67,7 @@ function formatDuration(seconds) {
   return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &' + '$1') : res[0]
 }
 
-function formatStartEndDate(start, end) {
+function formatStartEndDate(start, end, flag) {
   [start, end] = [testDate(start), testDate(end)]
 
   const [startday, startmonth, startyear] = [
@@ -82,22 +82,29 @@ function formatStartEndDate(start, end) {
     end.getFullYear()
   ]
 
+  let tempstartyear = startyear;
+  let tempendyear = endyear;
+  if (flag) {
+    tempstartyear = startyear.toString().slice(2, 4);
+    tempendyear = endyear.toString().slice(2, 4);
+  }
+
   if (startyear === endyear) {
     if (startmonth === endmonth) {
       if (startday === endday) {
         // same : day, month, year
-        return `${startmonth} ${startday} ${startyear}`
+        return `${startmonth} ${startday} ${tempstartyear}`
       } else {
         // same : month, year
-        return `${startmonth} ${startday} – ${endday}, ${startyear}`
+        return `${startmonth} ${startday} – ${endday}, ${tempstartyear}`
       }
     } else {
       // same : year
-      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${startyear}`
+      return `${startmonth} ${startday} – ${endmonth} ${endday}, ${tempstartyear}`
     }
   } else {
     // same : nothing
-    return `${startmonth} ${startday}, ${startyear} – ${endmonth} ${endday}, ${endyear}`
+    return `${startmonth} ${startday}, ${tempstartyear} – ${endmonth} ${endday}, ${tempendyear}`
   }
 }
 
@@ -127,6 +134,8 @@ function getDuration(start, end) {
     return duration
   }
 }
+
+
 
 function createDateFromFormattedString(dateString) {
   const dateArray = dateString.split("-")
@@ -274,6 +283,10 @@ function createTimestamp() {
   // return `${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`;
 }
 
+function longerThanDay(date1, date2) {
+  return getDurationSeconds(date1, date2) > 86400;
+}
+
 export {
   testDate,
   getDateFormatted,
@@ -296,4 +309,5 @@ export {
   formatEntryOptionsDate,
   getDurationSeconds,
   createTimestamp,
+  longerThanDay,
 }

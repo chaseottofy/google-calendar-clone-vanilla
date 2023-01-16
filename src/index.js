@@ -40,7 +40,6 @@ import "./styles/aside/shortcuts.css"
 // * finish settings
 // * finish privacy,terms,notes
 // * do a write up on all of the features that I've either added or changed
-// 
 
 // FIX;
 // * clicking on item in more modal and then escaping out of form causes error
@@ -57,4 +56,3 @@ import "./styles/aside/shortcuts.css"
 // localStorage.clear()
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
-console.log()

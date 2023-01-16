@@ -235,6 +235,7 @@
 
 .datetime-inactive {
   pointer-events: none;
+  /* padding-left:18px; */
 }
 
 .datetime-inactive .datetime-content::after {

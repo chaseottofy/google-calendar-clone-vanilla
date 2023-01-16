@@ -6,6 +6,7 @@
   background: var(--black1);
   display: flex;
   flex-direction: column;
+  border-top: 1px solid var(--black1);
   overflow: hidden;
   transform: translateX(0px);
   z-index: 901;
@@ -520,8 +521,6 @@
   .sidebar {
     height: calc(100% - 54px);
   }
-
-
 }
 
 @media screen and (max-height: 470px) and (max-width: 840px) {

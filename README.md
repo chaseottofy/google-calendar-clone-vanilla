@@ -9,8 +9,31 @@ I'll be periodically updating the documentation and would like to have it done w
 **Viewing**
 For now, you can view the app through screenshots (link below), or simply download the repo and open `./dist/testbundle.html` in your browser (or any live server extension). I will host on github pages shortly.
 
+**[SCREENSHOTS](https://ibb.co/album/fQrm1F)** (https://ibb.co/album/fQrm1F)
 
-#### **[SCREENSHOTS](https://ibb.co/album/fQrm1F)** (https://ibb.co/album/fQrm1F)
+<br>
+
+### Jan 16, 2023
+<ul>
+<li> 
+
+**build list/agenda view prototype -- [screenshot](https://ibb.co/3CCW8qn)** 
+</li>
+
+<li>
+
+Category change name bug fix
+</li>
+
+<li>
+
+Mobile query clean up
+</li>
+
+</ul>
+
+
+
 
 <br>
 

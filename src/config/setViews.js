@@ -3,7 +3,7 @@ import setYearView from "../components/views/yearview"
 import setMonthView from "../components/views/monthview"
 import setWeekView from "../components/views/weekview"
 import setDayView from "../components/views/dayview"
-import setListView from "../components/views/listviewtwo"
+import setListView from "../components/views/listview"
 // import setListView from "../components/views/listview"
 
 const yearComponent = document.querySelector(".yearview")
@@ -11,7 +11,6 @@ const monthComponent = document.querySelector(".monthview")
 const weekComponent = document.querySelector(".weekview")
 const dayComponent = document.querySelector(".dayview")
 const listComponent = document.querySelector(".listview")
-
 
 /**
  * 
