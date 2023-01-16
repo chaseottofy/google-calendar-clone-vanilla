@@ -56,4 +56,7 @@ import "./styles/aside/shortcuts.css"
 
 // localStorage.clear()
 setAppDefaults(context, store);
+// store.moveCategoryEntriesToNewCategory("default", "computers", true)
 renderViews(context, datepickerContext, store);
+// console.log(store.ctg)
+// console.log(store.getDefaultCtg()[0])

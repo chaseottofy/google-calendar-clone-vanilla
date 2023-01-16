@@ -88,6 +88,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
   function validateNewCategory(categoryName, color) {
     const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
+    const origName = formhelper.getOriginalName();
     
     let errormsg = false;
     if (trimName.length < 1) {
@@ -104,11 +105,15 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       return;
     } else {
       if (editing) {
-        if (formhelper.getOriginalName() === trimName && formhelper.getOriginalColor() === color) {
+        if (origName === trimName && formhelper.getOriginalColor() === color) {
           closeCategoryForm();
           return;
         } else {
-          store.updateCtg(trimName, color, formhelper.getName());
+          if (origName !== trimName){
+            store.updateCtg(trimName, color, formhelper.getName());
+          } else {
+            store.updateCtgColor(origName, color);
+          }
         }
       } else {
         store.addNewCtg(trimName, color);

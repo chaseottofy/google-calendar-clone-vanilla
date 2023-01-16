@@ -25,6 +25,8 @@ const categoriesHeader = document.querySelector(".sb__categories--header")
 const categoryHeaderCaret = document.querySelector(".sbch-caret")
 // renders via menu click -- see ./renderViews.js
 export default function handleSidebarCategories(context, store, datepickerContext) {
+  const defaultCtg = store.getDefaultCtg()[0]
+
   function updateComponent() {
     setViews(context.getComponent(), context, store, datepickerContext)
   }
@@ -95,16 +97,16 @@ export default function handleSidebarCategories(context, store, datepickerContex
     editicon.setAttribute("data-sbch-color", ctgcolor)
 
     // must have at least one category, so default cannot be deleted
-    if (ctgname.toLowerCase() === "default") {
+    if (ctgname.toLowerCase() === defaultCtg) {
       editicon.classList.add("sbch-col--actions__edit-icon--immutable")
     } else {
       deleteicon.appendChild(createCloseIcon("var(--white2)"))
       coltwo.appendChild(deleteicon)
     }
 
+    
     editicon.appendChild(createEditIcon("var(--white2)"))
     coltwo.appendChild(editicon)
-
     row.append(colone, coltwo)
     categoriesContainer.appendChild(row)
   }

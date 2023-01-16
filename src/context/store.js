@@ -621,8 +621,13 @@ class Store {
     return hasctg;
   }
 
-  moveCategoryEntriesToNewCategory(category, newCategory) {
-    if (this.hasCtg(category)) {
+  /**
+   * 
+   * @param {string} category 
+   * @param {string} newCategory 
+   */
+  moveCategoryEntriesToNewCategory(category, newCategory, newName) {
+    if (this.hasCtg(category) || newName === true) {
       this.store.forEach(entry => {
         if (entry.category === category) {
           entry.category = newCategory;
@@ -649,26 +654,63 @@ class Store {
     }
   }
 
+  /**
+   * 
+   * @param {string} categoryName 
+   * @param {string} color 
+   * @desc updates the color of a category
+   */
   updateCtgColor(categoryName, color) {
+    console.log("ran new color")
     if (this.hasCtg(categoryName)) {
       this.ctg[categoryName].color = color;
       Store.setCtg(this.ctg)
     }
   }
 
-  updateCtg(newCtgName, newCtgColor, oldCtgName) {
-    if (newCtgName.toLowerCase() === oldCtgName.toLowerCase()) {
-      this.updateCtgColor(oldCtgName, newCtgColor)
-    } else {
-      for (let [key, value] of Object.entries(this.ctg)) {
-        if (key.toLowerCase() === oldCtgName.toLowerCase()) {
-          this.ctg[newCtgName] = {
-            color: newCtgColor,
-            active: value.active,
+  /**
+   * 
+   * @param {string} newName 
+   * @param {string} newColor 
+   * @param {string} oldName 
+   * @returns new category object
+   * @desc note that 'value' @ [key, value] is necessary to segment the object, even if it is not directly referenced
+   */
+  updateCtg(newName, newColor, oldName) {
+    console.log('ran update everything')
+    let entries = Object.entries(this.ctg);
+    let hasColor = newColor !== null;
+    let count = 0;
+    let length = entries.length;
+
+    for (let [key, value] of entries) {
+      count++
+      if (count === 1) {
+        if (oldName === key) {
+          entries[0][0] = newName
+          if (hasColor) {
+            entries[0][1].color = newColor
           }
-          delete this.ctg[oldCtgName]
+        }
+      } else {
+        if (oldName === key) {
+          entries[count - 1][0] = newName;
+          if (hasColor) {
+            entries[count - 1][1].color = newColor;
+          }
         }
       }
+    }
+    if (entries.length !== length) {
+      console.error("something went wrong with category name/color change")
+      return;
+    } else {
+      this.ctg = Object.fromEntries(entries);
+      this.moveCategoryEntriesToNewCategory(
+        oldName, 
+        newName, 
+        true
+      )
       Store.setCtg(this.ctg)
     }
   }

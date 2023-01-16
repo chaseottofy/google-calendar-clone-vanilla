@@ -2191,6 +2191,8 @@ const categoriesHeader = document.querySelector(".sb__categories--header")
 const categoryHeaderCaret = document.querySelector(".sbch-caret")
 // renders via menu click -- see ./renderViews.js
 function handleSidebarCategories(context, store, datepickerContext) {
+  const defaultCtg = store.getDefaultCtg()[0]
+
   function updateComponent() {
     ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])(context.getComponent(), context, store, datepickerContext)
   }
@@ -2261,16 +2263,16 @@ function handleSidebarCategories(context, store, datepickerContext) {
     editicon.setAttribute("data-sbch-color", ctgcolor)
 
     // must have at least one category, so default cannot be deleted
-    if (ctgname.toLowerCase() === "default") {
+    if (ctgname.toLowerCase() === defaultCtg) {
       editicon.classList.add("sbch-col--actions__edit-icon--immutable")
     } else {
       deleteicon.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createCloseIcon)("var(--white2)"))
       coltwo.appendChild(deleteicon)
     }
 
+    
     editicon.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createEditIcon)("var(--white2)"))
     coltwo.appendChild(editicon)
-
     row.append(colone, coltwo)
     categoriesContainer.appendChild(row)
   }
@@ -6341,15 +6343,27 @@ function renderViews(context, datepickerContext, store) {
   }
 
   const getKeyPressThrottled = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.throttle)(delegateGlobalKeyDown, 150)
+  // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
+
+  // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
+  // Note that Each modal/popup has its own keydown close event on escape thats defined within the scope of its own function,
+  // once it is closed, the event listener is removed from the DOM.
+  let [lk, lk2] = ['', ''];
   function handleGlobalKeydown(e) {
-    // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
-
-    // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
-    // Note that Each modal/popup has its own keydown close event on escape thats defined within the scope of its own function,
-    // once it is closed, the event listener is removed from the DOM.
-
     if (!store.getShortcutsStatus()) return;
     if (store.hasActiveOverlay()) return;
+
+    // prevent ctrl + key shortcuts from triggering at all
+    lk = e.key
+    if (lk === "Control") {
+      lk2 = "Control"
+      return;
+    }
+
+    if (lk2 === "Control" && lk !== "Control") {
+      lk2 = ""
+      return;
+    }
     getKeyPressThrottled(e)
   }
 
@@ -7833,21 +7847,48 @@ class Store {
     }
   }
 
-  updateCtg(newCtgName, newCtgColor, oldCtgName) {
-    if (newCtgName.toLowerCase() === oldCtgName.toLowerCase()) {
-      this.updateCtgColor(oldCtgName, newCtgColor)
-    } else {
-      for (let [key, value] of Object.entries(this.ctg)) {
-        if (key.toLowerCase() === oldCtgName.toLowerCase()) {
-          this.ctg[newCtgName] = {
-            color: newCtgColor,
-            active: value.active,
+  /**
+   * 
+   * @param {string} newName 
+   * @param {string} newColor 
+   * @param {string} oldName 
+   * @returns new category object
+   * @desc note that 'value' @ [key, value] is necessary to segment the object, even if it is not directly referenced
+   */
+  updateCtg(newName, newColor, oldName) {
+    let entries = Object.entries(this.ctg);
+    let hasColor = newColor !== null;
+    let count = 0;
+    let length = entries.length;
+    console.log(entries)
+
+    /*
+    for (let [key, value] of entries) {
+      count++
+      if (count === 1) {
+        if (oldName === key) {
+          entries[0][0] = newName
+          if (hasColor) {
+            entries[0][1].color = newColor
           }
-          delete this.ctg[oldCtgName]
+        }
+      } else {
+        if (oldName === key) {
+          entries[count - 1][0] = newName;
+          if (hasColor) {
+            entries[count - 1][1].color = newColor;
+          }
         }
       }
+    }
+    if (entries.length !== length) {
+      console.error("something went wrong with category name/color change")
+      return;
+    } else {
+      this.ctg = Object.fromEntries(entries);
       Store.setCtg(this.ctg)
     }
+    */
   }
   /* ********************* */
 
@@ -9873,7 +9914,8 @@ __webpack_require__.r(__webpack_exports__);
 // localStorage.clear()
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-
+// console.log(store.ctg)
+console.log(_context_store__WEBPACK_IMPORTED_MODULE_1__["default"].getDefaultCtg()[0])
 })();
 
 /******/ })()
