@@ -7,3 +7,19 @@ I've provided a dozen or so screenshots of the application on imgbb
 
 **[SCREENSHOTS_LINK](https://ibb.co/album/fQrm1F)**.
 https://ibb.co/album/fQrm1F
+
+<br>
+
+## cloning this repo
+`git clone`.\
+`npm install`.\
+open `./dist/testbundle.html` to preview example build
+
+
+## Available Scripts
+
+###`npm run build`
+Builds the app and necessary resources in the `dist` folder.
+
+###`npm run dev`
+Starts the webpack development server on `localhost:3000`.
