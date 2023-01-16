@@ -11,9 +11,12 @@ https://ibb.co/album/fQrm1F
 <br>
 
 ## cloning this repo
-`git clone`.\
-`npm install`.\
-open `./dist/testbundle.html` to preview example build
+### `git clone`
+### `npm install`
+
+<br>
+
+open `./dist/testbundle.html` in browser for a preview example build
 
 
 ## Available Scripts
