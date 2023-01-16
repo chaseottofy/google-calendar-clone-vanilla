@@ -205,21 +205,26 @@
   }
 }
 
-@media screen and (max-width: 400px) {
-
+@media screen and (max-width: 500px) {
   .entry__options {
-    width: calc(100% - 18px);
+    left: 2% !important;
+    right: 2% !important;
+    margin: 0 auto;
   }
 
-  .entry__options-datetime {
-    padding: 15px 0 0 6px;
-  }
-
-  .entry__options-date {
+  .eob-title {
     font-size: 12px;
   }
 
-  .entry__options-time {
-    font-size: 10px;
+  .entry__options--header {
+    grid-template-columns: 1fr 90px;
+  }
+
+  .entry__options-date {
+    font-size: 11px;
+  }
+
+  .entry__options--header-icons svg {
+    transform: scale(0.8);
   }
 }
