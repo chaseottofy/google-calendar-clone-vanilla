@@ -158,7 +158,6 @@
   display: flex;
   align-items: center;
   border-radius: 4px;
-  
   transition-property: background, height;
   transition-duration: .1s;
   transition-timing-function: ease-in-out;
@@ -399,7 +398,11 @@
 
 
 
-@media screen and (max-width:735px) {}
+@media screen and (max-width:735px) {
+  .monthview--title {
+    font-size: 10px;
+  }
+}
 
 @media screen and (max-width: 530px) {
   .monthview--daynumber {

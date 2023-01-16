@@ -37,7 +37,6 @@ const formOverlay = document.querySelector(".form-overlay")
 const formModalOverlay = document.querySelector(".form-modal-overlay")
 const entriesFormWrapper = document.querySelector(".entries__form")
 const entriesForm = document.querySelector(".entry-form")
-const formHeaderDate = document.querySelector(".form--header-date")
 
 // title / description inputs
 const titleInput = document.querySelector(".form--body__title-input")
@@ -177,10 +176,15 @@ export default function setEntryForm(context, store, datepickerContext) {
     const [y, m, d] = getDateFromAttribute(e.target, "data-form-date");
     const rect = e.target.getBoundingClientRect();
     const datepickerLeft = parseInt(rect.left);
+    const bott = parseInt(rect.bottom);
     let datepickerTop = parseInt(rect.top);
 
     if (type === "end") {
       datepickerTop -= 40;
+    }
+
+    if (window.innerHeight - 216 < bott) {
+      datepickerTop = window.innerHeight - 216;
     }
 
     datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`)
@@ -573,7 +577,7 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function delegateEntryFormEvents(e) {
     // header
-    const dragHeader = getClosest(e, ".form--header-date");
+    const dragHeader = getClosest(e, ".form-header--dragarea");
     const closeicon = getClosest(e, ".form--header__icon-close");
 
     // form inputs
@@ -640,12 +644,16 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function delegateFormKeyDown(e) {
-    if (e.key === "Escape") {
+    const k = e.key.toLowerCase()
+    if (!datepicker.classList.contains("hide-datepicker")) {
+      return;
+    }
+
+    if (k === "escape") {
       handleFormClose(e);
     }
 
-    if (e.key === "Enter") {
-      if (!datepicker.classList.contains("hide-datepicker")) return;
+    if (e.key === "enter") {
       handleFormSubmission(e);
     }
   }

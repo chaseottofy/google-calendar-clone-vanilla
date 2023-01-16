@@ -181,6 +181,11 @@ class Store {
     this.keyboardShortcutsStatus = true;
   }
 
+  setStoreForTesting(store) {
+    this.store = store;
+    Store.setStore(this.store);
+  }
+
   getStoreStats() {
     return [this.store.length, this.getAllCtgNames().length] 
   }

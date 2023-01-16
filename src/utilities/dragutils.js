@@ -191,7 +191,9 @@ function setStylingForEvent(clause, wrapper, store) {
 
       store.addActiveOverlay("hide-resize-overlay");
       resizeoverlay.classList.remove("hide-resize-overlay");
-      document.body.style.cursor = "move";
+      if (!wrapper.classList.contains("monthview--calendar")) {
+        document.body.style.cursor = "move";
+      }
       break;
     case "dragend":
       store.removeActiveOverlay("hide-resize-overlay")

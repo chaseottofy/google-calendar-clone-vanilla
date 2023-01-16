@@ -314,7 +314,6 @@ const formOverlay = document.querySelector(".form-overlay")
 const formModalOverlay = document.querySelector(".form-modal-overlay")
 const entriesFormWrapper = document.querySelector(".entries__form")
 const entriesForm = document.querySelector(".entry-form")
-const formHeaderDate = document.querySelector(".form--header-date")
 
 // title / description inputs
 const titleInput = document.querySelector(".form--body__title-input")
@@ -454,10 +453,15 @@ function setEntryForm(context, store, datepickerContext) {
     const [y, m, d] = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.getDateFromAttribute)(e.target, "data-form-date");
     const rect = e.target.getBoundingClientRect();
     const datepickerLeft = parseInt(rect.left);
+    const bott = parseInt(rect.bottom);
     let datepickerTop = parseInt(rect.top);
 
     if (type === "end") {
       datepickerTop -= 40;
+    }
+
+    if (window.innerHeight - 216 < bott) {
+      datepickerTop = window.innerHeight - 216;
     }
 
     datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`)
@@ -850,7 +854,7 @@ function setEntryForm(context, store, datepickerContext) {
 
   function delegateEntryFormEvents(e) {
     // header
-    const dragHeader = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--header-date");
+    const dragHeader = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form-header--dragarea");
     const closeicon = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--header__icon-close");
 
     // form inputs
@@ -917,12 +921,16 @@ function setEntryForm(context, store, datepickerContext) {
   }
 
   function delegateFormKeyDown(e) {
-    if (e.key === "Escape") {
+    const k = e.key.toLowerCase()
+    if (!datepicker.classList.contains("hide-datepicker")) {
+      return;
+    }
+
+    if (k === "escape") {
       handleFormClose(e);
     }
 
-    if (e.key === "Enter") {
-      if (!datepicker.classList.contains("hide-datepicker")) return;
+    if (e.key === "enter") {
       handleFormSubmission(e);
     }
   }
@@ -1615,7 +1623,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ createCategoryForm)
 /* harmony export */ });
 /* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
+/* harmony import */ var _utilities_svgs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/svgs */ "./src/utilities/svgs.js");
 
+
+const checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_1__.createCheckIcon)('var(--taskcolor');
 const colors = Object.values(_locales_en__WEBPACK_IMPORTED_MODULE_0__["default"].colors)
 
 class CatFormHelper {
@@ -1661,7 +1672,7 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
     colorOption.setAttribute("data-color-hex", color)
 
     if (color === selected) {
-      colorOption.classList.add("color-selected");
+      colorOption.append(checkIcon);
       formhelper.setColor(color);
     }
 
@@ -1687,9 +1698,9 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
 
     const colorOptions = document.querySelectorAll(".color-picker--option");
     colorOptions.forEach((option) => {
-      option.classList.remove("color-selected");
+      option.innerText = "";
     })
-    target.classList.add("color-selected");
+    target.appendChild(checkIcon);
     colorPickerTitle.style.background = color;
     formhelper.setColor(color);
   }
@@ -1706,21 +1717,28 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
   function validateNewCategory(categoryName, color) {
     const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
     const origName = formhelper.getOriginalName();
-    
+    // const [origNameIdx, newNameIdx] = [
+    //   store.getCategoryIndex(origName)
+    // ]
+
     let errormsg = false;
     if (trimName.length < 1) {
       formhelper.setErrMsg("Category name is required");
       errormsg = true;
-    } else if (!editing && store.hasCtg(trimName)) {
-      formhelper.setErrMsg("Category already exists");
-      errormsg = true;
+    } else if (store.hasCtg(trimName)) {
+      if (!editing || (editing && origName !== trimName)) {
+        formhelper.setErrMsg("Category already exists");
+        errormsg = true;
+      }
     }
+
 
     if (errormsg) {
       ctgErrMsg.classList.remove("hide-ctg-err");
       handleInputErr(errormsg);
       return;
     } else {
+      console.log('ran')
       if (editing) {
         if (origName === trimName && formhelper.getOriginalColor() === color) {
           closeCategoryForm();
@@ -2336,6 +2354,9 @@ function handleSidebarCategories(context, store, datepickerContext) {
 
 
     // category has entries -- provide options to move entries to another category or delete them
+    // const setChecked = (inp) => {
+    //   inp.checked = true;
+    // }
     if (!noEntries) {
       // POPUP BODY
       const popupBody = document.createElement("div");
@@ -2368,6 +2389,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       }
       optionMove.append(optionMoveTitle, optionMoveSelect);
       optionsWrapperOne.append(optionMoveRadio, optionMove);
+      
 
       /* ************ */
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
@@ -2386,12 +2408,22 @@ function handleSidebarCategories(context, store, datepickerContext) {
 
       optionRemoveTitle.textContent = `Delete "${ctgname}" and ${categoryLength} ${ord} (irreversible)`;
       const optionRemoveIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createTrashIcon)(ctgcolor);
-
+      const handleWrapperClick = (e) => {
+        if (e.target.id === "ctg-delete" || e.target.id === "ctg-move" || e.target.classList.contains("popup-delete-ctg__option--move")) {
+          return;
+        } else {
+          // optionRemoveRadio.checked = true;
+          e.target.closest(".popup-delete-ctg__options").querySelector("input").checked = true;
+        }
+      }
 
       optionRemove.append(optionRemoveTitle, optionRemoveIcon)
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
+      
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
       popupBox.appendChild(popupBody)
+      optionsWrapperOne.onclick = handleWrapperClick;
+      optionsWrapperTwo.onclick = handleWrapperClick;
     }
 
 
@@ -2444,7 +2476,6 @@ function handleSidebarCategories(context, store, datepickerContext) {
       renderSidebarDatepickerCtg()
       renderCategories()
     }
-
 
     btnproceed.onclick = proceedDeletePopup
     popupBoxOverlay.onclick = closeDeletePopup
@@ -4021,15 +4052,9 @@ const sidebar = document.querySelector(".sidebar")
 const monthWrapper = document.querySelector(".monthview--calendar")
 
 function setMonthView(context, store, datepickerContext) {
-  monthWrapper.innerText = "";
-  const activeCategories = store.getActiveCategories()
   const montharray = context.getMonthArray()
   const monthentries = store.getMonthEntries(montharray)
   let groupedEntries = store.getGroupedMonthEntries(monthentries)
-  // console.log(montharray)
-  // console.log(monthentries)
-  let currentComponent;
-
 
   const boxquery = new _factory_queries__WEBPACK_IMPORTED_MODULE_5__["default"](
     window.innerWidth <= 530 || window.innerHeight <= 470
@@ -4328,17 +4353,24 @@ function setMonthView(context, store, datepickerContext) {
     let [movedX, movedY] = [0, 0];
     let [lastX, lastY] = [cellX, cellY];
     let gaveStyles = false; 
+    let changeCursor = false;
+    
 
 
     const mousemove = e => {
       movedX = Math.abs(e.clientX - startcursorx);
       movedY = Math.abs(e.clientY - startcursory);
-
       // Do not apply styles until user has moved the box at least 5px from starting position.
-      if (movedX > 5 || movedY > 5) {
+      if (movedX > 1 || movedY > 1) {
+        if (!changeCursor) {
+          document.body.style.cursor = "move";
+          changeCursor = true;
+        }
+      }
+      if (movedX > 3 || movedY > 3) {
         if (!gaveStyles) {
+          // document.body.style.cursor = "move";
           box.style.opacity = "0.5";
-          // clone.style.opacity = "0.8";
           clone.style.display = "block"
         }
         gaveStyles = true;
@@ -4851,7 +4883,6 @@ function setMonthView(context, store, datepickerContext) {
 
   const initMonth = () => {
     // see readme @ -- monthview.events -- for more info on setup
-    currentComponent = "month"
     populateCells()
     monthWrapper.onmousedown = delegateMonthEvents
     monthWrapper.onclick = delegateNewBox
@@ -5781,6 +5812,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_menus_shortcutsModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/menus/shortcutsModal */ "./src/components/menus/shortcutsModal.js");
 /* harmony import */ var _components_menus_sidebarSubMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/menus/sidebarSubMenu */ "./src/components/menus/sidebarSubMenu.js");
 /* harmony import */ var _components_forms_goto__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/forms/goto */ "./src/components/forms/goto.js");
+/* harmony import */ var _components_menus_editCategory__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/menus/editCategory */ "./src/components/menus/editCategory.js");
+
 
 
 
@@ -6342,6 +6375,13 @@ function renderViews(context, datepickerContext, store) {
       case "g":
         (0,_components_forms_goto__WEBPACK_IMPORTED_MODULE_9__["default"])(context, store, datepickerContext);
         break;
+
+      case "+":
+        const targetcat = {
+          name: "new category",
+          color: "#2C52BA",
+        }
+        ;(0,_components_menus_editCategory__WEBPACK_IMPORTED_MODULE_10__["default"])(store, targetcat, false, null);
       default:
         break;
     }
@@ -7864,6 +7904,10 @@ class Store {
     }
   }
 
+  getCtgIndex(category) {
+    return Object.keys(this.ctg).indexOf(category);
+  }
+
   /**
    * 
    * @param {string} newName 
@@ -8622,9 +8666,10 @@ __webpack_require__.r(__webpack_exports__);
   12: {shortcut: "→", action: 'next period.'},
   13: { shortcut: 's', action: 'toggle sidebar' },
   14: { shortcut: 'f', action: 'open form' },
-  15: { shortcut: 'a', action: 'open settings' },
-  16: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
-  17: { shortcut: "esc", action: 'return to calendar' },
+  15: { shortcut: '+', action: 'open new category form' },
+  16: { shortcut: 'a', action: 'open settings' },
+  17: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
+  18: { shortcut: "esc", action: 'return to calendar' },
 });
 
 /***/ }),
@@ -9160,7 +9205,9 @@ function setStylingForEvent(clause, wrapper, store) {
 
       store.addActiveOverlay("hide-resize-overlay");
       resizeoverlay.classList.remove("hide-resize-overlay");
-      document.body.style.cursor = "move";
+      if (!wrapper.classList.contains("monthview--calendar")) {
+        document.body.style.cursor = "move";
+      }
       break;
     case "dragend":
       store.removeActiveOverlay("hide-resize-overlay")
@@ -9919,7 +9966,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // FIX;
 // * clicking on item in more modal and then escaping out of form causes error
-// * header looks bad < 400px
 // * validate .json files
 // * top modal for day and week view
 // * numbers monospace in form / table
@@ -9927,16 +9973,14 @@ __webpack_require__.r(__webpack_exports__);
 // * redo listview
 // * time picker form
 // * only show times from period of day in sidebar
+// * aria labels and links not crawable
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 
 // localStorage.clear()
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-// store.moveCategoryEntriesToNewCategory("default", "computers", true)
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-// console.log(store.ctg)
-// console.log(store.getDefaultCtg()[0])
+console.log()
+
 })();
 
 /******/ })()

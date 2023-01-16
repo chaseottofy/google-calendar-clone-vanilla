@@ -28,7 +28,8 @@
 }
 
 .sidebar-content--header {
-  height: 72px;
+  height: 76px;
+  min-height: 76px;
   width: 100%;
   position: relative;
 }
@@ -161,7 +162,7 @@
   background: var(--black1);
   width: 100%;
   height: calc(100% + 48px);
-  margin-top: 16px;
+  margin-top: 4px;
   overflow-y: scroll !important;
   overflow-x: hidden;
   display: flex;
@@ -433,6 +434,8 @@
   height: 28px;
   width: 32px;
   position: relative;
+}
+.sb-link:first-child {
   cursor: pointer;
 }
 
@@ -440,7 +443,7 @@
   fill: var(--primary1);
 }
 
-.sb-link:hover::after {
+.sb-link:not(:first-child):hover::after {
   align-items: center;
   background: var(--mediumgrey1);
   border-radius: var(--borderradius);
@@ -517,6 +520,8 @@
   .sidebar {
     height: calc(100% - 54px);
   }
+
+
 }
 
 @media screen and (max-height: 470px) and (max-width: 840px) {

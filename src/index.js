@@ -2,6 +2,8 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
+// import generateRandomEvents from "./utilities/testing"
+// store.setStoreForTesting(generateRandomEvents())
 /*!*************************************!*\
 // (CSS) 
 /*!*************************************!*/
@@ -42,7 +44,6 @@ import "./styles/aside/shortcuts.css"
 
 // FIX;
 // * clicking on item in more modal and then escaping out of form causes error
-// * header looks bad < 400px
 // * validate .json files
 // * top modal for day and week view
 // * numbers monospace in form / table
@@ -50,15 +51,10 @@ import "./styles/aside/shortcuts.css"
 // * redo listview
 // * time picker form
 // * only show times from period of day in sidebar
-// * favicon
+// * aria labels and links not crawable
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 
 // localStorage.clear()
 setAppDefaults(context, store);
-// store.moveCategoryEntriesToNewCategory("default", "computers", true)
 renderViews(context, datepickerContext, store);
-// console.log(store.ctg)
-// console.log(store.getDefaultCtg()[0])
 console.log()

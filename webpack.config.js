@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
+// const TerserPlugin = require("terser-webpack-plugin");
 const path = require('path');
 
 module.exports = {
@@ -23,6 +23,7 @@ module.exports = {
       {
         test: /\.js$/,
         enforce: "pre",
+        exclude: /node_modules/,
         use: ["source-map-loader"],
       },
       {
@@ -34,7 +35,7 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /\.(?:ico|png|svg|webp|jpg|jpeg)$/i,
+        test: /\.(ico|png|svg|webp|jpg|jpeg)$/i,
         type: 'asset/resource',
       },
     ],
@@ -44,8 +45,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "output management",
       template: "./src/index.html",
-      filename: "testbundle.html",
       favicon: "./src/favicon.ico",
+      filename: "testbundle.html",
+      inject: "head",
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -74,6 +76,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    // publicPath: "./",
     clean: true,
   },
 };

@@ -165,6 +165,9 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
 
     // category has entries -- provide options to move entries to another category or delete them
+    // const setChecked = (inp) => {
+    //   inp.checked = true;
+    // }
     if (!noEntries) {
       // POPUP BODY
       const popupBody = document.createElement("div");
@@ -197,6 +200,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       }
       optionMove.append(optionMoveTitle, optionMoveSelect);
       optionsWrapperOne.append(optionMoveRadio, optionMove);
+      
 
       /* ************ */
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
@@ -215,12 +219,22 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
       optionRemoveTitle.textContent = `Delete "${ctgname}" and ${categoryLength} ${ord} (irreversible)`;
       const optionRemoveIcon = createTrashIcon(ctgcolor);
-
+      const handleWrapperClick = (e) => {
+        if (e.target.id === "ctg-delete" || e.target.id === "ctg-move" || e.target.classList.contains("popup-delete-ctg__option--move")) {
+          return;
+        } else {
+          // optionRemoveRadio.checked = true;
+          e.target.closest(".popup-delete-ctg__options").querySelector("input").checked = true;
+        }
+      }
 
       optionRemove.append(optionRemoveTitle, optionRemoveIcon)
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
+      
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
       popupBox.appendChild(popupBody)
+      optionsWrapperOne.onclick = handleWrapperClick;
+      optionsWrapperTwo.onclick = handleWrapperClick;
     }
 
 
@@ -273,7 +287,6 @@ export default function handleSidebarCategories(context, store, datepickerContex
       renderSidebarDatepickerCtg()
       renderCategories()
     }
-
 
     btnproceed.onclick = proceedDeletePopup
     popupBoxOverlay.onclick = closeDeletePopup

@@ -46,15 +46,9 @@ const sidebar = document.querySelector(".sidebar")
 const monthWrapper = document.querySelector(".monthview--calendar")
 
 export default function setMonthView(context, store, datepickerContext) {
-  monthWrapper.innerText = "";
-  const activeCategories = store.getActiveCategories()
   const montharray = context.getMonthArray()
   const monthentries = store.getMonthEntries(montharray)
   let groupedEntries = store.getGroupedMonthEntries(monthentries)
-  // console.log(montharray)
-  // console.log(monthentries)
-  let currentComponent;
-
 
   const boxquery = new MonthBoxQuery(
     window.innerWidth <= 530 || window.innerHeight <= 470
@@ -353,17 +347,24 @@ export default function setMonthView(context, store, datepickerContext) {
     let [movedX, movedY] = [0, 0];
     let [lastX, lastY] = [cellX, cellY];
     let gaveStyles = false; 
+    let changeCursor = false;
+    
 
 
     const mousemove = e => {
       movedX = Math.abs(e.clientX - startcursorx);
       movedY = Math.abs(e.clientY - startcursory);
-
       // Do not apply styles until user has moved the box at least 5px from starting position.
-      if (movedX > 5 || movedY > 5) {
+      if (movedX > 1 || movedY > 1) {
+        if (!changeCursor) {
+          document.body.style.cursor = "move";
+          changeCursor = true;
+        }
+      }
+      if (movedX > 3 || movedY > 3) {
         if (!gaveStyles) {
+          // document.body.style.cursor = "move";
           box.style.opacity = "0.5";
-          // clone.style.opacity = "0.8";
           clone.style.display = "block"
         }
         gaveStyles = true;
@@ -876,7 +877,6 @@ export default function setMonthView(context, store, datepickerContext) {
 
   const initMonth = () => {
     // see readme @ -- monthview.events -- for more info on setup
-    currentComponent = "month"
     populateCells()
     monthWrapper.onmousedown = delegateMonthEvents
     monthWrapper.onclick = delegateNewBox

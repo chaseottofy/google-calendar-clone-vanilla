@@ -24,6 +24,7 @@
   flex-direction: column;
   height: auto;
   /* min-height: 380px; */
+  min-height: 200px;
   max-height: 420px;
   min-width: 256px;
   max-width: 500px;
@@ -42,9 +43,9 @@
 }
 
 .hide-form {
-  height: 0;
-  left: 0;
-  opacity: 0;
+  height: 0 !important;
+  left: 0 !important;
+  opacity: 0 !important;
   pointer-events: none;
   top: 100%;
   transform: scale(.9);
@@ -64,8 +65,14 @@
   width: 100%
 }
 
-.form--header__icon-close,
-.form--header__icon-dock {
+.form-header--dragarea {
+  cursor: move;
+  height: 100%;
+  width: 100%;
+}
+
+
+.form--header__icon-close {
   align-items: center;
   cursor: pointer;
   display: flex;
@@ -75,21 +82,7 @@
   width: 32px
 }
 
-.form--header-date {
-  align-items: center;
-  color: var(--white2);
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  width: 100%
-}
-
-.form--header__icon-dock:hover:after {
-  left: 12px
-}
-
-.form--header__icon-close:hover:before,
-.form--header__icon-dock:hover:after {
+.form--header__icon-close:hover:before {
   background: var(--mediumgrey1);
   border-radius: var(--borderradius);
   color: var(--white1);
@@ -121,8 +114,9 @@
   flex-direction: column;
   height: 100%;
   overflow-y: scroll;
-  padding: 8px 16px 8px 0;
+  padding: 8px 16px 24px 0;
   width: 100%;
+  user-select: none;
 }
 
 .entries__form--body::-webkit-scrollbar-track {
@@ -204,11 +198,12 @@
   grid-template-rows: 1fr;
   height: 100%;
   padding: 4px 4px 4px 0;
-  width: 100%
+  width: 100%;
+  user-select: none;
 }
 
 .form--body__category {
-  margin-bottom: 8px
+  margin-bottom: 24px
 }
 
 .form--body__category-icon,
@@ -325,7 +320,7 @@
   transition-property: height;
   transition-timing-function: cubic-bezier(.33, 1, .68, 1);
   width: 200px;
-  z-index: 1200
+  z-index: 1200;
 }
 
 .category-modal-open {
@@ -461,11 +456,13 @@
   align-items: center;
   background: transparent;
   display: flex;
-  height: 42px;
+  height: 52px;
   justify-content: flex-end;
   margin-left: auto;
-  padding: 4px 4px 8px;
+  padding: 4px 16px 12px 0;
   width: 100%;
+  user-select: none;
+  z-index: 1200
 }
 
 .form--footer__button-cancel,

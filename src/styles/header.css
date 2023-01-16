@@ -459,6 +459,12 @@ h2 {
     width: 20px
   }
 
+  .prev,
+  .next {
+    width: 24px;
+    height: 24px;
+  }
+
   .datetime-wrapper {
     margin: 0 4px 0 0
   }
@@ -509,13 +515,10 @@ h2 {
   }
 
   .prev-next {
-    margin-right: 8px
+    margin-right: 6px;
+    margin-left: 6px;
   }
 
-  .next,
-  .prev {
-    margin-right: 2px
-  }
 
   .datetime-wrapper {
     margin: 0;
