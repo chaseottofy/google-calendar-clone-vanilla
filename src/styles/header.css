@@ -1,0 +1,549 @@
+.header {
+  background: var(--black1);
+  height: 64px;
+  overflow: visible;
+  transition: height .2s ease-in-out;
+  width: 100%;
+  display:flex;
+  align-items:center;
+  z-index: 197;
+}
+
+.h__container {
+  flex-direction: row;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
+
+.group-right,
+.h-col-1,
+.h-col-2,
+.h-col-3,
+.h__container {
+  align-items: center;
+  display: flex;
+  height: 36px;
+}
+
+.menu {
+  border-radius: 50%;
+  cursor: pointer;
+  height: 42px;
+  justify-content: center;
+  margin-left: 10px;
+  transition: background .2s ease-in-out;
+  width: 42px;
+}
+
+.menu:hover {
+  background: var(--mediumgrey0)
+}
+
+.menu:hover:after {
+  background: var(--mediumgrey0);
+  border-radius: 2px;
+  content: attr(data-tooltip);
+  font-size: 12px;
+  font-weight: 400;
+  height: 25px;
+  left: 90%;
+  position: absolute;
+  top: 60%;
+  transform: translate(-25%, 80%);
+  width: 88px;
+  z-index: 1000;
+}
+
+.logo,
+.menu:hover:after {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.logo {
+  height: 42px;
+  margin-left: 4px;
+  position: relative;
+  width: 42px;
+}
+
+.logo:after {
+  font-family: var(--primaryFont);
+  align-items: center;
+  color: #1d75f1;
+  content: attr(data-current-day-of-month);
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  height: 100%;
+  justify-content: center;
+  letter-spacing: -1px;
+  position: absolute;
+  text-indent: -1px;
+  width: 100%
+}
+
+.logo svg {
+  height: 42px;
+  width: 42px
+}
+
+.header-title {
+  font-size: 22px;
+  line-height: 36px;
+  margin-left: 8px;
+  pointer-events: none;
+  user-select: none;
+  font-weight: 400;
+  height: 36px;
+  padding-right: 36px;
+}
+
+.btn-today,
+.header-title,
+.prev,
+.next,
+.datetime-content,
+.select__modal {
+  color: var(--white2);
+  font-family: var(--secondaryFont);
+  font-weight: 400;
+}
+
+.btn-today {  
+  height: 32px;
+  width: 65px;
+  font-weight: 400;
+  margin-left: 16px;
+  padding: 2px 8px;
+  position: relative;
+  font-size: 14px;
+  letter-spacing: 0.18px;
+}
+
+.group-right {
+  /* display:flex; height:36px; align-items:center; */
+  justify-content: space-between;
+  margin-left: auto;
+  width: 100%;
+}
+
+.h-col-2 {
+  margin-left: 16px
+}
+
+.next,
+.prev,
+.prev-next {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center
+}
+
+.prev-next {
+  margin-right: 12px;
+}
+
+.next,
+.prev {
+  background: var(--black1);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  height: 32px;
+  width: 32px;
+  user-select: none;
+}
+
+.next:hover,
+.prev:hover {
+  background: var(--mediumgrey1);
+}
+
+.btn-today:hover:after,
+.next:hover:after,
+.prev:hover:after {
+  font-family: var(--primaryFont) !important;
+  align-items: center;
+  background: var(--mediumgrey1);
+  border-radius: 2px;
+  color: var(--white1);
+  content: attr(data-tooltip);
+  display: flex;
+  font-size: 11px;
+  font-weight: 400 !important;
+  height: 25px;
+  justify-content: center;
+  left: 50%;
+  padding: 0 1px;
+  position: absolute;
+  top: 60%;
+  transform: translate(-50%, 80%);
+  width: 138px;
+  z-index: 2000;
+}
+
+.next:hover:after,
+.prev:hover:after {
+  width: 70px;
+}
+
+.datetime-wrapper {
+  justify-content: flex-start;
+  margin: 0 8px 0 0;
+  position: relative;
+  width: auto;
+}
+
+.datetime-content,
+.datetime-wrapper {
+  align-items: center;
+  display: flex;
+}
+
+.datetime-content {
+  border: none;
+  color: var(--white2);
+  cursor: pointer;
+  font-size: 22px;
+  height: 36px;
+  line-height: 36px;
+  overflow: visible;
+  padding-left: 2px;
+  text-align: start;
+  user-select: none;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.datetime-content::after {
+  border-color: var(--white2) transparent transparent transparent;
+  border-style: solid;
+  border-width: 4px 4px 0;
+  content: "";
+  height: 0;
+  width: 0;
+  margin-left: 8px;
+}
+
+.datetime-wrapper:hover {
+  background: var(--black0)
+}
+
+.datetime-inactive {
+  pointer-events: none;
+}
+
+.datetime-inactive .datetime-content::after {
+  border-color: transparent transparent transparent transparent;
+}
+
+.menu,
+.settings {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  position: relative
+}
+
+.settings {
+  border-radius: 50%;
+  height: 32px;
+  justify-content: center;
+  width: 32px
+}
+
+.settings:hover:after {
+  align-items: center;
+  background: var(--mediumgrey1);
+  border-radius: 2px;
+  color: var(--white1);
+  content: attr(data-tooltip);
+  display: flex;
+  font-size: 11px;
+  font-weight: 400;
+  height: 25px;
+  justify-content: center;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, 80%);
+  width: 60px;
+  z-index: 1000
+}
+
+.select-wrapper {
+  height: 36px;
+  margin: 0 16px 0 12px;
+}
+
+.select-wrapper,
+.select__modal {
+  align-items: center;
+  display: flex;
+  position: relative
+}
+
+.select__modal {
+  -webkit-appearance: none;
+  appearance: none;
+  border: var(--bordergrey);
+  border-radius: var(--borderradius);
+  color: var(--white2);
+  cursor: pointer;
+  font-size: 14px;
+  height: 32px;
+  overflow: hidden;
+  padding: 0 8px;
+  text-overflow: clip;
+  white-space: nowrap;
+  width: auto;
+}
+
+.select__modal::after {
+  border-color: var(--white2) transparent transparent transparent;
+  border-style: solid;
+  border-width: 4px 4px 0;
+  content: "";
+  display: inline-block;
+  height: 0;
+  margin: 0 0 0 8px;
+  /* vertical-align: middle; */
+  width: 0
+}
+
+.select__modal:hover {
+  background: var(--black0);
+}
+
+.select__modal:focus {
+  outline: none
+}
+
+.selection--active {
+  background: var(--mediumgrey1)
+}
+
+.btn-today,
+.datetime-content,
+.menu,
+.next,
+.prev,
+.settings,
+.select__modal,
+h2 {
+  user-select: none
+}
+
+
+
+
+
+@media screen and (max-width: 840px) {
+  .header-title {
+    padding-right: 8px;
+  }
+}
+
+
+@media screen and (max-width:735px) {
+  .menu {
+    height: 32px;
+    margin-left: 8px;
+    width: 32px
+  }
+
+  .header-title {
+    font-size: 18px;
+    padding-right: 0;
+  }
+
+  .h-col-2 {
+    margin-left: 6px;
+  }
+
+  .prev-next {
+    margin-right: 4px;
+  }
+  .prev,
+  .next {
+    height: 28px;
+    width: 28px;
+  }
+  
+  .btn-today,
+  .select__modal {
+    font-size: 12px;
+    height: 28px;
+  }
+
+  .btn-today {
+    width: inherit;
+  }
+
+  .datetime-content {
+    font-size: 18px;
+  }
+  
+  .settings svg {
+    height: 20px;
+    width: 20px
+  }
+
+  .select-wrapper {
+    margin: 0 6px
+  }
+
+  .select__modal {
+    padding: 0 5px;
+  }
+
+  .select__modal::after {
+    border-width: 3px 3px 0;
+    margin: 0 0 0 4px;
+  }
+}
+
+@media screen and (max-width:640px) {
+  .btn-today {
+    display: none
+  }
+
+  .h-col-2 {
+    margin-left: 0
+  }
+
+  .header-title {
+    font-size: 18px;
+    margin-left: 3px;
+    margin-right: 6px
+  }
+
+  .settings {
+    display: none
+  }
+}
+
+@media screen and (max-width:530px) {
+  .header {
+    height: 54px
+  }
+
+  .h-col-1 {
+    height: 32px
+  }
+
+  .logo,
+  .logo svg,
+  .logo:after {
+    height: 36px;
+    width: 36px
+  }
+
+  .logo:after {
+    font-size: 12px;
+    line-height: 36px;
+    text-align: center;
+    text-indent: -.5px
+  }
+
+  .header-title {
+    font-size: 16px
+  }
+
+  .prev-next svg {
+    height: 20px;
+    width: 20px
+  }
+
+  .datetime-wrapper {
+    margin: 0 4px 0 0
+  }
+
+  .datetime-content {
+    font-size: 15px;
+    padding-left: 1px
+  }
+
+  .select__modal {
+    font-size: 10px;
+    height: 24px;
+    padding: 0 5px
+  }
+}
+
+@media screen and (max-width:448px) {
+  .menu {
+    margin-left: 4px
+  }
+
+  .menu svg {
+    height: 22px;
+    width: 22px
+  }
+
+  .logo {
+    margin-left: 1px
+  }
+
+  .logo,
+  .logo svg,
+  .logo:after {
+    height: 32px;
+    width: 32px
+  }
+
+  .logo:after {
+    font-size: 10px;
+    letter-spacing: -.5px;
+    line-height: 32px;
+    text-indent: 0
+  }
+
+  .header-title,
+  .settings {
+    display: none
+  }
+
+  .prev-next {
+    margin-right: 8px
+  }
+
+  .next,
+  .prev {
+    margin-right: 2px
+  }
+
+  .datetime-wrapper {
+    margin: 0;
+  }
+
+  .datetime-content {
+    font-size: 14px;
+  }
+
+  .select-wrapper {
+    margin: 0 4px 0 0 ;
+  }
+
+  .select__modal {
+    color: transparent;
+    font-size:0;
+    padding: 0 3px;
+  }
+
+  .select__modal::before {
+    content: attr(data-value);
+    color: var(--white2);
+    font-size: 10px !important;
+  }
+}
+
+@media screen and (max-height:470px) {
+  .header {
+    height: 54px
+  }
+}

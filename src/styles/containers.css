@@ -1,0 +1,135 @@
+@keyframes swipe-left {
+  0% {
+    opacity: 0.5;
+    transform: translateX(32px);
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes swipe-right {
+  0% {
+    opacity: 0.5;
+    transform: translateX(-32px);
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.transition--left {
+  -webkit-animation: swipe-left 200ms ease-out;
+  animation: swipe-left 200ms ease-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.transition--right {
+  -webkit-animation: swipe-right 200ms ease-out;
+  animation: swipe-right 200ms ease-out;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+}
+
+.resize-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 903;
+  user-select: none;
+}
+
+.hide-resize-overlay {
+  display: none;
+}
+
+.header-overlay--active {
+  display: block;
+}
+
+.main {
+  width: 100%;
+  height: calc(100% - 64px);
+  overflow: hidden;
+  display: flex;
+  /* background: var(--black1); */
+}
+
+.container__calendars {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin-left: auto;
+}
+
+.cc-tran {
+  transition: .3s cubic-bezier(.4,0,.2,1);
+  transition-property: width, transform;
+}
+
+.container__calendars-sb-active {
+  width: calc(100% - 256px);
+}
+
+.hide-view {
+  display: none !important;
+}
+
+.yearview,
+.dayview,
+.monthview {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+.monthview {
+  overflow:hidden;
+}
+
+.weekview {
+  width: 100%;
+  height: calc(100% - 64px);
+}
+
+.listview {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0 2px;
+  position: relative;
+}
+
+@media screen and (max-width: 840px) {
+  .container__calendars {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  .main {
+    height: calc(100% - 54px);
+  }
+
+  .weekview {
+    height: calc(100% - 54px);
+  }
+}
+
+@media screen and (max-height:470px) {
+  .main {
+    height: calc(100% - 54px);
+  }
+
+  .weekview {
+    height: calc(100% - 54px);
+  }
+}

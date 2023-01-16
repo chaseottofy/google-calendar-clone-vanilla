@@ -1,0 +1,89 @@
+.change-view--overlay {
+  display: block;
+  position: absolute;
+  background: transparent;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1001;
+}
+
+.change-view--wrapper {
+  top: 60px;
+  right: 0;
+  height: auto;
+  width: 30%;
+  min-width: 200px;
+  max-width: 200px;
+  position: absolute;
+  z-index: 1002;
+  background: var(--black1);
+  box-shadow: var(--box-shadow1);
+  padding: 8px 0;
+}
+
+.toggle-options {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.toggle-animate {
+  transition: all 0.2s ease-in-out;
+}
+
+.change-view--options {
+  width: auto!important;
+  min-width: auto!important;
+  height: auto;
+}
+
+.view-option {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  background: var(--black1);
+  color: var(--white2);
+  padding: 0 14px;
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.change-view--option__active {
+  color: var(--primarylight1);
+}
+
+.view-option:hover {
+  background: var(--mediumgrey1);
+}
+
+.view-option::after {
+  content: attr(data-view-key);
+  padding-right: 8px;
+}
+
+@media screen and (max-width: 530px) {
+  .change-view--wrapper {
+    top: 48px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .view-option {
+    min-height: 38px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-height: 470px) {
+  .change-view--wrapper {
+    top: 48px;
+  }
+}
