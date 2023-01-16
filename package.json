@@ -2,7 +2,7 @@
   "name": "google-calendar-clone-vanilla",
   "version": "1.0.0",
   "description": "zero dependency clone of google calendar written in vanilla javascript",
-  "private": true,
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,21 +12,34 @@
   },
   "keywords": [
     "google-calendar",
-    "vanilla",
+    "html",
+    "css",
+    "javascript",
     "calendar",
     "clone",
-    "css",
-    "html",
-    "javascript"
+    "google",
+    "vanilla",
+    "vanillajs"
   ],
-  "author": "Chase Ottofy",
+  "author": "chase ottofy",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/chaseottofy/google-calendar-clone-vanilla/issues"
   },
   "homepage": "https://github.com/chaseottofy/google-calendar-clone-vanilla#readme",
   "devDependencies": {
+    "compression-webpack-plugin": "^10.0.0",
+    "css-loader": "^6.7.3",
+    "css-minimizer-webpack-plugin": "^4.2.2",
+    "html-minimizer-webpack-plugin": "^4.3.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.2",
+    "source-map-loader": "^4.0.1",
+    "style-loader": "^3.3.1",
     "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1"
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-nano": "^1.1.1"
   }
 }
