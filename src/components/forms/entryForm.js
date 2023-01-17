@@ -99,7 +99,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`
     let nextDayTitle = locales.labels.monthsShort[nextDay.getMonth()] + " " + nextDay.getDate() + ", " + nextDay.getFullYear();
 
-
     endDateInput.setAttribute("data-form-date", nextDayString);
     endDateInput.textContent = nextDayTitle;
     endTimeInput.setAttribute("data-form-time", "00:30")
@@ -151,13 +150,29 @@ export default function setEntryForm(context, store, datepickerContext) {
       return parseInt(x)
     })
 
+    // console.log(currenthour, currentmin)
+
     let currentmd = currenthour > 12 ? "pm" : "am"
-    currenthour > 12 ? currenthour -= 12 : currenthour
     let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
+    let shouldTestReset = false;
+    // if (isSameDay)
+    if (end && currenthour === 23 && currentmin === 45) {
+      shouldTestReset = true;
+    }
+    currenthour > 12 ? currenthour -= 12 : currenthour
     let selectedIndex = hours.indexOf()
+
 
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
+      if (shouldTestReset) {
+        if (h === 23 && m >= 15) {
+          setEndDateToNextDay();
+          closetimepicker()
+          return;
+        }
+      }
+      
       if (h === 23) {
         if (m === 45) {
           setEndDateToNextDay();
@@ -521,7 +536,6 @@ export default function setEntryForm(context, store, datepickerContext) {
    */
   function handleFormErrors(errorMessages) {
     titleInput.blur()
-    console.log(errorMessages)
 
     const components = {
       title: titleInput,
