@@ -383,8 +383,8 @@ function setEntryForm(context, store, datepickerContext) {
     day = context.getDay()
     // ****************************************** //
     // title / description
+    descriptionInput.value = "";
     setTimeout(() => {
-      descriptionInput.value = "";
       let tempval = titleInput.value;
       titleInput.value = "";
       titleInput.focus();
@@ -1324,6 +1324,7 @@ class FormSetup {
       title: title || null,
       description: description || null,
     }
+    console.log(this.submission)
   }
 
   /**
@@ -1401,6 +1402,7 @@ const datepickerTitle = document.querySelector(".datepicker-title");
 // prev and next buttons aside from main app header datewrapper
 const headerPrevBtn = document.querySelector(".prev")
 const headerNextBtn = document.querySelector(".next")
+
 
 function setDatepicker(context, store, datepickerContext, type) {
   let montharray = datepickerContext.getMonthArray();
@@ -1887,19 +1889,61 @@ const reset = [
 ]
 
 function getEntryOptionModal(context, store, entry,datepickerContext, finishSetup) {
+
+
   function openEditForm() {
+  
     const openForm = store.getRenderFormCallback()
+
     openForm();
+    console.log(finishSetup)
     finishSetup();
     closeEntryOptions();
   }
 
-  function openDeleteWarning() {
-    // formNegated();
+
+  function proceedDelete(entry) {
     store.deleteEntry(entry.id);
-    // createToast(taostDeleteEntryWarning, store);
     closeEntryOptions();
     (0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])(context.getComponent(), context, store, datepickerContext);
+  }
+
+  function openDeleteWarning() {
+    // formNegated();
+    const deletepopup = document.createElement("div");
+    deletepopup.classList.add("delete-popup");
+
+    const deletebtns = document.createElement("div");
+    deletebtns.classList.add("delete-popup__btns");
+
+    const deletepopupCancel = document.createElement("button");
+    deletepopupCancel.classList.add("delete-popup__cancel");
+    deletepopupCancel.textContent = "Cancel";
+
+    const deletepopupConfirm = document.createElement("button");
+    deletepopupConfirm.classList.add("delete-popup__confirm");
+    deletepopupConfirm.textContent = "Delete";
+
+    const deletepopupText = document.createElement("p");
+    deletepopupText.classList.add("delete-popup__text");
+    deletepopupText.textContent = "Are you sure you want to delete this entry?";
+
+    deletebtns.append(deletepopupCancel, deletepopupConfirm)
+    deletepopup.append(deletepopupText, deletebtns);
+    entryOptionsWrapper.append(deletepopup);
+
+    const removeDeletePopup = () => {
+      deletepopup.remove();
+
+    }
+
+    const submitDelete = () => {
+      proceedDelete(entry);
+      removeDeletePopup();
+    }
+
+    deletepopupCancel.onclick = removeDeletePopup
+    deletepopupConfirm.onclick = submitDelete
   }
 
   function formNegated() {
@@ -1948,8 +1992,14 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
   }
 
   function handleEntryOptionKD(e) {
+    const deletepopup = document?.querySelector(".delete-popup")
     if (e.key === "Escape") { 
-      formNegated();
+      if (deletepopup) {
+        deletepopup.remove();
+        return;
+      } else {
+        formNegated();
+      }
     }
   }
 
@@ -2049,11 +2099,16 @@ function setHeader(context, component, store) {
       break;
     case "list":
       setHeaderAttributes("list");
+      header.style.borderBottom = "1px solid var(--mediumgrey1)"
+      // datetimeWrapper.classList.add("datetime-inactive");
+      /*
+      
       let [start, end] = store.getFirstAndLastEntry();
       
       !start || !end 
-        ? configListHeader("Schedule Clear")
-        : configListHeader((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_1__.formatStartEndDate)(new Date(), new Date(end), true));
+      ? configListHeader("Schedule Clear")
+      : configListHeader(formatStartEndDate(new Date(), new Date(end), true));
+      */
       break;
     default:
       break;
@@ -3190,8 +3245,6 @@ function getSidebarSubMenu(store, context) {
     shortcutSwitch.checked = status ? true : false;
   }
 
-
-
   function delegateSubMenuEvents(e) {
     const downloadjsonBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".down-json");
     const uploadjsonBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".upload-json");
@@ -4123,7 +4176,6 @@ function setListView(context, store, datepickerContext) {
       x = window.innerWidth - 150;
     }
 
-
     // *** config & open form ***
     store.setFormResetHandle("list", resetCellActive);
 
@@ -4139,8 +4191,6 @@ function setListView(context, store, datepickerContext) {
     const modal = document.querySelector(".entry__options")
     modal.style.top = y + "px";
     modal.style.left = x + "px";
-    // modal.style.top = offsettop + "px";
-    // modal.style.left = offsetleft + "px";
   }
 
 
@@ -4186,47 +4236,50 @@ function setListView(context, store, datepickerContext) {
       return;
     } else {
 
+      // update : 1.02 -- (1/16/23)
+      // The following logic is in its first stage and will be optimized when I come up with a better solution.
+      // I'm debating on whether to use a load more system or an infinite scroll system.
       const entries = store.sortBy(activeEnt, "start", "desc");
       const today = new Date();
-      const [todayYear, todayMonth, todayDay] = [
-        today.getFullYear(),
-        today.getMonth() + 1,
-        today.getDate(),
-      ];
+      const getdatearray = date => {
+        return [+date.getFullYear(), +date.getMonth() + 1, +date.getDate()]
+      }
+      const [todayYear, todayMonth, todayDay] = getdatearray(today)
 
       const groupedEntries = entries.reduce((acc, curr) => {
         const date = new Date(curr.start)
-        const [year, month, day] = [
-          +date.getFullYear(),
-          +date.getMonth() + 1,
-          +date.getDate(),
-        ];
-
+        const [year, month, day] = getdatearray(date)
         const datestring = `${year}-${month}-${day}` // for parse&group
 
         if (year < todayYear) {
           return acc;
+        } else if (year === todayYear) {
+          if (month < todayMonth) {
+            return acc;
+          } else if (month === todayMonth && day < todayDay) {
+            return acc;
+          }
         }
 
-        if (year === todayYear && month < todayMonth) {
-          return acc;
-        }
-
-        if (year === todayYear && month === todayMonth && day < todayDay) {
-          return acc;
-        }
-
-        if (!acc[datestring]) {
-          acc[datestring] = []
-        }
+        if (!acc[datestring]) {acc[datestring] = []}
         acc[datestring].push(curr)
         return acc;
       }, {})
 
-      const length = Object.keys(groupedEntries).length;
+      // set the header title to the first date with entries that is not in the past and the last date with entries
+      // if no entries are in the future, set the header title to "Schedule Clear";
+      const dateTimeTitle = document.querySelector(".datetime-content--title");
+      const keys = Object.keys(groupedEntries)
+      const length = keys.length;
       if (length === 0) {
-        const dateTimeTitle = document.querySelector(".datetime-content--title");
         dateTimeTitle.textContent = "Schedule Clear"
+      } else {
+        // true will slice the year at last two digits if two years are displayed at the same time;
+        dateTimeTitle.textContent = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndDate)(
+          keys[0], 
+          keys[length - 1], 
+          true
+        );
       }
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;
@@ -7506,7 +7559,8 @@ __webpack_require__.r(__webpack_exports__);
 
 const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 /*
-  // entry methods
+  ***************************************
+  // ENTRY MANAGEMENT
   "addEntry",
   "createEntry",
   "deleteEntry",
@@ -7527,7 +7581,11 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "getWeekEntries",
   "getYearEntries",
   "getGroupedYearEntries",
-  // category methods
+  ***************************************
+
+
+  ***************************************
+  // CATEGORY MANAGEMENT
   "addNewCtg",
   "deleteCategory",
   "getDefaultCtg",
@@ -7546,24 +7604,39 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "removeCategoryAndEntries",
   "setCategoryStatus",
   "updateCtgColor",
-  // keyboard shortcuts
+  ***************************************
+
+
+  ***************************************
+  // KEYBOARD SHORTCUT MANAGEMENT
   "getShortcuts",
   "setShortCut",
   "setShortcutsStatus",
   "getShortcutsStatus",
-  // overlay management
+  ***************************************
+
+
+  ***************************************
+  // POPUP/TOAST/NOTIFICATION MANAGEMENT
   "addActiveOverlay",
   "removeActiveOverlay",
   "getActiveOverlay",
   "hasActiveOverlay",
-  // user upload/download local storage
+  ***************************************
+
+
+  ***************************************
+  // USER UPLOAD/DOWNLOAD MANAGEMNET
   "validateUserUpload",
   "setUserUpload",
   "setDataReconfigCallback",
   "getUserUpload",
   "getDataReconfigCallback",
   ***************************************
-  // form management
+
+
+  ***************************************
+  // FORM MANAGEMENT 
   "setFormRenderHandle",
   "getFormRenderHandle",
 
@@ -7573,16 +7646,22 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "setRenderFormCallback",
   "getRenderFormCallback",
   ***************************************
+
+
   ***************************************
-  // sidebar management
+  // SIDEBAR MANAGEMENT
   "setRenderSidebarCallback",
   "getRenderSidebarCallback"
   ***************************************
+
+
   ***************************************
   // DATEPICKER MANAGEMENT
   "setResetDatepickerCallback",
   "getResetDatepickerCallback",
   ***************************************
+
+
   ***************************************
   // CALENDAR MANAGEMENT
   "setResizeHandle",
@@ -7594,7 +7673,6 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 // ./index > ./renderViews > ./setViews > component
 
 class Store {
-
   constructor() {
     this.store = localStorage.getItem("store") 
     ? JSON.parse(localStorage.getItem("store")) : _testdata_json__WEBPACK_IMPORTED_MODULE_5__;
@@ -7682,9 +7760,6 @@ class Store {
     return JSON.parse(localStorage.getItem("keyboardShortcutsStatus"));
   }
 
-  // static getActiveCtg() {
-  //   return JSON.parse(localStorage.getItem("activeCtg")) || [];
-  // }
   // *******************
   static setStore(store) {
     localStorage.setItem("store", JSON.stringify(store));
@@ -7701,10 +7776,6 @@ class Store {
   static setShortcutsStatus(status) {
     localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status))
   }
-
-  // static setActiveCtg(activeCtg) {
-  //   localStorage.setItem("activeCtg", JSON.stringify(activeCtg));
-  // }
   /* ************************* */
 
 
@@ -8048,7 +8119,6 @@ class Store {
 
   getActiveCategories() {
     let active = Object.keys(this.ctg).filter(key => this.ctg[key].active);
-    // Store.setActiveCtg(active) || []; 
     if (active.length > 0) {
       return active;
     } else {
@@ -8255,9 +8325,10 @@ class Store {
   /* ******************** */
 
 
+
+
   /* ************************ */
   /*  JSON UPLOAD & DOWNLOAD */
-  
   validateUserUpload(userUpload) {
     const keys = Object.keys(userUpload);
     let message = {};
@@ -8265,6 +8336,7 @@ class Store {
     if (keys.length > _constants__WEBPACK_IMPORTED_MODULE_1__["default"].length) {
       message.err1 = "invalid number of keys (too many)"
     }
+    
     for (let i = 0; i < keys.length; i++) {
       if (!_constants__WEBPACK_IMPORTED_MODULE_1__["default"].includes(keys[i])) {
         let errname = "err" + Object.keys(message).length;
@@ -8293,8 +8365,6 @@ class Store {
     } else {
       return validation;
     }
-    // console.log(validated)
-
     if (validated) {
       const refresh = localStorage.getItem("refresh");
       if (refresh === null) {
@@ -8308,6 +8378,8 @@ class Store {
     return this.userUpload;
   }
   /* ************************ */
+
+
 
   /* ******************************************* */
   /*  STATE MANAGEMENT : RENDERING / RESET / RESIZE */

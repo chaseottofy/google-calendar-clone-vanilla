@@ -188,11 +188,6 @@ html {
 }
 
 .contrast-mode {
-  /* --box-shadow1:
-  rgba(116, 123, 132, 0.1) 2px 4px 8px 1px,
-  rgba(122, 129, 138, 0.1) 0px 3px 7px 2px,
-  rgba(176, 181, 187, 0.1) 0px 2px 8px -1px; */
-
   --primary5: #0f2c4f;
   --white1: #ffffff;
   --white2: #ffffff;
@@ -201,8 +196,8 @@ html {
   --taskcolor0: #ffffff;
   --taskcolor: #ffffff;
   --taskcolor2: #ffffff;
-  --offwhite1: #c0bab2;
-  --offwhite2: #c0bab2;
+  --offwhite1: #BFC0C1;
+  --offwhite2: #BFC0C1;
   --black000: #0c0e0e;
   --black0: #0c0e0e;
   --black1: #000000;
@@ -228,9 +223,8 @@ html {
   --box-shadow-sbfixed:
     4px 8px 12px 0 rgba(59, 88, 108, .2);
   --box-shadow5:
-    rgba(51, 54, 55, 0.14) 0px 8px 4px 0px,
-    rgba(51, 54, 55, 0.12) 0px 3px 6px 0px,
-    rgba(51, 54, 55, 0.2) 0px 2px 4px 0px;
+    0px 1px 2px 0px rgba(60, 64, 67, 0.4), 
+    0px 1px 3px 1px rgba(60, 64, 67, 0.2);
 }
 
 select,
@@ -292,7 +286,7 @@ svg {
 
 ::-webkit-scrollbar {
   width: 12px;
-  height: 8px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -28,18 +28,12 @@ const reset = [
 ]
 
 export default function getEntryOptionModal(context, store, entry,datepickerContext, finishSetup) {
-
-
   function openEditForm() {
-  
     const openForm = store.getRenderFormCallback()
-
     openForm();
-    console.log(finishSetup)
     finishSetup();
     closeEntryOptions();
   }
-
 
   function proceedDelete(entry) {
     store.deleteEntry(entry.id);
@@ -48,7 +42,6 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
   }
 
   function openDeleteWarning() {
-    // formNegated();
     const deletepopup = document.createElement("div");
     deletepopup.classList.add("delete-popup");
 
@@ -71,11 +64,7 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
     deletepopup.append(deletepopupText, deletebtns);
     entryOptionsWrapper.append(deletepopup);
 
-    const removeDeletePopup = () => {
-      deletepopup.remove();
-
-    }
-
+    const removeDeletePopup = () => {deletepopup.remove();}
     const submitDelete = () => {
       proceedDelete(entry);
       removeDeletePopup();

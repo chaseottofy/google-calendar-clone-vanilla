@@ -59,7 +59,7 @@ const selectedCategoryColor = document.querySelector(".form--body__category-moda
 const selectedCategoryTitle = document.querySelector(".form--body__category-modal--wrapper__title")
 
 // reset / save btns
-const formSubmitButton = document.querySelector(".form--footer__button-save");
+const formSubmitButton = document.querySelector(".form--footer__button-saindve");
 // const formClearButton = document.querySelector(".form--footer__button-cancel");
 
 export default function setEntryForm(context, store, datepickerContext) {
@@ -69,6 +69,32 @@ export default function setEntryForm(context, store, datepickerContext) {
   let currentComponent;
   let [year, month, day] = [null, null, null]
 
+  function createTimepicker(range, end) {
+    // .timepicker-overlay
+    // .timepicker
+    // .timepicker-times__container
+    // .timepicker-time
+    const timepicker = document.createElement("div")
+    timepicker.classList.add("timepicker")
+    const timepickerOverlay = document.createElement("div")
+    timepickerOverlay.classList.add("timepicker-overlay")
+    const timepickerTimesContainer = document.createElement("div")
+    timepickerTimesContainer.classList.add("timepicker-times__container")
+
+    if (end) {
+
+    }
+
+    const closetimepicker = () => {
+      store.removeActiveOverlay("timepicker-overlay");
+      timepickerOverlay.remove()
+      timepicker.remove()
+    }
+
+    store.setActiveOverlay("timepicker-overlay");
+    document.body.appendChild(timepickerOverlay)
+
+  }
 
   function renderSidebarDatepickerForm() {
     if (!sidebar.classList.contains("hide-sidebar")) {
@@ -128,10 +154,13 @@ export default function setEntryForm(context, store, datepickerContext) {
     let temphours = new Date().getHours()
     startDateInput.textContent = dateSelected
     startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-    startDateInput.setAttribute("data-form-time", `${temphours}:00`)
+    // START TIME
+    startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
+
     endDateInput.textContent = dateSelected
     endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-    endDateInput.setAttribute("data-form-time", `${temphours}:30`)
+    // END TIME
+    endTimeInput.setAttribute("data-form-time", `${temphours}:30`)
     // ****************************************** // 
 
     // submit button setup 
@@ -210,15 +239,13 @@ export default function setEntryForm(context, store, datepickerContext) {
   function configDatesForStore() {
     let startDateAttr = startDateInput.getAttribute("data-form-date")
     let startDate = getDateFormatViaAttr(startDateAttr)
-    let startTimeAttr = startDateInput.getAttribute("data-form-time") || "12:00"
+    let startTimeAttr = startTimeInput.getAttribute("data-form-time") || "12:00"
     let [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr)
-    // let startTimeAttr = startTimeInput.getAttribute("data-form-time") || "12:00"
 
     let endDateAttr = endDateInput.getAttribute("data-form-date")
     let endDate = getDateFormatViaAttr(endDateAttr)
-    let endTimeAttr = endDateInput.getAttribute("data-form-time") || "12:30"
+    let endTimeAttr = endTimeInput.getAttribute("data-form-time") || "12:30"
     let [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr)
-    // let endTimeAttr = endTimeInput.getAttribute("data-form-time") || "12:00"
 
     console.log(starthour, endhour)
     if (starthour >= endhour) {

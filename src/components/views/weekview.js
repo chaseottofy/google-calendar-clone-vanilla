@@ -47,6 +47,7 @@ const sidebar = document.querySelector('.sidebar');
 const resizeoverlay = document.querySelector(".resize-overlay")
 
 // weekview main grid wrapper & children
+const containerCalendars = document.querySelector(".container__calendars")
 const main = document.querySelector(".weekview")
 const container = document.querySelector(".weekview--calendar")
 const weekviewHeader = document.querySelector(".weekview--header")
@@ -390,7 +391,6 @@ export default function setWeekView(context, store, datepickerContext) {
 
         let color = box.style.backgroundColor;
         let offsetColor = color;
-        // let offsetColor = `${color.slice(0,3)}a(${color.slice(4, color.length - 1)}, 0.4)`;
 
         const dates = calcDateOnClick(
           weekArray[parseInt(originalColumn)],
@@ -443,6 +443,8 @@ export default function setWeekView(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup)
   }
 
+
+
   /** RESIZE NORTH/SOUTH 
    * resizing will never trigger form
   */
@@ -474,9 +476,13 @@ export default function setWeekView(context, store, datepickerContext) {
         amountScrolled += headerOffset;
       }
 
-      if (window.innerHeight < e.pageY) {
-        main.scrollBy(0, Math.abs(window.innerHeight - e.pageY));
-      }
+
+
+      // console.log(window.innerHeight, e.pageY)
+
+      // if (window.innerHeight < e.pageY) {
+      //   main.scrollBy(0, Math.abs(window.innerHeight - e.pageY));
+      // }
 
       const newHeight = Math.round(((e.pageY - boxTop - headerOffset) + amountScrolled) / 12.5) * 12.5;
 
@@ -546,6 +552,8 @@ export default function setWeekView(context, store, datepickerContext) {
     }
   }
 
+  // console.log()
+
   /** Drag down empty column to create box */
   function createBoxOnDrag(e) {
     setStylingForEvent("dragstart", main, store);
@@ -563,6 +571,7 @@ export default function setWeekView(context, store, datepickerContext) {
     boxcontent.classList.add('box__content');
     boxtime.classList.add('box-time');
     boxtimeend.classList.add('box-time');
+    
 
     const headerOffset = +weekviewGrid.offsetTop;
     const scrolled = parseInt(weekviewGrid.scrollTop);
@@ -585,6 +594,16 @@ export default function setWeekView(context, store, datepickerContext) {
 
       coords.h = +newHeight / 12.5;
       coords.e = +coords.y + coords.h;
+      
+      // console.log(coords.e)
+
+      // if (e.pageY > (window.innerHeight - 12.5) && coords.e < 95) {
+      //   let scrollIncrement = Math.abs(window.innerHeight - e.pageY);
+      //   console.log(scrollIncrement)
+      //   weekviewGrid.scrollTo({
+      //     top: weekviewGrid.scrollTop + scrollIncrement,
+      //   })
+      // }
 
       // Math.floor(((h + y) / 12.5) / 4)
       endhour = Math.floor(((+newHeight + +y) / 12.5) / 4);
@@ -661,4 +680,8 @@ export default function setWeekView(context, store, datepickerContext) {
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
+ 
+  // console.log(containerCalendars.offsetWidth)
+  // console.log(window.innerWidth);
+  // console.log(main);
 }

@@ -3,7 +3,6 @@
     opacity: 0.5;
     transform: translateX(32px);
   }
-
   100% {
     transform: translateX(0);
     opacity: 1;
@@ -15,7 +14,6 @@
     opacity: 0.5;
     transform: translateX(-32px);
   }
-
   100% {
     transform: translateX(0);
     opacity: 1;
@@ -59,14 +57,17 @@
   height: calc(100% - 64px);
   overflow: hidden;
   display: flex;
-  /* background: var(--black1); */
 }
 
+
+/* 1.02 */
 .container__calendars {
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  /* overflow-y:hidden; */
+  overflow-x: auto;
   margin-left: auto;
+  /* scrollbar-gutter: stable both-edges; */
 }
 
 .cc-tran {
@@ -106,10 +107,11 @@
 }
 
 .weekview {
+  height: 100%;
   width: 100%;
-  height: calc(100% - 64px);
+  min-width: 580px;
+  overflow-y:hidden;
 }
-
 
 @media screen and (max-width: 840px) {
   .container__calendars {
@@ -121,18 +123,10 @@
   .main {
     height: calc(100% - 54px);
   }
-
-  .weekview {
-    height: calc(100% - 54px);
-  }
 }
 
 @media screen and (max-height:470px) {
   .main {
-    height: calc(100% - 54px);
-  }
-
-  .weekview {
     height: calc(100% - 54px);
   }
 }

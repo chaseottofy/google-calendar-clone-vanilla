@@ -194,7 +194,7 @@
   height: 100%;
   display:flex;
   justify-content: space-evenly;
-  /* align-items: center; */
+  border-radius: 8px;
   flex-direction: column;
   position: absolute;
   top: 0;
@@ -226,7 +226,6 @@
   width: 120px;
   border-radius: 4px;
   cursor: pointer;
-  /* column-gap: 16px; */
   transition: background .2s ease-in-out;
 }
 .delete-popup__cancel {

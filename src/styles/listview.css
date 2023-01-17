@@ -61,6 +61,7 @@
   margin-left: 6px;
   margin-top: 17px;
   display:flex;
+  flex-direction: column;
   justify-content: center;
   letter-spacing: 0.8px;
   height: 36px;
@@ -157,12 +158,15 @@
 
   .rowgroup--header__monthdow {
     width: 32px;
+    height: 24px;
     align-items: center;
     text-align: center;
     letter-spacing: 0.4px;
-    line-height: 12px;
+    line-height: 11px;
     font-size: 9px;
+    font-weight: 500;
     margin-left: 11px;
+    text-align: start;
   }
 
   .rowgroup-content {

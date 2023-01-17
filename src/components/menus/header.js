@@ -54,17 +54,10 @@ export default function setHeader(context, component, store) {
       setHeaderAttributes("year");
       break;
     case "list":
+      // !Important : text content is set in list.js after data is fetched
       setHeaderAttributes("list");
       header.style.borderBottom = "1px solid var(--mediumgrey1)"
       // datetimeWrapper.classList.add("datetime-inactive");
-      /*
-      
-      let [start, end] = store.getFirstAndLastEntry();
-      
-      !start || !end 
-      ? configListHeader("Schedule Clear")
-      : configListHeader(formatStartEndDate(new Date(), new Date(end), true));
-      */
       break;
     default:
       break;

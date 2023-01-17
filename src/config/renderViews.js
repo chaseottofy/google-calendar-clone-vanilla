@@ -40,6 +40,7 @@ const sidebar = document.querySelector(".sidebar");
 const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
+const weekwrapper = document.querySelector(".weekview")
 const listviewBody = document.querySelector(".listview__body");
 
 export default function renderViews(context, datepickerContext, store) {
@@ -179,6 +180,14 @@ export default function renderViews(context, datepickerContext, store) {
       dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
     }
 
+    // weekview is the only view that has a horizontal scrollbar, for the other views, hide this scrollbar when transitioning
+    if (!view.classList.contains("weekview")) {
+      viewsContainer.style.overflowX = "hidden";
+      setTimeout(() => {
+        viewsContainer.style.overflowX = "auto";
+      }, 200);
+    }
+
     removeslide(keyframeDirection)
     const slide = `transition--${keyframeDirection}`
     if (view.classList.contains(slide)) {
@@ -278,7 +287,7 @@ export default function renderViews(context, datepickerContext, store) {
         handleTransition(document.querySelector(".dayview--header-day"), "right", getPreviousDay)
         break;
       case "week":
-        handleTransition(document.querySelector(".weekview--calendar"), "right", getPreviousWeek)
+        handleTransition(weekwrapper, "right", getPreviousWeek)
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -298,7 +307,8 @@ export default function renderViews(context, datepickerContext, store) {
         handleTransition(document.querySelector(".dayview--header-day"), "left", getNextDay)
         break;
       case "week":
-        handleTransition(document.querySelector(".weekview--calendar"), "left", getNextWeek)
+        handleTransition(weekwrapper, "left", getNextWeek)
+        // handleTransition(document.querySelector(".weekview--calendar"), "left", getNextWeek)
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)
@@ -515,13 +525,13 @@ export default function renderViews(context, datepickerContext, store) {
         break;
 
       // (day/week) next month
-      case "n":
-        getNextPrevMonth("next");
+      case "p":
+        handleBtnPrev();
         break;
 
       // (day/week) prev month
-      case "p":
-        getNextPrevMonth("prev");
+      case "n":
+        handleBtnNext();
         break;
 
       // set date to today
@@ -532,16 +542,6 @@ export default function renderViews(context, datepickerContext, store) {
       // open submenu
       case "a":
         handleToggleSubmenu();
-        break;
-
-      // prev day/week/month/year
-      case "arrowleft":
-        handleBtnPrev();
-        break;
-
-      // next day/week/month/year
-      case "arrowright":
-        handleBtnNext();
         break;
 
       // open keyboard shortcuts modal

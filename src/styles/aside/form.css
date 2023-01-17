@@ -250,7 +250,9 @@
 }
 
 .form--body-end__date:hover,
-.form--body-start__date:hover {
+.form--body-start__date:hover,
+.form--body-end__time:hover,
+.form--body-start__time:hover {
   background: var(--black0)
 }
 
@@ -263,7 +265,9 @@
 .form--body-start__time {
   display: flex;
   justify-content: center;
-  width: 80px
+  width: 80px;
+  cursor: pointer;
+  align-items: center;
 }
 
 .form--body-end__time-hour,

@@ -36,6 +36,11 @@ function getDateForStore(date) {
   return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 }
 
+function getdatearray(date) {
+  return [+date.getFullYear(), +date.getMonth() + 1, +date.getDate()]
+
+}
+
 function formatDateForDisplay(date) {
   date = testDate(date)
   const month = locales.labels.monthsShort[date.getMonth()]
@@ -55,6 +60,20 @@ function compareDates(date1, date2) {
 
 function formatDuration(seconds) {
   let time = { year: 31536000, day: 86400, hour: 3600},
+    res = [];
+  if (seconds === 0) return 'now';
+  for (let key in time) {
+    if (seconds >= time[key]) {
+      let val = Math.floor(seconds / time[key]);
+      res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
+      seconds = seconds % time[key];
+    }
+  }
+  return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &' + '$1') : res[0]
+}
+
+function formatDurationHourMin(seconds) {
+  let time = { hour: 3600, minute: 60},
     res = [];
   if (seconds === 0) return 'now';
   for (let key in time) {
@@ -134,8 +153,6 @@ function getDuration(start, end) {
     return duration
   }
 }
-
-
 
 function createDateFromFormattedString(dateString) {
   const dateArray = dateString.split("-")
@@ -244,9 +261,10 @@ function formatEntryOptionsDate(date1, date2) {
     if (m1 === m2) {
       if (d1 === d2) {
         // === year, month, day
+        let duration = getDurationSeconds(date1, date2)
         return {
           date: `${labels.monthsLong[m1]} ${d1}, ${y1} (${formatStartEndTimes([h1, h2], [min1, min2])})`,
-          time: null,
+          time: formatDurationHourMin(duration),
         }
       } else {
         // === year, month
@@ -291,6 +309,7 @@ export {
   testDate,
   getDateFormatted,
   getDateForStore,
+  getdatearray,
   formatDateForDisplay,
   compareDates,
   createDateFromFormattedString,

@@ -11,6 +11,7 @@ const monthComponent = document.querySelector(".monthview")
 const weekComponent = document.querySelector(".weekview")
 const dayComponent = document.querySelector(".dayview")
 const listComponent = document.querySelector(".listview")
+const listComponentBody = document.querySelector('.listview__body');
 
 /**
  * 
@@ -23,7 +24,11 @@ const listComponent = document.querySelector(".listview")
  */
 
 let previousview = "month";
+let [prev1, prev2] = [null, null];
 export default function setViews(component, context, store, datepickerContext) {
+  prev1 = prev2;
+  prev2 = component;
+
   function hideViews() {
     const views = [
       yearComponent, 
@@ -32,6 +37,10 @@ export default function setViews(component, context, store, datepickerContext) {
       dayComponent,
       listComponent
     ];
+
+    if (prev1 === "list") {
+      listComponentBody.innerText = "";
+    }
     // only the month view relies on a resize listener
     // more info provided @readme > monthview > box queries
     views.forEach((view) => {

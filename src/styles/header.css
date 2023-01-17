@@ -535,8 +535,8 @@ h2 {
 
   .select__modal {
     color: transparent;
-    font-size:0;
-    padding: 0 3px;
+    font-size: 0;
+    padding: 0 4px;
   }
 
   .select__modal::before {

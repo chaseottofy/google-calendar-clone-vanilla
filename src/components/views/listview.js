@@ -7,6 +7,7 @@ import {
   hextorgba
 } from '../../utilities/helpers'
 import {
+  getdatearray,
   getFormDateObject,
   getDateFromAttribute,
   getDuration,
@@ -20,10 +21,13 @@ import locales from "../../locales/en"
 const monthNames = locales.labels.monthsShort.map(x => x.toUpperCase())
 const weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase())
 
+const dateTimeTitle = document.querySelector(".datetime-content--title");
 const listview = document.querySelector('.listview');
 const listviewBody = document.querySelector('.listview__body');
 
 export default function setListView(context, store, datepickerContext) {
+  let today = new Date();
+  let [todayYear, todayMonth, todayDay] = getdatearray(today)
   /*************************************** */
   /* CREATE ROW GROUPS*/
   function createRowGroups(entries) {
@@ -163,7 +167,6 @@ export default function setListView(context, store, datepickerContext) {
     modal.style.left = x + "px";
   }
 
-
   // SWITCH TO DAY VIEW
   function setDayViewLV(target) {
     let [year, month, day] = getDateFromAttribute(target, 'data-rgheader-date', "month");
@@ -200,21 +203,16 @@ export default function setListView(context, store, datepickerContext) {
 
   const initListView = () => {
     listviewBody.innerText = "";
+
     const activeEnt = store.getActiveEntries();
     if (activeEnt.length === 0) {
-      console.log(true);
+      dateTimeTitle.textContent = "No Entries to Display";
       return;
     } else {
-
       // update : 1.02 -- (1/16/23)
       // The following logic is in its first stage and will be optimized when I come up with a better solution.
       // I'm debating on whether to use a load more system or an infinite scroll system.
       const entries = store.sortBy(activeEnt, "start", "desc");
-      const today = new Date();
-      const getdatearray = date => {
-        return [+date.getFullYear(), +date.getMonth() + 1, +date.getDate()]
-      }
-      const [todayYear, todayMonth, todayDay] = getdatearray(today)
 
       const groupedEntries = entries.reduce((acc, curr) => {
         const date = new Date(curr.start)
@@ -238,13 +236,31 @@ export default function setListView(context, store, datepickerContext) {
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
       // if no entries are in the future, set the header title to "Schedule Clear";
-      const dateTimeTitle = document.querySelector(".datetime-content--title");
       const keys = Object.keys(groupedEntries)
       const length = keys.length;
       if (length === 0) {
         dateTimeTitle.textContent = "Schedule Clear"
       } else {
         // true will slice the year at last two digits if two years are displayed at the same time;
+
+        const earliestDate = new Date(Date.parse(keys[0]))
+
+        context.setDate(
+          earliestDate.getFullYear(),
+          earliestDate.getMonth(),
+          earliestDate.getDate()
+        );
+        context.setDateSelected(earliestDate.getDate());
+
+        if (context.getSidebarState === "open") {
+          datepickerContext.setDate(
+            earliestDate.getFullYear(),
+            earliestDate.getMonth(),
+            earliestDate.getDate()
+          )
+          datepickerContext.setDateSelected(earliestDate.getDate());
+        }
+
         dateTimeTitle.textContent = formatStartEndDate(
           keys[0], 
           keys[length - 1], 
@@ -254,8 +270,6 @@ export default function setListView(context, store, datepickerContext) {
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;
     }
-
   }
-
   initListView();
 }
