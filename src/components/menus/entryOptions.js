@@ -28,6 +28,7 @@ const reset = [
 ]
 
 export default function getEntryOptionModal(context, store, entry, datepickerContext, finishSetup) {
+
   function openEditForm() {
     const openForm = store.getRenderFormCallback()
     openForm();
@@ -107,7 +108,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
 
     const getDateTime = formatEntryOptionsDate(start, end);
     entryOptionsDateHeader.textContent = getDateTime.date;
-    console.log(getDateTime)
     if (getDateTime.time !== null) {
       if (getDateTime.time === undefined) {
         let tempdate = new Date()
@@ -133,7 +133,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     }
 
 
-    console.log(entry)
     entryOptionTitle.textContent = entry.title;
 
     entry.description.length === 0 ? entryOptionDescription.parentElement.style.display = "none" : entryOptionDescription.textContent = entry.description;

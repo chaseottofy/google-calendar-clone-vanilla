@@ -64,6 +64,8 @@ class FormConfig {
 
   configFormTitleDescriptionInput(title, description) {
     this.formTitleDescription.forEach((input, idx) => {
+      // console.log(input, idx)
+      console.log(title, description)
       input.firstElementChild.value = [title, description][idx]
     })
   }

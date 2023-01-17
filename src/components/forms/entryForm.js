@@ -312,12 +312,16 @@ export default function setEntryForm(context, store, datepickerContext) {
     // ****************************************** //
     // title / description
     descriptionInput.value = "";
-    let tempval = titleInput.value;
+    titleInput.value = "";
+    // titleInput.focus();
     setTimeout(() => {
-      titleInput.value = "";
       titleInput.focus();
-      titleInput.value = tempval;
     }, 10)
+    // let tempval = titleInput.value;
+    // setTimeout(() => {
+    //   titleInput.focus();
+    //   titleInput.value = tempval;
+    // }, 10)
 
     // ****************************************** //
     // category setup 
