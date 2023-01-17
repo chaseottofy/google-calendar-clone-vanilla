@@ -57,7 +57,7 @@ export default function setHeader(context, component, store) {
       // !Important : text content is set in list.js after data is fetched
       setHeaderAttributes("list");
       header.style.borderBottom = "1px solid var(--mediumgrey1)"
-      // datetimeWrapper.classList.add("datetime-inactive");
+      datetimeWrapper.classList.add("datetime-inactive");
       break;
     default:
       break;

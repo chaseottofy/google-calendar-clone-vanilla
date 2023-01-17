@@ -4,7 +4,7 @@ import createToast from "../toastPopups/toast";
 import { taostDeleteEntryWarning } from "../toastPopups/toastCallbacks";
 import { formatStartEndTimes } from "../../utilities/timeutils";
 
-import { 
+import {
   formatEntryOptionsDate,
   compareDates,
   formatDuration
@@ -27,7 +27,7 @@ const reset = [
   entryOptionCategory,
 ]
 
-export default function getEntryOptionModal(context, store, entry,datepickerContext, finishSetup) {
+export default function getEntryOptionModal(context, store, entry, datepickerContext, finishSetup) {
   function openEditForm() {
     const openForm = store.getRenderFormCallback()
     openForm();
@@ -64,7 +64,7 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
     deletepopup.append(deletepopupText, deletebtns);
     entryOptionsWrapper.append(deletepopup);
 
-    const removeDeletePopup = () => {deletepopup.remove();}
+    const removeDeletePopup = () => { deletepopup.remove(); }
     const submitDelete = () => {
       proceedDelete(entry);
       removeDeletePopup();
@@ -79,7 +79,7 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
     // If the form is not toggled open from this modal,
     // reset it manually on close
     const resetCurrentView = store.getFormResetHandle(context.getComponent())
-    closeEntryOptions()    
+    closeEntryOptions()
     resetCurrentView();
   }
 
@@ -100,7 +100,11 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
     store.addActiveOverlay("entry__options--hidden")
 
     const [start, end] = [new Date(entry.start), new Date(entry.end)]
-    
+    let istoday = false;
+    if (compareDates(start, new Date())) {
+      istoday = true;
+    }
+
     const getDateTime = formatEntryOptionsDate(start, end);
     entryOptionsDateHeader.textContent = getDateTime.date;
     console.log(getDateTime)
@@ -109,12 +113,27 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
         let tempdate = new Date()
         let daysSince = tempdate.getTime() - end.getTime()
         daysSince = Math.floor(daysSince / (1000 * 60 * 60 * 24))
-        entryOptionsTimeHeader.textContent = `ended ${daysSince} days ago`
+        let timeheadertitle;
+        console.log(' is today')
+        if (daysSince === 0) {
+          timeheadertitle = "ended today"
+        } else if (daysSince === 1) {
+          timeheadertitle = "ended yesterday"
+        } else {
+          timeheadertitle = `ended ${daysSince} days ago`
+        }
+        entryOptionsTimeHeader.textContent = timeheadertitle;
       } else {
-        entryOptionsTimeHeader.textContent = "ends in " + getDateTime.time;
+        if (istoday) {
+          entryOptionsTimeHeader.textContent = "ending in " + getDateTime.time;
+        } else {
+          entryOptionsTimeHeader.textContent = getDateTime.time;
+        }
       }
     }
-    
+
+
+    console.log(entry)
     entryOptionTitle.textContent = entry.title;
 
     entry.description.length === 0 ? entryOptionDescription.parentElement.style.display = "none" : entryOptionDescription.textContent = entry.description;
@@ -129,7 +148,7 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
 
   function handleEntryOptionKD(e) {
     const deletepopup = document?.querySelector(".delete-popup")
-    if (e.key === "Escape") { 
+    if (e.key === "Escape") {
       if (deletepopup) {
         deletepopup.remove();
         return;

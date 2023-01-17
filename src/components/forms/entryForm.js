@@ -14,7 +14,6 @@ import toastCallbackSaving from "../toastPopups/toastCallbacks"
 // helpers
 import {
   getClosest,
-  hextorgba
 } from "../../utilities/helpers"
 
 // date / time helpers
@@ -76,7 +75,6 @@ export default function setEntryForm(context, store, datepickerContext) {
   let [year, month, day] = [null, null, null]
 
 
-
   const closetimepicker = () => {
     const timep = document?.querySelector(".timepicker")
     const timepoverlay = document?.querySelector(".timepicker-overlay")
@@ -123,7 +121,7 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     let md = nextHour.getHours() > 12 ? "pm" : "am"
     let nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`
-    let nextHourTitle = `${+nextHour.getHours() % 12}:${nextHour.getMinutes()}${md}`
+    let nextHourTitle = `${+nextHour.getHours() % 12}:${+nextHour.getMinutes() == 0 ? "00" : nextHour.getMinutes()}${md}`
     endTimeInput.setAttribute("data-form-time", nextHourString);
     endTimeInput.textContent = nextHourTitle;
   }

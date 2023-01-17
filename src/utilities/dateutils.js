@@ -255,7 +255,6 @@ function formatEntryOptionsDate(date1, date2) {
   let useTempDate = false;
   let tempdateone = new Date();
   if (isBeforeDate(date1, tempdateone)) {
-    // console.log(true)
     useTempDate = true;
   }
   // if same day, month, & year -- return time as start-end
@@ -293,7 +292,6 @@ function formatEntryOptionsDate(date1, date2) {
     // different year --- return full date
     let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
     let durationTime = formatDuration(duration);
-
 
     return {
       date: `${labels.monthsShort[m1]} ${d1}, ${y1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,

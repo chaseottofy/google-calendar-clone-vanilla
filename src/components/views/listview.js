@@ -149,7 +149,6 @@ export default function setListView(context, store, datepickerContext) {
       y = rectTop - modalHeight - height - 12;
     }
 
-    console.log(rectTop, window.innerHeight)
 
     let x = rectLeft;
     if (rectLeft + 150 > window.innerWidth) {
@@ -200,8 +199,6 @@ export default function setListView(context, store, datepickerContext) {
     }
 
     if (rgCell) {
-      // console.log(rgCell)
-      // rgCell.classList.toggle("rowgroup--cell-active")
       getRgContextMenu(rgCell)
       return;
     }
