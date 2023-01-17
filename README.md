@@ -1,8 +1,8 @@
 # Cloning this repo
 
-## `git clone`
+`git clone`
 
-## `npm install`
+`npm install`
 
 ## Available Scripts
 
