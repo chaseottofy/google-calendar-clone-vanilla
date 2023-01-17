@@ -39,13 +39,9 @@ import "./styles/aside/shortcuts.css"
 // * finish privacy,terms,notes
 
 // FIX;
-// * clicking on item in more modal and then escaping out of form causes error
 // * validate .json files
-// * top modal for day and week view
-// * set min width for week view
+// * top modal for day view
 // * set toast to be removed on window focus
-// * time picker form
-
 // localStorage.clear()
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
