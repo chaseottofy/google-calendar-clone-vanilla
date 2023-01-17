@@ -29,7 +29,7 @@ import {
 import {
   compareTimes,
 } from "../../utilities/timeutils"
-import { calcNewHourFromCoords } from "../../utilities/dragutils"
+import { calcNewHourFromCoords, getOriginalBoxObject } from "../../utilities/dragutils"
 
 
 // main app sidebar
@@ -99,11 +99,35 @@ export default function setEntryForm(context, store, datepickerContext) {
       startCurrentDate[2] + 1
     )
     let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`
-    let nextDayTitle = locales.labels.monthsShort[nextDay.getMonth()] + " " + nextDay.getDate() + ", " + nextDay.getFullYear()
+    let nextDayTitle = locales.labels.monthsShort[nextDay.getMonth()] + " " + nextDay.getDate() + ", " + nextDay.getFullYear();
+
 
     endDateInput.setAttribute("data-form-date", nextDayString);
     endDateInput.textContent = nextDayTitle;
+    endTimeInput.setAttribute("data-form-time", "00:30")
+    endTimeInput.textContent = "12:30am";
   }
+
+  function setEndDateToNextHour() {
+    const startCurrentTime = startTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x));
+    
+    let [newh, newm] = [
+      startCurrentTime[0] < 23 ? startCurrentTime[0] + 1 : 23,
+      startCurrentTime[0] < 23 ? startCurrentTime[1] : 45
+    ]
+    let nextHour = new Date(
+      0, 0, 0,
+      newh,
+      newm
+    )
+
+    let md = nextHour.getHours() > 12 ? "pm" : "am"
+    let nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`
+    let nextHourTitle = `${+nextHour.getHours() % 12}:${nextHour.getMinutes()}${md}`
+    endTimeInput.setAttribute("data-form-time", nextHourString);
+    endTimeInput.textContent = nextHourTitle;
+  }
+
 
   function createTimepicker(coords, currentTime, end, endLimit) {
     const timepicker = document.createElement("div")
@@ -119,13 +143,12 @@ export default function setEntryForm(context, store, datepickerContext) {
       12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
       12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
     ];
-
     let md = [
       'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am',
       'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm',
     ]
-
     let minutes = ["00", "15", "30", "45"];
+
     let [currenthour, currentmin] = currentTime.split(":").map((x) => {
       return parseInt(x)
     })
@@ -156,7 +179,7 @@ export default function setEntryForm(context, store, datepickerContext) {
         const timepickerTime = document.createElement("div")
         timepickerTime.classList.add("timepicker-time")
         let attr;
-        if (md[houridx] === currentmd) {
+        if (md[houridx] === "am") {
           if (+hour === 12) {
             attr = `00:${min}`
           } else {
@@ -178,13 +201,14 @@ export default function setEntryForm(context, store, datepickerContext) {
             if (currentmd === "pm" && md[houridx] === "pm") {
               timepickerTime.classList.add("timepicker-time--selected")
               selectedIndex = (houridx * 4) + (minidx * 4) - 4;
+
             } else if (currentmd === "am" && md[houridx] === "am") {
               timepickerTime.classList.add("timepicker-time--selected")
               selectedIndex = (houridx * 4) + (minidx * 4) - 4;
             }
           }
-        }
-
+        } 
+          
         timepickerTimesContainer.appendChild(timepickerTime)
       })
     })
@@ -197,8 +221,24 @@ export default function setEntryForm(context, store, datepickerContext) {
       if (!end) {
         startTimeInput.textContent = time
         startTimeInput.setAttribute("data-form-time", attr)
-        closetimepicker();
+
+        let [testhour, testminute] = attr.split(":").map(x => parseInt(x))
+        let [endTestHour, endTestMinute] = endTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x))
+
+        if (isSameDay) {
+          if (testhour === 23 && testminute === 45) {
+            setEndDateToNextDay()
+          } else {
+            if (testhour > endTestHour || (testhour === endTestHour && testminute >= endTestMinute)) {
+              setEndDateToNextHour()
+            }
+          }
+        }
+      } else {
+        endTimeInput.textContent = time;
+        endTimeInput.setAttribute("data-form-time", attr)
       }
+      closetimepicker();
     }
 
     const delegateNewTime = (e) => {
