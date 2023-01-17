@@ -29,6 +29,7 @@ import {
 import {
   compareTimes,
 } from "../../utilities/timeutils"
+import { calcNewHourFromCoords } from "../../utilities/dragutils"
 
 
 // main app sidebar
@@ -79,10 +80,29 @@ export default function setEntryForm(context, store, datepickerContext) {
   const closetimepicker = () => {
     const timep = document?.querySelector(".timepicker")
     const timepoverlay = document?.querySelector(".timepicker-overlay")
+    const activeTimeElement = document?.querySelector(".active-form-time")
     if (timep) {
+      timep.scrollTo(0, 0)
       timep.remove();
       timepoverlay.remove();
     }
+    if (activeTimeElement) {
+      activeTimeElement.classList.remove("active-form-time")
+    }
+  }
+
+  function setEndDateToNextDay() {
+    const startCurrentDate = startDateInput.getAttribute("data-form-date").split("-").map(x => parseInt(x))
+    let nextDay = new Date(
+      startCurrentDate[0],
+      startCurrentDate[1],
+      startCurrentDate[2] + 1
+    )
+    let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`
+    let nextDayTitle = locales.labels.monthsShort[nextDay.getMonth()] + " " + nextDay.getDate() + ", " + nextDay.getFullYear()
+
+    endDateInput.setAttribute("data-form-date", nextDayString);
+    endDateInput.textContent = nextDayTitle;
   }
 
   function createTimepicker(coords, currentTime, end, endLimit) {
@@ -94,130 +114,77 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepickerOverlay.classList.add("timepicker-overlay")
     const timepickerTimesContainer = document.createElement("div")
     timepickerTimesContainer.classList.add("timepicker-times__container");
-    
 
-    const hours = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
-    const minutes = ["00", "15", "30", "45"];
-    const [am, pm] = ['am', 'pm'];
+    let hours = [
+      "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+    ];
+    let minutes = ["00", "15", "30", "45"];
+
     const [currenthour, currentmin] = currentTime.split(":")
     let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
-    let [amStatus, pmStatus] = [currenthour < 12, currenthour >= 12]
-    let selectedIndex = 0;
-    // endhour / endmin (not relavent if timepicker is for start time)
-    let [eh, em] = [null, null]
-    let endCanIterate = true;
-    let canCount = false;
-    let count = 0;
-    if (end && isSameDay) {
-      endCanIterate = false;
-      [eh, em] = endLimit.split(":");
-    }
-
-    // some annoying steps to ensure there is no possibility of a user selecting an end time before a start time on the same day;
-    const createTimesTemp = (md, flag) => {
-      hours.forEach((hour, houridx) => {
-        minutes.forEach((min, minidx) => {
-          if (!endCanIterate) {
-            if (hour == eh) {
-              if (em == min) {
-                canCount = true;
-              }
-            }
-          }
-          // once the current start time is reached, the end time must wait until the next iteration to avoid picking the same time
-          if (canCount) {
-            count++;
-            if (count == 2) {
-              endCanIterate = true;
-            }
-          }
-
-          // 'endCanIterate' flag will always be true if the timepicker is for the start time
-          if (endCanIterate) {
-            const timepickerTime = document.createElement("div")
-            timepickerTime.classList.add("timepicker-time")
-            timepickerTime.textContent = `${hour}:${min}${md}`
-
-            let attr;
-            md === "pm" ? attr = `${parseInt(hour) + 12}:${min}` : attr = `${hour}:${min}`
-            timepickerTime.setAttribute("data-tp-time", attr)
-
-            // determine where the timepicker should be scrolled to
-            if (currenthour == hour && currentmin == min) {
-              // if (am)
-              if (flag && md === "am") {
-                selectedIndex = houridx * 4 + minidx
-                timepickerTime.classList.add("timepicker-time--selected")
-                // if (pm)
-              } else if (flag && md === "pm") {
-                selectedIndex = houridx * 4 + minidx + 48
-                timepickerTime.classList.add("timepicker-time--selected")
-              }
-            }
-            timepickerTimesContainer.appendChild(timepickerTime)
-          }
-        })
-      })
-    }
-
-    if (end) {
-      createTimesTemp(am, amStatus)
-      createTimesTemp(pm, pmStatus)
-    } else {
-      createTimesTemp(am, amStatus)
-      createTimesTemp(pm, pmStatus)
-    }
-
-    const setnewtime = (e) => {
-      const newtime = e.target.getAttribute("data-tp-time")
-      const newtimetext = e.target.textContent;
-      if (newtime) {
-        if (end) {
-          endTimeInput.textContent = newtimetext;
-          endTimeInput.setAttribute("data-form-time", newtime);
+    let selectedIndex;
+    
+    if (endLimit !== null && isSameDay) {
+      let [h, m] = endLimit.split(":").map(x => parseInt(x))
+      if (h === 23) {
+        if (m === 45) {
+          setEndDateToNextDay();
         } else {
-          startTimeInput.textContent = newtimetext;
-          startTimeInput.setAttribute("data-form-time", newtime);
-          let tempEndTime = endTimeInput.getAttribute("data-form-time")
-          const [diff, status] = compareTimes(newtime, tempEndTime)
-          let newEndHour = parseInt(newtime.split(":")[0]) + 1;
-          let newEndMin = newtime.split(":")[1];
-          if (status !== true && isSameDay) {
-            console.log(newEndHour, newEndMin)
-            if (newEndHour === 24) {
-              if (newEndMin === '45') {
-                newEndHour = 1;
-                newEndMin = "00";
-                let [ty, tm, td] = getDateFromAttribute(endDateInput, "data-form-date")
-                let newEndDate = new Date(ty, tm, td + 1)
+          hours = hours.slice(-1)
+          m = m.slice(-1)
+        }
+      } else {
+        hours = hours.slice(0, +h + 1);
+      }
+      hours.slice(0, +h + 1)
+    }
+    // let [h, m] = endLimit.split(":")
 
-                endDateInput.textContent = `${locales.labels.monthsShort[newEndDate.getMonth()]} ${newEndDate.getDate()}, ${newEndDate.getFullYear()}`
-                endDateInput.setAttribute("data-form-date", getDateForStore(newEndDate))
 
-              } else {
-                newEndHour = 24;
-                newEndMin = "45";
-              }
-            }
-            endTimeInput.setAttribute("data-form-time", `${newEndHour}:${newEndMin}`)
 
-            let newEndHourText;
-            let newEndMd;
-            if (newEndHour > 12) {
-              newEndMd = "pm"
-              newEndHourText = newEndHour % 12
-            } else if (newEndHour === 0 || newEndHour === 12) {
-              newEndHour = 12;
-            } else {
-              newEndMd = "am"
-              newEndHourText = newEndHour
-            }
-
-            endTimeInput.textContent = `${newEndHourText}:${newEndMin}${newEndMd}`
+    hours.forEach((hour, houridx) => {
+      minutes.forEach((min, minidx) => {
+        const timepickerTime = document.createElement("div")
+        timepickerTime.classList.add("timepicker-time")
+        let attr;
+        if (typeof hour === "string") {
+          if (hour === "12") {
+            attr = `00:${min}`
+          } else {
+            attr = `${hour}:${min}`
+          }
+        } else {
+          if (hour === 12) {
+            attr = `12:${min}`
+          } else {
+            attr = `${hour + 12}:${min}`
           }
         }
+
+        timepickerTime.setAttribute("data-tp-time", attr)
+        timepickerTime.textContent = `${hour}:${min}${typeof hour == "string" ? "am" : "pm"}`
+
+
+        if (hour == currenthour && min == currentmin) {
+          timepickerTime.classList.add("timepicker-time--selected")
+          selectedIndex = houridx * 4 + minidx;
+        }
+
+        timepickerTimesContainer.appendChild(timepickerTime)
+      })
+    })
+
+
+    function setnewtime(e) {
+      const time = e.target.textContent
+      let attr = e.target.getAttribute("data-tp-time")
+
+      if (!end) {
+        startTimeInput.textContent = time
+        startTimeInput.setAttribute("data-form-time", attr)
+        closetimepicker();
       }
-      closetimepicker();
     }
 
     const delegateNewTime = (e) => {
@@ -232,15 +199,13 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepicker.setAttribute("style", `top:${y}px; left:${x}px;`)
     document.body.prepend(timepickerOverlay);
     document.body.prepend(timepicker)
+    if (!end) {
+      timepicker.scrollTo(0, 3840 - (selectedIndex * 40))
+    } else {
+      timepicker.scrollTo(0, 0);
+    }
     timepickerOverlay.onclick = closetimepicker;
     timepickerTimesContainer.onclick = delegateNewTime;
-
-    console.log(timepickerTimesContainer.children.length)
-    const containerLength = timepickerTimesContainer.children.length
-    const denom = containerLength >= 48 ? 48 : 96;
-
-    let percentageToScroll = Math.floor((containerLength * 40) * (selectedIndex / denom).toFixed(2))
-    timepicker.scrollTo(0, percentageToScroll - 40)
   }
 
   function renderSidebarDatepickerForm() {
@@ -776,28 +741,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
   }
 
-  function createfakediv(x, y) {
-    const d = document.createElement("div");
-    d.style.position = "absolute";
-    d.style.left = x + "px";
-    d.style.top = y + "px";
-    d.style.width = "180px";
-    d.style.height = "200px";
-    d.style.zIndex = "2000";
-    d.style.backgroundColor = "rgba(0,0,0,0.6)";
-
-    const deletediv = () => {
-      d.remove();
-    }
-
-    d.onclick = deletediv
-    document.body.prepend(d);
-  }
-
 
   function handleTimepickerSetup(target) {
     const rect = target.getBoundingClientRect()
-
     return [
       parseInt(rect.right) + 16,
       parseInt(rect.top) - 24,
@@ -842,6 +788,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     if (starttime) {
+      e.target.classList.add("active-form-time")
       createTimepicker(
         handleTimepickerSetup(e.target),
         startTimeInput.getAttribute("data-form-time"),
@@ -857,6 +804,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     if (endtime) {
+      // console.log(endTimeInput.getAttribute("data-form-time"))
+      console.log(startTimeInput.getAttribute("data-form-time"))
+      e.target.classList.add("active-form-time")
       createTimepicker(
         handleTimepickerSetup(e.target),
         endTimeInput.getAttribute("data-form-time"),

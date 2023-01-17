@@ -73,7 +73,6 @@
   width: 100%;
 }
 
-
 .form--header__icon-close {
   align-items: center;
   cursor: pointer;
@@ -237,12 +236,12 @@
 .form--body-start__date,
 .form--body-start__time {
   color: var(--white3);
-  height: 30px
+  height: 30px;
+  border-bottom: 2px solid transparent;
 }
 
 .form--body-end__date,
 .form--body-start__date {
-  border-bottom: 2px solid transparent;
   cursor: pointer;
   line-height: 30px;
   max-width: 108px;
@@ -272,6 +271,9 @@
   align-items: center;
   min-width: 60px;
   margin-left: 13px;
+  transition-duration: .3s;
+  transition-property: border-bottom;
+  transition-timing-function: cubic-bezier(.33, 1, .68, 1)
 }
 
 .form--body-end__time-hour,
@@ -293,6 +295,11 @@
 .form--body-start__time-hour:hover,
 .form--body-start__time-minute:hover {
   background: var(--black0)
+}
+
+.active-form-time {
+  border-bottom: 2px solid var(--primary2);
+  background: var(--black0);
 }
 
 .form--body-time__br {
