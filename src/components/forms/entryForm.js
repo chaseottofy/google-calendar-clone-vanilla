@@ -116,15 +116,25 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepickerTimesContainer.classList.add("timepicker-times__container");
 
     let hours = [
-      "12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
-      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11
+      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
     ];
-    let minutes = ["00", "15", "30", "45"];
 
-    const [currenthour, currentmin] = currentTime.split(":")
+    let md = [
+      'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am',
+      'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm',
+    ]
+
+    let minutes = ["00", "15", "30", "45"];
+    let [currenthour, currentmin] = currentTime.split(":").map((x) => {
+      return parseInt(x)
+    })
+
+    let currentmd = currenthour > 12 ? "pm" : "am"
+    currenthour > 12 ? currenthour -= 12 : currenthour
     let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
-    let selectedIndex;
-    
+    let selectedIndex = hours.indexOf()
+
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
       if (h === 23) {
@@ -132,24 +142,22 @@ export default function setEntryForm(context, store, datepickerContext) {
           setEndDateToNextDay();
         } else {
           hours = hours.slice(-1)
+          md = md.slice(-1)
           m = m.slice(-1)
         }
       } else {
-        hours = hours.slice(0, +h + 1);
+        hours = hours.slice(+h + 1, hours.length)
+        md = md.slice(+h + 1, md.length)
       }
-      hours.slice(0, +h + 1)
     }
-    // let [h, m] = endLimit.split(":")
-
-
 
     hours.forEach((hour, houridx) => {
       minutes.forEach((min, minidx) => {
         const timepickerTime = document.createElement("div")
         timepickerTime.classList.add("timepicker-time")
         let attr;
-        if (typeof hour === "string") {
-          if (hour === "12") {
+        if (md[houridx] === currentmd) {
+          if (+hour === 12) {
             attr = `00:${min}`
           } else {
             attr = `${hour}:${min}`
@@ -163,12 +171,18 @@ export default function setEntryForm(context, store, datepickerContext) {
         }
 
         timepickerTime.setAttribute("data-tp-time", attr)
-        timepickerTime.textContent = `${hour}:${min}${typeof hour == "string" ? "am" : "pm"}`
+        timepickerTime.textContent = `${hour}:${min}${md[houridx]}`
 
-
-        if (hour == currenthour && min == currentmin) {
-          timepickerTime.classList.add("timepicker-time--selected")
-          selectedIndex = houridx * 4 + minidx;
+        if (!end) {
+          if (+hour == +currenthour && +min == +currentmin) {
+            if (currentmd === "pm" && md[houridx] === "pm") {
+              timepickerTime.classList.add("timepicker-time--selected")
+              selectedIndex = (houridx * 4) + (minidx * 4) - 4;
+            } else if (currentmd === "am" && md[houridx] === "am") {
+              timepickerTime.classList.add("timepicker-time--selected")
+              selectedIndex = (houridx * 4) + (minidx * 4) - 4;
+            }
+          }
         }
 
         timepickerTimesContainer.appendChild(timepickerTime)
@@ -200,7 +214,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     document.body.prepend(timepickerOverlay);
     document.body.prepend(timepicker)
     if (!end) {
-      timepicker.scrollTo(0, 3840 - (selectedIndex * 40))
+      timepicker.scrollTo(0, parseInt(3840 - (selectedIndex * 40)))
     } else {
       timepicker.scrollTo(0, 0);
     }
