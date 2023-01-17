@@ -1,16 +1,14 @@
-# google calendar clone
+# Cloning this repo
 
-## Cloning this repo
+## `git clone`
 
-### `git clone`
-
-### `npm install`
+## `npm install`
 
 ## Available Scripts
 
 ### `npm run build`
 
-Builds the app and necessary resources in the `dist` folder.
+Builds the app and **necessary** resources in the `dist` folder.
 
 ### `npm run dev`
 
