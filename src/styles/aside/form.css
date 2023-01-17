@@ -362,7 +362,7 @@
 }
 
 .form--body__category-modal--wrapper::-webkit-scrollbar-track {
-  background: transparent
+  background: var(--black1);
 }
 
 .form--body__category-modal--wrapper::-webkit-scrollbar-thumb {

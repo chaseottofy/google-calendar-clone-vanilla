@@ -408,24 +408,13 @@ export default function setEntryForm(context, store, datepickerContext) {
   function configDatesForStore() {
     let startDateAttr = startDateInput.getAttribute("data-form-date")
     let startDate = getDateFormatViaAttr(startDateAttr)
-    let startTimeAttr = startTimeInput.getAttribute("data-form-time") || "12:00"
+    let startTimeAttr = startTimeInput.getAttribute("data-form-time")
     let [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr)
 
     let endDateAttr = endDateInput.getAttribute("data-form-date")
     let endDate = getDateFormatViaAttr(endDateAttr)
-    let endTimeAttr = endTimeInput.getAttribute("data-form-time") || "12:30"
+    let endTimeAttr = endTimeInput.getAttribute("data-form-time")
     let [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr)
-
-    console.log(starthour, endhour)
-    if (starthour >= endhour) {
-      if (starthour < 23) {
-        endhour += 1
-      } else {
-        startminute = 0;
-        endhour = 23;
-        endminute = 30;
-      }
-    }
 
     return [
       getDateTimeFormatted(startDate, [starthour, startminute]),
@@ -858,8 +847,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     if (endtime) {
-      // console.log(endTimeInput.getAttribute("data-form-time"))
-      console.log(startTimeInput.getAttribute("data-form-time"))
       e.target.classList.add("active-form-time")
       createTimepicker(
         handleTimepickerSetup(e.target),
