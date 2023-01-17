@@ -3,6 +3,7 @@
     opacity: 0.5;
     transform: translateX(32px);
   }
+
   100% {
     transform: translateX(0);
     opacity: 1;
@@ -14,6 +15,7 @@
     opacity: 0.5;
     transform: translateX(-32px);
   }
+
   100% {
     transform: translateX(0);
     opacity: 1;
@@ -64,14 +66,16 @@
 .container__calendars {
   height: 100%;
   width: 100%;
-  /* overflow-y:hidden; */
   overflow-x: auto;
   margin-left: auto;
-  /* scrollbar-gutter: stable both-edges; */
+}
+
+.container__calendars::-webkit-scrollbar {
+  display: none;
 }
 
 .cc-tran {
-  transition: .3s cubic-bezier(.4,0,.2,1);
+  transition: .3s cubic-bezier(.4, 0, .2, 1);
   transition-property: width, transform;
 }
 
@@ -95,7 +99,7 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  overflow-x:hidden;  
+  overflow-x: hidden;
 }
 
 .listview::-webkit-scrollbar-thumb {
@@ -103,19 +107,25 @@
 }
 
 .monthview {
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .weekview {
   height: 100%;
   width: 100%;
   min-width: 580px;
-  overflow-y:hidden;
+  overflow-y: hidden;
 }
 
 @media screen and (max-width: 840px) {
   .container__calendars {
     width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .container__calendars::-webkit-scrollbar {
+    display:inherit;
   }
 }
 

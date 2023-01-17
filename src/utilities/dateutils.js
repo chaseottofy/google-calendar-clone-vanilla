@@ -255,36 +255,50 @@ function formatEntryOptionsDate(date1, date2) {
   let [d1, d2] = [date1.getDate(), date2.getDate()];
   let [h1, h2] = [date1.getHours(), date2.getHours()];
   let [min1, min2] = [date1.getMinutes(), date2.getMinutes()]
+
+  let useTempDate = false;
+  let tempdateone = new Date();
+  if (isBeforeDate(date1, tempdateone)) {
+    // console.log(true)
+    useTempDate = true;
+  }
   // if same day, month, & year -- return time as start-end
   // otherwise, return time as duration between start & end
   if (y1 === y2) {
     if (m1 === m2) {
       if (d1 === d2) {
         // === year, month, day
-        let duration = getDurationSeconds(date1, date2)
+
+        let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
+        let durationTime = formatDurationHourMin(duration);
         return {
           date: `${labels.monthsLong[m1]} ${d1}, ${y1} (${formatStartEndTimes([h1, h2], [min1, min2])})`,
-          time: formatDurationHourMin(duration),
+          time: durationTime,
         }
       } else {
         // === year, month
-        let duration = getDurationSeconds(date1, date2)
+        let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
+        let durationTime = formatDuration(duration);
         return {
           date: `${labels.monthsLong[m1]} ${d1} – ${d2}, ${y1}`,
-          time: formatDuration(duration),
+          time: durationTime,
         }
       }
     } else {
       // === year
-      let duration = getDurationSeconds(date1, date2)
+      let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
+      let durationTime = formatDuration(duration);
       return {
         date: `${labels.monthsShort[m1]} ${d1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
-        time: formatDuration(duration),
+        time: durationTime,
       }
     }
   } else {
     // different year --- return full date
-    let duration = getDurationSeconds(date1, date2)
+    let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
+    let durationTime = formatDuration(duration);
+
+
     return {
       date: `${labels.monthsShort[m1]} ${d1}, ${y1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
       time: formatDuration(duration),
@@ -298,7 +312,6 @@ function createTimestamp() {
   const month = monthNames[date.getMonth()].toUpperCase();
   const day = parseInt(date.getDate());
   return `${month}${day}`
-  // return `${date.getFullYear()}${date.getMonth()}${date.getDate()}${date.getHours()}${date.getMinutes()}`;
 }
 
 function longerThanDay(date1, date2) {

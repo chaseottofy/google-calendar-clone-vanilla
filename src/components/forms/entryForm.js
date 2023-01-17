@@ -59,7 +59,7 @@ const selectedCategoryColor = document.querySelector(".form--body__category-moda
 const selectedCategoryTitle = document.querySelector(".form--body__category-modal--wrapper__title")
 
 // reset / save btns
-const formSubmitButton = document.querySelector(".form--footer__button-saindve");
+const formSubmitButton = document.querySelector(".form--footer__button-save");
 // const formClearButton = document.querySelector(".form--footer__button-cancel");
 
 export default function setEntryForm(context, store, datepickerContext) {
@@ -152,24 +152,23 @@ export default function setEntryForm(context, store, datepickerContext) {
     // date inputs setup
     const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`
     let temphours = new Date().getHours()
+
+    // DATES : START/END
     startDateInput.textContent = dateSelected
     startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-    // START TIME
-    startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
-
     endDateInput.textContent = dateSelected
     endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-    // END TIME
+    
+    // TIME : START/END 
+    startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
     endTimeInput.setAttribute("data-form-time", `${temphours}:30`)
-    // ****************************************** // 
 
+    // ****************************************** // 
     // submit button setup 
     formSubmitButton.setAttribute("data-form-action", "create")
     formSubmitButton.setAttribute("data-form-id", "")
     // ****************************************** // 
 
-
-    // ****************************************** // 
 
     // approve form event delegation
     entriesFormWrapper.onmousedown = delegateEntryFormEvents

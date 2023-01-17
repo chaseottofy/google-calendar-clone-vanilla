@@ -6,6 +6,9 @@ import getEntryOptionModal from "../menus/entryOptions";
 import { Week } from "../../factory/entries"
 import locales from "../../locales/en"
 import calcTime, { formatTime } from "../../utilities/timeutils"
+
+import { createCloseIcon } from "../../utilities/svgs"
+
 import {
   formatStartEndDate,
   formatStartEndTime,
@@ -14,7 +17,10 @@ import {
   getTempDates,
   getFormDateObject,
   getDateFromAttribute,
+  formatEntryOptionsDate,
+  isBeforeDate
 } from "../../utilities/dateutils"
+
 import handleOverlap, {
   setStylingForEvent,
   updateBoxCoordinates,
@@ -31,8 +37,11 @@ import handleOverlap, {
   getOriginalBoxObject,
   resetOriginalBox,
 } from "../../utilities/dragutils"
+
 import { getClosest } from "../../utilities/helpers"
+
 import createToast from "../toastPopups/toast"
+
 import {
   toastNoCategorySelected,
   removeToastNoCategorySelected,
@@ -147,11 +156,12 @@ export default function setWeekView(context, store, datepickerContext) {
 
   function createBoxesTop(col, len) {
     const cell = document.createElement("div")
-
     cell.classList.add("allday__cell");
     cell.classList.add("allday__cell--active");
+
     const taskicons = document.createElement("div");
     taskicons.classList.add("wv-ad--taskicons");
+
     const icon = document.createElement("div");
     icon.classList.add("wv-ad--taskicon");
     icon.style.backgroundColor = "#6F0C2B";
@@ -159,7 +169,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const celltitle = document.createElement("div");
     celltitle.classList.add("wv-ad--celltitle");
-    len > 1 ? celltitle.textContent = `${len} tasks` : celltitle.textContent = `${len} task`;
+    celltitle.textContent = `${len} more`;
     cell.append(taskicons, celltitle);
     col.appendChild(cell);
   }
@@ -171,92 +181,95 @@ export default function setWeekView(context, store, datepickerContext) {
     cell.setAttribute("data-allday-modal-cell-id", entry.id)
     cell.style.backgroundColor = store.getCtgColor(entry.category)
 
-    const celldatetimes = document.createElement("div")
-    celldatetimes.classList.add("allday-modal__datetime")
-    const celldate = document.createElement("div")
-    celldate.classList.add("allday-modal__cell-dates")
-    celldate.textContent = formatStartEndDate(entry.start, entry.end)
-    const celltime = document.createElement("div")
-    celltime.classList.add("allday-modal__cell-time")
-    celltime.textContent = `(${formatStartEndTime(entry.start, entry.end)})`
-    const cellduration = document.createElement("div")
-    cellduration.classList.add("allday-modal__cell-duration")
-    cellduration.textContent = getDuration(entry.start, entry.end)
-
     const cellcontent = document.createElement("div")
     cellcontent.classList.add("allday-modal__cell-content")
+    const cellIcons = document.createElement("div")
+    cellIcons.classList.add("allday-modal__cell-action-icons")
+
     const celltitle = document.createElement("div")
-    celltitle.classList.add("allday-modal__cell-title")
-    celltitle.textContent = `"${entry.title}"`
+    celltitle.classList.add("allday-modal__celltitle")
+    celltitle.textContent = entry.title;
 
-    celldatetimes.append(celldate, cellduration)
-    cellcontent.append(celltitle)
+    const [start, end] = [
+      new Date(entry.start), new Date(entry.end)
+    ]
+    const endFormatted = formatEntryOptionsDate(start, end);
 
-    cell.append(cellcontent, celldatetimes)
+    const cellendDate = document.createElement("div")
+    cellendDate.classList.add("allday-modal__cellend-date")
+    cellendDate.textContent = endFormatted.date
+
+    const cellendTime = document.createElement("div")
+    cellendTime.classList.add("allday-modal__cellend-time")
+    cellendTime.textContent = endFormatted.time
+    console.log(endFormatted)
+
+    cellcontent.append(celltitle, cellendDate, cellendTime)
+    cell.append(cellcontent, cellIcons)
     return cell;
   }
 
   function createAllDayModal(e, col, entries, idx, cell) {
-    // setStylingForEvent("dragstart")
-    // need to add resize overlay
     let dayofweek = locales.labels.weekdaysLong[idx]
     let daynumber = col.getAttribute("data-wvtop-day")
 
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
+    modal.style.left = +weekviewGrid.offsetLeft + "px"
+    modal.style.top = +weekviewGrid.offsetTop + "px"
+
     const modalheader = document.createElement("div")
     modalheader.classList.add("allday-modal__header")
+
     const modaltitle = document.createElement("div")
     modaltitle.classList.add("allday-modal-title")
-    modaltitle.textContent = `${dayofweek} ${daynumber}`
-    const modalsubtitle = document.createElement("div")
-    modalsubtitle.classList.add("allday-modal-subtitle")
-    modalsubtitle.textContent = "(multiple day events)"
-    modalheader.append(modaltitle, modalsubtitle)
+    modaltitle.textContent = `${dayofweek} ${daynumber}, ${locales.labels.monthsLong[weekArray[idx].getMonth()]}`
 
+    const closeAlldayModalBtn = document.createElement("div");
+    closeAlldayModalBtn.classList.add("close-allday-modal");
+    closeAlldayModalBtn.appendChild(createCloseIcon("var(--white4"));
+    
     const modalcontent = document.createElement("div")
     modalcontent.classList.add("allday-modal__content")
+    
 
-    const colwidth = col.offsetWidth
-    let colleft = col.offsetLeft + weekviewGrid.offsetLeft - 48
-    let colheight = 86 + (entries.length * 48)
-
-    const setColPos = () => {
-      if (idx === 0) { colleft += 48 }
-      if (idx === 6) { colleft -= 48 }
-      if (colheight >= 760) { colheight = 760 }
-
-      modal.style.height = colheight + "px"
-      modal.style.left = colleft + "px"
-      modal.style.width = (colwidth + 96) + "px"
-      modal.style.top = +weekviewGrid.offsetTop + "px"
+    const closealldayonEsc = (e) => {
+      if (e.key === "Escape") {
+        closealldaymodal()
+      }
     }
-    setColPos()
+    const closealldaymodal = () => {
+      modal.remove()
+      resizeoverlay.classList.add("hide-resize-overlay")
+      cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B"
+      document.removeEventListener("keydown", closealldayonEsc)
+      store.removeActiveOverlay("allday-modal")
+    }
 
-    modal.appendChild(modalheader)
     entries.forEach((entry, idx) => {
       const cell = createAllDayModalCell(entry, idx)
       modalcontent.appendChild(cell)
     })
 
-    modal.appendChild(modalcontent)
+    modalheader.append(modaltitle, closeAlldayModalBtn)
+    modal.append(modalheader, modalcontent)
     main.insertBefore(modal, document.querySelector(".weekview__top"))
 
-    const closealldaymodal = () => {
-      // modal.remove()
-      // resizeoverlay.classList.add("hide-resize-overlay")
-      // cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B"
-    }
+    resizeoverlay.onclick = closealldaymodal
+    closeAlldayModalBtn.onclick = closealldaymodal
+    document.addEventListener("keydown", closealldayonEsc)
+    store.addActiveOverlay("allday-modal")
   }
 
   function openAllDayModal(e, cell) {
-    // const col = cell.parentElement
-    // cell.firstChild.firstChild.style.backgroundColor = "#01635b"
-    // const colidx = parseInt(col.getAttribute("data-allday-column"))
-    // let colentries = boxes.getBoxesByColumnTop(colidx)
-    // if (colentries.length > 0) {
-    //   createAllDayModal(e, col, colentries, colidx, cell)
-    // }
+    const col = cell.parentElement
+    cell.firstChild.firstChild.style.backgroundColor = "#01635b"
+    const colidx = parseInt(col.getAttribute("data-allday-column"))
+    let colentries = boxes.getBoxesByColumnTop(colidx)
+    if (colentries.length > 0) {
+      createAllDayModal(e, col, colentries, colidx, cell)
+      resizeoverlay.classList.remove("hide-resize-overlay")
+    }
   }
 
   function getcol(idx) {
@@ -562,7 +575,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const box = document.createElement('div');
     box.setAttribute("class", "box box-dragging temp-week-box");
-    
+
     // boxheader is static - create from template
     const boxheader = createTempBoxHeader("week");
     const boxcontent = document.createElement('div');
@@ -571,13 +584,13 @@ export default function setWeekView(context, store, datepickerContext) {
     boxcontent.classList.add('box__content');
     boxtime.classList.add('box-time');
     boxtimeend.classList.add('box-time');
-    
+
 
     const headerOffset = +weekviewGrid.offsetTop;
     const scrolled = parseInt(weekviewGrid.scrollTop);
     const startCursorY = e.pageY - weekviewGrid.offsetTop;
 
-    let y = Math.round((startCursorY + Math.abs(scrolled))/12.5)*12.5;
+    let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
     box.setAttribute("style", getBoxDefaultStyle(y, color));
 
     let coords = { y: +y / 12.5, x: colIdx, h: 1, e: 2 }
@@ -594,7 +607,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
       coords.h = +newHeight / 12.5;
       coords.e = +coords.y + coords.h;
-      
+
       // console.log(coords.e)
 
       // if (e.pageY > (window.innerHeight - 12.5) && coords.e < 95) {
@@ -680,7 +693,7 @@ export default function setWeekView(context, store, datepickerContext) {
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
- 
+
   // console.log(containerCalendars.offsetWidth)
   // console.log(window.innerWidth);
   // console.log(main);
