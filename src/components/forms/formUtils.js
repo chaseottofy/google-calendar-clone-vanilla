@@ -1,5 +1,5 @@
-
 import locales from "../../locales/en"
+import { placePopup } from "../../utilities/helpers"
 class FormConfig {
   constructor() {
     this.monthNames = locales.labels.monthsShort;
@@ -45,34 +45,21 @@ class FormConfig {
   }
 
   configFormPosition(cell, coordinates, top) {
-    const [x, y] = coordinates;
-    const cellWidth = cell.offsetWidth;
-    const cellHeight = cell.offsetHeight;
-    const cellTop = cell.offsetTop;
-    const cellLeft = cell.offsetLeft;
-    const windowWidth = window.innerWidth;
+    console.log(coordinates)
+    // console.log(coordinates)
+    // const [x, y] = coordinates;
+    // const cellWidth = cell.offsetWidth;
+    // const cellHeight = cell.offsetHeight;
+    // const cellTop = cell.offsetTop;
+    // const cellLeft = cell.offsetLeft;
+    // const windowWidth = window.innerWidth;
 
-    let setTop = top + this.headerOffset.offsetHeight;
-    let setMaxWidth = 380;
-    let [setLeft, setBottom, setRight, setMargin] = [0, 0, 0, 0];
+    // let setTop = top + this.headerOffset.offsetHeight;
+    // let setMaxWidth = 380;
+    // let [setLeft, setBottom, setRight, setMargin] = [0, 0, 0, 0];
+    // console.log(cell, coordinates, top)
 
-    // determine which side of the cell to open the form
-    if (x === 3) {
-      setMargin = "0 auto";
-    } else {
-      if (x < 3) {
-        setLeft = cellWidth * (x + 1);
-      } else {
-        setLeft = cellWidth * (x - 4);
-      }
-
-      // if (y >= 3) {
-      //   setTop = cellHeight * (y - 2);
-      // } else {
-      // }
-    }
-
-    this.setFormStyle([setTop, setLeft, setBottom, setRight, setMargin, setMaxWidth]);
+    // this.setFormStyle([setTop, setLeft, setBottom, setRight, setMargin, setMaxWidth]);
   }
 
   configFormTitleDescriptionInput(title, description) {
@@ -84,11 +71,15 @@ class FormConfig {
   /**
    * 
    * @param {HTML} input 
-   * @param {} date 
-   * @param {*} minutes 
-   * @param {*} dateFormatted 
+   * @param {object} date 
+   * @param {number} minutes 
+   * @param {string} dateFormatted 
+   * @desc
+   * Set the date & time for the form input fields
+   * Set attributes for date/time inputs
+   * Format date/time for display
    */
-  setFormDateInput(input, date, minutes, dateFormatted, inputtwo) {
+  setFormDateInput(input, date, minutes, dateFormatted) {
     const [dateinput, timeinput] = [
       input.firstElementChild,
       input.lastElementChild
@@ -100,7 +91,8 @@ class FormConfig {
       timeformatted
     );
 
-    timeinput.textContent = `${timeformatted}${date.getHours() < 12 ? "am" : "pm"}`;
+    // darn yankee time
+    timeinput.textContent = `${+date.getHours() === 0 || +date.getHours() === 12 ? 12 : date.getHours() % 12}:${minutes}${date.getHours() < 12 ? "am" : "pm"}`;
 
     dateinput.setAttribute("data-form-date", dateFormatted)
     dateinput.textContent = `${this.monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
@@ -117,9 +109,22 @@ class FormConfig {
     datepickerContext.setDateSelected(start.getDate());
   }
 
+
+  /**
+   * 
+   * @param {object} dates 
+   * @desc
+   * Iterate through object containing the data below to both the start date/time & end date/time form inputs
+   * 
+   * DateObject: [Date(start), Date(end)]
+   * 
+   * Minutes: [start minutes, end minutes]
+   * 
+   * DateString [start date, end date]
+   * 
+   */
   configFormDateInputs(dates) {
     for (let i = 0; i < 2; i++) {
-      // console.log(this.formStartEndCtg[i].lastElementChild)
       this.setFormDateInput(
         this.formStartEndCtg[i].lastElementChild,
         dates.dateObj[i],

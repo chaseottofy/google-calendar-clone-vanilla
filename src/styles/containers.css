@@ -59,6 +59,7 @@
   height: calc(100% - 64px);
   overflow: hidden;
   display: flex;
+  background: var(--black1);
 }
 
 

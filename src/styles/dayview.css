@@ -25,6 +25,7 @@
 .dayview--header-day__number {
   align-items: center;
   background: var(--primary1);
+  font-family: monospace, monospace;
   border-radius: 50%;
   color: var(--taskcolor0);
   display: flex;

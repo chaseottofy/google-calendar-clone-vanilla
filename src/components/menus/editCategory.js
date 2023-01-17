@@ -112,7 +112,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       handleInputErr(errormsg);
       return;
     } else {
-      console.log('ran')
       if (editing) {
         if (origName === trimName && formhelper.getOriginalColor() === color) {
           closeCategoryForm();

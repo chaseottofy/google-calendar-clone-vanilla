@@ -20,7 +20,6 @@ export default class FormSetup {
       title: title || null,
       description: description || null,
     }
-    console.log(this.submission)
   }
 
   /**

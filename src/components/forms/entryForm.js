@@ -2,9 +2,10 @@
 import setViews from "../../config/setViews"
 import setDatepicker from "../menus/datepicker"
 import setSidebarDatepicker from "../menus/sidebarDatepicker"
+import locales from "../../locales/en"
 
 // svgs
-import { createCheckIcon } from "../../utilities/svgs"
+import { createCheckIcon, createCloseIcon } from "../../utilities/svgs"
 
 // popups
 import createToast from "../toastPopups/toast"
@@ -24,6 +25,10 @@ import {
   getDateFromAttribute,
   formatDateForDisplay
 } from "../../utilities/dateutils"
+
+import {
+  compareTimes,
+} from "../../utilities/timeutils"
 
 
 // main app sidebar
@@ -46,12 +51,13 @@ const descriptionInput = document.querySelector(".form--body__description-input"
 // end date / time
 const startDateInput = document.querySelector(".form--body-start__date")
 const endDateInput = document.querySelector(".form--body-end__date")
+
 const startTimeInput = document.querySelector(".form--body-start__time")
 const endTimeInput = document.querySelector(".form--body-end__time")
-const starthourInput = document.querySelector(".form--body-start__hour")
 
 // category modal
 const categoryModal = document.querySelector(".form--body__category-modal")
+const closeCategoryModalBtn = document.querySelector(".close-options-floating__btn")
 const categoryModalIcon = document.querySelector(".form--body__category-icon")
 const categoryModalWrapper = document.querySelector(".form--body__category-modal--wrapper")
 const selectedCategoryWrapper = document.querySelector(".form--body__category-modal--wrapper-selection")
@@ -63,37 +69,178 @@ const formSubmitButton = document.querySelector(".form--footer__button-save");
 // const formClearButton = document.querySelector(".form--footer__button-cancel");
 
 export default function setEntryForm(context, store, datepickerContext) {
-
   let categories;
   let activeCategories;
   let currentComponent;
   let [year, month, day] = [null, null, null]
 
-  function createTimepicker(range, end) {
-    // .timepicker-overlay
-    // .timepicker
-    // .timepicker-times__container
-    // .timepicker-time
+
+
+  const closetimepicker = () => {
+    const timep = document?.querySelector(".timepicker")
+    const timepoverlay = document?.querySelector(".timepicker-overlay")
+    if (timep) {
+      timep.remove();
+      timepoverlay.remove();
+    }
+  }
+
+  function createTimepicker(coords, currentTime, end, endLimit) {
     const timepicker = document.createElement("div")
     timepicker.classList.add("timepicker")
+    timepicker.style.top = `${coords.y}px`
+    timepicker.style.left = `${coords.x}px`
     const timepickerOverlay = document.createElement("div")
     timepickerOverlay.classList.add("timepicker-overlay")
     const timepickerTimesContainer = document.createElement("div")
-    timepickerTimesContainer.classList.add("timepicker-times__container")
+    timepickerTimesContainer.classList.add("timepicker-times__container");
+    
+
+    const hours = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+    const minutes = ["00", "15", "30", "45"];
+    const [am, pm] = ['am', 'pm'];
+    const [currenthour, currentmin] = currentTime.split(":")
+    let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
+    let [amStatus, pmStatus] = [currenthour < 12, currenthour >= 12]
+    let selectedIndex = 0;
+    // endhour / endmin (not relavent if timepicker is for start time)
+    let [eh, em] = [null, null]
+    let endCanIterate = true;
+    let canCount = false;
+    let count = 0;
+    if (end && isSameDay) {
+      endCanIterate = false;
+      [eh, em] = endLimit.split(":");
+    }
+
+    // some annoying steps to ensure there is no possibility of a user selecting an end time before a start time on the same day;
+    const createTimesTemp = (md, flag) => {
+      hours.forEach((hour, houridx) => {
+        minutes.forEach((min, minidx) => {
+          if (!endCanIterate) {
+            if (hour == eh) {
+              if (em == min) {
+                canCount = true;
+              }
+            }
+          }
+          // once the current start time is reached, the end time must wait until the next iteration to avoid picking the same time
+          if (canCount) {
+            count++;
+            if (count == 2) {
+              endCanIterate = true;
+            }
+          }
+
+          // 'endCanIterate' flag will always be true if the timepicker is for the start time
+          if (endCanIterate) {
+            const timepickerTime = document.createElement("div")
+            timepickerTime.classList.add("timepicker-time")
+            timepickerTime.textContent = `${hour}:${min}${md}`
+
+            let attr;
+            md === "pm" ? attr = `${parseInt(hour) + 12}:${min}` : attr = `${hour}:${min}`
+            timepickerTime.setAttribute("data-tp-time", attr)
+
+            // determine where the timepicker should be scrolled to
+            if (currenthour == hour && currentmin == min) {
+              // if (am)
+              if (flag && md === "am") {
+                selectedIndex = houridx * 4 + minidx
+                timepickerTime.classList.add("timepicker-time--selected")
+                // if (pm)
+              } else if (flag && md === "pm") {
+                selectedIndex = houridx * 4 + minidx + 48
+                timepickerTime.classList.add("timepicker-time--selected")
+              }
+            }
+            timepickerTimesContainer.appendChild(timepickerTime)
+          }
+        })
+      })
+    }
 
     if (end) {
-
+      createTimesTemp(am, amStatus)
+      createTimesTemp(pm, pmStatus)
+    } else {
+      createTimesTemp(am, amStatus)
+      createTimesTemp(pm, pmStatus)
     }
 
-    const closetimepicker = () => {
-      store.removeActiveOverlay("timepicker-overlay");
-      timepickerOverlay.remove()
-      timepicker.remove()
+    const setnewtime = (e) => {
+      const newtime = e.target.getAttribute("data-tp-time")
+      const newtimetext = e.target.textContent;
+      if (newtime) {
+        if (end) {
+          endTimeInput.textContent = newtimetext;
+          endTimeInput.setAttribute("data-form-time", newtime);
+        } else {
+          startTimeInput.textContent = newtimetext;
+          startTimeInput.setAttribute("data-form-time", newtime);
+          let tempEndTime = endTimeInput.getAttribute("data-form-time")
+          const [diff, status] = compareTimes(newtime, tempEndTime)
+          let newEndHour = parseInt(newtime.split(":")[0]) + 1;
+          let newEndMin = newtime.split(":")[1];
+          if (status !== true && isSameDay) {
+            console.log(newEndHour, newEndMin)
+            if (newEndHour === 24) {
+              if (newEndMin === '45') {
+                newEndHour = 1;
+                newEndMin = "00";
+                let [ty, tm, td] = getDateFromAttribute(endDateInput, "data-form-date")
+                let newEndDate = new Date(ty, tm, td + 1)
+
+                endDateInput.textContent = `${locales.labels.monthsShort[newEndDate.getMonth()]} ${newEndDate.getDate()}, ${newEndDate.getFullYear()}`
+                endDateInput.setAttribute("data-form-date", getDateForStore(newEndDate))
+
+              } else {
+                newEndHour = 24;
+                newEndMin = "45";
+              }
+            }
+            endTimeInput.setAttribute("data-form-time", `${newEndHour}:${newEndMin}`)
+
+            let newEndHourText;
+            let newEndMd;
+            if (newEndHour > 12) {
+              newEndMd = "pm"
+              newEndHourText = newEndHour % 12
+            } else if (newEndHour === 0 || newEndHour === 12) {
+              newEndHour = 12;
+            } else {
+              newEndMd = "am"
+              newEndHourText = newEndHour
+            }
+
+            endTimeInput.textContent = `${newEndHourText}:${newEndMin}${newEndMd}`
+          }
+        }
+      }
+      closetimepicker();
     }
 
-    store.setActiveOverlay("timepicker-overlay");
-    document.body.appendChild(timepickerOverlay)
+    const delegateNewTime = (e) => {
+      if (getClosest(e, ".timepicker-time")) {
+        setnewtime(e)
+        return;
+      }
+    }
 
+    timepicker.appendChild(timepickerTimesContainer)
+    const [x, y] = coords
+    timepicker.setAttribute("style", `top:${y}px; left:${x}px;`)
+    document.body.prepend(timepickerOverlay);
+    document.body.prepend(timepicker)
+    timepickerOverlay.onclick = closetimepicker;
+    timepickerTimesContainer.onclick = delegateNewTime;
+
+    console.log(timepickerTimesContainer.children.length)
+    const containerLength = timepickerTimesContainer.children.length
+    const denom = containerLength >= 48 ? 48 : 96;
+
+    let percentageToScroll = Math.floor((containerLength * 40) * (selectedIndex / denom).toFixed(2))
+    timepicker.scrollTo(0, percentageToScroll - 40)
   }
 
   function renderSidebarDatepickerForm() {
@@ -133,17 +280,18 @@ export default function setEntryForm(context, store, datepickerContext) {
     // ****************************************** //
     // title / description
     descriptionInput.value = "";
+    let tempval = titleInput.value;
     setTimeout(() => {
-      let tempval = titleInput.value;
       titleInput.value = "";
       titleInput.focus();
       titleInput.value = tempval;
     }, 10)
+
     // ****************************************** //
     // category setup 
     setInitialFormCategory()
-    // ****************************************** // 
 
+    // ****************************************** // 
     // date picker setup
     datepickerContext.setDate(year, month, day)
     context.setDateSelected(day)
@@ -151,24 +299,27 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     // date inputs setup
     const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`
-    let temphours = new Date().getHours()
-
     // DATES : START/END
     startDateInput.textContent = dateSelected
     startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
     endDateInput.textContent = dateSelected
     endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-    
+
     // TIME : START/END 
+    const temphours = new Date().getHours()
     startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
     endTimeInput.setAttribute("data-form-time", `${temphours}:30`)
+    const getTimeAndMd = (hour, min) => {
+      return `${+hour === 0 || +hour === 12 ? 12 : hour % 12}:${min}${hour < 12 ? "am" : "pm"}`;
+    }
+    startTimeInput.textContent = getTimeAndMd(temphours, "00")
+    endTimeInput.textContent = getTimeAndMd(temphours, "30")
 
     // ****************************************** // 
     // submit button setup 
     formSubmitButton.setAttribute("data-form-action", "create")
     formSubmitButton.setAttribute("data-form-id", "")
     // ****************************************** // 
-
 
     // approve form event delegation
     entriesFormWrapper.onmousedown = delegateEntryFormEvents
@@ -353,8 +504,18 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
   }
 
+  /**
+   * 
+   * @param {object} errorMessages object key represents the input name and the value represents the string error message
+   * 
+   * Use object key to get the input HTML element class name and append the error message as a data attribute to the input element using the err object.
+   * 
+   * Set the submit button to disabled until all errors are resolved
+   * 
+   */
   function handleFormErrors(errorMessages) {
     titleInput.blur()
+    console.log(errorMessages)
 
     const components = {
       title: titleInput,
@@ -372,10 +533,10 @@ export default function setEntryForm(context, store, datepickerContext) {
     for (let key in errorMessages) {
       if (components[key]) {
         if (key === "title" || key === "description") {
-          components[key].parentElement.setAttribute(err.inputAttr, errors[key]);
+          components[key].parentElement.setAttribute(err.inputAttr, errorMessages[key]);
           components[key].parentElement.classList.add(err.inputClass)
         } else {
-          components[key].setAttribute(err.inputAttr, errors[key])
+          components[key].setAttribute(err.inputAttr, errorMessages[key])
           components[key].classList.add(err.svgClass)
           const svg = components[key].parentElement.parentElement.firstElementChild.firstElementChild
           svg.style.fill = "var(--red2)";
@@ -406,6 +567,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     entriesForm.reset();
     descriptionInput.value = "";
     titleInput.value = "";
+    if (categoryModalWrapper.classList.contains("category-modal-open")) {
+      closeCategoryModal()
+    }
     document.removeEventListener("keydown", delegateFormKeyDown)
 
     const resetCurrentView = store.getFormResetHandle(currentComponent)
@@ -486,6 +650,7 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function closeCategoryModal() {
+    closeCategoryModalBtn.style.display = "none";
     categoryModalWrapper.classList.remove("category-modal-open")
     categoryModal.classList.add("hide-form-category-modal")
     selectedCategoryWrapper.classList.remove("hide-form-category-selection")
@@ -495,6 +660,7 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function createCategoryOptions(parent, categories) {
     const currentCategory = categoryModalWrapper.getAttribute("data-form-category")
+
 
     categories.forEach(([key, value]) => {
       const color = value.color;
@@ -537,6 +703,14 @@ export default function setEntryForm(context, store, datepickerContext) {
     const length = categories.length;
     if (length === 1) return;
 
+    closeCategoryModalBtn.removeAttribute("style");
+
+    if (length >= 5) {
+      closeCategoryModalBtn.setAttribute("style", `top: -100px`)
+    } else {
+      closeCategoryModalBtn.setAttribute("style", `top: ${(length * 20) * -1}px`)
+    }
+
     categoryModalWrapper.classList.add("category-modal-open")
     if (length < 5) {
       categoryModalWrapper.style.height = `${length * 32}px`;
@@ -555,6 +729,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
     formModalOverlay.classList.remove("hide-form-overlay");
     formModalOverlay.onclick = closeCategoryModal;
+    closeCategoryModalBtn.onclick = closeCategoryModal;
   }
 
   function dragFormAnywhere(e) {
@@ -601,6 +776,34 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
   }
 
+  function createfakediv(x, y) {
+    const d = document.createElement("div");
+    d.style.position = "absolute";
+    d.style.left = x + "px";
+    d.style.top = y + "px";
+    d.style.width = "180px";
+    d.style.height = "200px";
+    d.style.zIndex = "2000";
+    d.style.backgroundColor = "rgba(0,0,0,0.6)";
+
+    const deletediv = () => {
+      d.remove();
+    }
+
+    d.onclick = deletediv
+    document.body.prepend(d);
+  }
+
+
+  function handleTimepickerSetup(target) {
+    const rect = target.getBoundingClientRect()
+
+    return [
+      parseInt(rect.right) + 16,
+      parseInt(rect.top) - 24,
+    ]
+  }
+
   function delegateEntryFormEvents(e) {
     // header
     const dragHeader = getClosest(e, ".form-header--dragarea");
@@ -608,7 +811,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     // form inputs
     const startdate = getClosest(e, ".form--body-start__date");
+    const starttime = getClosest(e, ".form--body-start__time");
     const enddate = getClosest(e, ".form--body-end__date");
+    const endtime = getClosest(e, ".form--body-end__time");
     const category = getClosest(e, ".form--body__category-modal--wrapper-selection");
 
     // error msg : <input> / <textarea>
@@ -636,8 +841,28 @@ export default function setEntryForm(context, store, datepickerContext) {
       return;
     }
 
+    if (starttime) {
+      createTimepicker(
+        handleTimepickerSetup(e.target),
+        startTimeInput.getAttribute("data-form-time"),
+        false,
+        null
+      );
+      return;
+    }
+
     if (enddate) {
       handleSetDate(e, "end");
+      return;
+    }
+
+    if (endtime) {
+      createTimepicker(
+        handleTimepickerSetup(e.target),
+        endTimeInput.getAttribute("data-form-time"),
+        true,
+        startTimeInput.getAttribute("data-form-time"),
+      );
       return;
     }
 
@@ -673,9 +898,14 @@ export default function setEntryForm(context, store, datepickerContext) {
     if (!datepicker.classList.contains("hide-datepicker")) {
       return;
     } else {
+      const timep = document?.querySelector(".timepicker")
 
       if (e.key === "Escape") {
-        handleFormClose(e);
+        if (timep) {
+          closetimepicker()
+        } else {
+          handleFormClose(e);
+        }
       }
 
       if (e.key === "Enter") {

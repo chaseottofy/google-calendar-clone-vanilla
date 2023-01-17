@@ -59,12 +59,12 @@ function compareDates(date1, date2) {
 }
 
 function formatDuration(seconds) {
-  let time = { year: 31536000, day: 86400, hour: 3600},
+  let time = { year: 31536000, day: 86400, hour: 3600 },
     res = [];
   if (seconds === 0) return 'now';
   for (let key in time) {
     if (seconds >= time[key]) {
-      let val = Math.floor(seconds / time[key]);
+      let val = Math.floor(seconds / time[key]); 
       res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
       seconds = seconds % time[key];
     }
@@ -145,7 +145,6 @@ function formatStartEndTime(start, end) {
 
 function getDuration(start, end) {
   [start, end] = [new Date(start), new Date(end)]
-
   const duration = formatDuration((Math.floor(end.getTime() / 1000)) - (Math.floor(start.getTime() / 1000)))
   if (duration === undefined) {
     return "completed"
@@ -156,9 +155,6 @@ function getDuration(start, end) {
 
 function createDateFromFormattedString(dateString) {
   const dateArray = dateString.split("-")
-  // if (flag) {
-  //   return new Date(dateArray[0], dateArray[1], dateArray[2])
-  // }
   return new Date(dateArray[0], dateArray[1] - 1, dateArray[2])
 }
 
@@ -324,6 +320,7 @@ export {
   getDateForStore,
   getdatearray,
   formatDateForDisplay,
+  formatDuration,
   compareDates,
   createDateFromFormattedString,
   formatStartEndDate,

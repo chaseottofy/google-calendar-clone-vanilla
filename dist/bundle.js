@@ -110,6 +110,18 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/styles/aside/timepicker.css":
+/*!*****************************************!*\
+  !*** ./src/styles/aside/timepicker.css ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./src/styles/aside/toast.css":
 /*!************************************!*\
   !*** ./src/styles/aside/toast.css ***!
@@ -329,6 +341,7 @@ const starthourInput = document.querySelector(".form--body-start__hour")
 
 // category modal
 const categoryModal = document.querySelector(".form--body__category-modal")
+const closeCategoryModalBtn = document.querySelector(".close-options-floating__btn")
 const categoryModalIcon = document.querySelector(".form--body__category-icon")
 const categoryModalWrapper = document.querySelector(".form--body__category-modal--wrapper")
 const selectedCategoryWrapper = document.querySelector(".form--body__category-modal--wrapper-selection")
@@ -346,20 +359,42 @@ function setEntryForm(context, store, datepickerContext) {
   let currentComponent;
   let [year, month, day] = [null, null, null]
 
-  function createTimepicker(range, end) {
-    // .timepicker-overlay
-    // .timepicker
-    // .timepicker-times__container
-    // .timepicker-time
+
+
+  function createTimepicker(coords, range, end) {
     const timepicker = document.createElement("div")
     timepicker.classList.add("timepicker")
+    timepicker.style.top = `${coords.y}px`
+    timepicker.style.left = `${coords.x}px`
     const timepickerOverlay = document.createElement("div")
     timepickerOverlay.classList.add("timepicker-overlay")
     const timepickerTimesContainer = document.createElement("div")
     timepickerTimesContainer.classList.add("timepicker-times__container")
 
-    if (end) {
+    const hours = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+    const minutes = ["00", "15", "30", "45"];
+    const [am, pm] = ['am', 'pm'];
 
+    const createTimesTemp = (md, flag) => {
+      hours.forEach((hour) => {
+        minutes.forEach((min) => {
+          const timepickerTime = document.createElement("div")
+          timepickerTime.classList.add("timepicker-time")
+          timepickerTime.textContent = `${hour}:${min} ${md}`
+          let attr;
+          md === "pm" ? attr = `${hour + 12}:${min}` : attr = `${hour}:${min}`
+          timepickerTime.setAttribute("data-tp-time", attr)
+          timepickerTimesContainer.appendChild(timepickerTime)
+        })
+      })
+    }
+
+    if (end) {
+      createTimesTemp(am, false)
+      createTimesTemp(pm, true)
+    } else {
+      createTimesTemp(am, false)
+      createTimesTemp(pm, true)
     }
 
     const closetimepicker = () => {
@@ -368,9 +403,31 @@ function setEntryForm(context, store, datepickerContext) {
       timepicker.remove()
     }
 
-    store.setActiveOverlay("timepicker-overlay");
-    document.body.appendChild(timepickerOverlay)
+    const setnewtime = (e) => {
+      const newtime = e.target.getAttribute("data-tp-time")
+      if (newtime) {
+        if (end) {
+          endTimeInput.value = newtime
+          endTimeInput.setAttribute("data-form-time", newtime);
+        } else {
+          startTimeInput.textContent = newtime;
+          startTimeInput.setAttribute("data-form-time", newtime);
+        }
+      }
+    }
 
+    const delegateNewTime = (e) => {
+      if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".timepicker-time")) {
+        setnewtime(e)
+      }
+    }
+
+    store.addActiveOverlay("timepicker-overlay");
+    timepickerTimesContainer.onclick = delegateNewTime;
+    timepickerOverlay.onclick = closetimepicker;
+    timepicker.appendChild(timepickerTimesContainer)
+    document.body.appendChild(timepickerOverlay);
+    document.body.appendChild(timepicker)
   }
 
   function renderSidebarDatepickerForm() {
@@ -410,8 +467,8 @@ function setEntryForm(context, store, datepickerContext) {
     // ****************************************** //
     // title / description
     descriptionInput.value = "";
+    let tempval = titleInput.value;
     setTimeout(() => {
-      let tempval = titleInput.value;
       titleInput.value = "";
       titleInput.focus();
       titleInput.value = tempval;
@@ -435,7 +492,7 @@ function setEntryForm(context, store, datepickerContext) {
     startDateInput.setAttribute("data-form-date", (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.getDateForStore)(context.getDate()))
     endDateInput.textContent = dateSelected
     endDateInput.setAttribute("data-form-date", (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.getDateForStore)(context.getDate()))
-    
+
     // TIME : START/END 
     startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
     endTimeInput.setAttribute("data-form-time", `${temphours}:30`)
@@ -630,8 +687,18 @@ function setEntryForm(context, store, datepickerContext) {
     }
   }
 
+  /**
+   * 
+   * @param {object} errorMessages object key represents the input name and the value represents the string error message
+   * 
+   * Use object key to get the input HTML element class name and append the error message as a data attribute to the input element using the err object.
+   * 
+   * Set the submit button to disabled until all errors are resolved
+   * 
+   */
   function handleFormErrors(errorMessages) {
     titleInput.blur()
+    console.log(errorMessages)
 
     const components = {
       title: titleInput,
@@ -649,10 +716,10 @@ function setEntryForm(context, store, datepickerContext) {
     for (let key in errorMessages) {
       if (components[key]) {
         if (key === "title" || key === "description") {
-          components[key].parentElement.setAttribute(err.inputAttr, errors[key]);
+          components[key].parentElement.setAttribute(err.inputAttr, errorMessages[key]);
           components[key].parentElement.classList.add(err.inputClass)
         } else {
-          components[key].setAttribute(err.inputAttr, errors[key])
+          components[key].setAttribute(err.inputAttr, errorMessages[key])
           components[key].classList.add(err.svgClass)
           const svg = components[key].parentElement.parentElement.firstElementChild.firstElementChild
           svg.style.fill = "var(--red2)";
@@ -683,6 +750,9 @@ function setEntryForm(context, store, datepickerContext) {
     entriesForm.reset();
     descriptionInput.value = "";
     titleInput.value = "";
+    if (categoryModalWrapper.classList.contains("category-modal-open")) {
+      closeCategoryModal()
+    }
     document.removeEventListener("keydown", delegateFormKeyDown)
 
     const resetCurrentView = store.getFormResetHandle(currentComponent)
@@ -763,6 +833,7 @@ function setEntryForm(context, store, datepickerContext) {
   }
 
   function closeCategoryModal() {
+    closeCategoryModalBtn.style.display = "none";
     categoryModalWrapper.classList.remove("category-modal-open")
     categoryModal.classList.add("hide-form-category-modal")
     selectedCategoryWrapper.classList.remove("hide-form-category-selection")
@@ -772,6 +843,7 @@ function setEntryForm(context, store, datepickerContext) {
 
   function createCategoryOptions(parent, categories) {
     const currentCategory = categoryModalWrapper.getAttribute("data-form-category")
+
 
     categories.forEach(([key, value]) => {
       const color = value.color;
@@ -814,6 +886,14 @@ function setEntryForm(context, store, datepickerContext) {
     const length = categories.length;
     if (length === 1) return;
 
+    closeCategoryModalBtn.removeAttribute("style");
+
+    if (length >= 5) {
+      closeCategoryModalBtn.setAttribute("style", `top: -100px`)
+    } else {
+      closeCategoryModalBtn.setAttribute("style", `top: ${(length * 20) * -1}px`)
+    }
+
     categoryModalWrapper.classList.add("category-modal-open")
     if (length < 5) {
       categoryModalWrapper.style.height = `${length * 32}px`;
@@ -832,6 +912,7 @@ function setEntryForm(context, store, datepickerContext) {
     }
     formModalOverlay.classList.remove("hide-form-overlay");
     formModalOverlay.onclick = closeCategoryModal;
+    closeCategoryModalBtn.onclick = closeCategoryModal;
   }
 
   function dragFormAnywhere(e) {
@@ -885,7 +966,9 @@ function setEntryForm(context, store, datepickerContext) {
 
     // form inputs
     const startdate = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-start__date");
+    const starttime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-start__time");
     const enddate = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-end__date");
+    const endtime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-end__time");
     const category = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body__category-modal--wrapper-selection");
 
     // error msg : <input> / <textarea>
@@ -913,8 +996,28 @@ function setEntryForm(context, store, datepickerContext) {
       return;
     }
 
+    if (starttime) {
+      const target = e.target
+      const [x, y] = [
+        target.offsetLeft,
+        target.offsetTop + 36,
+      ]
+      createTimepicker([x, y], null, true)
+      return;
+    }
+
     if (enddate) {
       handleSetDate(e, "end");
+      return;
+    }
+
+    if (endtime) {
+      const target = e.target
+      const [x, y] = [
+        target.offsetLeft,
+        target.offsetTop + 36,
+      ]
+      createTimepicker([x, y], null, true)
       return;
     }
 
@@ -979,6 +1082,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
+/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
 
 
 class FormConfig {
@@ -1026,34 +1130,21 @@ class FormConfig {
   }
 
   configFormPosition(cell, coordinates, top) {
-    const [x, y] = coordinates;
-    const cellWidth = cell.offsetWidth;
-    const cellHeight = cell.offsetHeight;
-    const cellTop = cell.offsetTop;
-    const cellLeft = cell.offsetLeft;
-    const windowWidth = window.innerWidth;
+    console.log(coordinates)
+    // console.log(coordinates)
+    // const [x, y] = coordinates;
+    // const cellWidth = cell.offsetWidth;
+    // const cellHeight = cell.offsetHeight;
+    // const cellTop = cell.offsetTop;
+    // const cellLeft = cell.offsetLeft;
+    // const windowWidth = window.innerWidth;
 
-    let setTop = top + this.headerOffset.offsetHeight;
-    let setMaxWidth = 380;
-    let [setLeft, setBottom, setRight, setMargin] = [0, 0, 0, 0];
+    // let setTop = top + this.headerOffset.offsetHeight;
+    // let setMaxWidth = 380;
+    // let [setLeft, setBottom, setRight, setMargin] = [0, 0, 0, 0];
+    // console.log(cell, coordinates, top)
 
-    // determine which side of the cell to open the form
-    if (x === 3) {
-      setMargin = "0 auto";
-    } else {
-      if (x < 3) {
-        setLeft = cellWidth * (x + 1);
-      } else {
-        setLeft = cellWidth * (x - 4);
-      }
-
-      // if (y >= 3) {
-      //   setTop = cellHeight * (y - 2);
-      // } else {
-      // }
-    }
-
-    this.setFormStyle([setTop, setLeft, setBottom, setRight, setMargin, setMaxWidth]);
+    // this.setFormStyle([setTop, setLeft, setBottom, setRight, setMargin, setMaxWidth]);
   }
 
   configFormTitleDescriptionInput(title, description) {
@@ -1065,11 +1156,15 @@ class FormConfig {
   /**
    * 
    * @param {HTML} input 
-   * @param {} date 
-   * @param {*} minutes 
-   * @param {*} dateFormatted 
+   * @param {object} date 
+   * @param {number} minutes 
+   * @param {string} dateFormatted 
+   * @desc
+   * Set the date & time for the form input fields
+   * Set attributes for date/time inputs
+   * Format date/time for display
    */
-  setFormDateInput(input, date, minutes, dateFormatted, inputtwo) {
+  setFormDateInput(input, date, minutes, dateFormatted) {
     const [dateinput, timeinput] = [
       input.firstElementChild,
       input.lastElementChild
@@ -1081,7 +1176,8 @@ class FormConfig {
       timeformatted
     );
 
-    timeinput.textContent = `${timeformatted}${date.getHours() < 12 ? "am" : "pm"}`;
+    // darn yankee time
+    timeinput.textContent = `${+date.getHours() === 0 || +date.getHours() === 12 ? 12 : date.getHours() % 12}:${minutes}${date.getHours() < 12 ? "am" : "pm"}`;
 
     dateinput.setAttribute("data-form-date", dateFormatted)
     dateinput.textContent = `${this.monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
@@ -1098,9 +1194,22 @@ class FormConfig {
     datepickerContext.setDateSelected(start.getDate());
   }
 
+
+  /**
+   * 
+   * @param {object} dates 
+   * @desc
+   * Iterate through object containing the data below to both the start date/time & end date/time form inputs
+   * 
+   * DateObject: [Date(start), Date(end)]
+   * 
+   * Minutes: [start minutes, end minutes]
+   * 
+   * DateString [start date, end date]
+   * 
+   */
   configFormDateInputs(dates) {
     for (let i = 0; i < 2; i++) {
-      // console.log(this.formStartEndCtg[i].lastElementChild)
       this.setFormDateInput(
         this.formStartEndCtg[i].lastElementChild,
         dates.dateObj[i],
@@ -1368,7 +1477,6 @@ class FormSetup {
       title: title || null,
       description: description || null,
     }
-    console.log(this.submission)
   }
 
   /**
@@ -1784,7 +1892,6 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
       handleInputErr(errormsg);
       return;
     } else {
-      console.log('ran')
       if (editing) {
         if (origName === trimName && formhelper.getOriginalColor() === color) {
           closeCategoryForm();
@@ -2008,8 +2115,16 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
     
     const getDateTime = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatEntryOptionsDate)(start, end);
     entryOptionsDateHeader.textContent = getDateTime.date;
+    console.log(getDateTime)
     if (getDateTime.time !== null) {
-      entryOptionsTimeHeader.textContent = getDateTime.time;
+      if (getDateTime.time === undefined) {
+        let tempdate = new Date()
+        let daysSince = tempdate.getTime() - end.getTime()
+        daysSince = Math.floor(daysSince / (1000 * 60 * 60 * 24))
+        entryOptionsTimeHeader.textContent = `ended ${daysSince} days ago`
+      } else {
+        entryOptionsTimeHeader.textContent = "ends in " + getDateTime.time;
+      }
     }
     
     entryOptionTitle.textContent = entry.title;
@@ -3596,6 +3711,7 @@ function setDayView(context, store, datepickerContext) {
   /** RESIZE NORTH/SOUTH */
   function resizeBoxNSDay(e, box) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
+    document.body.style.cursor = "move";
     const col = box.parentElement
 
     let boxhasOnTop = false;
@@ -3792,8 +3908,8 @@ function setDayView(context, store, datepickerContext) {
 
     setup.setPosition(
       1,
-      [1, 3],
-      parseInt((coords.y * 12.5) - dvGrid.scrollTop)
+      coords,
+      parseInt(box.style.top)
     );
 
     const [start, end] = dates
@@ -3810,6 +3926,7 @@ function setDayView(context, store, datepickerContext) {
   /** Drag down empty column to create box */
   function createBoxOnDragDay(e) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
+    document.body.style.cursor = "move";
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair()
 
     const box = document.createElement('div');
@@ -3867,7 +3984,7 @@ function setDayView(context, store, datepickerContext) {
 
       openDayviewForm(
         box,
-        [1, 3],
+        [e.clientX, e.clientY],
         [tempcategory, color, color],
         datesData,
         ["create", null, null, null],
@@ -4293,7 +4410,6 @@ function setListView(context, store, datepickerContext) {
         if (!acc[datestring]) { acc[datestring] = [] }
         acc[datestring].push(curr)
         return acc;
-
       }, {})
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
@@ -5063,13 +5179,11 @@ function setMonthView(context, store, datepickerContext) {
     cell.classList.add("monthview--daycontent__form-temp");
     cell.style.backgroundColor = offsetColor;
     const [x, y] = getCoordinatesFromCell(cell);
-    console.log(y)
     
     let offX = cell.offsetLeft;
     let offY = cell.offsetTop;
     let offH = cell.offsetHeight;
     let offW = cell.offsetWidth;
-    console.log(offX, offY)
 
     if (x >= 3) {
       offX -= (offW * (x - 2));
@@ -5079,7 +5193,6 @@ function setMonthView(context, store, datepickerContext) {
     } else {
       offY += offH;
     }
-    // console.log(x, y)
 
     // *** config & open form ***
     store.setFormResetHandle("month", handleMonthviewEditFormClose);
@@ -5653,11 +5766,25 @@ function setWeekView(context, store, datepickerContext) {
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
     let startCursorY = e.pageY - weekviewGrid.offsetTop
-    let startCursorX = e.pageX
+    let tempstartY = e.pageY;
+    let startCursorX = e.pageX;
     let [movedX, movedY] = [0, 0];
+    let [sX, sY] = [0, 0];
+    let hasStyles = false;
 
     /** DRAG NORTH SOUTH */
     const mousemove = (e) => {
+      sX = Math.abs(e.clientX - startCursorX);
+      sY = Math.abs(e.clientY - tempstartY);
+      if (!hasStyles) {
+        if (sX > 3 || sY > 3) {
+          document.body.style.cursor = "move";
+          hasStyles = true;
+          sX = 0;
+          sY = 0;
+        }
+      }
+
       const headerOffset = weekviewGrid.offsetTop
       const currentCursorY = e.pageY - headerOffset
       let newOffsetY = currentCursorY - startCursorY
@@ -5710,6 +5837,7 @@ function setWeekView(context, store, datepickerContext) {
 
       movedY = newOffsetY
       movedX = newOffsetX
+      // if (movedY >)
     }
 
     function mouseup() {
@@ -5725,24 +5853,7 @@ function setWeekView(context, store, datepickerContext) {
           handleWeekviewFormClose,
           e
         );
-        // cell, entry, handleCloseCallback
 
-        // let color = box.style.backgroundColor;
-        // let offsetColor = color;
-
-        // const dates = calcDateOnClick(
-        //   weekArray[parseInt(originalColumn)],
-        //   +box.getAttribute("data-start-time"),
-        //   +box.getAttribute("data-time-intervals"),
-        // );
-
-        // openWeekviewForm(
-        //   box,
-        //   [parseInt(originalColumn), 3],
-        //   [tempEntry.category, color, offsetColor],
-        //   dates,
-        //   ["edit", id, tempEntry.title, tempEntry.description],
-        // );
 
       } else {
         (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setBoxTimeAttributes)(box, "week");
@@ -5788,6 +5899,8 @@ function setWeekView(context, store, datepickerContext) {
   */
   function resizeBoxNS(e, box) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragstart", main, store);
+    document.body.style.cursor = "move";
+
     const col = box.parentElement;
     const currentColumn = col.getAttribute("data-column-index");
     box.setAttribute("data-box-col", currentColumn);
@@ -5895,6 +6008,7 @@ function setWeekView(context, store, datepickerContext) {
   /** Drag down empty column to create box */
   function createBoxOnDrag(e) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragstart", main, store);
+    document.body.style.cursor = "move";
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair();
     const colIdx = parseInt(e.target.getAttribute("data-column-index"));
 
@@ -6485,13 +6599,15 @@ function renderViews(context, datepickerContext, store) {
 
     function closeform(e) {
       if (e.target === formOverlay) {
-        form.classList.add("hide-form")
-        formOverlay.classList.add("hide-form-overlay")
-        store.removeActiveOverlay("hide-form-overlay")
-        formOverlay.removeEventListener("click", closeform)
+        form.classList.add("hide-form");
+        formOverlay.classList.add("hide-form-overlay");
+        store.removeActiveOverlay("hide-form-overlay");
+        formOverlay.onclick = null;
+        // formOverlay.removeEventListener("click", closeform)
       }
     }
-    formOverlay.addEventListener("click", closeform)
+    formOverlay.onclick = closeform
+    // formOverlay.addEventListener("click", closeform)
   }
 
   // the submenu (meatball? menu) adjacent to "create" button in sidebar
@@ -9144,6 +9260,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createTimestamp": () => (/* binding */ createTimestamp),
 /* harmony export */   "default": () => (/* binding */ createDate),
 /* harmony export */   "formatDateForDisplay": () => (/* binding */ formatDateForDisplay),
+/* harmony export */   "formatDuration": () => (/* binding */ formatDuration),
 /* harmony export */   "formatEntryOptionsDate": () => (/* binding */ formatEntryOptionsDate),
 /* harmony export */   "formatStartEndDate": () => (/* binding */ formatStartEndDate),
 /* harmony export */   "formatStartEndTime": () => (/* binding */ formatStartEndTime),
@@ -9227,12 +9344,12 @@ function compareDates(date1, date2) {
 }
 
 function formatDuration(seconds) {
-  let time = { year: 31536000, day: 86400, hour: 3600},
+  let time = { year: 31536000, day: 86400, hour: 3600 },
     res = [];
   if (seconds === 0) return 'now';
   for (let key in time) {
     if (seconds >= time[key]) {
-      let val = Math.floor(seconds / time[key]);
+      let val = Math.floor(seconds / time[key]); 
       res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
       seconds = seconds % time[key];
     }
@@ -9313,7 +9430,6 @@ function formatStartEndTime(start, end) {
 
 function getDuration(start, end) {
   [start, end] = [new Date(start), new Date(end)]
-
   const duration = formatDuration((Math.floor(end.getTime() / 1000)) - (Math.floor(start.getTime() / 1000)))
   if (duration === undefined) {
     return "completed"
@@ -9324,9 +9440,6 @@ function getDuration(start, end) {
 
 function createDateFromFormattedString(dateString) {
   const dateArray = dateString.split("-")
-  // if (flag) {
-  //   return new Date(dateArray[0], dateArray[1], dateArray[2])
-  // }
   return new Date(dateArray[0], dateArray[1] - 1, dateArray[2])
 }
 
@@ -9708,9 +9821,6 @@ function setStylingForEvent(clause, wrapper, store) {
 
       store.addActiveOverlay("hide-resize-overlay");
       resizeoverlay.classList.remove("hide-resize-overlay");
-      if (!wrapper.classList.contains("monthview--calendar")) {
-        document.body.style.cursor = "move";
-      }
       break;
     case "dragend":
       store.removeActiveOverlay("hide-resize-overlay")
@@ -10470,11 +10580,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
 /* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
 /* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
-/* harmony import */ var _styles_datepicker_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/datepicker.css */ "./src/styles/datepicker.css");
-/* harmony import */ var _styles_aside_popup_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/aside/popup.css */ "./src/styles/aside/popup.css");
-/* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
-/* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
-/* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
+/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
+/* harmony import */ var _styles_datepicker_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/datepicker.css */ "./src/styles/datepicker.css");
+/* harmony import */ var _styles_aside_popup_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/aside/popup.css */ "./src/styles/aside/popup.css");
+/* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
+/* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
+/* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
 
 
 
@@ -10508,6 +10619,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /*!*************************************!*/
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // NOTES;
@@ -10525,7 +10637,6 @@ __webpack_require__.r(__webpack_exports__);
 // localStorage.clear()
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-
 })();
 
 /******/ })()

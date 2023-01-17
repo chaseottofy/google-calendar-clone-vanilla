@@ -103,8 +103,16 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
     
     const getDateTime = formatEntryOptionsDate(start, end);
     entryOptionsDateHeader.textContent = getDateTime.date;
+    console.log(getDateTime)
     if (getDateTime.time !== null) {
-      entryOptionsTimeHeader.textContent = getDateTime.time;
+      if (getDateTime.time === undefined) {
+        let tempdate = new Date()
+        let daysSince = tempdate.getTime() - end.getTime()
+        daysSince = Math.floor(daysSince / (1000 * 60 * 60 * 24))
+        entryOptionsTimeHeader.textContent = `ended ${daysSince} days ago`
+      } else {
+        entryOptionsTimeHeader.textContent = "ends in " + getDateTime.time;
+      }
     }
     
     entryOptionTitle.textContent = entry.title;

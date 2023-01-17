@@ -255,10 +255,10 @@
   cursor: pointer;
   background: rgba(0,0,0,0.1);
 }
+
 .allday-modal__cell-action-icons:hover {
   background: rgba(0, 0, 0, .4);
-  width: 26px;
-  transition-property: background, width;
+  transition-property: background;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
 }

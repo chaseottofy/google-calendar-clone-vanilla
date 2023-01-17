@@ -215,13 +215,15 @@ export default function renderViews(context, datepickerContext, store) {
 
     function closeform(e) {
       if (e.target === formOverlay) {
-        form.classList.add("hide-form")
-        formOverlay.classList.add("hide-form-overlay")
-        store.removeActiveOverlay("hide-form-overlay")
-        formOverlay.removeEventListener("click", closeform)
+        form.classList.add("hide-form");
+        formOverlay.classList.add("hide-form-overlay");
+        store.removeActiveOverlay("hide-form-overlay");
+        formOverlay.onclick = null;
+        // formOverlay.removeEventListener("click", closeform)
       }
     }
-    formOverlay.addEventListener("click", closeform)
+    formOverlay.onclick = closeform
+    // formOverlay.addEventListener("click", closeform)
   }
 
   // the submenu (meatball? menu) adjacent to "create" button in sidebar

@@ -714,13 +714,11 @@ export default function setMonthView(context, store, datepickerContext) {
     cell.classList.add("monthview--daycontent__form-temp");
     cell.style.backgroundColor = offsetColor;
     const [x, y] = getCoordinatesFromCell(cell);
-    console.log(y)
     
     let offX = cell.offsetLeft;
     let offY = cell.offsetTop;
     let offH = cell.offsetHeight;
     let offW = cell.offsetWidth;
-    console.log(offX, offY)
 
     if (x >= 3) {
       offX -= (offW * (x - 2));
@@ -730,7 +728,6 @@ export default function setMonthView(context, store, datepickerContext) {
     } else {
       offY += offH;
     }
-    // console.log(x, y)
 
     // *** config & open form ***
     store.setFormResetHandle("month", handleMonthviewEditFormClose);

@@ -399,11 +399,25 @@ export default function setWeekView(context, store, datepickerContext) {
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
     let startCursorY = e.pageY - weekviewGrid.offsetTop
-    let startCursorX = e.pageX
+    let tempstartY = e.pageY;
+    let startCursorX = e.pageX;
     let [movedX, movedY] = [0, 0];
+    let [sX, sY] = [0, 0];
+    let hasStyles = false;
 
     /** DRAG NORTH SOUTH */
     const mousemove = (e) => {
+      sX = Math.abs(e.clientX - startCursorX);
+      sY = Math.abs(e.clientY - tempstartY);
+      if (!hasStyles) {
+        if (sX > 3 || sY > 3) {
+          document.body.style.cursor = "move";
+          hasStyles = true;
+          sX = 0;
+          sY = 0;
+        }
+      }
+
       const headerOffset = weekviewGrid.offsetTop
       const currentCursorY = e.pageY - headerOffset
       let newOffsetY = currentCursorY - startCursorY
@@ -456,6 +470,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
       movedY = newOffsetY
       movedX = newOffsetX
+      // if (movedY >)
     }
 
     function mouseup() {
@@ -471,24 +486,7 @@ export default function setWeekView(context, store, datepickerContext) {
           handleWeekviewFormClose,
           e
         );
-        // cell, entry, handleCloseCallback
 
-        // let color = box.style.backgroundColor;
-        // let offsetColor = color;
-
-        // const dates = calcDateOnClick(
-        //   weekArray[parseInt(originalColumn)],
-        //   +box.getAttribute("data-start-time"),
-        //   +box.getAttribute("data-time-intervals"),
-        // );
-
-        // openWeekviewForm(
-        //   box,
-        //   [parseInt(originalColumn), 3],
-        //   [tempEntry.category, color, offsetColor],
-        //   dates,
-        //   ["edit", id, tempEntry.title, tempEntry.description],
-        // );
 
       } else {
         setBoxTimeAttributes(box, "week");
@@ -534,6 +532,8 @@ export default function setWeekView(context, store, datepickerContext) {
   */
   function resizeBoxNS(e, box) {
     setStylingForEvent("dragstart", main, store);
+    document.body.style.cursor = "move";
+
     const col = box.parentElement;
     const currentColumn = col.getAttribute("data-column-index");
     box.setAttribute("data-box-col", currentColumn);
@@ -641,6 +641,7 @@ export default function setWeekView(context, store, datepickerContext) {
   /** Drag down empty column to create box */
   function createBoxOnDrag(e) {
     setStylingForEvent("dragstart", main, store);
+    document.body.style.cursor = "move";
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair();
     const colIdx = parseInt(e.target.getAttribute("data-column-index"));
 

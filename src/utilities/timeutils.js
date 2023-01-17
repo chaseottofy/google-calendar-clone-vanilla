@@ -64,9 +64,28 @@ function calcTime(start, length) {
   return boxtime;
 }
 
+function compareTimes(time1, time2) {
+  let [hours1, minutes1] = time1.split(":");
+  let [hours2, minutes2] = time2.split(":");
+  // get time difference in minutes
+  let diff = (hours2 - hours1) * 60 + (minutes2 - minutes1);
+  let closest;
+
+  // if diff is negative, return the next closest time difference in 15 minute interval
+  if (diff < 0) {
+    closest = 15 * Math.ceil(diff / 15);
+  } else {
+    closest = true;
+  }
+
+  return [diff, closest];
+}
+
+
 export default calcTime;
 export { 
   configMinutesForStore,
   formatStartEndTimes,
   formatTime,
+  compareTimes
 }

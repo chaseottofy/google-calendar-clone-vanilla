@@ -26,6 +26,7 @@ import "./styles/aside/sidebarSubMenu.css"
 import "./styles/aside/changeViewModule.css"
 import "./styles/aside/editCategoryForm.css"
 import "./styles/aside/form.css"
+import "./styles/aside/timepicker.css";
 import "./styles/datepicker.css"
 import "./styles/aside/popup.css"
 import "./styles/aside/entryOptions.css"

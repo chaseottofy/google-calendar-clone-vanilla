@@ -153,6 +153,7 @@ export default function setDayView(context, store, datepickerContext) {
   /** RESIZE NORTH/SOUTH */
   function resizeBoxNSDay(e, box) {
     setStylingForEvent("dragstart", dvGrid, store)
+    document.body.style.cursor = "move";
     const col = box.parentElement
 
     let boxhasOnTop = false;
@@ -349,8 +350,8 @@ export default function setDayView(context, store, datepickerContext) {
 
     setup.setPosition(
       1,
-      [1, 3],
-      parseInt((coords.y * 12.5) - dvGrid.scrollTop)
+      coords,
+      parseInt(box.style.top)
     );
 
     const [start, end] = dates
@@ -367,6 +368,7 @@ export default function setDayView(context, store, datepickerContext) {
   /** Drag down empty column to create box */
   function createBoxOnDragDay(e) {
     setStylingForEvent("dragstart", dvGrid, store)
+    document.body.style.cursor = "move";
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair()
 
     const box = document.createElement('div');
@@ -424,7 +426,7 @@ export default function setDayView(context, store, datepickerContext) {
 
       openDayviewForm(
         box,
-        [1, 3],
+        [e.clientX, e.clientY],
         [tempcategory, color, color],
         datesData,
         ["create", null, null, null],

@@ -2,7 +2,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.3);
   z-index: 1019;
   top: 0;
   left: 0;
@@ -12,11 +12,17 @@
 .timepicker {
   position: absolute;
   z-index: 1020;
-  width: 120px;
+  width: 180px;
   background: var(--black1);
+  box-shadow: var(--box-shadow1);
+  border-radius: 4px;
   height: 200px;
   overflow-y: scroll;
   min-height: 200px;
+}
+
+.timepicker::-webkit-scrollbar-thumb {
+  min-height: 40px;
 }
 
 .timepicker-times__container {
@@ -37,6 +43,12 @@
   font-size: 14px;
   cursor:pointer;
 }
+
 .timepicker-time:hover {
   background: var(--black2);
+}
+
+.timepicker-time--selected {
+  background: var(--black3);
+  color: var(--primary1);
 }

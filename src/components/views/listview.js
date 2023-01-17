@@ -238,7 +238,6 @@ export default function setListView(context, store, datepickerContext) {
         if (!acc[datestring]) { acc[datestring] = [] }
         acc[datestring].push(curr)
         return acc;
-
       }, {})
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
