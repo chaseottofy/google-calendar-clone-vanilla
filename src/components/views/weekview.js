@@ -7,7 +7,10 @@ import { Week } from "../../factory/entries"
 import locales from "../../locales/en"
 import calcTime, { formatTime } from "../../utilities/timeutils"
 
-import { createCloseIcon } from "../../utilities/svgs"
+import {
+  createCloseIcon,
+  createMeatballVertIcon
+} from "../../utilities/svgs"
 
 import {
   formatStartEndDate,
@@ -38,7 +41,7 @@ import handleOverlap, {
   resetOriginalBox,
 } from "../../utilities/dragutils"
 
-import { getClosest } from "../../utilities/helpers"
+import { getClosest, placePopup } from "../../utilities/helpers"
 
 import createToast from "../toastPopups/toast"
 
@@ -174,7 +177,7 @@ export default function setWeekView(context, store, datepickerContext) {
     col.appendChild(cell);
   }
 
-  function createAllDayModalCell(entry, idx) {
+  function createAllDayModalCell(entry, idx, col, handleCloseCallback) {
     const cell = document.createElement("div")
     cell.classList.add("allday-modal__cell")
     cell.setAttribute("data-allday-modal-cell", idx)
@@ -183,6 +186,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const cellcontent = document.createElement("div")
     cellcontent.classList.add("allday-modal__cell-content")
+
     const cellIcons = document.createElement("div")
     cellIcons.classList.add("allday-modal__cell-action-icons")
 
@@ -190,32 +194,46 @@ export default function setWeekView(context, store, datepickerContext) {
     celltitle.classList.add("allday-modal__celltitle")
     celltitle.textContent = entry.title;
 
-    const [start, end] = [
-      new Date(entry.start), new Date(entry.end)
-    ]
-    const endFormatted = formatEntryOptionsDate(start, end);
-
     const cellendDate = document.createElement("div")
     cellendDate.classList.add("allday-modal__cellend-date")
-    cellendDate.textContent = endFormatted.date
+    cellendDate.textContent = formatStartEndDate(
+      new Date(entry.start), new Date(entry.end)
+    );
 
-    const cellendTime = document.createElement("div")
-    cellendTime.classList.add("allday-modal__cellend-time")
-    cellendTime.textContent = endFormatted.time
-    console.log(endFormatted)
+    const cellcategoryTitle = document.createElement("div")
+    cellcategoryTitle.classList.add("allday-modal__cellcategory-title")
+    cellcategoryTitle.textContent = "category: " + entry.category;
 
-    cellcontent.append(celltitle, cellendDate, cellendTime)
-    cell.append(cellcontent, cellIcons)
+    const getContextMenuViaMeatball = (e) => {
+      getWeekViewContextMenu(col, entry, handleCloseCallback, e);
+    }
+
+    cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
+    cellIcons.appendChild(createMeatballVertIcon("var(--white4"));
+    cell.append(cellcontent, cellIcons);
+    cellIcons.onclick = getContextMenuViaMeatball;
     return cell;
   }
 
   function createAllDayModal(e, col, entries, idx, cell) {
     let dayofweek = locales.labels.weekdaysLong[idx]
     let daynumber = col.getAttribute("data-wvtop-day")
-
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
-    modal.style.left = +weekviewGrid.offsetLeft + "px"
+
+    let x;
+    const colLeft = col.offsetLeft;
+    if (colLeft + 240 + 32 > window.innerWidth) {
+      x = window.innerWidth - 268;
+    } else {
+      x = colLeft + 32;
+    }
+    if (idx < 3) {
+      modal.style.left = (col.offsetLeft + 32) + "px"
+    } else {
+      modal.style.left = (col.offsetLeft + 32) - 160 + "px"
+    }
+    modal.style.left = x + "px"
     modal.style.top = +weekviewGrid.offsetTop + "px"
 
     const modalheader = document.createElement("div")
@@ -228,10 +246,10 @@ export default function setWeekView(context, store, datepickerContext) {
     const closeAlldayModalBtn = document.createElement("div");
     closeAlldayModalBtn.classList.add("close-allday-modal");
     closeAlldayModalBtn.appendChild(createCloseIcon("var(--white4"));
-    
+
     const modalcontent = document.createElement("div")
     modalcontent.classList.add("allday-modal__content")
-    
+
 
     const closealldayonEsc = (e) => {
       if (e.key === "Escape") {
@@ -244,10 +262,11 @@ export default function setWeekView(context, store, datepickerContext) {
       cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B"
       document.removeEventListener("keydown", closealldayonEsc)
       store.removeActiveOverlay("allday-modal")
+      cell.classList.remove("allday-modal__cell--open")
     }
 
     entries.forEach((entry, idx) => {
-      const cell = createAllDayModalCell(entry, idx)
+      const cell = createAllDayModalCell(entry, idx, col, closealldaymodal)
       modalcontent.appendChild(cell)
     })
 
@@ -263,6 +282,8 @@ export default function setWeekView(context, store, datepickerContext) {
 
   function openAllDayModal(e, cell) {
     const col = cell.parentElement
+    // console.log(cell)
+    cell.classList.add("allday-modal__cell--open")
     cell.firstChild.firstChild.style.backgroundColor = "#01635b"
     const colidx = parseInt(col.getAttribute("data-allday-column"))
     let colentries = boxes.getBoxesByColumnTop(colidx)
@@ -310,6 +331,51 @@ export default function setWeekView(context, store, datepickerContext) {
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
     fullFormConfig.getConfig(setup.getSetup());
   }
+
+
+
+  // ***********************
+  // CONTEXT MENU SETUP
+
+  function getWeekViewContextMenu(cell, entry, handleCloseCallback, e) {
+    const id = entry.id;
+    const start = entry.start;
+    const color = store.getCtgColor(entry.category);
+    const col = +cell.getAttribute("data-box-col")
+    const rect = cols[col].getBoundingClientRect()
+
+    let [x, y] = placePopup(
+      360,
+      165,
+      [parseInt(rect.left), e.clientY],
+      [window.innerWidth, window.innerHeight]
+    )
+
+    store.setFormResetHandle("week", handleCloseCallback);
+    const setup = new FormSetup();
+    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setCategory(entry.category, color, color);
+    setup.setPosition(x, [x, y], y);
+    setup.setDates(getFormDateObject(start, entry.end));
+    console.log(getFormDateObject(start, entry.end))
+    fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
+
+    const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
+
+    getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
+
+    const modal = document.querySelector(".entry__options")
+    if (window.innerWidth > 580) {
+      modal.style.top = y + "px";
+      modal.style.left = x + "px";
+    } else {
+      modal.style.top = "64px";
+    }
+  }
+
+  // ***********************
+
+
 
   /** DRAG NORTH, SOUTH, EAST, WEST */
   function dragEngineWeek(e, box) {
@@ -399,25 +465,30 @@ export default function setWeekView(context, store, datepickerContext) {
 
       if (Math.abs(movedX) <= 6 && Math.abs(movedY) <= 6) {
         resetOriginalBox(box, boxorig);
-        const id = box.getAttribute("data-box-id");
-        const tempEntry = store.getEntry(id);
-
-        let color = box.style.backgroundColor;
-        let offsetColor = color;
-
-        const dates = calcDateOnClick(
-          weekArray[parseInt(originalColumn)],
-          +box.getAttribute("data-start-time"),
-          +box.getAttribute("data-time-intervals"),
-        );
-
-        openWeekviewForm(
+        getWeekViewContextMenu(
           box,
-          [parseInt(originalColumn), 3],
-          [tempEntry.category, color, offsetColor],
-          dates,
-          ["edit", id, tempEntry.title, tempEntry.description],
+          store.getEntry(box.getAttribute("data-box-id")),
+          handleWeekviewFormClose,
+          e
         );
+        // cell, entry, handleCloseCallback
+
+        // let color = box.style.backgroundColor;
+        // let offsetColor = color;
+
+        // const dates = calcDateOnClick(
+        //   weekArray[parseInt(originalColumn)],
+        //   +box.getAttribute("data-start-time"),
+        //   +box.getAttribute("data-time-intervals"),
+        // );
+
+        // openWeekviewForm(
+        //   box,
+        //   [parseInt(originalColumn), 3],
+        //   [tempEntry.category, color, offsetColor],
+        //   dates,
+        //   ["edit", id, tempEntry.title, tempEntry.description],
+        // );
 
       } else {
         setBoxTimeAttributes(box, "week");
@@ -608,17 +679,6 @@ export default function setWeekView(context, store, datepickerContext) {
       coords.h = +newHeight / 12.5;
       coords.e = +coords.y + coords.h;
 
-      // console.log(coords.e)
-
-      // if (e.pageY > (window.innerHeight - 12.5) && coords.e < 95) {
-      //   let scrollIncrement = Math.abs(window.innerHeight - e.pageY);
-      //   console.log(scrollIncrement)
-      //   weekviewGrid.scrollTo({
-      //     top: weekviewGrid.scrollTop + scrollIncrement,
-      //   })
-      // }
-
-      // Math.floor(((h + y) / 12.5) / 4)
       endhour = Math.floor(((+newHeight + +y) / 12.5) / 4);
       endmin = Math.floor(((+newHeight + +y) / 12.5) % 4) * 15
       boxtime.style.wordBreak = "break-word";

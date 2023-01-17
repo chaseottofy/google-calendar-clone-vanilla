@@ -131,11 +131,35 @@ function setTheme(context) {
   setColorSchema()
 }
 
+
+/**
+ * 
+ * @param {number} popupWidth 
+ * @param {number} popupHeight 
+ * @param {array} coords [x: e.clientX, y: e.clientY]
+ * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
+ * @returns [left position, top position];
+ */
+function placePopup(popupWidth, popupHeight, coords, windowCoords) {
+  const [popupW, popupH] = [popupWidth, popupHeight];
+  const [x, y] = coords;
+  const [winW, winH] = windowCoords;
+
+  let popupX = x + popupW > winW ? x - popupW - 6 : x;
+  let popupY = y + popupH > winH ? winH - popupH - 6 : y;
+
+  if (popupX < 0) popupX = winW - popupW - 24;
+  if (popupY < 0) popupY = winH - popupH - 24;
+
+  return [popupX, popupY];
+}
+
 export default debounce;
 export {
   getClosest,
   hextorgba,
   generateId,
   throttle,
-  setTheme
+  setTheme,
+  placePopup
 } 

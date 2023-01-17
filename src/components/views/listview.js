@@ -2,7 +2,7 @@ import getEntryOptionModal from "../menus/entryOptions";
 import setViews from "../../config/setViews";
 import FormSetup from "../forms/setForm";
 import fullFormConfig from "../forms/formUtils";
-import { 
+import {
   getClosest,
   hextorgba
 } from '../../utilities/helpers'
@@ -47,9 +47,15 @@ export default function setListView(context, store, datepickerContext) {
 
       const rgContent = document.createElement("div");
       rgContent.classList.add("rowgroup-content");
-      value.forEach((entry) => {
+
+      value.sort((a, b) => {
+        return new Date(a.end) - new Date(b.end)
+      })
+
+      value.forEach((entry, idx) => {
         rgContent.append(createRowGroupCell(entry))
       })
+
       const rg = document.createElement('div');
       rg.classList.add('listview__rowgroup');
       rg.append(rgheader, rgContent);
@@ -229,9 +235,10 @@ export default function setListView(context, store, datepickerContext) {
           }
         }
 
-        if (!acc[datestring]) {acc[datestring] = []}
+        if (!acc[datestring]) { acc[datestring] = [] }
         acc[datestring].push(curr)
         return acc;
+
       }, {})
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
@@ -250,6 +257,7 @@ export default function setListView(context, store, datepickerContext) {
           earliestDate.getMonth(),
           earliestDate.getDate()
         );
+
         context.setDateSelected(earliestDate.getDate());
 
         if (context.getSidebarState === "open") {
@@ -262,8 +270,8 @@ export default function setListView(context, store, datepickerContext) {
         }
 
         dateTimeTitle.textContent = formatStartEndDate(
-          keys[0], 
-          keys[length - 1], 
+          keys[0],
+          keys[length - 1],
           true
         );
       }

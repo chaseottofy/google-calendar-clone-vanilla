@@ -1,3 +1,4 @@
+
 import locales from "../../locales/en"
 class FormConfig {
   constructor() {
@@ -38,7 +39,7 @@ class FormConfig {
   setFormSubmitType(type, id) {
     this.formsubmitbtn.setAttribute("data-form-action", type);
     this.formsubmitbtn.setAttribute(
-      "data-form-entry-id", 
+      "data-form-entry-id",
       id === null ? id = "" : id
     );
   }
@@ -80,13 +81,29 @@ class FormConfig {
     })
   }
 
-  setFormDateInput(input, date, minutes, dateFormatted) {
-    input.setAttribute(
-      "data-form-time", 
-      `${date.getHours()}:${minutes}`
+  /**
+   * 
+   * @param {HTML} input 
+   * @param {} date 
+   * @param {*} minutes 
+   * @param {*} dateFormatted 
+   */
+  setFormDateInput(input, date, minutes, dateFormatted, inputtwo) {
+    const [dateinput, timeinput] = [
+      input.firstElementChild,
+      input.lastElementChild
+    ]
+
+    const timeformatted = `${date.getHours()}:${minutes}`
+    timeinput.setAttribute(
+      "data-form-time",
+      timeformatted
     );
-    input.setAttribute("data-form-date", dateFormatted)
-    input.textContent = `${this.monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+
+    timeinput.textContent = `${timeformatted}${date.getHours() < 12 ? "am" : "pm"}`;
+
+    dateinput.setAttribute("data-form-date", dateFormatted)
+    dateinput.textContent = `${this.monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
   }
 
   setFormDatepickerDate(context, datepickerContext, start) {
@@ -102,10 +119,11 @@ class FormConfig {
 
   configFormDateInputs(dates) {
     for (let i = 0; i < 2; i++) {
+      // console.log(this.formStartEndCtg[i].lastElementChild)
       this.setFormDateInput(
-        this.formStartEndCtg[i].lastElementChild.firstElementChild, 
-        dates.dateObj[i], 
-        dates.minutes[i], 
+        this.formStartEndCtg[i].lastElementChild,
+        dates.dateObj[i],
+        dates.minutes[i],
         dates.formatted[i],
       );
     }

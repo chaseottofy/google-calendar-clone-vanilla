@@ -175,7 +175,7 @@
 .allday-modal {
   position: absolute;
   width: 240px;
-  z-index: 1000;
+  z-index: 978;
   border-radius: 8px;
   border: none;
   max-height: 280px;
@@ -186,6 +186,9 @@
   align-items: center;
   user-select: none;
   overflow: hidden;
+}
+.allday-modal__cell--open {
+  background: var(--mediumgrey1);
 }
 
 .allday-modal__header {
@@ -227,8 +230,8 @@
 
 .allday-modal__cell {
   display: grid;
-  grid-template-columns: 1fr 40px;
-  width: 200px;
+  grid-template-columns: 1fr 28px;
+  width: 218px;
   height: auto;
   border-radius: 4px 0 0 4px;
   margin-bottom: 8px;
@@ -246,11 +249,18 @@
   display:flex;
   justify-content: center;
   flex-direction: column;
-  align-items: center;
-  height: 100%;
-  padding: 2px;
-  width: 40px;
-  background: rgba(0,0,0,0.2);
+  align-items:center;
+  width: 24px;
+  margin-left: auto;
+  cursor: pointer;
+  background: rgba(0,0,0,0.1);
+}
+.allday-modal__cell-action-icons:hover {
+  background: rgba(0, 0, 0, .4);
+  width: 26px;
+  transition-property: background, width;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
 }
 
 .allday-modal__celltitle {
@@ -259,10 +269,12 @@
   color: var(--taskcolor);
   padding: 6px;
   line-height: 11px;
+  pointer-events:none;
 }
 
 .allday-modal__cellend-date,
-.allday-modal__cellend-time {
+.allday-modal__cellcategory-title {
+  pointer-events:none;
   margin-top: 2px;
   font-size: 10px;
   font-weight: 400;
