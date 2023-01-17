@@ -176,7 +176,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
       formNegated();
       return;
     }
-
   }
 
   setEntryDefaults()

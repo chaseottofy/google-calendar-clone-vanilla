@@ -125,7 +125,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     endTimeInput.textContent = nextHourTitle;
   }
 
-
   function createTimepicker(coords, currentTime, end, endLimit) {
     const timepicker = document.createElement("div")
     timepicker.classList.add("timepicker")
@@ -150,18 +149,16 @@ export default function setEntryForm(context, store, datepickerContext) {
       return parseInt(x)
     })
 
-    // console.log(currenthour, currentmin)
-
     let currentmd = currenthour > 12 ? "pm" : "am"
     let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
     let shouldTestReset = false;
-    // if (isSameDay)
+
     if (end && currenthour === 23 && currentmin === 45) {
       shouldTestReset = true;
     }
+
     currenthour > 12 ? currenthour -= 12 : currenthour
     let selectedIndex = hours.indexOf()
-
 
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
@@ -213,11 +210,13 @@ export default function setEntryForm(context, store, datepickerContext) {
           if (+hour == +currenthour && +min == +currentmin) {
             if (currentmd === "pm" && md[houridx] === "pm") {
               timepickerTime.classList.add("timepicker-time--selected")
-              selectedIndex = (houridx * 4) + (minidx * 4) - 4;
-
+              selectedIndex = (houridx * 4) + minidx;
+              console.log((houridx * 4) * 40)
+              
             } else if (currentmd === "am" && md[houridx] === "am") {
               timepickerTime.classList.add("timepicker-time--selected")
-              selectedIndex = (houridx * 4) + (minidx * 4) - 4;
+              selectedIndex = (houridx * 4) + minidx;
+              console.log((houridx * 4) * 40)
             }
           }
         } 
@@ -267,6 +266,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     document.body.prepend(timepickerOverlay);
     document.body.prepend(timepicker)
     if (!end) {
+      console.log(timepickerTimesContainer.getBoundingClientRect())
       timepicker.scrollTo(0, parseInt(3840 - (selectedIndex * 40)))
     } else {
       timepicker.scrollTo(0, 0);
@@ -313,16 +313,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     // title / description
     descriptionInput.value = "";
     titleInput.value = "";
-    // titleInput.focus();
     setTimeout(() => {
       titleInput.focus();
     }, 10)
-    // let tempval = titleInput.value;
-    // setTimeout(() => {
-    //   titleInput.focus();
-    //   titleInput.value = tempval;
-    // }, 10)
-
     // ****************************************** //
     // category setup 
     setInitialFormCategory()

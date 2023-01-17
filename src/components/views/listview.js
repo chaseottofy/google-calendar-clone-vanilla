@@ -213,8 +213,6 @@ export default function setListView(context, store, datepickerContext) {
       return;
     } else {
       // update : 1.02 -- (1/16/23)
-      // The following logic is in its first stage and will be optimized when I come up with a better solution.
-      // I'm debating on whether to use a load more system or an infinite scroll system.
       const entries = store.sortBy(activeEnt, "start", "desc");
 
       const groupedEntries = entries.reduce((acc, curr) => {
