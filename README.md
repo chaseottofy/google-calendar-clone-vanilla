@@ -1,8 +1,8 @@
-# Cloning this repo
+## Cloning this repo
 
-`git clone`
+### `git clone`
 
-`npm install`
+### `npm install`
 
 ## Available Scripts
 
@@ -14,7 +14,7 @@ Builds the app and **necessary** resources in the `dist` folder.
 
 Starts the webpack development server on `localhost:3000`.
 
-### contact: ottofy@zohomail.com
+## contact: ottofy@zohomail.com
 
 ### Jan 15, 2023
 
