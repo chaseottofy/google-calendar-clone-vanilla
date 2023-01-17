@@ -274,8 +274,6 @@ export default function getSidebarSubMenu(store, context) {
     shortcutSwitch.checked = status ? true : false;
   }
 
-
-
   function delegateSubMenuEvents(e) {
     const downloadjsonBtn = getClosest(e, ".down-json");
     const uploadjsonBtn = getClosest(e, ".upload-json");

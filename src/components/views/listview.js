@@ -11,7 +11,8 @@ import {
   getDateFromAttribute,
   getDuration,
   formatEntryOptionsDate,
-  longerThanDay
+  longerThanDay,
+  formatStartEndDate
 } from "../../utilities/dateutils"
 import { formatStartEndTimes } from "../../utilities/timeutils"
 import locales from "../../locales/en"
@@ -145,7 +146,6 @@ export default function setListView(context, store, datepickerContext) {
       x = window.innerWidth - 150;
     }
 
-
     // *** config & open form ***
     store.setFormResetHandle("list", resetCellActive);
 
@@ -161,8 +161,6 @@ export default function setListView(context, store, datepickerContext) {
     const modal = document.querySelector(".entry__options")
     modal.style.top = y + "px";
     modal.style.left = x + "px";
-    // modal.style.top = offsettop + "px";
-    // modal.style.left = offsetleft + "px";
   }
 
 
@@ -208,47 +206,50 @@ export default function setListView(context, store, datepickerContext) {
       return;
     } else {
 
+      // update : 1.02 -- (1/16/23)
+      // The following logic is in its first stage and will be optimized when I come up with a better solution.
+      // I'm debating on whether to use a load more system or an infinite scroll system.
       const entries = store.sortBy(activeEnt, "start", "desc");
       const today = new Date();
-      const [todayYear, todayMonth, todayDay] = [
-        today.getFullYear(),
-        today.getMonth() + 1,
-        today.getDate(),
-      ];
+      const getdatearray = date => {
+        return [+date.getFullYear(), +date.getMonth() + 1, +date.getDate()]
+      }
+      const [todayYear, todayMonth, todayDay] = getdatearray(today)
 
       const groupedEntries = entries.reduce((acc, curr) => {
         const date = new Date(curr.start)
-        const [year, month, day] = [
-          +date.getFullYear(),
-          +date.getMonth() + 1,
-          +date.getDate(),
-        ];
-
+        const [year, month, day] = getdatearray(date)
         const datestring = `${year}-${month}-${day}` // for parse&group
 
         if (year < todayYear) {
           return acc;
+        } else if (year === todayYear) {
+          if (month < todayMonth) {
+            return acc;
+          } else if (month === todayMonth && day < todayDay) {
+            return acc;
+          }
         }
 
-        if (year === todayYear && month < todayMonth) {
-          return acc;
-        }
-
-        if (year === todayYear && month === todayMonth && day < todayDay) {
-          return acc;
-        }
-
-        if (!acc[datestring]) {
-          acc[datestring] = []
-        }
+        if (!acc[datestring]) {acc[datestring] = []}
         acc[datestring].push(curr)
         return acc;
       }, {})
 
-      const length = Object.keys(groupedEntries).length;
+      // set the header title to the first date with entries that is not in the past and the last date with entries
+      // if no entries are in the future, set the header title to "Schedule Clear";
+      const dateTimeTitle = document.querySelector(".datetime-content--title");
+      const keys = Object.keys(groupedEntries)
+      const length = keys.length;
       if (length === 0) {
-        const dateTimeTitle = document.querySelector(".datetime-content--title");
         dateTimeTitle.textContent = "Schedule Clear"
+      } else {
+        // true will slice the year at last two digits if two years are displayed at the same time;
+        dateTimeTitle.textContent = formatStartEndDate(
+          keys[0], 
+          keys[length - 1], 
+          true
+        );
       }
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;

@@ -37,8 +37,6 @@
 :root {
   --primaryFont: "Roboto", sans-serif;
   --secondaryFont: "Google Sans", sans-serif;
-  /* --primaryFont: monospace; */
-  /* --secondaryFont: monospace; */
   --black000: #0c0e0e;
   --black0: #141617;
   --black1: #181a1b;
@@ -183,51 +181,18 @@ html {
   --scrollerThumbBorder: 3px solid #b0b3b9;
   --scrollerThumbBackgroundHover: #d2d7e0;
   --scrollerTrackBackground: var(--black0);
+  --box-shadow5:
+    rgba(51, 54, 55, 0.14) 0px 4px 4px 0px,
+    rgba(51, 54, 55, 0.12) 0px 3px 2px 0px,
+    rgba(51, 54, 55, 0.2) 0px 2px 3px 0px;
 }
-
-/* .light-mode {
-  --primary5: #e9eff6;
-  --black000: #F1F3F4;
-  --black0: #E8F0FE;
-  --black1: #ffffff;
-  --black2: #E8F0FE;
-  --black3: #D2E3FC;
-  --darkgrey000: #9AA0A6;
-  --darkgrey0: #a9b0b7;
-  --darkgrey1: #9da4aa;
-  --darkgrey2: #979ea5;
-  --darkgrey3: #f1f3f4;
-  --darkgrey4: #f1f3f4;
-  --mediumgrey0: rgb(219, 221, 224);
-  --mediumgrey1: #dadce0;
-  --mediumgrey2: #dadce0;
-  --mediumgrey3: #dadce0;
-  --taskcolor: #e8f0fe;
-  --taskcolor2: #e8f0fe;
-  --white1: #3c4043;
-  --white2: #3c4043;
-  --white3: #879096;
-  --white4: #3c4043;
-  --offwhite1: #8e959c;
-  --bordergrey: 1px solid #dadce0;
-  --borderdarkgrey: 1px solid #dadce0;
-  --primary3: #5693e8;
-  --primary4: #41638c;
-  --scrollerThumbBackground: #BCC0C6;
-  --scrollerThumbBorder: 3px solid #b0b3b9;
-  --scrollerThumbBackgroundHover: #d2d7e0;
-  --scrollerTrackBackground: var(--black0);
-} */
 
 .contrast-mode {
   /* --box-shadow1:
   rgba(116, 123, 132, 0.1) 2px 4px 8px 1px,
   rgba(122, 129, 138, 0.1) 0px 3px 7px 2px,
   rgba(176, 181, 187, 0.1) 0px 2px 8px -1px; */
-  --box-shadow1:
-    rgba(20, 20, 20, 0.5) 0px 8px 10px 1px;
-  --box-shadow-sbfixed:
-    4px 8px 12px 0 rgba(59, 88, 108, .2);
+
   --primary5: #0f2c4f;
   --white1: #ffffff;
   --white2: #ffffff;
@@ -258,6 +223,14 @@ html {
   --scrollerThumbBorder: 3px solid #5d6a73;
   --scrollerThumbBackgroundHover: #415763;
   --scrollerTrackBackground: #000000;
+  --box-shadow1:
+    rgba(20, 20, 20, 0.5) 0px 8px 10px 1px;
+  --box-shadow-sbfixed:
+    4px 8px 12px 0 rgba(59, 88, 108, .2);
+  --box-shadow5:
+    rgba(51, 54, 55, 0.14) 0px 8px 4px 0px,
+    rgba(51, 54, 55, 0.12) 0px 3px 6px 0px,
+    rgba(51, 54, 55, 0.2) 0px 2px 4px 0px;
 }
 
 select,

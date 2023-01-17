@@ -1,10 +1,10 @@
 .listview__body {
-  margin-left: 66px;
+  margin-left: 62px;
+  width: calc(100% - 62px);
   height: auto;
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 66px);
   background: var(--black1);
   border-left: var(--bordergrey);
   transition-property: margin-left, width;
@@ -42,6 +42,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  font-family: monospace, monospace;
   font-weight: 500;
   color: var(--offwhite1);
 }
@@ -60,7 +61,6 @@
   margin-left: 6px;
   margin-top: 17px;
   display:flex;
-  flex-direction: column;
   justify-content: center;
   letter-spacing: 0.8px;
   height: 36px;
@@ -82,12 +82,12 @@
   width: 100%;
   padding-left: 10px;
   margin-right: 8px;
-
 }
+
 .rowgroup--cell {
   display:flex;
   align-items: center;
-  width: 100%;
+  width: calc(100% - 8px);
   padding-left: 10px;
   cursor: pointer;
   height: 36px;
@@ -98,13 +98,14 @@
   border-radius: 32px;
 }
 
+.rowgroup--cell-active {
+  box-shadow: var(--box-shadow5);
+}
+
 .rowgroup-content:last-child {
   margin-bottom: 8px;
 }
 
-.rowgroup--cell-active {
-  box-shadow: var(--box-shadow1);
-}
 
 .rowgroup--cell__color {
   width: 10px;
@@ -123,11 +124,13 @@
 
 .rowgroup--cell__title {
   font-size: 14px;
-  width: auto;
+  width: min-content;
+  padding-right: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 500;
+
   color: var(--white4);
 }
 
@@ -139,10 +142,10 @@
 
 /* queries */
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 720px) {
   .rowgroup-header {
-    padding-left: 4px;
-    width: 70px;
+    padding-left: 5px;
+    width: 80px;
   }
 
   .rowgroup--header__datenumber {
@@ -156,10 +159,10 @@
     width: 32px;
     align-items: center;
     text-align: center;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.4px;
     line-height: 12px;
     font-size: 9px;
-    margin-left: 4px;
+    margin-left: 11px;
   }
 
   .rowgroup-content {
@@ -182,7 +185,7 @@
 
 @media screen and (max-width: 530px) {
   .listview__body {
-    margin-left: 0px;
+    margin-left: 6px;
     width: 100% !important;
   }
 }

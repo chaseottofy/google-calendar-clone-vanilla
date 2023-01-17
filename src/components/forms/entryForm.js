@@ -106,8 +106,8 @@ export default function setEntryForm(context, store, datepickerContext) {
     day = context.getDay()
     // ****************************************** //
     // title / description
+    descriptionInput.value = "";
     setTimeout(() => {
-      descriptionInput.value = "";
       let tempval = titleInput.value;
       titleInput.value = "";
       titleInput.focus();

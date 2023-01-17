@@ -28,19 +28,61 @@ const reset = [
 ]
 
 export default function getEntryOptionModal(context, store, entry,datepickerContext, finishSetup) {
+
+
   function openEditForm() {
+  
     const openForm = store.getRenderFormCallback()
+
     openForm();
+    console.log(finishSetup)
     finishSetup();
     closeEntryOptions();
   }
 
-  function openDeleteWarning() {
-    // formNegated();
+
+  function proceedDelete(entry) {
     store.deleteEntry(entry.id);
-    // createToast(taostDeleteEntryWarning, store);
     closeEntryOptions();
     setViews(context.getComponent(), context, store, datepickerContext);
+  }
+
+  function openDeleteWarning() {
+    // formNegated();
+    const deletepopup = document.createElement("div");
+    deletepopup.classList.add("delete-popup");
+
+    const deletebtns = document.createElement("div");
+    deletebtns.classList.add("delete-popup__btns");
+
+    const deletepopupCancel = document.createElement("button");
+    deletepopupCancel.classList.add("delete-popup__cancel");
+    deletepopupCancel.textContent = "Cancel";
+
+    const deletepopupConfirm = document.createElement("button");
+    deletepopupConfirm.classList.add("delete-popup__confirm");
+    deletepopupConfirm.textContent = "Delete";
+
+    const deletepopupText = document.createElement("p");
+    deletepopupText.classList.add("delete-popup__text");
+    deletepopupText.textContent = "Are you sure you want to delete this entry?";
+
+    deletebtns.append(deletepopupCancel, deletepopupConfirm)
+    deletepopup.append(deletepopupText, deletebtns);
+    entryOptionsWrapper.append(deletepopup);
+
+    const removeDeletePopup = () => {
+      deletepopup.remove();
+
+    }
+
+    const submitDelete = () => {
+      proceedDelete(entry);
+      removeDeletePopup();
+    }
+
+    deletepopupCancel.onclick = removeDeletePopup
+    deletepopupConfirm.onclick = submitDelete
   }
 
   function formNegated() {
@@ -89,8 +131,14 @@ export default function getEntryOptionModal(context, store, entry,datepickerCont
   }
 
   function handleEntryOptionKD(e) {
+    const deletepopup = document?.querySelector(".delete-popup")
     if (e.key === "Escape") { 
-      formNegated();
+      if (deletepopup) {
+        deletepopup.remove();
+        return;
+      } else {
+        formNegated();
+      }
     }
   }
 

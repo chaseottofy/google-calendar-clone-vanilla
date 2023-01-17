@@ -6,7 +6,6 @@
   text-align:center;
   width:100%;
   min-width:100%;
-
 }
 
 .monthview__top-weekname {
@@ -18,7 +17,7 @@
   padding: 3px 0;
   font-size: 9px;
   letter-spacing: 0.5px;
-  color: var(--white2);
+  color: var(--white3);
   user-select:none;
   pointer-events:none;
   border-left: var(--bordergrey);

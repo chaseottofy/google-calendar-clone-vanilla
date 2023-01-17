@@ -6,7 +6,8 @@ import defautlKeyboardShortcuts from "../locales/kbDefault"
 import testdata from "../testdata.json"
 const colors = locales.colors
 /*
-  // entry methods
+  ***************************************
+  // ENTRY MANAGEMENT
   "addEntry",
   "createEntry",
   "deleteEntry",
@@ -27,7 +28,11 @@ const colors = locales.colors
   "getWeekEntries",
   "getYearEntries",
   "getGroupedYearEntries",
-  // category methods
+  ***************************************
+
+
+  ***************************************
+  // CATEGORY MANAGEMENT
   "addNewCtg",
   "deleteCategory",
   "getDefaultCtg",
@@ -46,24 +51,39 @@ const colors = locales.colors
   "removeCategoryAndEntries",
   "setCategoryStatus",
   "updateCtgColor",
-  // keyboard shortcuts
+  ***************************************
+
+
+  ***************************************
+  // KEYBOARD SHORTCUT MANAGEMENT
   "getShortcuts",
   "setShortCut",
   "setShortcutsStatus",
   "getShortcutsStatus",
-  // overlay management
+  ***************************************
+
+
+  ***************************************
+  // POPUP/TOAST/NOTIFICATION MANAGEMENT
   "addActiveOverlay",
   "removeActiveOverlay",
   "getActiveOverlay",
   "hasActiveOverlay",
-  // user upload/download local storage
+  ***************************************
+
+
+  ***************************************
+  // USER UPLOAD/DOWNLOAD MANAGEMNET
   "validateUserUpload",
   "setUserUpload",
   "setDataReconfigCallback",
   "getUserUpload",
   "getDataReconfigCallback",
   ***************************************
-  // form management
+
+
+  ***************************************
+  // FORM MANAGEMENT 
   "setFormRenderHandle",
   "getFormRenderHandle",
 
@@ -73,16 +93,22 @@ const colors = locales.colors
   "setRenderFormCallback",
   "getRenderFormCallback",
   ***************************************
+
+
   ***************************************
-  // sidebar management
+  // SIDEBAR MANAGEMENT
   "setRenderSidebarCallback",
   "getRenderSidebarCallback"
   ***************************************
+
+
   ***************************************
   // DATEPICKER MANAGEMENT
   "setResetDatepickerCallback",
   "getResetDatepickerCallback",
   ***************************************
+
+
   ***************************************
   // CALENDAR MANAGEMENT
   "setResizeHandle",
@@ -94,7 +120,6 @@ const colors = locales.colors
 // ./index > ./renderViews > ./setViews > component
 
 class Store {
-
   constructor() {
     this.store = localStorage.getItem("store") 
     ? JSON.parse(localStorage.getItem("store")) : testdata;
@@ -182,9 +207,6 @@ class Store {
     return JSON.parse(localStorage.getItem("keyboardShortcutsStatus"));
   }
 
-  // static getActiveCtg() {
-  //   return JSON.parse(localStorage.getItem("activeCtg")) || [];
-  // }
   // *******************
   static setStore(store) {
     localStorage.setItem("store", JSON.stringify(store));
@@ -201,10 +223,6 @@ class Store {
   static setShortcutsStatus(status) {
     localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status))
   }
-
-  // static setActiveCtg(activeCtg) {
-  //   localStorage.setItem("activeCtg", JSON.stringify(activeCtg));
-  // }
   /* ************************* */
 
 
@@ -548,7 +566,6 @@ class Store {
 
   getActiveCategories() {
     let active = Object.keys(this.ctg).filter(key => this.ctg[key].active);
-    // Store.setActiveCtg(active) || []; 
     if (active.length > 0) {
       return active;
     } else {
@@ -755,9 +772,10 @@ class Store {
   /* ******************** */
 
 
+
+
   /* ************************ */
   /*  JSON UPLOAD & DOWNLOAD */
-  
   validateUserUpload(userUpload) {
     const keys = Object.keys(userUpload);
     let message = {};
@@ -765,6 +783,7 @@ class Store {
     if (keys.length > localStoreKeyNames.length) {
       message.err1 = "invalid number of keys (too many)"
     }
+    
     for (let i = 0; i < keys.length; i++) {
       if (!localStoreKeyNames.includes(keys[i])) {
         let errname = "err" + Object.keys(message).length;
@@ -793,8 +812,6 @@ class Store {
     } else {
       return validation;
     }
-    // console.log(validated)
-
     if (validated) {
       const refresh = localStorage.getItem("refresh");
       if (refresh === null) {
@@ -808,6 +825,8 @@ class Store {
     return this.userUpload;
   }
   /* ************************ */
+
+
 
   /* ******************************************* */
   /*  STATE MANAGEMENT : RENDERING / RESET / RESIZE */

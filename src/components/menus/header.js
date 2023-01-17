@@ -55,11 +55,16 @@ export default function setHeader(context, component, store) {
       break;
     case "list":
       setHeaderAttributes("list");
+      header.style.borderBottom = "1px solid var(--mediumgrey1)"
+      // datetimeWrapper.classList.add("datetime-inactive");
+      /*
+      
       let [start, end] = store.getFirstAndLastEntry();
       
       !start || !end 
-        ? configListHeader("Schedule Clear")
-        : configListHeader(formatStartEndDate(new Date(), new Date(end), true));
+      ? configListHeader("Schedule Clear")
+      : configListHeader(formatStartEndDate(new Date(), new Date(end), true));
+      */
       break;
     default:
       break;

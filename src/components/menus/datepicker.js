@@ -15,6 +15,7 @@ const datepickerTitle = document.querySelector(".datepicker-title");
 const headerPrevBtn = document.querySelector(".prev")
 const headerNextBtn = document.querySelector(".next")
 
+
 export default function setDatepicker(context, store, datepickerContext, type) {
   let montharray = datepickerContext.getMonthArray();
   let count = 0;
