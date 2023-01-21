@@ -637,10 +637,11 @@ export default function setDayView(context, store, datepickerContext) {
     if (elementCount > 0) {
       setTimeout(() => {
         let fc;
-        if (elementCount === 1) {
-          fc = dvMainGrid.children[0];
+        let checkForBOT = document?.querySelector(".dv-box-one")
+        if (checkForBOT !== null) {
+          fc = checkForBOT
         } else {
-          fc = document.querySelector(".dv-box-one")
+          fc = dvMainGrid.children[0];
         }
 
         dvGrid.scrollTo({
@@ -654,7 +655,7 @@ export default function setDayView(context, store, datepickerContext) {
         let temphour = tempdate.getHours() * 50
         dvGrid.scrollTo({
           top: temphour - 50 > 0 ? temphour - 50 : 0,
-          behavior: "instant",
+          behavior: "auto",
         })
       }, 4)
     }
