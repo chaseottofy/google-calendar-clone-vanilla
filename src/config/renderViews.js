@@ -399,6 +399,7 @@ export default function renderViews(context, datepickerContext, store) {
     const btnPrev = getClosest(e, ".prev");
     const btnNext = getClosest(e, ".next");
     const dateTime = getClosest(e, ".datetime-content");
+    const search = getClosest(e, ".h-search");
     const settings = getClosest(e, ".settings");
     const select = getClosest(e, ".select__modal");
 
@@ -425,6 +426,11 @@ export default function renderViews(context, datepickerContext, store) {
 
     if (dateTime) {
       handleDatePickerBtn(e);
+      return;
+    }
+
+    if (search) {
+      createGoTo(context, store, datepickerContext);
       return;
     }
 

@@ -62,6 +62,14 @@ export default function setWeekView(context, store, datepickerContext) {
   let entries = store.getWeekEntries(weekArray)
   let boxes = new Week(entries.day, entries.allDay);
 
+  function setDayView(e) {
+    let [yr, mo, da] = getDateFromAttribute(e.target, "data-weekview-date")
+    context.setDate(yr, mo, da)
+    context.setDateSelected(da)
+    context.setComponent("day")
+    setViews("day", context, store, datepickerContext)
+  }
+
   function configureDaysOfWeek() {
     let hasToday;
     let hasSelected;
@@ -91,31 +99,23 @@ export default function setWeekView(context, store, datepickerContext) {
 
     dayNumbers.forEach((num, idx) => {
       if (num === hasSelected) {
-        weekviewHeaderDay[idx].classList.add("wvh--selected")
+        weekviewHeaderDayNumber[idx].classList.add("wvh--selected")
       } else {
-        weekviewHeaderDay[idx].classList.remove("wvh--selected")
+        weekviewHeaderDayNumber[idx].classList.remove("wvh--selected")
       }
 
-      weekviewHeaderDayNumber[idx].textContent = num
       if (num === hasToday) {
-        weekviewHeaderDay[idx].classList.add("wvh--today")
+        weekviewHeaderDayNumber[idx].classList.add("wvh--today")
       } else {
-        weekviewHeaderDay[idx].classList.remove("wvh--today")
+        weekviewHeaderDayNumber[idx].classList.remove("wvh--today")
       }
-
-      weekviewHeaderDay[idx].setAttribute("data-weekview-date", ymd[idx]);
+      
+      weekviewHeaderDayNumber[idx].textContent = num
+      weekviewHeaderDayNumber[idx].setAttribute("data-weekview-date", ymd[idx]);
       topCols[idx].setAttribute("data-wvtop-day", num)
     })
 
-
-    function setDayView(e) {
-      let [yr, mo, da] = getDateFromAttribute(e.target, "data-weekview-date")
-      context.setDate(yr, mo, da)
-      context.setDateSelected(da)
-      context.setComponent("day")
-      setViews("day", context, store, datepickerContext)
-    }
-    weekviewHeader.onmousedown = setDayView
+    // weekviewHeader.onmousedown = setDayView
   }
 
   function renderSidebarDatepickerWeek() {
@@ -678,6 +678,11 @@ export default function setWeekView(context, store, datepickerContext) {
 
   /** delegate via grid */
   function delegateGridEvents(e) {
+    if (getClosest(e, ".weekview--header-day__number")) {
+      setDayView(e)
+      return;
+    }
+    
     if (getClosest(e, ".box-resize-s")) {
       resizeBoxNS(e, e.target.parentElement);
       return;
@@ -715,7 +720,7 @@ export default function setWeekView(context, store, datepickerContext) {
     configureDaysOfWeek();
     renderDataForGrid();
     store.setResetPreviousViewCallback(resetWeekviewBoxes)
-    container.onmousedown = delegateGridEvents;
+    main.onmousedown = delegateGridEvents;
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();

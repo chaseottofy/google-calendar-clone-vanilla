@@ -68,6 +68,7 @@
   --white4: #BFC0C1;
   --offwhite1: #9e9689;
   --offwhite2: #c0bab2;
+  --offwhite3: #70757a;
   --error: #d93025;
   --red1: #B01244;
   --red2: #7b0d25;
@@ -76,10 +77,10 @@
   --bordergrey: 1px solid var(--mediumgrey1);
   --borderdarkgrey: 1px solid var(--mediumgrey2);
   --borderradius: 4px;
-  --scrollerThumbBackground: #363A3D;
-  --scrollerThumbBorder: 3px solid #303436;
-  --scrollerThumbBackgroundHover: #3a3e42;
-  --scrollerTrackBackground: var(--black0);
+  --scrollerThumbBackground: rgb(43, 47, 49);
+  --scrollerThumbBorder: 4px solid var(--black1);
+  --scrollerThumbBackgroundHover: #3b4042;
+  --scrollerTrackBackground: var(--black1);
   --overlay1: rgba(0, 0, 0, 0.2);
   --overlay2: rgba(0, 0, 0, 0.5);
   --box-shadow1:
@@ -115,7 +116,6 @@
     inset 3px 3px 4px -1px rgba(0, 0, 0, 0.2);
   --box-shadow-sbfixed:
     4px 6px 6px 0 rgba(0, 0, 0, .3);
-
 }
 
 *,
@@ -177,10 +177,10 @@ html {
   --borderdarkgrey: 1px solid #dadce0;
   --primary3: #5693e8;
   --primary4: #41638c;
-  --scrollerThumbBackground: #BCC0C6;
-  --scrollerThumbBorder: 3px solid #b0b3b9;
-  --scrollerThumbBackgroundHover: #d2d7e0;
-  --scrollerTrackBackground: var(--black0);
+  --scrollerThumbBackground: #dadce0;
+  --scrollerThumbBorder: 4px solid #ffffff;
+  --scrollerThumbBackgroundHover: #bdc1c6;
+  --scrollerTrackBackground: #ffffff;
   --box-shadow5:
     rgba(51, 54, 55, 0.14) 0px 4px 4px 0px,
     rgba(51, 54, 55, 0.12) 0px 3px 2px 0px,
@@ -215,9 +215,9 @@ html {
   --mediumgrey3: #95a0a5;
   --bordergrey: 1px solid var(--mediumgrey1);
   --scrollerThumbBackground: #5d6a73;
-  --scrollerThumbBorder: 3px solid #5d6a73;
-  --scrollerThumbBackgroundHover: #415763;
-  --scrollerTrackBackground: #000000;
+  --scrollerThumbBorder: 4px solid var(--black1);
+  --scrollerThumbBackgroundHover: #505b65;
+  --scrollerTrackBackground: var(--black1);
   --box-shadow1:
     rgba(20, 20, 20, 0.5) 0px 8px 10px 1px;
   --box-shadow-sbfixed:
@@ -285,8 +285,8 @@ svg {
 }
 
 ::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
+  width: 16px;
+  height: 16px;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -78,10 +78,11 @@
   font-size: 14px;
   font-weight: 500;
   height: 100%;
+  left: 0;
+  text-align: center;
+  letter-spacing: -0.6px;
   justify-content: center;
-  letter-spacing: -1px;
   position: absolute;
-  text-indent: -1px;
   width: 100%
 }
 
@@ -98,7 +99,7 @@
   user-select: none;
   font-weight: 400;
   height: 36px;
-  padding-right: 44px;
+  padding-right: 36px;
 }
 
 .btn-today,
@@ -243,13 +244,17 @@
 }
 
 .menu,
-.settings {
+.settings,
+.h-search,
+.h-kb--shortcuts {
   align-items: center;
   cursor: pointer;
   display: flex;
   position: relative
 }
 
+
+.h-search,
 .settings {
   border-radius: 50%;
   height: 32px;
@@ -257,6 +262,15 @@
   width: 32px
 }
 
+.h-search {
+  margin-top: 1px;
+  margin-right: 3px;
+}
+
+.h-search svg {
+  transform: scale(0.9);
+}
+.h-search:hover:after,
 .settings:hover:after {
   align-items: center;
   background: var(--mediumgrey1);
@@ -312,7 +326,6 @@
   display: inline-block;
   height: 0;
   margin: 0 0 0 8px;
-  /* vertical-align: middle; */
   width: 0
 }
 
@@ -346,6 +359,12 @@ h2 {
 @media screen and (max-width: 840px) {
   .header-title {
     padding-right: 8px;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .h-search {
+    display:none;
   }
 }
 
@@ -446,9 +465,9 @@ h2 {
 
   .logo:after {
     font-size: 12px;
-    line-height: 36px;
-    text-align: center;
-    text-indent: -.5px
+    /* line-height: 36px; */
+    /* text-align: center; */
+    /* text-indent: -.5px */
   }
 
   .header-title {
@@ -505,9 +524,9 @@ h2 {
 
   .logo:after {
     font-size: 10px;
-    letter-spacing: -.5px;
+    /* letter-spacing: -.5px; */
     line-height: 32px;
-    text-indent: 0
+    /* text-indent: 0 */
   }
 
   .header-title,

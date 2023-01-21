@@ -66,6 +66,7 @@ const dvHeaderInfo = document.querySelector(".dayview--header-day__info")
 // day view on top container (row 2)
 const dvOnTop = document.querySelector('.dayview--ontop-container');
 
+
 // main grid wrapper (row 3) (scroll wrapper) (offsettop)
 const dvGrid = document.querySelector(".dayview__grid")
 const dvSideGrid = document.querySelector(".dayview--side-grid")
@@ -134,7 +135,7 @@ export default function setDayView(context, store, datepickerContext) {
     })
 
     dvHeaderDayOfWeek.textContent = context.getDay()
-    dvHeaderDayNumber.textContent = locales.labels.weekdaysShort[context.getWeekday()].toUpperCase() + " :";
+    dvHeaderDayNumber.textContent = locales.labels.weekdaysShort[context.getWeekday()].toUpperCase();
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
 
@@ -170,7 +171,7 @@ export default function setDayView(context, store, datepickerContext) {
 
     box.classList.add("dv-box-resizing")
     const boxTop = box.offsetTop
-    const headerOffset = 72 + header.offsetHeight
+    const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
     createTemporaryBox(box, col, boxhasOnTop, "day")
 
     let amountScrolled = parseInt(dvGrid.scrollTop)
@@ -222,7 +223,6 @@ export default function setDayView(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup)
   }
 
-
   /** DRAG NORTH/ SOUTH, EAST/ WEST */
   function dragEngineDay(e, box) {
     setStylingForEvent("dragstart", dvGrid, store)
@@ -240,12 +240,27 @@ export default function setDayView(context, store, datepickerContext) {
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
-    const startCursorY = e.pageY - dvGrid.offsetTop
-    const headerOffset = 72 + header.offsetHeight
+    const startCursorY = e.pageY - dvGrid.offsetTop;
+    const headerOffset = dvGrid.offsetTop;
+    // const startCursorX = e.pageX;
+    let [tempX, tempY] = [e.pageX, e.pageY];
+    let [sX, sY] = [0, 0];
+    let hasStyles = false;
     let movedY = 0;
 
     /** DRAG NORTH SOUTH */
     const mousemove = (e) => {
+      sX = Math.abs(e.clientX - tempX);
+      sY = Math.abs(e.clientY - tempY);
+      if (!hasStyles) {
+        if (sX > 3 || sY > 3) {
+          document.body.style.cursor = "move";
+          hasStyles = true;
+          sX = 0;
+          sY = 0;
+        }
+      }
+
       const currentCursorY = e.pageY - headerOffset
       let newOffsetY = currentCursorY - startCursorY
       let newTop = Math.round((newOffsetY + startTop) / 12.5) * 12.5

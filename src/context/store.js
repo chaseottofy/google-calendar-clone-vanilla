@@ -122,7 +122,7 @@ const colors = locales.colors
 class Store {
   constructor() {
     this.store = localStorage.getItem("store") 
-    ? JSON.parse(localStorage.getItem("store")) : testdata;
+    ? JSON.parse(localStorage.getItem("store")) : [];
 
     this.userUpload;
 

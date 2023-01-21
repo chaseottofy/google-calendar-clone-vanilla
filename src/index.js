@@ -2,7 +2,7 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
-import generateRandomEvents from "./utilities/testing"
+// import generateRandomEvents from "./utilities/testing"
 
 /*!*************************************!*\
 // (CSS) 
@@ -54,5 +54,3 @@ import "./styles/aside/shortcuts.css"
 // store.setStoreForTesting(generateRandomEvents(1000))
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
-const tt = document.querySelector(".weekview__top")
-console.log(tt.offsetHeight)

@@ -124,6 +124,10 @@
   background: transparent;
 }
 
+.entries__form--body::-webkit-scrollbar {
+  width: 10px;
+}
+
 .form--body__description,
 .form--body__title {
   align-items: center;
@@ -363,6 +367,10 @@
 .category-modal-open {
   box-shadow: var(--box-shadow1);
   z-index: 1200
+}
+
+.form--body__category-modal--wrapper::-webkit-scrollbar {
+  width: 10px;
 }
 
 .form--body__category-modal--wrapper::-webkit-scrollbar-track {

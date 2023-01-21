@@ -1,7 +1,7 @@
 .weekview__top {
   display: grid;
   grid-template-columns: 36px 1fr;
-  height: 50px;
+  height: 78px;
   overflow-y:scroll;
 }
 
@@ -16,6 +16,7 @@
   align-items: center;
   overflow: hidden;
   position: relative;
+  height: 54px;
 }
 
 .weekview--header-day {
@@ -24,52 +25,50 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
   border-radius: 2px;
 }
 
-.wvh--selected {
-  background: var(--primary4) !important;
-}
-
-.wvh--selected .weekview--header-day__title,
-.wvh--selected .weekview--header-day__number {
-  color: var(--taskcolor) !important;
-}
-
-.weekview--header-day:hover {
-  background: var(--mediumgrey1);
-  transition: background .2s ease-in-out;
-}
-
-.wvh--selected:hover {
-  background: var(--primary2) !important;
-}
-
 .weekview--header-day__title {
-  font-size: 10px;
   text-align: center;
   font-weight: 400;
   user-select: none;
   pointer-events: none;
-  color: var(--white4);
+  color: var(--offwhite1);
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  line-height: 16px;
+  pointer-events:none;
 }
 
 .weekview--header-day__number {
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 500;
-  user-select: none;
-  pointer-events: none;
-  color: var(--white4);
+  width: 34px;
+  height: 34px;
+  text-align: center;
+  display:flex;
+  align-items:center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--offwhite1);
+  cursor: pointer;
+}
+
+.weekview--header-day__number:hover {
+  background: var(--mediumgrey1);
+}
+
+.wvh--selected {
+  background: var(--primary3);
+  color: var(--taskcolor);
 }
 
 .wvh--today {
-  color: var(--primarylight2);
-  position: relative;
+  background: var(--primary1);
+  color: var(--taskcolor0) !important;
 }
-
-.wvh--today .weekview--header-day__title {
-  color: var(--primarylight2);
+.wvh--today:hover {
+  background: var(--primarylight1);
 }
 
 .weekview--allday-module {
@@ -122,7 +121,6 @@
 
 .allday__cell:hover {
   background: var(--darkgrey2);
-  /* transition: background 150ms ease-in-out; */
 }
 
 .wv-ad--taskicons {
@@ -293,7 +291,7 @@
 /* grid */
 .weekview__grid {
   display: grid;
-  height: 100%;
+  height: calc(100% - 36px);
   width: 100%;
   min-width: 100%;
   overflow-y:scroll;
@@ -340,8 +338,10 @@
   grid-template-columns: repeat(7, 1fr);
   background-size: calc(100% / 7) 4%;
   background-image:
-    linear-gradient(to right, var(--mediumgrey1) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--mediumgrey1) 1px, transparent 1px);
+    linear-gradient(
+      to right, var(--mediumgrey1) 1px, transparent 1px),
+    linear-gradient(
+      to bottom, var(--mediumgrey1) 1px, transparent 1px);
 }
 
 .week--col {
@@ -556,8 +556,6 @@
   transition: none;
 }
 
-
-
 .weekview--footer {
   width: 100%;
   height: 62.5px;
@@ -583,17 +581,17 @@
 
 
 @media screen and (max-width: 530px) {
-  .weekview__top {
+  /* .weekview__top {
     height: 46px;
-  }
+  } */
 
-  .weekview--header-day__title {
+  /* .weekview--header-day__title {
     font-size: 8px;
-  }
+  } */
 
-  .weekview--header-day__number {
+  /* .weekview--header-day__number {
     font-size: 9px;
-  }
+  } */
 
   .allday__cell {
     justify-content: center;
@@ -637,10 +635,6 @@
 }
 
 @media screen and (max-height:470px) {
-  .weekview--header-day__title {
-    font-size: 8px;
-  }
-
   .wv-ad--celltitle::after {
     border-left: 2px solid transparent;
     border-right: 2px solid transparent;
