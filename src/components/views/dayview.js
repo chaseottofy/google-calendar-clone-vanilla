@@ -243,14 +243,12 @@ export default function setDayView(context, store, datepickerContext) {
   function dragEngineDay(e, box) {
     setStylingForEvent("dragstart", dvGrid, store)
     const col = box.parentElement
-    // const boxorig = getOriginalBoxObject(box);
     let boxhasOnTop = false;
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
     const startCursorY = e.pageY - dvGrid.offsetTop;
     const headerOffset = dvGrid.offsetTop;
-    // const startCursorX = e.pageX;
     let [tempX, tempY] = [e.pageX, e.pageY];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
@@ -293,18 +291,19 @@ export default function setDayView(context, store, datepickerContext) {
       if (tempbox === null) {
         const setReset = () => {
           setStylingForEvent("dragend", dvGrid, store)
+          box.classList.remove("dv-box-clicked")
         }
+        box.classList.add("dv-box-clicked")
         const id = box.getAttribute("data-dv-box-id");
         const entry = store.getEntry(id);
         const start = entry.start;
         const color = box.style.backgroundColor;
-
         const rect = box.getBoundingClientRect()
 
         let [x, y] = placePopup(
           400,
           165,
-          [parseInt(rect.left), parseInt(rect.top)],
+          [parseInt(rect.left) + 32, parseInt(rect.top) + 32],
           [window.innerWidth, window.innerHeight],
           false,
         );
@@ -321,12 +320,11 @@ export default function setDayView(context, store, datepickerContext) {
 
         const modal = document.querySelector(".entry__options")
         if (window.innerWidth > 580) {
-          modal.style.top = +y + 20 + "px";
+          modal.style.top = +y + "px";
           modal.style.left = x + "px";
         } else {
           modal.style.top = "64px";
         }
-
         // ******************
       } else {
         tempbox.remove()

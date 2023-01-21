@@ -396,6 +396,12 @@
   transition-timing-function: ease-in-out;
 }
 
+.wv-box-clicked {
+  box-shadow: var(--box-shadow3) !important;
+  z-index: 981 !important;
+  filter: brightness(1.1);
+}
+
 .temporary-box {
   user-select: none;
   pointer-events: none;

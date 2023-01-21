@@ -123,9 +123,6 @@
 }
 
 .dayview__grid--wrapper {
-  /* background-image: linear-gradient(
-    to bottom, var(--mediumgrey1) 1px, transparent 1px
-  ); */
   background-image:
     linear-gradient(to bottom, var(--mediumgrey1) 2%, transparent 0);
   background-size: 100% 4%;
@@ -280,6 +277,12 @@
 .dv-box-resizing {
   z-index: 1000 !important;
   transition: none;
+}
+
+.dv-box-clicked {
+  box-shadow: var(--box-shadow3) !important;
+  z-index: 981 !important;
+  filter: brightness(1.1);
 }
 
 .dv-box-one {
