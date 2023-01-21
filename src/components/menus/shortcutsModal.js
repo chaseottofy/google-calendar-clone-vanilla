@@ -17,11 +17,11 @@ export default function handleShortCutsModal(store) {
       const or = document.createElement("span")
       or.textContent = " or "
       const keytwo = document.createElement("span")
-      keyone.textContent = key[0]
-      keytwo.textContent = key[1]
+      keyone.textContent = key[0].toUpperCase()
+      keytwo.textContent = key[1].toUpperCase()
       shortcutKey.append(keyone, or, keytwo)
     } else {
-      keyone.textContent = key;
+      keyone.textContent = key.toUpperCase();
       shortcutKey.appendChild(keyone);
     }
 

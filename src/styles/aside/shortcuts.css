@@ -138,12 +138,13 @@
   align-items: center;
   justify-content: space-between;
   flex-direction: row-reverse;
-  width: 120px;
+  width: 140px;
   text-align: end;
   margin-right: 16px;
   height: 30px;
   color: var(--white2);
 }
+
 .sm-item:first-child .sm-key:first-child span { 
   font-family: monospace !important;
 }
@@ -151,10 +152,10 @@
 .sm-key span:first-child,
 .sm-key span:last-child {
   height: 30px;
-  width: 30px;
+  width: 40px;
   line-height: 30px;
   text-align: center;
-  background: var(--darkgrey1);
+  background: var(--darkgrey0);
 }
 .sm-key span:nth-child(2) {
   padding: 0 4px;
@@ -171,6 +172,6 @@
   font-size: 15px;
   width: calc(100% - 12px);
   background: var(--black0);
-  color: var(--white4);
+  color: var(--white2);
   padding-left: 8px;
 }
