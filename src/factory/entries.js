@@ -254,7 +254,7 @@ class Day {
     return bxs.sort((a, b) => {
       let diff = +a.coordinates.y - +b.coordinates.y
       if (diff === 0) {
-        return +b.coordinates.e - +a.coordinates.e
+        return +a.coordinates.e - +b.coordinates.e
       } else {
         return diff;
       }

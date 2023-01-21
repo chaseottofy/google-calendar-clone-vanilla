@@ -14,7 +14,7 @@
   align-items: center;
   width: 100%;
   min-height: 54px;
-  margin-left: 36px;
+  margin-left: 4px;
   transition: margin-left 150ms ease-in-out;
 }
 
@@ -22,9 +22,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   height: 100%;
-  width: calc(100% / 7);
+  width: calc((100% / 7));
+  margin-left: 32px;
+  max-width: 80px;
+  margin-right: 18px;
   border-bottom: 2px solid transparent;
 }
 
@@ -44,7 +47,7 @@
   border-radius: 50%;
   color: var(--offwhite1);
   display: flex;
-  font-size: 18px;
+  font-size: 22px;
   width: 34px;
   height: 34px;
   font-weight: 500;
@@ -71,9 +74,8 @@
 .dayview--header-day__info {
   font-family: var(--secondaryFont);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   /* background: var(--black000); */
-
   height: 30px;
   font-weight: 400;
   font-size: 14px;
@@ -401,9 +403,11 @@
 }
 
 .dv-box-ontop {
-  border: 1px solid var(--black0);
+  /* border: 1px solid var(--black0); */
+  border-left: 1px solid var(--black0);
   border-bottom: 1px solid var(--black2);
   border-top: 1px solid var(--black2);
+  border-right: 1px solid var(--black3);
   box-shadow:none;
 }
 
@@ -522,7 +526,13 @@
 }
 
 @media screen and (max-width:530px) {
-  .dayview--header {
-    margin-left: 36px;
+  .dayview--header-day {
+    /* max-width: 56px; */
+    width: 48px;
+    margin-left: 28px;
+
   }
+  /* .dayview--header {
+    margin-left: 36px;
+  } */
 }

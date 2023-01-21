@@ -69,6 +69,11 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     const submitDelete = () => {
       proceedDelete(entry);
       removeDeletePopup();
+      const resetCurrentView = store.getFormResetHandle(context.getComponent())
+      if (resetCurrentView !== null) {
+        resetCurrentView()
+      }
+
     }
 
     deletepopupCancel.onclick = removeDeletePopup
@@ -91,6 +96,7 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     entryOptionsOverlay.classList.add("entry__options--hidden");
     store.removeActiveOverlay("entry__options--hidden")
     entryOptionDescription.parentElement.removeAttribute("style");
+
     document.removeEventListener("keydown", handleEntryOptionKD);
   }
 
@@ -183,7 +189,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
 
     if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "delete") {
       openDeleteWarning();
-      
     }
   }
 

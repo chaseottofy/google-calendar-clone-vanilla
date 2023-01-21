@@ -27,12 +27,15 @@ const identifiers = {
       'box-one', 'box-two', 'box-three',
       'box-four', 'box-five', 'box-six',
       'box-seven', 'box-eight', 'box-nine',
-      'box-ten',
+      'box-ten', 'box-eleven', 'box-twelve',
+      'box-thirteen', 'box-fourteen', 'box-fifteen',
     ],
     day: [
       'dv-box-one', 'dv-box-two', 'dv-box-three',
       'dv-box-four', 'dv-box-five', 'dv-box-six',
       'dv-box-seven', 'dv-box-eight', 'dv-box-nine',
+      'dv-box-ten', 'dv-box-eleven', 'dv-box-twelve',
+      'dv-box-thirteen', 'dv-box-fourteen', 'dv-box-fifteen',
     ],
   },
 
@@ -102,9 +105,10 @@ function calcNewLeft(index) {
   }
 }
 
+
+// *** I'm using a temporary switch statement to try and fine tune the collision handling for now
 function setBoxWidthWeek(box, prepend, dataidx) {
   const attr = box.getAttribute(dataidx);
-
   switch (attr) {
     case `${prepend}one`:
       box.style.left = 'calc((100% - 0px) * 0 + 0px)';
@@ -142,11 +146,34 @@ function setBoxWidthWeek(box, prepend, dataidx) {
       box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
       box.style.width = "calc((100% - 4px) * 0.35)"
       break;
+    case `${prepend}ten`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}eleven`:
+      box.style.left = "calc((100% - 0px) * 0.70 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}twelve`:
+      box.style.left = "calc((100% - 0px) * 0.85 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}thirteen`:
+      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fourteen`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fifteen`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
     default:
       break;
   }
 }
-
 
 function setBoxWidthDay(box, prepend, dataidx) {
   const attr = box.getAttribute(dataidx);
@@ -176,16 +203,40 @@ function setBoxWidthDay(box, prepend, dataidx) {
       box.style.width = "calc((100% - 4px) * 0.25)"
       break;
     case `${prepend}seven`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.3)"
+      box.style.left = "calc((100% - 0px) * 0.10 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
       break;
     case `${prepend}eight`:
       box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.25)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
       break;
     case `${prepend}nine`:
-      box.style.left = "calc((100% - 0px) * 0.40 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.65)"
+      box.style.left = "calc((100% - 0px) * 0.4 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}ten`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}eleven`:
+      box.style.left = "calc((100% - 0px) * 0.70 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}twelve`:
+      box.style.left = "calc((100% - 0px) * 0.85 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}thirteen`:
+      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fourteen`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fifteen`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
       break;
     default:
       break;
@@ -210,8 +261,8 @@ function handleOverlap(col, view, boxes) {
   for (let i = 0; i < collisions.length; i++) {
     const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`)
     let idx = i;
-    if (i >= 9) {
-      idx -= 8;
+    if (i >= 15) {
+      idx -= 12;
     }
     if (i === 0) {
       box.setAttribute("class", `${baseClass.base} ${identifyBox[idx]}`)
@@ -220,8 +271,8 @@ function handleOverlap(col, view, boxes) {
       box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
       box.setAttribute(boxIdxAttr, identifyBox[idx])
     }
-    view === "day" 
-      ? setBoxWidthDay(box, classPrepend, boxIdxAttr) 
+    view === "day"
+      ? setBoxWidthDay(box, classPrepend, boxIdxAttr)
       : setBoxWidthWeek(box, classPrepend, boxIdxAttr)
   }
 }
@@ -238,7 +289,6 @@ function setStylingForEvent(clause, wrapper, store) {
           sidebar.classList.add("sidebar--dragged-over")
         }
       }
-
       store.addActiveOverlay("hide-resize-overlay");
       resizeoverlay.classList.remove("hide-resize-overlay");
       break;

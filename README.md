@@ -49,3 +49,4 @@ For now, you can view the app through screenshots (link below), or simply downlo
   * If the entry ends today and hasn't started, display the length in hours/minutes.
   * If the entry ended yesterday, display "ended yesterday".
   * If the entry is yet to start and is not in the past, display how long until it is scheduled to start.
+* Improve collisions [screenshot](https://ibb.co/CwN951Z)

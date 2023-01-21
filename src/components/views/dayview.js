@@ -175,7 +175,7 @@ export default function setDayView(context, store, datepickerContext) {
 
     document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
     let day = context.getDay();
-    if (day < 10) { day = `0${day}` }
+    // if (day < 10) { day = `0${day}` }
     dvHeaderDayOfWeek.textContent = day
 
     if (context.isToday()) {
@@ -312,7 +312,7 @@ export default function setDayView(context, store, datepickerContext) {
 
     box.classList.add("dv-box-resizing")
     const boxTop = box.offsetTop
-    const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
+    const headerOffset = parseInt(dvGrid.offsetTop);
     createTemporaryBox(box, col, boxhasOnTop, "day")
 
     let amountScrolled = parseInt(dvGrid.scrollTop)
@@ -372,8 +372,8 @@ export default function setDayView(context, store, datepickerContext) {
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
-    const startCursorY = e.pageY - dvGrid.offsetTop;
-    const headerOffset = dvGrid.offsetTop;
+    const startCursorY = e.pageY - parseInt(dvGrid.offsetTop);
+    const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
     let [tempX, tempY] = [e.pageX, e.pageY];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
@@ -417,6 +417,7 @@ export default function setDayView(context, store, datepickerContext) {
         const setResetDv = () => {
           setStylingForEvent("dragend", dvGrid, store)
           box.classList.remove("dv-box-clicked")
+
         }
         box.classList.add("dv-box-clicked")
         const id = box.getAttribute("data-dv-box-id");
@@ -539,7 +540,6 @@ export default function setDayView(context, store, datepickerContext) {
     // boxheader is static - create from template
     const boxheader = createTempBoxHeader("day")
 
-
     const boxcontent = document.createElement('div');
     const boxtime = document.createElement('span');
     const boxtimeend = document.createElement('span');
@@ -547,7 +547,7 @@ export default function setDayView(context, store, datepickerContext) {
     boxtime.classList.add('dv-box-time');
     boxtimeend.classList.add('dv-box-time');
 
-    const headerOffset = 72 + header.offsetHeight;
+    const headerOffset = parseInt(dvGrid.offsetTop);
     const scrolled = parseInt(dvGrid.scrollTop);
     const startCursorY = e.pageY - headerOffset;
 

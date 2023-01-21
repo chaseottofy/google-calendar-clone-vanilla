@@ -2,7 +2,7 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
-// import generateRandomEvents from "./utilities/testing"
+import generateRandomEvents from "./utilities/testing"
 
 /*!*************************************!*\
 // (CSS) 
@@ -51,6 +51,6 @@ import "./styles/aside/shortcuts.css"
 // * more modal monthview 
 // * linter
 // * 
-
+// store.setStoreForTesting(generateRandomEvents(1000));
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
