@@ -207,7 +207,6 @@ export default function setListView(context, store, datepickerContext) {
   
   function resetListview() {
     listviewBody.innerText = "";
-    console.log(listviewBody.innerHTML);
   }
 
   const initListView = () => {

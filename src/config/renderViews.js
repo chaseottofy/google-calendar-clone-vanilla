@@ -182,16 +182,16 @@ export default function renderViews(context, datepickerContext, store) {
     }
 
     // weekview is the only view that has a horizontal scrollbar, for the other views, hide this scrollbar when transitioning
-    viewsContainer.style.overflowX = "hidden";
-    setTimeout(() => {
-      viewsContainer.style.overflowX = "auto";
-    }, 200)
-    // if (!view.classList.contains("weekview")) {
-    //   viewsContainer.style.overflowX = "hidden";
-    //   setTimeout(() => {
-    //     viewsContainer.style.overflowX = "auto";
-    //   }, 200);
-    // }
+    // view.style.overflowX = "hidden";
+    // setTimeout(() => {
+    //   view.style.overflowX = "auto";
+    // }, 150)
+    if (!view.classList.contains("weekview")) {
+      viewsContainer.style.overflowX = "hidden";
+      setTimeout(() => {
+        viewsContainer.style.overflowX = "auto";
+      }, 200);
+    }
 
     removeslide(keyframeDirection)
     const slide = `transition--${keyframeDirection}`
@@ -588,7 +588,7 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
-  const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 150)
+  const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 200)
   // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
 
   // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.

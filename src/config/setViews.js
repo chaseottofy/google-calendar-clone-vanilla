@@ -24,9 +24,12 @@ const listComponentBody = document.querySelector('.listview__body');
  */
 
 let [prev1, prev2] = [null, null];
+let lastReset = null;
+let count = 0;
 export default function setViews(component, context, store, datepickerContext) {
   prev1 = prev2;
   prev2 = component;
+
 
   function hideViews() {
     const views = [
@@ -39,9 +42,11 @@ export default function setViews(component, context, store, datepickerContext) {
 
     // reset previous view after switching to a new view
     const resetPrevView = store.getResetPreviousViewCallback()
-    if (prev1 !== null && resetPrevView !== null) {
+    if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
+      console.log('ran')
       resetPrevView();
     }
+    
     // only the month view relies on a resize listener
     // more info provided @readme > monthview > box queries
     views.forEach((view) => {
