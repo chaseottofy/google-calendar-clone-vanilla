@@ -367,17 +367,7 @@ export default function setWeekView(context, store, datepickerContext) {
     const originalColumn = col.getAttribute("data-column-index")
     let currentColumn = col.getAttribute("data-column-index")
     let boxhasOnTop = false;
-
-    const boxorig = getOriginalBoxObject(box)
-    if (box.classList.contains("box-ontop")) {
-      boxhasOnTop = true;
-      resetStyleOnClick("week", box);
-    }
-    box.classList.add("box-dragging")
-
     box.setAttribute("data-box-col", currentColumn)
-    // show original position while dragging
-    createTemporaryBox(box, col, boxhasOnTop, "week")
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
@@ -394,8 +384,14 @@ export default function setWeekView(context, store, datepickerContext) {
       sY = Math.abs(e.clientY - tempstartY);
       if (!hasStyles) {
         if (sX > 3 || sY > 3) {
-          document.body.style.cursor = "move";
           hasStyles = true;
+          document.body.style.cursor = "move";
+          if (box.classList.contains("box-ontop")) {
+            boxhasOnTop = true;
+            resetStyleOnClick("week", box);
+          }
+          box.classList.add("box-dragging")
+          createTemporaryBox(box, col, boxhasOnTop, "week")
           sX = 0;
           sY = 0;
         }
@@ -453,24 +449,61 @@ export default function setWeekView(context, store, datepickerContext) {
 
       movedY = newOffsetY
       movedX = newOffsetX
-      // if (movedY >)
     }
 
     function mouseup() {
-      document.querySelector(".temporary-box").remove();
+      const tempbox = document.querySelector(".temporary-box")
       box.classList.remove("box-dragging");
       if (boxhasOnTop) { box.classList.add("box-ontop") }
 
-      if (Math.abs(movedX) <= 6 && Math.abs(movedY) <= 6) {
-        resetOriginalBox(box, boxorig);
-        getWeekViewContextMenu(
-          box,
-          store.getEntry(box.getAttribute("data-box-id")),
-          handleWeekviewFormClose,
-          e
+      if (tempbox === null) {
+        // const reset
+        const setResetWv = () => {
+          setStylingForEvent("dragend", main, store)
+          box.classList.remove("wv-box-clicked")
+        }
+        box.classList.add("wv-box-clicked")
+        const id = box.getAttribute("data-box-id");
+        const entry = store.getEntry(id);
+        const start = entry.start;
+        const color = box.style.backgroundColor;
+        const rect = box.getBoundingClientRect()
+        let [x, y] = placePopup(
+          400,
+          165,
+          [parseInt(rect.left), parseInt(rect.top) + 32],
+          [window.innerWidth, window.innerHeight],
+          false,
         );
+        store.setFormResetHandle("week", setResetWv)
+
+        const setup = new FormSetup();
+        setup.setSubmission("edit", id, entry.title, entry.description);
+        setup.setCategory(entry.category, color, color);
+        setup.setPosition(x, [x, y], y);
+        setup.setDates(getFormDateObject(start, entry.end));
+        fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
+
+        const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
+        getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
+
+        const modal = document.querySelector(".entry__options")
+        if (window.innerWidth > 580) {
+          modal.style.top = +y + "px";
+          modal.style.left = x + "px";
+        } else {
+          modal.style.top = "64px";
+        }
+        // resetOriginalBox(box, boxorig);
+        // getWeekViewContextMenu(
+        //   box,
+        //   store.getEntry(box.getAttribute("data-box-id")),
+        //   handleWeekviewFormClose,
+        //   e
+        // );
 
       } else {
+        tempbox.remove();
         setBoxTimeAttributes(box, "week");
         const time = calcTime(
           +box.getAttribute("data-start-time"),
@@ -497,9 +530,9 @@ export default function setWeekView(context, store, datepickerContext) {
         } else {
           box.setAttribute("box-idx", "box-one")
         }
+        setStylingForEvent("dragend", main, store)
       }
 
-      setStylingForEvent("dragend", main, store)
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }

@@ -289,7 +289,7 @@ export default function setDayView(context, store, datepickerContext) {
       // if box did not move, no render needed
       // click event to open form
       if (tempbox === null) {
-        const setReset = () => {
+        const setResetDv = () => {
           setStylingForEvent("dragend", dvGrid, store)
           box.classList.remove("dv-box-clicked")
         }
@@ -307,7 +307,7 @@ export default function setDayView(context, store, datepickerContext) {
           [window.innerWidth, window.innerHeight],
           false,
         );
-        store.setFormResetHandle("day", setReset)
+        store.setFormResetHandle("day", setResetDv)
         const setup = new FormSetup();
         setup.setSubmission("edit", id, entry.title, entry.description);
         setup.setCategory(entry.category, color, color);

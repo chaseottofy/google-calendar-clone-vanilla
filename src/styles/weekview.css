@@ -375,6 +375,7 @@
   z-index: 3;
   user-select: none;
   overflow: hidden;
+  transition: filter 150ms ease-in-out;
 }
 
 /* box events */
@@ -399,7 +400,7 @@
 .wv-box-clicked {
   box-shadow: var(--box-shadow3) !important;
   z-index: 981 !important;
-  filter: brightness(1.1);
+  filter: brightness(1.2);
 }
 
 .temporary-box {

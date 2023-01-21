@@ -322,6 +322,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
 // main app sidebar
 const sidebar = document.querySelector(".sidebar")
 // main app datepicker / overlay
@@ -333,6 +336,7 @@ const formOverlay = document.querySelector(".form-overlay")
 const formModalOverlay = document.querySelector(".form-modal-overlay")
 const entriesFormWrapper = document.querySelector(".entries__form")
 const entriesForm = document.querySelector(".entry-form")
+const entriesFormBody = document.querySelector(".entries__form--body")
 
 // title / description inputs
 const titleInput = document.querySelector(".form--body__title-input")
@@ -454,6 +458,8 @@ function setEntryForm(context, store, datepickerContext) {
     timepicker.classList.add("timepicker")
     timepicker.style.top = `${coords.y}px`
     timepicker.style.left = `${coords.x}px`
+
+
 
     const timepickerOverlay = document.createElement("div")
     timepickerOverlay.classList.add("timepicker-overlay")
@@ -1054,6 +1060,10 @@ function setEntryForm(context, store, datepickerContext) {
     if (length === 1) return;
 
     closeCategoryModalBtn.removeAttribute("style");
+    entriesFormBody.scrollTo({
+      top: entriesFormBody.scrollHeight,
+      behavior: "smooth"
+    })
 
     if (length >= 5) {
       closeCategoryModalBtn.setAttribute("style", `top: -100px`)
@@ -1128,10 +1138,14 @@ function setEntryForm(context, store, datepickerContext) {
 
   function handleTimepickerSetup(target) {
     const rect = target.getBoundingClientRect()
-    return [
-      parseInt(rect.right) + 16,
-      parseInt(rect.top) - 24,
-    ]
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.placePopup)(
+      180,
+      200,
+      [parseInt(rect.left), parseInt(rect.top)],
+      [window.innerWidth, window.innerHeight],
+      false,
+    )
+    return [x, y]
   }
 
   function delegateEntryFormEvents(e) {
@@ -1231,10 +1245,13 @@ function setEntryForm(context, store, datepickerContext) {
       return;
     } else {
       const timep = document?.querySelector(".timepicker")
+      const catsAct = document?.querySelector(".hide-form-category-modal")
 
       if (e.key === "Escape") {
-        if (timep) {
+        if (timep !== null) {
           closetimepicker()
+        } else if (catsAct === null) {
+          closeCategoryModal()
         } else {
           handleFormClose(e);
         }
@@ -4037,14 +4054,12 @@ function setDayView(context, store, datepickerContext) {
   function dragEngineDay(e, box) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
     const col = box.parentElement
-    // const boxorig = getOriginalBoxObject(box);
     let boxhasOnTop = false;
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
     const startCursorY = e.pageY - dvGrid.offsetTop;
     const headerOffset = dvGrid.offsetTop;
-    // const startCursorX = e.pageX;
     let [tempX, tempY] = [e.pageX, e.pageY];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
@@ -4085,24 +4100,25 @@ function setDayView(context, store, datepickerContext) {
       // if box did not move, no render needed
       // click event to open form
       if (tempbox === null) {
-        const setReset = () => {
+        const setResetDv = () => {
           (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
+          box.classList.remove("dv-box-clicked")
         }
+        box.classList.add("dv-box-clicked")
         const id = box.getAttribute("data-dv-box-id");
         const entry = store.getEntry(id);
         const start = entry.start;
         const color = box.style.backgroundColor;
-
         const rect = box.getBoundingClientRect()
 
         let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.placePopup)(
           400,
           165,
-          [parseInt(rect.left), parseInt(rect.top)],
+          [parseInt(rect.left) + 32, parseInt(rect.top) + 32],
           [window.innerWidth, window.innerHeight],
           false,
         );
-        store.setFormResetHandle("day", setReset)
+        store.setFormResetHandle("day", setResetDv)
         const setup = new _forms_setForm__WEBPACK_IMPORTED_MODULE_1__["default"]();
         setup.setSubmission("edit", id, entry.title, entry.description);
         setup.setCategory(entry.category, color, color);
@@ -4115,12 +4131,11 @@ function setDayView(context, store, datepickerContext) {
 
         const modal = document.querySelector(".entry__options")
         if (window.innerWidth > 580) {
-          modal.style.top = +y + 20 + "px";
+          modal.style.top = +y + "px";
           modal.style.left = x + "px";
         } else {
           modal.style.top = "64px";
         }
-
         // ******************
       } else {
         tempbox.remove()
@@ -5218,7 +5233,12 @@ function setMonthView(context, store, datepickerContext) {
       parseInt(rect.width)
     );
 
-    modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px;`)
+    // console.log(y)
+    // console.log(window.innerHeight)
+    // console.log(maxH)
+    
+    let maxH = +window.innerHeight - +y - 24;
+    modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px; max-height: ${maxH}px;`);
 
     const modalHeader = document.createElement("div");
     modalHeader.classList.add("more-modal-header");
@@ -5506,8 +5526,6 @@ function setMonthView(context, store, datepickerContext) {
     populateCells()
     monthWrapper.onmousedown = delegateMonthEvents
     monthWrapper.onclick = delegateNewBox
-    // const handlewindowResize = debounce(getMonthviewResize, 100)
-    // store.setResizeHandle("month", handlewindowResize)
     store.setResetPreviousViewCallback(resetMonthview)
     store.setResizeHandle("month", getMonthviewResize)
   }
@@ -5887,17 +5905,7 @@ function setWeekView(context, store, datepickerContext) {
     const originalColumn = col.getAttribute("data-column-index")
     let currentColumn = col.getAttribute("data-column-index")
     let boxhasOnTop = false;
-
-    const boxorig = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.getOriginalBoxObject)(box)
-    if (box.classList.contains("box-ontop")) {
-      boxhasOnTop = true;
-      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.resetStyleOnClick)("week", box);
-    }
-    box.classList.add("box-dragging")
-
     box.setAttribute("data-box-col", currentColumn)
-    // show original position while dragging
-    ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.createTemporaryBox)(box, col, boxhasOnTop, "week")
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
@@ -5914,8 +5922,14 @@ function setWeekView(context, store, datepickerContext) {
       sY = Math.abs(e.clientY - tempstartY);
       if (!hasStyles) {
         if (sX > 3 || sY > 3) {
-          document.body.style.cursor = "move";
           hasStyles = true;
+          document.body.style.cursor = "move";
+          if (box.classList.contains("box-ontop")) {
+            boxhasOnTop = true;
+            (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.resetStyleOnClick)("week", box);
+          }
+          box.classList.add("box-dragging")
+          ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.createTemporaryBox)(box, col, boxhasOnTop, "week")
           sX = 0;
           sY = 0;
         }
@@ -5973,24 +5987,61 @@ function setWeekView(context, store, datepickerContext) {
 
       movedY = newOffsetY
       movedX = newOffsetX
-      // if (movedY >)
     }
 
     function mouseup() {
-      document.querySelector(".temporary-box").remove();
+      const tempbox = document.querySelector(".temporary-box")
       box.classList.remove("box-dragging");
       if (boxhasOnTop) { box.classList.add("box-ontop") }
 
-      if (Math.abs(movedX) <= 6 && Math.abs(movedY) <= 6) {
-        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.resetOriginalBox)(box, boxorig);
-        getWeekViewContextMenu(
-          box,
-          store.getEntry(box.getAttribute("data-box-id")),
-          handleWeekviewFormClose,
-          e
+      if (tempbox === null) {
+        // const reset
+        const setResetWv = () => {
+          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragend", main, store)
+          box.classList.remove("wv-box-clicked")
+        }
+        box.classList.add("wv-box-clicked")
+        const id = box.getAttribute("data-box-id");
+        const entry = store.getEntry(id);
+        const start = entry.start;
+        const color = box.style.backgroundColor;
+        const rect = box.getBoundingClientRect()
+        let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_11__.placePopup)(
+          400,
+          165,
+          [parseInt(rect.left), parseInt(rect.top) + 32],
+          [window.innerWidth, window.innerHeight],
+          false,
         );
+        store.setFormResetHandle("week", setResetWv)
+
+        const setup = new _forms_setForm__WEBPACK_IMPORTED_MODULE_3__["default"]();
+        setup.setSubmission("edit", id, entry.title, entry.description);
+        setup.setCategory(entry.category, color, color);
+        setup.setPosition(x, [x, y], y);
+        setup.setDates((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_9__.getFormDateObject)(start, entry.end));
+        _forms_formUtils__WEBPACK_IMPORTED_MODULE_2__["default"].setFormDatepickerDate(context, datepickerContext, start);
+
+        const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_2__["default"].getConfig(setup.getSetup());
+        (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_4__["default"])(context, store, entry, datepickerContext, finishSetup);
+
+        const modal = document.querySelector(".entry__options")
+        if (window.innerWidth > 580) {
+          modal.style.top = +y + "px";
+          modal.style.left = x + "px";
+        } else {
+          modal.style.top = "64px";
+        }
+        // resetOriginalBox(box, boxorig);
+        // getWeekViewContextMenu(
+        //   box,
+        //   store.getEntry(box.getAttribute("data-box-id")),
+        //   handleWeekviewFormClose,
+        //   e
+        // );
 
       } else {
+        tempbox.remove();
         (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setBoxTimeAttributes)(box, "week");
         const time = (0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_7__["default"])(
           +box.getAttribute("data-start-time"),
@@ -6017,9 +6068,9 @@ function setWeekView(context, store, datepickerContext) {
         } else {
           box.setAttribute("box-idx", "box-one")
         }
+        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragend", main, store)
       }
 
-      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragend", main, store)
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }
@@ -9901,7 +9952,7 @@ function calcNewLeft(index) {
   }
 }
 
-function setBoxWidth(box, prepend, dataidx) {
+function setBoxWidthWeek(box, prepend, dataidx) {
   const attr = box.getAttribute(dataidx);
 
   switch (attr) {
@@ -9918,11 +9969,11 @@ function setBoxWidth(box, prepend, dataidx) {
       box.style.width = "calc((100% - 4px) * 0.55)";
       break;
     case `${prepend}four`:
-      box.style.left = "calc((100% - 0px) * 0.35 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.65)"
+      box.style.left = "calc((100% - 0px) * 0.0 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.44)"
       break;
     case `${prepend}five`:
-      box.style.left = "calc((100% - 0px) * 0 + 0px)"
+      box.style.left = "calc((100% - 0px) * .5 + 0px)"
       box.style.width = "calc((100% - 4px) * 0.35)"
       break;
     case `${prepend}six`:
@@ -9946,7 +9997,52 @@ function setBoxWidth(box, prepend, dataidx) {
   }
 }
 
+
+function setBoxWidthDay(box, prepend, dataidx) {
+  const attr = box.getAttribute(dataidx);
+  switch (attr) {
+    case `${prepend}one`:
+      box.style.left = 'calc((100% - 0px) * 0 + 0px)';
+      box.style.width = "calc((100% - 4px) * 1)"
+      break;
+    case `${prepend}two`:
+      box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.75)";
+      break;
+    case `${prepend}three`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.70)";
+      break;
+    case `${prepend}four`:
+      box.style.left = "calc((100% - 0px) * 0.45 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.55)"
+      break;
+    case `${prepend}five`:
+      box.style.left = "calc((100% - 0px) * 0.60 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.40)"
+      break;
+    case `${prepend}six`:
+      box.style.left = "calc((100% - 0px) * 0.75 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.25)"
+      break;
+    case `${prepend}seven`:
+      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.3)"
+      break;
+    case `${prepend}eight`:
+      box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.25)"
+      break;
+    case `${prepend}nine`:
+      box.style.left = "calc((100% - 0px) * 0.40 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.65)"
+      break;
+    default:
+      break;
+  }
+}
 function handleOverlap(col, view, boxes) {
+
   const collisions = view === "day" ? boxes.checkForCollision() : boxes.checkForCollision(col);
 
   const identifyBox = identifiers.boxnumarr[view]
@@ -9974,7 +10070,9 @@ function handleOverlap(col, view, boxes) {
       box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
       box.setAttribute(boxIdxAttr, identifyBox[idx])
     }
-    setBoxWidth(box, classPrepend, boxIdxAttr)
+    view === "day" 
+      ? setBoxWidthDay(box, classPrepend, boxIdxAttr) 
+      : setBoxWidthWeek(box, classPrepend, boxIdxAttr)
   }
 }
 
@@ -10328,17 +10426,18 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
   if (center) {
     // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
-    // popupX = x / ;
-    // align to center 
+    if (targetWidth + x >= winW) {
+      console.log(true);
+      popupX = winW - popupW - 4;
+    }
   } else {
     popupX = x + popupW > winW ? x - popupW - 6 : x;
   }
 
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
-  if (popupX < 0) popupX = winW - popupW - 24;
-  if (popupY < 0) popupY = winH - popupH - 24;
-
+  if (popupX < 0) popupX = x;
+  if (popupY < 0) popupY = 56;
   return [popupX, popupY];
 }
 

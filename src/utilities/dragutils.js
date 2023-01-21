@@ -102,7 +102,7 @@ function calcNewLeft(index) {
   }
 }
 
-function setBoxWidth(box, prepend, dataidx) {
+function setBoxWidthWeek(box, prepend, dataidx) {
   const attr = box.getAttribute(dataidx);
 
   switch (attr) {
@@ -119,11 +119,11 @@ function setBoxWidth(box, prepend, dataidx) {
       box.style.width = "calc((100% - 4px) * 0.55)";
       break;
     case `${prepend}four`:
-      box.style.left = "calc((100% - 0px) * 0.35 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.65)"
+      box.style.left = "calc((100% - 0px) * 0.0 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.44)"
       break;
     case `${prepend}five`:
-      box.style.left = "calc((100% - 0px) * 0 + 0px)"
+      box.style.left = "calc((100% - 0px) * .5 + 0px)"
       box.style.width = "calc((100% - 4px) * 0.35)"
       break;
     case `${prepend}six`:
@@ -147,7 +147,52 @@ function setBoxWidth(box, prepend, dataidx) {
   }
 }
 
+
+function setBoxWidthDay(box, prepend, dataidx) {
+  const attr = box.getAttribute(dataidx);
+  switch (attr) {
+    case `${prepend}one`:
+      box.style.left = 'calc((100% - 0px) * 0 + 0px)';
+      box.style.width = "calc((100% - 4px) * 1)"
+      break;
+    case `${prepend}two`:
+      box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.75)";
+      break;
+    case `${prepend}three`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.70)";
+      break;
+    case `${prepend}four`:
+      box.style.left = "calc((100% - 0px) * 0.45 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.55)"
+      break;
+    case `${prepend}five`:
+      box.style.left = "calc((100% - 0px) * 0.60 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.40)"
+      break;
+    case `${prepend}six`:
+      box.style.left = "calc((100% - 0px) * 0.75 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.25)"
+      break;
+    case `${prepend}seven`:
+      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.3)"
+      break;
+    case `${prepend}eight`:
+      box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.25)"
+      break;
+    case `${prepend}nine`:
+      box.style.left = "calc((100% - 0px) * 0.40 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.65)"
+      break;
+    default:
+      break;
+  }
+}
 function handleOverlap(col, view, boxes) {
+
   const collisions = view === "day" ? boxes.checkForCollision() : boxes.checkForCollision(col);
 
   const identifyBox = identifiers.boxnumarr[view]
@@ -175,7 +220,9 @@ function handleOverlap(col, view, boxes) {
       box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
       box.setAttribute(boxIdxAttr, identifyBox[idx])
     }
-    setBoxWidth(box, classPrepend, boxIdxAttr)
+    view === "day" 
+      ? setBoxWidthDay(box, classPrepend, boxIdxAttr) 
+      : setBoxWidthWeek(box, classPrepend, boxIdxAttr)
   }
 }
 
