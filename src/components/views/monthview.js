@@ -610,7 +610,12 @@ export default function setMonthView(context, store, datepickerContext) {
       parseInt(rect.width)
     );
 
-    modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px;`)
+    // console.log(y)
+    // console.log(window.innerHeight)
+    // console.log(maxH)
+    
+    let maxH = +window.innerHeight - +y - 24;
+    modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px; max-height: ${maxH}px;`);
 
     const modalHeader = document.createElement("div");
     modalHeader.classList.add("more-modal-header");

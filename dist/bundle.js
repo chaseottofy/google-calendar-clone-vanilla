@@ -14,6 +14,30 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/styles/aside/datepicker.css":
+/*!*****************************************!*\
+  !*** ./src/styles/aside/datepicker.css ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "./src/styles/aside/deleteCategoryPopup.css":
+/*!**************************************************!*\
+  !*** ./src/styles/aside/deleteCategoryPopup.css ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./src/styles/aside/editCategoryForm.css":
 /*!***********************************************!*\
   !*** ./src/styles/aside/editCategoryForm.css ***!
@@ -66,18 +90,6 @@ __webpack_require__.r(__webpack_exports__);
 /*!***********************************!*\
   !*** ./src/styles/aside/info.css ***!
   \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/styles/aside/popup.css":
-/*!************************************!*\
-  !*** ./src/styles/aside/popup.css ***!
-  \************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -149,18 +161,6 @@ __webpack_require__.r(__webpack_exports__);
 /***/ "./src/styles/containers.css":
 /*!***********************************!*\
   !*** ./src/styles/containers.css ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/styles/datepicker.css":
-/*!***********************************!*\
-  !*** ./src/styles/datepicker.css ***!
   \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -489,6 +489,7 @@ function setEntryForm(context, store, datepickerContext) {
 
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
+      console.log(h, m)
       if (shouldTestReset) {
         if (h === 23 && m >= 15) {
           setEndDateToNextDay();
@@ -501,8 +502,8 @@ function setEntryForm(context, store, datepickerContext) {
         if (m === 45) {
           setEndDateToNextDay();
         } else {
-          hours = hours.slice(-1)
-          md = md.slice(-1)
+          hours = [12]
+          md = ['pm']
           m = m.slice(-1)
         }
       } else {
@@ -2673,7 +2674,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createCheckIcon)("none")
     }
 
-    checkbox.style.border = `2px solid ${ctgcolor}`;
+    checkbox.style.border = `1px solid ${ctgcolor}`;
     checkbox.appendChild(checkIcon)
     checkboxWrapper.appendChild(checkbox)
 
@@ -2732,7 +2733,6 @@ function handleSidebarCategories(context, store, datepickerContext) {
     const popupBoxOverlay = document.createElement("aside");
     popupBoxOverlay.classList.add("popup-delete-ctg__overlay");
 
-
     // POPUP BOX
     const popupBox = document.createElement("aside");
     popupBox.classList.add("popup-delete-ctg");
@@ -2786,7 +2786,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       const optionMoveTitle = document.createElement("span");
       const optionMoveSelect = document.createElement("select");
       optionMove.classList.add("popup-delete-ctg__option--move");
-      optionMoveTitle.textContent = `Move "${ctgname}" ${ord} to another category`;
+      optionMoveTitle.textContent = `Move "${ctgname}" ${ord} to `;
       optionMoveSelect.classList.add("popup-delete-ctg__option--move-select");
       for (let i = 0; i < categoryNames.length; i++) {
         if (categoryNames[i] === ctgname) continue;
@@ -2803,7 +2803,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
       const optionsWrapperTwo = document.createElement("div");
       optionsWrapperTwo.classList.add("popup-delete-ctg__options");
-      optionsWrapperTwo.style.border = `2px solid ${ctgcolor}`
+      optionsWrapperTwo.style.border = `2px solid var(--mediumgrey1)`
 
       const optionRemoveRadio = document.createElement("input");
       optionRemoveRadio.setAttribute("type", "radio");
@@ -2815,21 +2815,36 @@ function handleSidebarCategories(context, store, datepickerContext) {
       const optionRemoveTitle = document.createElement("span");
 
       optionRemoveTitle.textContent = `Delete "${ctgname}" and ${categoryLength} ${ord} (irreversible)`;
-      const optionRemoveIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createTrashIcon)(ctgcolor);
+      const optionRemoveIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createTrashIcon)("var(--mediumgrey1)");
       const handleWrapperClick = (e) => {
-        if (e.target.id === "ctg-delete" || e.target.id === "ctg-move" || e.target.classList.contains("popup-delete-ctg__option--move")) {
+        if (e.target.id === "ctg-delete" || e.target.id === "ctg-move" || e.target.classList.contains("popup-delete-ctg__option--move") || e.target.classList.contains("popup-delete-ctg__option--move-select")) {
           return;
         } else {
-          // optionRemoveRadio.checked = true;
           e.target.closest(".popup-delete-ctg__options").querySelector("input").checked = true;
+          document.querySelectorAll(".popup-delete-ctg__options").forEach((el) => {
+            // el.style.backgroundColor = "transparent";
+            el.setAttribute("style", "background-color: transparent; border: 2px solid var(--mediumgrey1);")
+            el.classList.remove("popup-delete-act")
+          })
+          // popup-delete-act
+          e.target.closest(".popup-delete-ctg__options").setAttribute("style", `background-color: ${offsetColor}; border: 2px solid ${ctgcolor};`)
+
+          e.target.closest(".popup-delete-ctg__options").classList.add("popup-delete-act")
+          // e.target.closest(".popup-delete-ctg__options").style.backgroundColor = offsetColor;
+          // console.log(e.target === optionsWrapperOne)
         }
       }
+
+      // function handleOptionSelectChange(e) {
+      //   const selectedCtg = e.target.value;
+      // }
 
       optionRemove.append(optionRemoveTitle, optionRemoveIcon)
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
       
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
       popupBox.appendChild(popupBody)
+      // optionMoveSelect.onchange = handleOptionSelectChange;
       optionsWrapperOne.onclick = handleWrapperClick;
       optionsWrapperTwo.onclick = handleWrapperClick;
     }
@@ -2961,13 +2976,16 @@ function handleSidebarCategories(context, store, datepickerContext) {
     }
   }
 
-  renderCategories()
-  const fullCtgRender = () => {
-    renderCategories();
-    updateComponent();
+  const initSidebarCategories = () => {
+    renderCategories()
+    const fullCtgRender = () => {
+      renderCategories();
+      updateComponent();
+    }
+    store.setRenderCategoriesCallback(fullCtgRender)
+    sidebarColTwo.onmousedown = delegateCategoryEvents
   }
-  store.setRenderCategoriesCallback(fullCtgRender)
-  sidebarColTwo.onmousedown = delegateCategoryEvents
+  initSidebarCategories();
 }
 
 /***/ }),
@@ -3799,8 +3817,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _forms_formUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../forms/formUtils */ "./src/components/forms/formUtils.js");
 /* harmony import */ var _forms_setForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../forms/setForm */ "./src/components/forms/setForm.js");
-/* harmony import */ var _factory_entries__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../factory/entries */ "./src/factory/entries.js");
-/* harmony import */ var _menus_entryOptions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../menus/entryOptions */ "./src/components/menus/entryOptions.js");
+/* harmony import */ var _menus_entryOptions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../menus/entryOptions */ "./src/components/menus/entryOptions.js");
+/* harmony import */ var _factory_entries__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../factory/entries */ "./src/factory/entries.js");
 /* harmony import */ var _utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/timeutils */ "./src/utilities/timeutils.js");
 /* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utilities/dateutils */ "./src/utilities/dateutils.js");
 /* harmony import */ var _utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/dragutils */ "./src/utilities/dragutils.js");
@@ -3810,6 +3828,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
 // import setViews from "../../config/setViews"
 // import setSidebarDatepicker from "../../components/menus/sidebarDatepicker";
+
 
 
 
@@ -3843,6 +3862,7 @@ const dvHeaderInfo = document.querySelector(".dayview--header-day__info")
 // day view on top container (row 2)
 const dvOnTop = document.querySelector('.dayview--ontop-container');
 
+
 // main grid wrapper (row 3) (scroll wrapper) (offsettop)
 const dvGrid = document.querySelector(".dayview__grid")
 const dvSideGrid = document.querySelector(".dayview--side-grid")
@@ -3850,19 +3870,19 @@ const dvMainGrid = document.querySelector(".dayview--main-grid")
 
 function setDayView(context, store, datepickerContext) {
   let entries = store.getDayEntries(context.getDate())
-  let boxes = new _factory_entries__WEBPACK_IMPORTED_MODULE_2__.Day(
+  let boxes = new _factory_entries__WEBPACK_IMPORTED_MODULE_3__.Day(
     entries.day,
     entries.allDay
   );
 
   function getDayviewHeaderEntryCount() {
     let allboxes = boxes.getAllBoxes();
-    if (allboxes.length === 0) { return "no entries"; } 
+    if (allboxes.length === 0) { return "no entries"; }
     let [endingToday, startingToday] = [0, 0];
 
     for (let i = 0; i < allboxes.length; i++) {
       const [start, end, current] = [
-        new Date(allboxes[i].start), 
+        new Date(allboxes[i].start),
         new Date(allboxes[i].end),
         context.getDate(),
       ]
@@ -3872,7 +3892,7 @@ function setDayView(context, store, datepickerContext) {
 
     if (startingToday === 1 && endingToday === 1) {
       return `1 entry from ${(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
-        new Date(allboxes[0].start), 
+        new Date(allboxes[0].start),
         new Date(allboxes[0].end)
       )}`
     }
@@ -3880,7 +3900,7 @@ function setDayView(context, store, datepickerContext) {
     if (startingToday > 1 && (startingToday === endingToday)) {
       return `${startingToday} entries starting & ending today`;
     }
-    
+
     let fulltitle = ""
     if (startingToday > 0) {
       if (startingToday === 1) {
@@ -3910,8 +3930,22 @@ function setDayView(context, store, datepickerContext) {
       el.innerText = "";
     })
 
+    let gmtOffset = new Date().getTimezoneOffset() / 60
+    if (gmtOffset < 0) {
+      gmtOffset = `+${Math.abs(gmtOffset)}`
+    }
+
+    document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
     dvHeaderDayOfWeek.textContent = context.getDay()
-    dvHeaderDayNumber.textContent = _locales_en__WEBPACK_IMPORTED_MODULE_10__["default"].labels.weekdaysShort[context.getWeekday()].toUpperCase() + " :";
+
+    if (context.isToday()) {
+      dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today")
+      dvHeaderDayNumber.style.color = "var(--primary1)";
+    } else {
+      dvHeaderDayOfWeek.classList.remove("dayview--header-day__number--today")
+      dvHeaderDayNumber.removeAttribute("style");
+    }
+    dvHeaderDayNumber.textContent = _locales_en__WEBPACK_IMPORTED_MODULE_10__["default"].labels.weekdaysShort[context.getWeekday()].toUpperCase();
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
 
@@ -3947,8 +3981,8 @@ function setDayView(context, store, datepickerContext) {
 
     box.classList.add("dv-box-resizing")
     const boxTop = box.offsetTop
-    const headerOffset = 72 + header.offsetHeight
-    ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTemporaryBox)(box, col, boxhasOnTop, "day")
+    const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
+    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTemporaryBox)(box, col, boxhasOnTop, "day")
 
     let amountScrolled = parseInt(dvGrid.scrollTop)
     const mousemove = (e) => {
@@ -3967,7 +4001,7 @@ function setDayView(context, store, datepickerContext) {
     function mouseup() {
       document.querySelector(".dv-temporary-box").remove();
       box.classList.remove("dv-box-resizing");
-      if (boxhasOnTop) {box.classList.add("dv-box-ontop");}
+      if (boxhasOnTop) { box.classList.add("dv-box-ontop"); }
 
       if (boxorig.height === box.offsetHeight) {
         (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetOriginalBox)(box, boxorig);
@@ -3999,30 +4033,41 @@ function setDayView(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup)
   }
 
-
   /** DRAG NORTH/ SOUTH, EAST/ WEST */
   function dragEngineDay(e, box) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
     const col = box.parentElement
-
+    // const boxorig = getOriginalBoxObject(box);
     let boxhasOnTop = false;
-    const boxorig = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.getOriginalBoxObject)(box);
-    if (box.classList.contains("dv-box-ontop")) {
-      boxhasOnTop = true;
-      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetStyleOnClick)("day", box);
-    }
-
-    box.classList.add("dv-box-dragging")
-    ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTemporaryBox)(box, col, boxhasOnTop, "day")
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
-    const startCursorY = e.pageY - dvGrid.offsetTop
-    const headerOffset = 72 + header.offsetHeight
-    let movedY = 0;
+    const startCursorY = e.pageY - dvGrid.offsetTop;
+    const headerOffset = dvGrid.offsetTop;
+    // const startCursorX = e.pageX;
+    let [tempX, tempY] = [e.pageX, e.pageY];
+    let [sX, sY] = [0, 0];
+    let hasStyles = false;
 
     /** DRAG NORTH SOUTH */
     const mousemove = (e) => {
+      sX = Math.abs(e.clientX - tempX);
+      sY = Math.abs(e.clientY - tempY);
+      if (!hasStyles) {
+        if (sX > 3 || sY > 3) {
+          hasStyles = true;
+          document.body.style.cursor = "move";
+          if (box.classList.contains("dv-box-ontop")) {
+            boxhasOnTop = true;
+            (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetStyleOnClick)("day", box);
+          }
+          box.classList.add("dv-box-dragging")
+          ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTemporaryBox)(box, col, boxhasOnTop, "day")
+          sX = 0;
+          sY = 0;
+        }
+      }
+
       const currentCursorY = e.pageY - headerOffset
       let newOffsetY = currentCursorY - startCursorY
       let newTop = Math.round((newOffsetY + startTop) / 12.5) * 12.5
@@ -4033,48 +4078,55 @@ function setDayView(context, store, datepickerContext) {
         return;
       }
       box.style.top = `${newTop}px`
-      movedY = newOffsetY
     }
 
     const mouseup = () => {
-      document.querySelector(".dv-temporary-box").remove()
-      box.classList.remove("dv-box-dragging")
-      if (boxhasOnTop) { box.classList.add("dv-box-ontop") }
-
+      const tempbox = document?.querySelector(".dv-temporary-box")
       // if box did not move, no render needed
       // click event to open form
-      if (Math.abs(movedY) <= 6) {
-        // @function setReset() is provided to the form via the store
-        // it will call once the form is either submitted or cancelled
+      if (tempbox === null) {
         const setReset = () => {
-          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetOriginalBox)(box, boxorig);
-          document.querySelector(".dayview-temp-box")?.remove()
-          configHeader()
-          ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
+          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
         }
-        store.setFormResetHandle("day", setReset)
-
         const id = box.getAttribute("data-dv-box-id");
-        const tempEntry = store.getEntry(id);
+        const entry = store.getEntry(id);
+        const start = entry.start;
         const color = box.style.backgroundColor;
-        let offsetColor = color;
-        // let offsetColor = `${color.slice(0,3)}a(${color.slice(4, color.length - 1)}, 0.4)`;
 
-        const dates = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.calcDateOnClick)(
-          new Date(tempEntry.start),
-          +box.getAttribute("data-dv-start-time"),
-          +box.getAttribute("data-dv-time-intervals"),
-        );
+        const rect = box.getBoundingClientRect()
 
-        openDayviewForm(
-          box,
-          [1, 3],
-          [tempEntry.category, color, offsetColor],
-          dates,
-          ["edit", id, tempEntry.title, tempEntry.description],
+        let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.placePopup)(
+          400,
+          165,
+          [parseInt(rect.left), parseInt(rect.top)],
+          [window.innerWidth, window.innerHeight],
+          false,
         );
+        store.setFormResetHandle("day", setReset)
+        const setup = new _forms_setForm__WEBPACK_IMPORTED_MODULE_1__["default"]();
+        setup.setSubmission("edit", id, entry.title, entry.description);
+        setup.setCategory(entry.category, color, color);
+        setup.setPosition(x, [x, y], y);
+        setup.setDates((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.getFormDateObject)(start, entry.end));
+        _forms_formUtils__WEBPACK_IMPORTED_MODULE_0__["default"].setFormDatepickerDate(context, datepickerContext, start);
+
+        const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_0__["default"].getConfig(setup.getSetup());
+        (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_2__["default"])(context, store, entry, datepickerContext, finishSetup);
+
+        const modal = document.querySelector(".entry__options")
+        if (window.innerWidth > 580) {
+          modal.style.top = +y + 20 + "px";
+          modal.style.left = x + "px";
+        } else {
+          modal.style.top = "64px";
+        }
+
         // ******************
       } else {
+        tempbox.remove()
+        box.classList.remove("dv-box-dragging")
+        if (boxhasOnTop) { box.classList.add("dv-box-ontop") }
+
         (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setBoxTimeAttributes)(box, "day")
         const start = +box.getAttribute("data-dv-start-time")
         const length = +box.getAttribute("data-dv-time-intervals")
@@ -4094,11 +4146,10 @@ function setDayView(context, store, datepickerContext) {
           box.setAttribute("data-dv-box-index", "box-one")
         }
 
-
         configHeader()
+        ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
       }
       
-      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }
@@ -4173,14 +4224,14 @@ function setDayView(context, store, datepickerContext) {
 
     let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
     box.setAttribute("style", (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.getBoxDefaultStyle)(y, color))
-    
+
     let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 }
     let [starthour, startmin, endhour, endmin] = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.startEndDefault)(y);
-    
+
     function mousemove(e) {
       let newHeight = Math.round(((e.pageY + scrolled) - y - headerOffset) / 12.5) * 12.5
-      if (newHeight <= 12.5) {newHeight = 12.5;}
-      if ((newHeight + y) > 1188) {newHeight = 1187.5 - y;}
+      if (newHeight <= 12.5) { newHeight = 12.5; }
+      if ((newHeight + y) > 1188) { newHeight = 1187.5 - y; }
 
       box.style.height = `${newHeight}px`
       coords.h = +newHeight / 12.5
@@ -4232,7 +4283,7 @@ function setDayView(context, store, datepickerContext) {
       resizeBoxNSDay(e, e.target.parentElement);
       return;
     }
-    
+
     if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".dv-box")) {
       dragEngineDay(e, e.target);
       return;
@@ -4471,7 +4522,6 @@ function setListView(context, store, datepickerContext) {
   
   function resetListview() {
     listviewBody.innerText = "";
-    console.log(listviewBody.innerHTML);
   }
 
   const initListView = () => {
@@ -4567,9 +4617,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _toastPopups_toast__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../toastPopups/toast */ "./src/components/toastPopups/toast.js");
 /* harmony import */ var _toastPopups_toastCallbacks__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../toastPopups/toastCallbacks */ "./src/components/toastPopups/toastCallbacks.js");
 /* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utilities/dateutils */ "./src/utilities/dateutils.js");
-/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
-/* harmony import */ var _utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utilities/dragutils */ "./src/utilities/dragutils.js");
-/* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
+/* harmony import */ var _utilities_svgs__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utilities/svgs */ "./src/utilities/svgs.js");
+/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
+/* harmony import */ var _utilities_dragutils__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../utilities/dragutils */ "./src/utilities/dragutils.js");
+/* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
 // rendering
 
 
@@ -4587,6 +4638,8 @@ __webpack_require__.r(__webpack_exports__);
 // date utilities
 
 
+
+
 // general utilities
 
 
@@ -4595,7 +4648,7 @@ __webpack_require__.r(__webpack_exports__);
 
 // naming
 
-const monthNames = _locales_en__WEBPACK_IMPORTED_MODULE_11__["default"].labels.monthsShort
+const monthNames = _locales_en__WEBPACK_IMPORTED_MODULE_12__["default"].labels.monthsShort
 // placePopup(popupWidth, popupHeight, coords, windowCoords)
 
 
@@ -4875,7 +4928,7 @@ function setMonthView(context, store, datepickerContext) {
   // the month view drag and drop system differs from the week & day views
   // see readme for more info (section : drag engine)
   function dragEngineMonth(e, box) {
-    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragstart", monthWrapper, store);
+    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_11__.setStylingForEvent)("dragstart", monthWrapper, store);
     const startDragTime = Date.now()
     const parent = box.parentElement;
     const cell = parent.parentElement;
@@ -5007,7 +5060,7 @@ function setMonthView(context, store, datepickerContext) {
       // newcell not found 
       // edge case, haven't come across this yet
       if (newCell === undefined || newCell === null) {
-        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragend", monthWrapper, store);
+        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_11__.setStylingForEvent)("dragend", monthWrapper, store);
         box.style.opacity = "1";
         clone.remove();
         boxmoved = false;
@@ -5086,7 +5139,7 @@ function setMonthView(context, store, datepickerContext) {
         }
       }
       /*******************/
-      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragend", monthWrapper, store);
+      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_11__.setStylingForEvent)("dragend", monthWrapper, store);
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     }
@@ -5156,11 +5209,13 @@ function setMonthView(context, store, datepickerContext) {
       modalHeight = 400;
     }
     const rect = parent.getBoundingClientRect();
-    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.placePopup)(
-      224,
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.placePopup)(
+      216,
       modalHeight,
       [parseInt(rect.left), parseInt(rect.top)],
-      [window.innerWidth, window.innerHeight]
+      [window.innerWidth, window.innerHeight],
+      true,
+      parseInt(rect.width)
     );
 
     modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px;`)
@@ -5174,7 +5229,7 @@ function setMonthView(context, store, datepickerContext) {
     // dayn: daynumber (1, 2, 3, etc)
     const dowspan = document.createElement("span");
     dowspan.classList.add("more-modal-header-title-dow");
-    dowspan.textContent = _locales_en__WEBPACK_IMPORTED_MODULE_11__["default"].labels.weekdaysShort[parentDate.getDay()].toUpperCase();
+    dowspan.textContent = _locales_en__WEBPACK_IMPORTED_MODULE_12__["default"].labels.weekdaysShort[parentDate.getDay()].toUpperCase();
 
     const daynspan = document.createElement("span");
     daynspan.classList.add("more-modal-header-title-dayn");
@@ -5182,7 +5237,8 @@ function setMonthView(context, store, datepickerContext) {
 
     const modalHeaderClose = document.createElement("div");
     modalHeaderClose.classList.add("more-modal-header-close");
-    modalHeaderClose.textContent = "X";
+    modalHeaderClose.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_9__.createCloseIcon)("var(--white3)"))
+    // modalHeaderClose.textContent = "X";
     modalHeaderClose.setAttribute("data-tooltip", "Close");
 
     modalHeaderTitle.append(modalHeaderClose, dowspan, daynspan);
@@ -5271,12 +5327,12 @@ function setMonthView(context, store, datepickerContext) {
     const entry = store.getEntry(id);
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
-    const offsetColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.hextorgba)(color, 0.5);
+    const offsetColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.hextorgba)(color, 0.5);
     cell.classList.add("monthview--daycontent__form-temp");
     cell.style.backgroundColor = offsetColor;
 
     const rect = cell.getBoundingClientRect();
-    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.placePopup)(
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.placePopup)(
       360,
       165,
       [parseInt(rect.left), parseInt(rect.top)],
@@ -5345,7 +5401,7 @@ function setMonthView(context, store, datepickerContext) {
           (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.getDateFromAttribute)(cell, "data-mv-date", "month")
         );
         const [tempctg, color] = store.getFirstActiveCategoryKeyPair();
-        const offsetcolor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.hextorgba)(color, 0.5);
+        const offsetcolor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.hextorgba)(color, 0.5);
         const [x, y] = getCoordinatesFromCell(cell);
 
         configNewBoxInsertion(cellWrapper, cell, tempctg, offsetcolor)
@@ -5367,11 +5423,11 @@ function setMonthView(context, store, datepickerContext) {
 
   function delegateMonthEvents(e) {
     // delegates via monthview--box (monthWrapper) onmousedown
-    const monthviewBox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.getClosest)(e, ".monthview--box")
-    const monthviewBoxHeader = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.getClosest)(e, ".monthview--dayofmonth")
-    const groupedBox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.getClosest)(e, ".monthview--daygroup")
-    const groupedBoxItem = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.getClosest)(e, ".more-modal-entry")
-    const closeGroupedBox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.getClosest)(e, ".more-modal-header-close")
+    const monthviewBox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.getClosest)(e, ".monthview--box")
+    const monthviewBoxHeader = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.getClosest)(e, ".monthview--dayofmonth")
+    const groupedBox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.getClosest)(e, ".monthview--daygroup")
+    const groupedBoxItem = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.getClosest)(e, ".more-modal-entry")
+    const closeGroupedBox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.getClosest)(e, ".more-modal-header-close")
 
     // target : any box (task/event) within a day
     // execute : drag and drop
@@ -5413,7 +5469,7 @@ function setMonthView(context, store, datepickerContext) {
     // delegates via monthview--daycontent (cellWrapper) onclick
     // note that this is the same parent element that delegates mouse down events
     // second delegation is needed to prevent the scrollbars that exist within the cells (days) from triggering the creation of a new entry on cell click
-    const emptyBoxClick = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.getClosest)(e, ".monthview--daycontent")
+    const emptyBoxClick = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_10__.getClosest)(e, ".monthview--daycontent")
     if (emptyBoxClick) {
       if (window.innerHeight <= 300) return;
       createEntryOnEmptyTarget(e, e.target)
@@ -5526,7 +5582,16 @@ function setWeekView(context, store, datepickerContext) {
   let entries = store.getWeekEntries(weekArray)
   let boxes = new _factory_entries__WEBPACK_IMPORTED_MODULE_5__.Week(entries.day, entries.allDay);
 
+  function setDayView(e) {
+    let [yr, mo, da] = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_9__.getDateFromAttribute)(e.target, "data-weekview-date")
+    context.setDate(yr, mo, da)
+    context.setDateSelected(da)
+    context.setComponent("day")
+    ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])("day", context, store, datepickerContext)
+  }
+
   function configureDaysOfWeek() {
+    document.querySelector(".wv-gmt").textContent = `UTC ${context.getGmt()}`
     let hasToday;
     let hasSelected;
     let dayNumbers = []
@@ -5555,31 +5620,23 @@ function setWeekView(context, store, datepickerContext) {
 
     dayNumbers.forEach((num, idx) => {
       if (num === hasSelected) {
-        weekviewHeaderDay[idx].classList.add("wvh--selected")
+        weekviewHeaderDayNumber[idx].classList.add("wvh--selected")
       } else {
-        weekviewHeaderDay[idx].classList.remove("wvh--selected")
+        weekviewHeaderDayNumber[idx].classList.remove("wvh--selected")
       }
 
-      weekviewHeaderDayNumber[idx].textContent = num
       if (num === hasToday) {
-        weekviewHeaderDay[idx].classList.add("wvh--today")
+        weekviewHeaderDayNumber[idx].classList.add("wvh--today")
       } else {
-        weekviewHeaderDay[idx].classList.remove("wvh--today")
+        weekviewHeaderDayNumber[idx].classList.remove("wvh--today")
       }
-
-      weekviewHeaderDay[idx].setAttribute("data-weekview-date", ymd[idx]);
+      
+      weekviewHeaderDayNumber[idx].textContent = num
+      weekviewHeaderDayNumber[idx].setAttribute("data-weekview-date", ymd[idx]);
       topCols[idx].setAttribute("data-wvtop-day", num)
     })
 
-
-    function setDayView(e) {
-      let [yr, mo, da] = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_9__.getDateFromAttribute)(e.target, "data-weekview-date")
-      context.setDate(yr, mo, da)
-      context.setDateSelected(da)
-      context.setComponent("day")
-      ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])("day", context, store, datepickerContext)
-    }
-    weekviewHeader.onmousedown = setDayView
+    // weekviewHeader.onmousedown = setDayView
   }
 
   function renderSidebarDatepickerWeek() {
@@ -5794,7 +5851,7 @@ function setWeekView(context, store, datepickerContext) {
     const rect = cols[col].getBoundingClientRect()
 
     let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_11__.placePopup)(
-      360,
+      400,
       165,
       [parseInt(rect.left), e.clientY],
       [window.innerWidth, window.innerHeight]
@@ -5829,15 +5886,15 @@ function setWeekView(context, store, datepickerContext) {
     const col = box.parentElement
     const originalColumn = col.getAttribute("data-column-index")
     let currentColumn = col.getAttribute("data-column-index")
-
     let boxhasOnTop = false;
+
     const boxorig = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.getOriginalBoxObject)(box)
     if (box.classList.contains("box-ontop")) {
       boxhasOnTop = true;
       (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.resetStyleOnClick)("week", box);
     }
-
     box.classList.add("box-dragging")
+
     box.setAttribute("data-box-col", currentColumn)
     // show original position while dragging
     ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.createTemporaryBox)(box, col, boxhasOnTop, "week")
@@ -6142,6 +6199,11 @@ function setWeekView(context, store, datepickerContext) {
 
   /** delegate via grid */
   function delegateGridEvents(e) {
+    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_11__.getClosest)(e, ".weekview--header-day__number")) {
+      setDayView(e)
+      return;
+    }
+    
     if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_11__.getClosest)(e, ".box-resize-s")) {
       resizeBoxNS(e, e.target.parentElement);
       return;
@@ -6179,7 +6241,7 @@ function setWeekView(context, store, datepickerContext) {
     configureDaysOfWeek();
     renderDataForGrid();
     store.setResetPreviousViewCallback(resetWeekviewBoxes)
-    container.onmousedown = delegateGridEvents;
+    main.onmousedown = delegateGridEvents;
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
@@ -6494,6 +6556,7 @@ const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
 const weekwrapper = document.querySelector(".weekview")
+const daywrapper = document.querySelector(".dayview")
 const listviewBody = document.querySelector(".listview__body");
 
 function renderViews(context, datepickerContext, store) {
@@ -6634,6 +6697,10 @@ function renderViews(context, datepickerContext, store) {
     }
 
     // weekview is the only view that has a horizontal scrollbar, for the other views, hide this scrollbar when transitioning
+    // view.style.overflowX = "hidden";
+    // setTimeout(() => {
+    //   view.style.overflowX = "auto";
+    // }, 150)
     if (!view.classList.contains("weekview")) {
       viewsContainer.style.overflowX = "hidden";
       setTimeout(() => {
@@ -6696,7 +6763,6 @@ function renderViews(context, datepickerContext, store) {
       sidebar.classList.add("hide-sidebar");
       dateTimeWrapper.classList.remove("datetime-inactive");
       listviewBody.removeAttribute("style");
-      // listviewBody.style.width = "100%";
     } else {
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
@@ -6745,7 +6811,7 @@ function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         // transition day header rather than entire view (too jarring)
-        handleTransition(document.querySelector(".dayview--header-day"), "right", getPreviousDay)
+        handleTransition(daywrapper, "right", getPreviousDay)
         break;
       case "week":
         handleTransition(weekwrapper, "right", getPreviousWeek)
@@ -6765,7 +6831,7 @@ function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         // transition day header rather than entire view (too jarring)
-        handleTransition(document.querySelector(".dayview--header-day"), "left", getNextDay)
+        handleTransition(daywrapper, "left", getNextDay)
         break;
       case "week":
         handleTransition(weekwrapper, "left", getNextWeek)
@@ -6852,6 +6918,7 @@ function renderViews(context, datepickerContext, store) {
     const btnPrev = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".prev");
     const btnNext = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".next");
     const dateTime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".datetime-content");
+    const search = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".h-search");
     const settings = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".settings");
     const select = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".select__modal");
 
@@ -6878,6 +6945,11 @@ function renderViews(context, datepickerContext, store) {
 
     if (dateTime) {
       handleDatePickerBtn(e);
+      return;
+    }
+
+    if (search) {
+      (0,_components_forms_goto__WEBPACK_IMPORTED_MODULE_9__["default"])(context, store, datepickerContext);
       return;
     }
 
@@ -7031,7 +7103,7 @@ function renderViews(context, datepickerContext, store) {
     }
   }
 
-  const getKeyPressThrottled = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.throttle)(delegateGlobalKeyDown, 150)
+  const getKeyPressThrottled = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.throttle)(delegateGlobalKeyDown, 200)
   // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
 
   // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
@@ -7125,9 +7197,12 @@ const listComponentBody = document.querySelector('.listview__body');
  */
 
 let [prev1, prev2] = [null, null];
+let lastReset = null;
+let count = 0;
 function setViews(component, context, store, datepickerContext) {
   prev1 = prev2;
   prev2 = component;
+
 
   function hideViews() {
     const views = [
@@ -7140,9 +7215,11 @@ function setViews(component, context, store, datepickerContext) {
 
     // reset previous view after switching to a new view
     const resetPrevView = store.getResetPreviousViewCallback()
-    if (prev1 !== null && resetPrevView !== null) {
+    if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
+      console.log('ran')
       resetPrevView();
     }
+    
     // only the month view relies on a resize listener
     // more info provided @readme > monthview > box queries
     views.forEach((view) => {
@@ -7225,11 +7302,13 @@ class Context {
     this.component = "month";
     this.sidebarState = "hide";
     this.date = new Date();
+    this.gmt = new Date().getTimezoneOffset() / 60;
 
     this.dateSelected = 1;
     this.daySelected = this.date.getDate();
     this.monthSelected = this.date.getMonth();
     this.yearSelected = this.date.getFullYear();
+
 
     this.month = this.getMonth();
     this.monthArray = this.getMonthArray();
@@ -7467,6 +7546,10 @@ class Context {
 
   /* ************** */
   /* GETTERS */
+  getGmt() {
+    return this.gmt;
+  }
+
   getDateSelected() {
     return +Context.getLocalDateSelected() || this.date.getDate();
     // return this.dateSelected;
@@ -8012,7 +8095,7 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 class Store {
   constructor() {
     this.store = localStorage.getItem("store") 
-    ? JSON.parse(localStorage.getItem("store")) : _testdata_json__WEBPACK_IMPORTED_MODULE_5__;
+    ? JSON.parse(localStorage.getItem("store")) : [];
 
     this.userUpload;
 
@@ -8795,7 +8878,7 @@ class Store {
   }
   
   getFormResetHandle(type) {
-    if (this.handleRenders.calendars[type] === undefined) {
+    if (this.handleRenders.calendars[type].reset === undefined) {
       return null;
     } else {
       return this.handleRenders.calendars[type].reset;
@@ -10236,12 +10319,21 @@ function setTheme(context) {
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
  * @returns [left position, top position];
  */
-function placePopup(popupWidth, popupHeight, coords, windowCoords, center) {
+function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;
   const [winW, winH] = windowCoords;
 
-  let popupX = x + popupW > winW ? x - popupW - 6 : x;
+  let popupX;
+  if (center) {
+    // align to center of target element (targetWidth)
+    popupX = x - (popupW / 2) + (targetWidth / 2);
+    // popupX = x / ;
+    // align to center 
+  } else {
+    popupX = x + popupW > winW ? x - popupW - 6 : x;
+  }
+
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
   if (popupX < 0) popupX = winW - popupW - 24;
@@ -10770,16 +10862,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_listview_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./styles/listview.css */ "./src/styles/listview.css");
 /* harmony import */ var _styles_sidebar_css__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./styles/sidebar.css */ "./src/styles/sidebar.css");
 /* harmony import */ var _styles_sbdatepicker_css__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./styles/sbdatepicker.css */ "./src/styles/sbdatepicker.css");
-/* harmony import */ var _styles_aside_toast_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./styles/aside/toast.css */ "./src/styles/aside/toast.css");
-/* harmony import */ var _styles_aside_goto_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./styles/aside/goto.css */ "./src/styles/aside/goto.css");
-/* harmony import */ var _styles_aside_toggleForm_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./styles/aside/toggleForm.css */ "./src/styles/aside/toggleForm.css");
-/* harmony import */ var _styles_aside_sidebarSubMenu_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/sidebarSubMenu.css */ "./src/styles/aside/sidebarSubMenu.css");
-/* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
-/* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
-/* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
-/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
-/* harmony import */ var _styles_datepicker_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/datepicker.css */ "./src/styles/datepicker.css");
-/* harmony import */ var _styles_aside_popup_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/popup.css */ "./src/styles/aside/popup.css");
+/* harmony import */ var _styles_aside_datepicker_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./styles/aside/datepicker.css */ "./src/styles/aside/datepicker.css");
+/* harmony import */ var _styles_aside_toast_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./styles/aside/toast.css */ "./src/styles/aside/toast.css");
+/* harmony import */ var _styles_aside_goto_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./styles/aside/goto.css */ "./src/styles/aside/goto.css");
+/* harmony import */ var _styles_aside_toggleForm_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/toggleForm.css */ "./src/styles/aside/toggleForm.css");
+/* harmony import */ var _styles_aside_sidebarSubMenu_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/sidebarSubMenu.css */ "./src/styles/aside/sidebarSubMenu.css");
+/* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
+/* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
+/* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
+/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
+/* harmony import */ var _styles_aside_deleteCategoryPopup_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/deleteCategoryPopup.css */ "./src/styles/aside/deleteCategoryPopup.css");
 /* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
 /* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
 /* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
@@ -10805,6 +10897,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // </main>
+
 // popup / modals
 
 
@@ -10839,8 +10932,7 @@ __webpack_require__.r(__webpack_exports__);
 // store.setStoreForTesting(generateRandomEvents(1000))
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-const tt = document.querySelector(".weekview__top")
-console.log(tt.offsetHeight)
+
 })();
 
 /******/ })()

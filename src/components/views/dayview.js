@@ -306,8 +306,8 @@ export default function setDayView(context, store, datepickerContext) {
           165,
           [parseInt(rect.left), parseInt(rect.top)],
           [window.innerWidth, window.innerHeight],
-          false
-        )
+          false,
+        );
         store.setFormResetHandle("day", setReset)
         const setup = new FormSetup();
         setup.setSubmission("edit", id, entry.title, entry.description);

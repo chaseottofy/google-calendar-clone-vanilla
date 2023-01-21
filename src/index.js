@@ -20,7 +20,9 @@ import "./styles/listview.css"
 import "./styles/sidebar.css"
 import "./styles/sbdatepicker.css"
 // </main>
+
 // popup / modals
+import "./styles/aside/datepicker.css"
 import "./styles/aside/toast.css"
 import "./styles/aside/goto.css"
 import "./styles/aside/toggleForm.css"
@@ -29,8 +31,7 @@ import "./styles/aside/changeViewModule.css"
 import "./styles/aside/editCategoryForm.css"
 import "./styles/aside/form.css"
 import "./styles/aside/timepicker.css";
-import "./styles/datepicker.css"
-import "./styles/aside/popup.css"
+import "./styles/aside/deleteCategoryPopup.css"
 import "./styles/aside/entryOptions.css"
 import "./styles/aside/info.css"
 import "./styles/aside/shortcuts.css"

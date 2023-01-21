@@ -127,7 +127,7 @@
     to bottom, var(--mediumgrey1) 1px, transparent 1px
   ); */
   background-image:
-    linear-gradient(to bottom, var(--mediumgrey1) 1%, transparent 0);
+    linear-gradient(to bottom, var(--mediumgrey1) 2%, transparent 0);
   background-size: 100% 4%;
   display: flex;
   max-height: 1250px;

@@ -57,6 +57,8 @@
   .timepicker {
     right: 5% !important;
     left: 25% !important;
+    bottom: 4% !important;
+    top: 40% !important;
     margin: 0 auto !important;
   }
 }

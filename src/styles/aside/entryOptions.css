@@ -291,6 +291,31 @@
   }
 }
 
+@media screen and (max-height: 400px) {
+  .entry__options {
+    left: 2% !important;
+    right: 2% !important;
+    bottom: 4% !important;
+    margin: 0 auto;
+  }
+
+  .eob-title {
+    font-size: 12px;
+  }
+
+  .entry__options--header {
+    grid-template-columns: 1fr 90px;
+  }
+
+  .entry__options-date {
+    font-size: 11px;
+  }
+
+  .entry__options--header-icons svg {
+    transform: scale(0.8);
+  }
+}
+
 @media screen and (max-width: 420px) {
   .entry__options {
     min-width: 90%;

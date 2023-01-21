@@ -135,7 +135,6 @@ export default function handleSidebarCategories(context, store, datepickerContex
     const popupBoxOverlay = document.createElement("aside");
     popupBoxOverlay.classList.add("popup-delete-ctg__overlay");
 
-
     // POPUP BOX
     const popupBox = document.createElement("aside");
     popupBox.classList.add("popup-delete-ctg");
@@ -189,7 +188,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       const optionMoveTitle = document.createElement("span");
       const optionMoveSelect = document.createElement("select");
       optionMove.classList.add("popup-delete-ctg__option--move");
-      optionMoveTitle.textContent = `Move "${ctgname}" ${ord} to another category`;
+      optionMoveTitle.textContent = `Move "${ctgname}" ${ord} to `;
       optionMoveSelect.classList.add("popup-delete-ctg__option--move-select");
       for (let i = 0; i < categoryNames.length; i++) {
         if (categoryNames[i] === ctgname) continue;
@@ -206,7 +205,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
       const optionsWrapperTwo = document.createElement("div");
       optionsWrapperTwo.classList.add("popup-delete-ctg__options");
-      optionsWrapperTwo.style.border = `2px solid ${ctgcolor}`
+      optionsWrapperTwo.style.border = `2px solid var(--mediumgrey1)`
 
       const optionRemoveRadio = document.createElement("input");
       optionRemoveRadio.setAttribute("type", "radio");
@@ -218,21 +217,36 @@ export default function handleSidebarCategories(context, store, datepickerContex
       const optionRemoveTitle = document.createElement("span");
 
       optionRemoveTitle.textContent = `Delete "${ctgname}" and ${categoryLength} ${ord} (irreversible)`;
-      const optionRemoveIcon = createTrashIcon(ctgcolor);
+      const optionRemoveIcon = createTrashIcon("var(--mediumgrey1)");
       const handleWrapperClick = (e) => {
-        if (e.target.id === "ctg-delete" || e.target.id === "ctg-move" || e.target.classList.contains("popup-delete-ctg__option--move")) {
+        if (e.target.id === "ctg-delete" || e.target.id === "ctg-move" || e.target.classList.contains("popup-delete-ctg__option--move") || e.target.classList.contains("popup-delete-ctg__option--move-select")) {
           return;
         } else {
-          // optionRemoveRadio.checked = true;
           e.target.closest(".popup-delete-ctg__options").querySelector("input").checked = true;
+          document.querySelectorAll(".popup-delete-ctg__options").forEach((el) => {
+            // el.style.backgroundColor = "transparent";
+            el.setAttribute("style", "background-color: transparent; border: 2px solid var(--mediumgrey1);")
+            el.classList.remove("popup-delete-act")
+          })
+          // popup-delete-act
+          e.target.closest(".popup-delete-ctg__options").setAttribute("style", `background-color: ${offsetColor}; border: 2px solid ${ctgcolor};`)
+
+          e.target.closest(".popup-delete-ctg__options").classList.add("popup-delete-act")
+          // e.target.closest(".popup-delete-ctg__options").style.backgroundColor = offsetColor;
+          // console.log(e.target === optionsWrapperOne)
         }
       }
+
+      // function handleOptionSelectChange(e) {
+      //   const selectedCtg = e.target.value;
+      // }
 
       optionRemove.append(optionRemoveTitle, optionRemoveIcon)
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
       
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
       popupBox.appendChild(popupBody)
+      // optionMoveSelect.onchange = handleOptionSelectChange;
       optionsWrapperOne.onclick = handleWrapperClick;
       optionsWrapperTwo.onclick = handleWrapperClick;
     }

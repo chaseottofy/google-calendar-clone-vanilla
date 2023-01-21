@@ -1,0 +1,227 @@
+.popup-delete-ctg__overlay {
+  backdrop-filter: blur(2px);
+  background: rgba(0, 0, 0, .4);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1040
+}
+
+.popup-delete-ctg {
+  background: var(--black0);
+  border-radius: 12px;
+  bottom: 5%;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  left: 5%;
+  margin: auto;
+  max-height: 360px;
+  max-width: 600px;
+  overflow: hidden;
+  padding: 2px;
+  position: absolute;
+  right: 5%;
+  top: 5%;
+  width: auto;
+  z-index: 1044
+}
+
+.popup-delete-ctg__no-entries {
+  max-height: 200px;
+  max-width: 480px
+}
+
+.popup-delete-ctg__header {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 160px;
+  justify-content: center;
+  width: 100%
+}
+
+.popup-delete-ctg__title {
+  background: var(--black000);
+  font-size: 20px;
+  font-weight: 500;
+  width: max-content
+}
+
+.popup-delete-ctg__stats,
+.popup-delete-ctg__title {
+  color: var(--taskcolor0);
+  height: min-content;
+  padding: 2px 16px
+}
+
+.popup-delete-ctg__stats {
+  color: var(--white4);
+  font-size: 16px;
+  font-weight: 400;
+  padding-top: 6px
+}
+
+.popup-delete-ctg__body {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 16px;
+  width: 100%
+}
+
+.popup-delete-ctg__options {
+  align-items: center;
+  border-radius: 4px;
+  color: var(--white4);
+  cursor: pointer;
+  display: grid;
+  font-size: 16px;
+  font-weight: 500;
+  grid-template-columns: 40px 1fr;
+  grid-template-rows: 1fr;
+  height: auto;
+  margin-top: 16px;
+  min-height: 60px;
+  padding: 0 8px;
+  position: relative;
+  width: 100%
+}
+
+input[type=radio] {
+  height: 18px;
+  pointer-events: none;
+  position: relative;
+  user-select: none;
+  width: 32px
+}
+
+.popup-delete-ctg__option--move,
+.popup-delete-ctg__option--move span {
+  align-items: center;
+  color: var(--taskcolor);
+  display: flex;
+  height: 100%;
+  justify-content: flex-end;
+  width: 100%
+}
+
+.popup-delete-ctg__option--move span {
+  padding-right: 4px;
+  user-select: none
+}
+
+.popup-delete-ctg__option--move-select {
+  border: 1px solid var(--mediumgrey1);
+  color: var(--taskcolor);
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 6px;
+  min-width: 100px;
+  padding: 6px 8px 6px 6px;
+  width: auto
+}
+
+.popup-delete-ctg__option--remove {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: flex-end;
+  width: 100%
+}
+
+.popup-delete-ctg__option--remove span {
+  color: var(--taskcolor);
+  padding-right: 8px;
+  pointer-events: none;
+  user-select: none
+}
+
+.popup-delete-act svg {
+  fill: var(--red1) !important
+}
+
+.popup-delete-ctg__footer {
+  align-items: center;
+  display: flex;
+  height: 100px;
+  justify-content: space-between;
+  padding: 0 16px 16px;
+  width: 100%
+}
+
+.popup-delete-ctg__btn--cancel {
+  background: var(--black2);
+  border: 1px solid var(--black000);
+  color: var(--taskcolor0)
+}
+
+.popup-delete-ctg__btn--cancel:hover {
+  filter: brightness(1.2)
+}
+
+.popup-delete-ctg__btn--cancel,
+.popup-delete-ctg__btn--proceed {
+  align-items: center;
+  border-radius: 18px;
+  cursor: pointer;
+  display: flex;
+  font-size: 15px;
+  height: 40px;
+  justify-content: center;
+  margin: 0 4px;
+  transition: all .2s ease-in-out;
+  width: 100%
+}
+
+.popup-delete-ctg__btn--proceed {
+  background: var(--black3);
+  border: 1px solid transparent
+}
+
+.popup-delete-ctg__btn--proceed:hover {
+  background: var(--red1);
+  color: var(--taskcolor0)
+}
+
+@media screen and (max-width:440px) {
+  .popup-delete-ctg__title {
+    font-size: 14px
+  }
+
+  .popup-delete-ctg__stats {
+    font-size: 13px
+  }
+
+  .popup-delete-ctg__body {
+    padding: 0 4px
+  }
+
+  .popup-delete-ctg__options {
+    column-gap: 8px;
+    grid-template-columns: 24px 1fr
+  }
+
+  .popup-delete-ctg__option--move {
+    font-size: 13px;
+    padding-left: 4px
+  }
+
+  .popup-delete-ctg__option--move-select {
+    font-size: 13px;
+    margin-left: auto;
+    min-width: auto;
+    width: auto
+  }
+
+  .popup-delete-ctg__options {
+    font-size: 13px
+  }
+
+  .popup-delete-ctg__option--remove {
+    padding-left: 4px
+  }
+}

@@ -149,17 +149,18 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
   if (center) {
     // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
-    // popupX = x / ;
-    // align to center 
+    if (targetWidth + x > winW) {
+      console.log(true);
+      popupX = winW - popupW - 4;
+    }
   } else {
     popupX = x + popupW > winW ? x - popupW - 6 : x;
   }
 
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
-  if (popupX < 0) popupX = winW - popupW - 24;
-  if (popupY < 0) popupY = winH - popupH - 24;
-
+  if (popupX < 0) popupX = x;
+  if (popupY < 0) popupY = 56;
   return [popupX, popupY];
 }
 

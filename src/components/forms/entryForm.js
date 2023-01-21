@@ -42,6 +42,7 @@ const formOverlay = document.querySelector(".form-overlay")
 const formModalOverlay = document.querySelector(".form-modal-overlay")
 const entriesFormWrapper = document.querySelector(".entries__form")
 const entriesForm = document.querySelector(".entry-form")
+const entriesFormBody = document.querySelector(".entries__form--body")
 
 // title / description inputs
 const titleInput = document.querySelector(".form--body__title-input")
@@ -760,9 +761,15 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function openCategoryModal(e, categories) {
     const length = categories.length;
+
+
     if (length === 1) return;
 
     closeCategoryModalBtn.removeAttribute("style");
+    entriesFormBody.scrollTo({
+      top: entriesFormBody.scrollHeight,
+      behavior: "smooth"
+    })
 
     if (length >= 5) {
       closeCategoryModalBtn.setAttribute("style", `top: -100px`)
