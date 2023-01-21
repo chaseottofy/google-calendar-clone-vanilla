@@ -402,6 +402,9 @@
 
 .dv-box-ontop {
   border: 1px solid var(--black0);
+  border-bottom: 1px solid var(--black2);
+  border-top: 1px solid var(--black2);
+  box-shadow:none;
 }
 
 .dv-temporary-box {

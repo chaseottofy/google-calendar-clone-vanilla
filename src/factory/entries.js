@@ -251,7 +251,14 @@ class Day {
   }
 
   sortByY(bxs) {
-    return bxs.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
+    return bxs.sort((a, b) => {
+      let diff = +a.coordinates.y - +b.coordinates.y
+      if (diff === 0) {
+        return +b.coordinates.e - +a.coordinates.e
+      } else {
+        return diff;
+      }
+    })
   }
 
   checkForCollision() {
@@ -271,6 +278,7 @@ class Day {
         }
       }
     }
+    console.log(collisions)
     return this.sortByY([...collisions])
   }
 
@@ -293,7 +301,6 @@ class Day {
       endhours = 23
       endminutes = 59
     }
-
     endDate.setHours(endhours)
     endDate.setMinutes(endminutes)
 
