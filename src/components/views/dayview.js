@@ -85,25 +85,24 @@ export default function setDayView(context, store, datepickerContext) {
     let longest = 0;
     let shortest = 100;
     for (let i = 0; i < bxs.length; i++) {
-      console.log(bxs[i].coordinates)
       let [tempshort, templong] = [
         bxs[i].coordinates.y,
         bxs[i].coordinates.e
-      ]
+      ];
       if (templong > longest) { longest = templong; }
       if (tempshort < shortest) { shortest = tempshort; }
     }
-    let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)]
-    let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15]
-    let [tempdate1, tempdate2] = [new Date(bxs[0].start), new Date(bxs[0].start)]
-    tempdate1.setHours(h1)
-    tempdate1.setMinutes(m1)
-    tempdate2.setHours(h2)
-    tempdate2.setMinutes(m2)
+    let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)];
+    let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15];
+    let [tempdate1, tempdate2] = [new Date(bxs[0].start), new Date(bxs[0].start)];
+    tempdate1.setHours(h1);
+    tempdate1.setMinutes(m1);
+    tempdate2.setHours(h2);
+    tempdate2.setMinutes(m2);
     return formatStartEndTime(
       tempdate1,
       tempdate2
-    )
+    );
   }
 
   function getDayviewHeaderEntryCount() {
@@ -136,7 +135,8 @@ export default function setDayView(context, store, datepickerContext) {
       return `${startingToday} entries starting & ending today ( ${firstLastDates(boxes.boxes)} )`;
     }
 
-    let fulltitle = ""
+
+    let fulltitle = "";
     if (startingToday > 0) {
       if (startingToday === 1) {
         fulltitle += `${startingToday} entry starting today`
@@ -160,7 +160,6 @@ export default function setDayView(context, store, datepickerContext) {
     } else {
       fulltitle += ` – no entries ending today`
     }
-
     return fulltitle;
   }
 
@@ -286,7 +285,6 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   function renderBoxes() {
-    // dvMainGrid.innerText = ""
     resetDayview()
     createDvTop(boxes.getBoxesTop())
     boxes.getBoxes().forEach((entry) => {
@@ -298,8 +296,6 @@ export default function setDayView(context, store, datepickerContext) {
       )
     })
   }
-
-
 
   /** RESIZE NORTH/SOUTH */
   function resizeBoxNSDay(e, box) {
