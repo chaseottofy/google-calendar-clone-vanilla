@@ -291,12 +291,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _config_setViews__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../config/setViews */ "./src/config/setViews.js");
 /* harmony import */ var _menus_datepicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../menus/datepicker */ "./src/components/menus/datepicker.js");
 /* harmony import */ var _menus_sidebarDatepicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../menus/sidebarDatepicker */ "./src/components/menus/sidebarDatepicker.js");
-/* harmony import */ var _utilities_svgs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utilities/svgs */ "./src/utilities/svgs.js");
-/* harmony import */ var _toastPopups_toast__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../toastPopups/toast */ "./src/components/toastPopups/toast.js");
-/* harmony import */ var _toastPopups_toastCallbacks__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../toastPopups/toastCallbacks */ "./src/components/toastPopups/toastCallbacks.js");
-/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
-/* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/dateutils */ "./src/utilities/dateutils.js");
+/* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
+/* harmony import */ var _utilities_svgs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/svgs */ "./src/utilities/svgs.js");
+/* harmony import */ var _toastPopups_toast__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../toastPopups/toast */ "./src/components/toastPopups/toast.js");
+/* harmony import */ var _toastPopups_toastCallbacks__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../toastPopups/toastCallbacks */ "./src/components/toastPopups/toastCallbacks.js");
+/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
+/* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utilities/dateutils */ "./src/utilities/dateutils.js");
+/* harmony import */ var _utilities_timeutils__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utilities/timeutils */ "./src/utilities/timeutils.js");
+/* harmony import */ var _utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utilities/dragutils */ "./src/utilities/dragutils.js");
 // render methods
+
 
 
 
@@ -312,6 +316,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // date / time helpers
+
+
+
 
 
 
@@ -335,9 +342,9 @@ const descriptionInput = document.querySelector(".form--body__description-input"
 // end date / time
 const startDateInput = document.querySelector(".form--body-start__date")
 const endDateInput = document.querySelector(".form--body-end__date")
+
 const startTimeInput = document.querySelector(".form--body-start__time")
 const endTimeInput = document.querySelector(".form--body-end__time")
-const starthourInput = document.querySelector(".form--body-start__hour")
 
 // category modal
 const categoryModal = document.querySelector(".form--body__category-modal")
@@ -350,84 +357,253 @@ const selectedCategoryTitle = document.querySelector(".form--body__category-moda
 
 // reset / save btns
 const formSubmitButton = document.querySelector(".form--footer__button-save");
-// const formClearButton = document.querySelector(".form--footer__button-cancel");
+
+
+/**
+ * list of methods -- I plan on cleaning the form up
+ * 
+ * closetimepicker
+ * setEndDateToNextDay
+ * setEndDateToNextHour
+ * createTimepicker
+ * renderSidebarDatepickerForm
+ * getDefaultCategory
+ * setInitialFormCategory
+ * setFormInitialValues
+ * getDatePicker
+ * handleOverlayClose
+ * handleSetDate
+ * getDateFormatViaAttr
+ * getTimeFormatViaAttr
+ * getDateTimeFormatted
+ * configDatesForStore
+ * checkFormValidity
+ * removeErrorMessages
+ * handleFormErrors
+ * removeLastFormEntry
+ * handleFormClose
+ * handleSubmissionRender
+ * handleFormSubmission
+ * handleCategorySelection
+ * closeCategoryModal
+ * createCategoryOptions
+ * openCategoryModal
+ * dragFormAnywhere
+ * delegateCategorySelection
+ * handleTimepickerSetup
+ * delegateEntryFormEvents
+ * delegateFormKeyDown
+ */
 
 function setEntryForm(context, store, datepickerContext) {
-
   let categories;
   let activeCategories;
   let currentComponent;
   let [year, month, day] = [null, null, null]
 
+  function closetimepicker() {
+    const timep = document?.querySelector(".timepicker")
+    const timepoverlay = document?.querySelector(".timepicker-overlay")
+    const activeTimeElement = document?.querySelector(".active-form-time")
+    if (timep) {
+      timep.scrollTo(0, 0)
+      timep.remove();
+      timepoverlay.remove();
+    }
+    if (activeTimeElement) {
+      activeTimeElement.classList.remove("active-form-time")
+    }
+  }
 
+  function setEndDateToNextDay() {
+    const startCurrentDate = startDateInput.getAttribute("data-form-date").split("-").map(x => parseInt(x))
+    let nextDay = new Date(
+      startCurrentDate[0],
+      startCurrentDate[1],
+      startCurrentDate[2] + 1
+    )
+    let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`
+    let nextDayTitle = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].labels.monthsShort[nextDay.getMonth()] + " " + nextDay.getDate() + ", " + nextDay.getFullYear();
 
-  function createTimepicker(coords, range, end) {
+    endDateInput.setAttribute("data-form-date", nextDayString);
+    endDateInput.textContent = nextDayTitle;
+    endTimeInput.setAttribute("data-form-time", "00:30")
+    endTimeInput.textContent = "12:30am";
+  }
+
+  function setEndDateToNextHour() {
+    const startCurrentTime = startTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x));
+
+    let [newh, newm] = [
+      startCurrentTime[0] < 23 ? startCurrentTime[0] + 1 : 23,
+      startCurrentTime[0] < 23 ? startCurrentTime[1] : 45
+    ]
+
+    let nextHour = new Date(0, 0, 0, newh, newm)
+    let md = nextHour.getHours() > 12 ? "pm" : "am"
+
+    let nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`
+    let nextHourTitle = `${+nextHour.getHours() % 12}:${+nextHour.getMinutes() == 0 ? "00" : nextHour.getMinutes()}${md}`
+
+    endTimeInput.setAttribute("data-form-time", nextHourString);
+    endTimeInput.textContent = nextHourTitle;
+  }
+
+  function createTimepicker(coords, currentTime, end, endLimit) {
     const timepicker = document.createElement("div")
     timepicker.classList.add("timepicker")
     timepicker.style.top = `${coords.y}px`
     timepicker.style.left = `${coords.x}px`
+
     const timepickerOverlay = document.createElement("div")
     timepickerOverlay.classList.add("timepicker-overlay")
+
     const timepickerTimesContainer = document.createElement("div")
-    timepickerTimesContainer.classList.add("timepicker-times__container")
+    timepickerTimesContainer.classList.add("timepicker-times__container");
 
-    const hours = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
-    const minutes = ["00", "15", "30", "45"];
-    const [am, pm] = ['am', 'pm'];
+    let hours = [
+      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+      12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
+    ];
+    let md = [
+      'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am',
+      'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm',
+    ]
+    let minutes = ["00", "15", "30", "45"];
 
-    const createTimesTemp = (md, flag) => {
-      hours.forEach((hour) => {
-        minutes.forEach((min) => {
-          const timepickerTime = document.createElement("div")
-          timepickerTime.classList.add("timepicker-time")
-          timepickerTime.textContent = `${hour}:${min} ${md}`
-          let attr;
-          md === "pm" ? attr = `${hour + 12}:${min}` : attr = `${hour}:${min}`
-          timepickerTime.setAttribute("data-tp-time", attr)
-          timepickerTimesContainer.appendChild(timepickerTime)
-        })
-      })
+    let [currenthour, currentmin] = currentTime.split(":").map((x) => {
+      return parseInt(x)
+    })
+
+    let currentmd = currenthour > 12 ? "pm" : "am"
+
+    let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
+    let shouldTestReset = false;
+
+    if (end && currenthour === 23 && currentmin === 45) {
+      shouldTestReset = true;
     }
 
-    if (end) {
-      createTimesTemp(am, false)
-      createTimesTemp(pm, true)
-    } else {
-      createTimesTemp(am, false)
-      createTimesTemp(pm, true)
-    }
+    currenthour > 12 ? currenthour -= 12 : currenthour
 
-    const closetimepicker = () => {
-      store.removeActiveOverlay("timepicker-overlay");
-      timepickerOverlay.remove()
-      timepicker.remove()
-    }
 
-    const setnewtime = (e) => {
-      const newtime = e.target.getAttribute("data-tp-time")
-      if (newtime) {
-        if (end) {
-          endTimeInput.value = newtime
-          endTimeInput.setAttribute("data-form-time", newtime);
-        } else {
-          startTimeInput.textContent = newtime;
-          startTimeInput.setAttribute("data-form-time", newtime);
+    if (endLimit !== null && isSameDay) {
+      let [h, m] = endLimit.split(":").map(x => parseInt(x))
+      if (shouldTestReset) {
+        if (h === 23 && m >= 15) {
+          setEndDateToNextDay();
+          closetimepicker()
+          return;
         }
       }
+
+      if (h === 23) {
+        if (m === 45) {
+          setEndDateToNextDay();
+        } else {
+          hours = hours.slice(-1)
+          md = md.slice(-1)
+          m = m.slice(-1)
+        }
+      } else {
+        hours = hours.slice(+h + 1, hours.length)
+        md = md.slice(+h + 1, md.length)
+      }
+    }
+
+    let count = 0
+    let si;
+    hours.forEach((hour, houridx) => {
+      minutes.forEach(min => {
+        const timepickerTime = document.createElement("div")
+        timepickerTime.classList.add("timepicker-time")
+        let attr;
+        if (md[houridx] === "am") {
+          if (+hour === 12) {
+            attr = `00:${min}`
+
+          } else {
+            attr = `${hour}:${min}`
+          }
+        } else if (md[houridx] === "pm") {
+          if (hour === 12) {
+            attr = `12:${min}`
+          } else {
+            attr = `${hour + 12}:${min}`
+          }
+        }
+
+        timepickerTime.setAttribute("data-tp-time", attr)
+        timepickerTime.textContent = `${hour}:${min}${md[houridx]}`
+        count++
+
+        if (!end) {
+          if (+hour == +currenthour && +min == +currentmin) {
+            if (currentmd === "pm" && md[houridx] === "pm") {
+              timepickerTime.classList.add("timepicker-time--selected")
+              si = count;
+            } else if (currentmd === "am" && md[houridx] === "am") {
+              timepickerTime.classList.add("timepicker-time--selected")
+              si = count;
+            }
+          }
+        }
+
+        timepickerTimesContainer.appendChild(timepickerTime)
+      })
+    })
+
+
+    function setnewtime(e) {
+      const time = e.target.textContent
+      let attr = e.target.getAttribute("data-tp-time")
+
+      if (!end) {
+        startTimeInput.textContent = time
+        startTimeInput.setAttribute("data-form-time", attr)
+
+        let [testhour, testminute] = attr.split(":").map(x => +x)
+        let [endTestHour, endTestMinute] = endTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x))
+
+        if (isSameDay) {
+          if (testhour === 23 && testminute === 45) {
+            setEndDateToNextDay()
+          } else {
+            if (testhour > endTestHour || (testhour === endTestHour && testminute >= endTestMinute)) {
+              setEndDateToNextHour()
+            }
+          }
+        }
+      } else {
+        endTimeInput.textContent = time;
+        endTimeInput.setAttribute("data-form-time", attr)
+      }
+      closetimepicker();
     }
 
     const delegateNewTime = (e) => {
-      if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".timepicker-time")) {
+      if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".timepicker-time")) {
         setnewtime(e)
+        return;
       }
     }
 
-    store.addActiveOverlay("timepicker-overlay");
-    timepickerTimesContainer.onclick = delegateNewTime;
-    timepickerOverlay.onclick = closetimepicker;
     timepicker.appendChild(timepickerTimesContainer)
-    document.body.appendChild(timepickerOverlay);
-    document.body.appendChild(timepicker)
+    const [x, y] = coords
+    timepicker.setAttribute("style", `top:${y}px; left:${x}px;`)
+    document.body.prepend(timepickerOverlay);
+    document.body.prepend(timepicker)
+    timepickerOverlay.onclick = closetimepicker;
+    timepickerTimesContainer.onclick = delegateNewTime;
+    if (!end) {
+      if (si > 0) {
+        timepicker.scrollTo(0, parseInt(si * 40) - 40)
+      } else {
+        timepicker.scrollTo(0, 0);
+      }
+    } else {
+      timepicker.scrollTo(0, 0);
+    }
   }
 
   function renderSidebarDatepickerForm() {
@@ -467,17 +643,16 @@ function setEntryForm(context, store, datepickerContext) {
     // ****************************************** //
     // title / description
     descriptionInput.value = "";
-    let tempval = titleInput.value;
+    titleInput.blur();
+    titleInput.value = "";
     setTimeout(() => {
-      titleInput.value = "";
       titleInput.focus();
-      titleInput.value = tempval;
     }, 10)
     // ****************************************** //
     // category setup 
     setInitialFormCategory()
-    // ****************************************** // 
 
+    // ****************************************** // 
     // date picker setup
     datepickerContext.setDate(year, month, day)
     context.setDateSelected(day)
@@ -485,24 +660,27 @@ function setEntryForm(context, store, datepickerContext) {
 
     // date inputs setup
     const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`
-    let temphours = new Date().getHours()
-
     // DATES : START/END
     startDateInput.textContent = dateSelected
-    startDateInput.setAttribute("data-form-date", (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.getDateForStore)(context.getDate()))
+    startDateInput.setAttribute("data-form-date", (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.getDateForStore)(context.getDate()))
     endDateInput.textContent = dateSelected
-    endDateInput.setAttribute("data-form-date", (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.getDateForStore)(context.getDate()))
+    endDateInput.setAttribute("data-form-date", (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.getDateForStore)(context.getDate()))
 
     // TIME : START/END 
+    const temphours = new Date().getHours()
     startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
     endTimeInput.setAttribute("data-form-time", `${temphours}:30`)
+    const getTimeAndMd = (hour, min) => {
+      return `${+hour === 0 || +hour === 12 ? 12 : hour % 12}:${min}${hour < 12 ? "am" : "pm"}`;
+    }
+    startTimeInput.textContent = getTimeAndMd(temphours, "00")
+    endTimeInput.textContent = getTimeAndMd(temphours, "30")
 
     // ****************************************** // 
     // submit button setup 
     formSubmitButton.setAttribute("data-form-action", "create")
     formSubmitButton.setAttribute("data-form-id", "")
     // ****************************************** // 
-
 
     // approve form event delegation
     entriesFormWrapper.onmousedown = delegateEntryFormEvents
@@ -535,7 +713,7 @@ function setEntryForm(context, store, datepickerContext) {
       endDateInput.setAttribute("class", "form--body-end__date active-form-date");
     }
 
-    const [y, m, d] = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.getDateFromAttribute)(e.target, "data-form-date");
+    const [y, m, d] = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.getDateFromAttribute)(e.target, "data-form-date");
     const rect = e.target.getBoundingClientRect();
     const datepickerLeft = parseInt(rect.left);
     const bott = parseInt(rect.bottom);
@@ -572,24 +750,13 @@ function setEntryForm(context, store, datepickerContext) {
   function configDatesForStore() {
     let startDateAttr = startDateInput.getAttribute("data-form-date")
     let startDate = getDateFormatViaAttr(startDateAttr)
-    let startTimeAttr = startTimeInput.getAttribute("data-form-time") || "12:00"
+    let startTimeAttr = startTimeInput.getAttribute("data-form-time")
     let [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr)
 
     let endDateAttr = endDateInput.getAttribute("data-form-date")
     let endDate = getDateFormatViaAttr(endDateAttr)
-    let endTimeAttr = endTimeInput.getAttribute("data-form-time") || "12:30"
+    let endTimeAttr = endTimeInput.getAttribute("data-form-time")
     let [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr)
-
-    console.log(starthour, endhour)
-    if (starthour >= endhour) {
-      if (starthour < 23) {
-        endhour += 1
-      } else {
-        startminute = 0;
-        endhour = 23;
-        endminute = 30;
-      }
-    }
 
     return [
       getDateTimeFormatted(startDate, [starthour, startminute]),
@@ -637,7 +804,7 @@ function setEntryForm(context, store, datepickerContext) {
     if (!startDate) {
       status.startDate = "Start date cannot be empty";
       status.valid = false;
-    } else if (!(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.isDate)(startDate)) {
+    } else if (!(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.isDate)(startDate)) {
       status.startDate = "Start date is not valid";
       status.valid = false;
     }
@@ -646,10 +813,10 @@ function setEntryForm(context, store, datepickerContext) {
     if (!endDate) {
       status.endDate = "End date cannot be empty";
       status.valid = false;
-    } else if (!(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.isDate)(endDate)) {
+    } else if (!(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.isDate)(endDate)) {
       status.endDate = "End date is not valid";
       status.valid = false;
-    } else if (!(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_7__.isBeforeDate)(startDate, endDate)) {
+    } else if (!(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_8__.isBeforeDate)(startDate, endDate)) {
       status.endDate = "End date must be after start date";
       status.valid = false;
     }
@@ -698,7 +865,6 @@ function setEntryForm(context, store, datepickerContext) {
    */
   function handleFormErrors(errorMessages) {
     titleInput.blur()
-    console.log(errorMessages)
 
     const components = {
       title: titleInput,
@@ -774,7 +940,7 @@ function setEntryForm(context, store, datepickerContext) {
       renderSidebarDatepickerForm()
     }
     handleFormClose()
-    ;(0,_toastPopups_toast__WEBPACK_IMPORTED_MODULE_4__["default"])("Saving", 1000, null, null, null, removeLastFormEntry)
+    ;(0,_toastPopups_toast__WEBPACK_IMPORTED_MODULE_5__["default"])("Saving", 1000, null, null, null, removeLastFormEntry)
   }
 
   function handleFormSubmission(e) {
@@ -864,7 +1030,7 @@ function setEntryForm(context, store, datepickerContext) {
       categoryTitle.textContent = key;
 
       if (key === currentCategory) {
-        const checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createCheckIcon)("var(--white4)");
+        const checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_4__.createCheckIcon)("var(--white4)");
         const checkIconWrapper = document.createElement("div");
         checkIconWrapper.classList.add("category-modal--category-check");
         checkIconWrapper.appendChild(checkIcon);
@@ -954,32 +1120,40 @@ function setEntryForm(context, store, datepickerContext) {
   }
 
   function delegateCategorySelection(e) {
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".category-modal--category")) {
+    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".category-modal--category")) {
       handleCategorySelection(e);
     }
   }
 
+  function handleTimepickerSetup(target) {
+    const rect = target.getBoundingClientRect()
+    return [
+      parseInt(rect.right) + 16,
+      parseInt(rect.top) - 24,
+    ]
+  }
+
   function delegateEntryFormEvents(e) {
     // header
-    const dragHeader = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form-header--dragarea");
-    const closeicon = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--header__icon-close");
+    const dragHeader = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form-header--dragarea");
+    const closeicon = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--header__icon-close");
 
     // form inputs
-    const startdate = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-start__date");
-    const starttime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-start__time");
-    const enddate = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-end__date");
-    const endtime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body-end__time");
-    const category = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--body__category-modal--wrapper-selection");
+    const startdate = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--body-start__date");
+    const starttime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--body-start__time");
+    const enddate = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--body-end__date");
+    const endtime = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--body-end__time");
+    const category = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--body__category-modal--wrapper-selection");
 
     // error msg : <input> / <textarea>
-    const inputError = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form-input-error");
+    const inputError = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form-input-error");
 
     // error msg : custom inputs (date / time)
-    const customInputError = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form-input-error__custom-input");
+    const customInputError = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form-input-error__custom-input");
 
     // form footer buttons
-    const clearbtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--footer__button-cancel");
-    const submitbtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_6__.getClosest)(e, ".form--footer__button-save");
+    const clearbtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--footer__button-cancel");
+    const submitbtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--footer__button-save");
 
     if (dragHeader) {
       dragFormAnywhere(e);
@@ -997,12 +1171,13 @@ function setEntryForm(context, store, datepickerContext) {
     }
 
     if (starttime) {
-      const target = e.target
-      const [x, y] = [
-        target.offsetLeft,
-        target.offsetTop + 36,
-      ]
-      createTimepicker([x, y], null, true)
+      e.target.classList.add("active-form-time")
+      createTimepicker(
+        handleTimepickerSetup(e.target),
+        startTimeInput.getAttribute("data-form-time"),
+        false,
+        null
+      );
       return;
     }
 
@@ -1012,12 +1187,13 @@ function setEntryForm(context, store, datepickerContext) {
     }
 
     if (endtime) {
-      const target = e.target
-      const [x, y] = [
-        target.offsetLeft,
-        target.offsetTop + 36,
-      ]
-      createTimepicker([x, y], null, true)
+      e.target.classList.add("active-form-time")
+      createTimepicker(
+        handleTimepickerSetup(e.target),
+        endTimeInput.getAttribute("data-form-time"),
+        true,
+        startTimeInput.getAttribute("data-form-time"),
+      );
       return;
     }
 
@@ -1053,9 +1229,14 @@ function setEntryForm(context, store, datepickerContext) {
     if (!datepicker.classList.contains("hide-datepicker")) {
       return;
     } else {
+      const timep = document?.querySelector(".timepicker")
 
       if (e.key === "Escape") {
-        handleFormClose(e);
+        if (timep) {
+          closetimepicker()
+        } else {
+          handleFormClose(e);
+        }
       }
 
       if (e.key === "Enter") {
@@ -1064,8 +1245,6 @@ function setEntryForm(context, store, datepickerContext) {
     }
   }
 
-
-  titleInput.blur()
   setFormInitialValues()
 }
 
@@ -1149,6 +1328,8 @@ class FormConfig {
 
   configFormTitleDescriptionInput(title, description) {
     this.formTitleDescription.forEach((input, idx) => {
+      // console.log(input, idx)
+      console.log(title, description)
       input.firstElementChild.value = [title, description][idx]
     })
   }
@@ -1778,6 +1959,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
 /* harmony import */ var _utilities_svgs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utilities/svgs */ "./src/utilities/svgs.js");
+/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
+
 
 
 const checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_1__.createCheckIcon)('var(--taskcolor');
@@ -1871,9 +2054,6 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
   function validateNewCategory(categoryName, color) {
     const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
     const origName = formhelper.getOriginalName();
-    // const [origNameIdx, newNameIdx] = [
-    //   store.getCategoryIndex(origName)
-    // ]
 
     let errormsg = false;
     if (trimName.length < 1) {
@@ -1885,7 +2065,6 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
         errormsg = true;
       }
     }
-
 
     if (errormsg) {
       ctgErrMsg.classList.remove("hide-ctg-err");
@@ -2039,7 +2218,8 @@ const reset = [
   entryOptionCategory,
 ]
 
-function getEntryOptionModal(context, store, entry,datepickerContext, finishSetup) {
+function getEntryOptionModal(context, store, entry, datepickerContext, finishSetup) {
+
   function openEditForm() {
     const openForm = store.getRenderFormCallback()
     openForm();
@@ -2076,7 +2256,7 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
     deletepopup.append(deletepopupText, deletebtns);
     entryOptionsWrapper.append(deletepopup);
 
-    const removeDeletePopup = () => {deletepopup.remove();}
+    const removeDeletePopup = () => { deletepopup.remove(); }
     const submitDelete = () => {
       proceedDelete(entry);
       removeDeletePopup();
@@ -2091,7 +2271,7 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
     // If the form is not toggled open from this modal,
     // reset it manually on close
     const resetCurrentView = store.getFormResetHandle(context.getComponent())
-    closeEntryOptions()    
+    closeEntryOptions()
     resetCurrentView();
   }
 
@@ -2112,21 +2292,59 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
     store.addActiveOverlay("entry__options--hidden")
 
     const [start, end] = [new Date(entry.start), new Date(entry.end)]
-    
+    let istoday = false;
+    if ((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.compareDates)(start, new Date())) {
+      istoday = true;
+    }
+
     const getDateTime = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatEntryOptionsDate)(start, end);
     entryOptionsDateHeader.textContent = getDateTime.date;
-    console.log(getDateTime)
     if (getDateTime.time !== null) {
       if (getDateTime.time === undefined) {
         let tempdate = new Date()
-        let daysSince = tempdate.getTime() - end.getTime()
-        daysSince = Math.floor(daysSince / (1000 * 60 * 60 * 24))
-        entryOptionsTimeHeader.textContent = `ended ${daysSince} days ago`
+        let secondsDiff = tempdate.getTime() - end.getTime()
+        let daysSince = Math.floor(secondsDiff / (1000 * 60 * 60 * 24))
+        let timeheadertitle;
+
+        /**
+         * If the entry has ended, display the time since it ended
+         * If the entry has ended today, display the time since it ended
+         * If the entry has ended yesterday, display "ended yesterday"
+         * If the entry starts today, display how long until it is scheduled to end
+         * If the entry is yet to start, display how long until it is scheduled to start
+         * 
+         */
+
+        if (daysSince === 0) {
+          let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60))
+          let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60))
+          if (hourSince === 0) {
+            if (minSince === 1) {
+              timeheadertitle = `ended ${minSince} minute ago`
+            } else {
+              timeheadertitle = `ended ${minSince} minutes ago`
+            }
+          } else if (hourSince === 1) {
+            timeheadertitle = `ended ${hourSince} hour ago`
+          } else if (hourSince > 1) {
+            timeheadertitle = `ended ${hourSince} hours ago`
+          } 
+        } else if (daysSince === 1) {
+          timeheadertitle = "ended yesterday"
+        } else {
+          timeheadertitle = `ended ${daysSince} days ago`
+        }
+        entryOptionsTimeHeader.textContent = timeheadertitle;
       } else {
-        entryOptionsTimeHeader.textContent = "ends in " + getDateTime.time;
+        if (istoday) {
+          entryOptionsTimeHeader.textContent = "ending in " + getDateTime.time;
+        } else {
+          entryOptionsTimeHeader.textContent = getDateTime.time;
+        }
       }
     }
-    
+
+
     entryOptionTitle.textContent = entry.title;
 
     entry.description.length === 0 ? entryOptionDescription.parentElement.style.display = "none" : entryOptionDescription.textContent = entry.description;
@@ -2141,7 +2359,7 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
 
   function handleEntryOptionKD(e) {
     const deletepopup = document?.querySelector(".delete-popup")
-    if (e.key === "Escape") { 
+    if (e.key === "Escape") {
       if (deletepopup) {
         deletepopup.remove();
         return;
@@ -2170,7 +2388,6 @@ function getEntryOptionModal(context, store, entry,datepickerContext, finishSetu
       formNegated();
       return;
     }
-
   }
 
   setEntryDefaults()
@@ -2208,14 +2425,14 @@ function setHeader(context, component, store) {
   const configHeader = (borderstyle, componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
     datetimeWrapper.classList.remove("datetime-inactive");
-    header.style.borderBottom = borderstyle;
+    // header.style.borderBottom = borderstyle;
     datetimeWrapper.style.paddingRight = "0";
     datetimeContent.removeAttribute("style")
   }
 
   const configListHeader = (componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
-    header.style.borderBottom = "1px solid var(--mediumgrey1)"
+    // header.style.borderBottom = "1px solid var(--mediumgrey1)"
     datetimeWrapper.classList.add("datetime-inactive");
   }
 
@@ -2238,7 +2455,9 @@ function setHeader(context, component, store) {
       setHeaderAttributes("week");
       break;
     case "month":
-      configHeader("var(--bordergrey)", `${context.getMonthName()} ${context.getYear()}`);
+      // 1px solid transparent
+      // var(--bordergrey)
+      configHeader("1px solid transparent", `${context.getMonthName()} ${context.getYear()}`);
       setHeaderAttributes("month");
       break;
     case "year":
@@ -2248,8 +2467,8 @@ function setHeader(context, component, store) {
     case "list":
       // !Important : text content is set in list.js after data is fetched
       setHeaderAttributes("list");
-      header.style.borderBottom = "1px solid var(--mediumgrey1)"
-      // datetimeWrapper.classList.add("datetime-inactive");
+      // header.style.borderBottom = "1px solid var(--mediumgrey1)"
+      datetimeWrapper.classList.add("datetime-inactive");
       break;
     default:
       break;
@@ -2454,7 +2673,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createCheckIcon)("none")
     }
 
-    checkbox.style.border = `1px solid ${ctgcolor}`;
+    checkbox.style.border = `2px solid ${ctgcolor}`;
     checkbox.appendChild(checkIcon)
     checkboxWrapper.appendChild(checkbox)
 
@@ -3696,8 +3915,13 @@ function setDayView(context, store, datepickerContext) {
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
 
+  function resetDayview() {
+    dvMainGrid.innerText = "";
+  }
+
   function renderBoxes() {
-    dvMainGrid.innerText = ""
+    // dvMainGrid.innerText = ""
+    resetDayview()
     boxes.getBoxes().forEach((entry) => {
       ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createBox)(
         dvMainGrid,                         // column
@@ -4023,143 +4247,11 @@ function setDayView(context, store, datepickerContext) {
   const initDayView = () => {
     renderBoxesForGrid();
     configHeader();
+    store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
   }
   initDayView();
 }
-
-
-
-
-// function setBoxWidth(box) {
-//   switch (box.getAttribute("data-dv-box-index")) {
-//     case "dv-box-one":
-//       box.style.left = 'calc((100% - 0px) * 0 + 0px)';
-//       box.style.width = "calc((100% - 0px) * 1)"
-//       break;
-//     case "dv-box-two":
-//       box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.9)";
-//       break;
-//     case "dv-box-three":
-//       box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.85)";
-//       break;
-//     case "dv-box-four":
-//       box.style.left = "calc((100% - 0px) * 0.35 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.65)"
-//       break;
-//     case "dv-box-five":
-//       box.style.left = "calc((100% - 0px) * 0 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.34)"
-//       break;
-//     case "dv-box-six":
-//       box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.4)"
-//       break;
-//     case "dv-box-seven":
-//       box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.38)"
-//       break;
-//     case "dv-box-eight":
-//       box.style.left = "calc((100% - 0px) * 0.1)"
-//       box.style.width = "calc((100% - 4px) * 0.4)"
-//       break;
-//     case "dv-box-nine":
-//       box.style.left = "calc((100% - 0px) * 0.3)"
-//       box.style.width = "calc((100% - 4px) * 0.7)"
-//       break;
-//     default:
-//       break;
-//   }
-// }
-
-// function handleOverlap() {
-//   // console.log(ho(null, "day",boxes.checkForCollision()))
-//   const collisions = boxes.checkForCollision()
-//   if (collisions.length > 0) {
-//     let boxnumarr = [
-//       'dv-box-one',
-//       'dv-box-two',
-//       'dv-box-three',
-//       'dv-box-four',
-//       'dv-box-five',
-//       'dv-box-six',
-//       'dv-box-seven',
-//       'dv-box-eight',
-//       'dv-box-nine'
-//     ]
-//     for (let i = 0; i < collisions.length; i++) {
-//       const box = document.querySelector(`[data-dv-box-id="${collisions[i].id}"]`)
-//       if (i === 0) {
-//         box.setAttribute("class", "dv-box box-one")
-//         box.setAttribute("data-dv-box-index", "dv-box-one")
-//       } else {
-//         box.setAttribute("class", `dv-box dv-box-ontop ${boxnumarr[i]}`)
-//         box.setAttribute("data-dv-box-index", boxnumarr[i])
-//       }
-//       setBoxWidth(box)
-//     }
-//   }
-// }
-
-
-
-
-  // function getScript(totalEntries, idx, endDate, endTime) {
-//   const scripts = [
-//     `1 entry ending on ${endDate}`,
-//     `1 entry ending at ${endTime}`,
-//     `${totalEntries} total entries ending on ${endDate}`, 
-//     `${totalEntries} total entries - last ending on ${endDate}`, 
-//     `${totalEntries} total entries - last ending at ${endTime}`,
-//     `${totalEntries} entry ending today at ${endTime}`,
-//   ];
-//   return scripts[idx]
-// }
-
-// console.log(boxes.getAllBoxes().filter((box) => {
-//   return box.end.getDate() === context.getDate() && box.end.getMonth() === context.getMonth() && box.end.getFullYear() === context.getYear()
-// }))
-// console.log(boxes.getEntriesEndingOnDay(context.getDay()))
-
-// if (totalEntries > 0) {
-
-//   // no day entries
-//   if (dayLen === 0) {
-//     if (alldayLen > 1) {
-//       // multiple all day entries 
-//       console.log(boxes)
-
-//     } else {
-//       // one all day entry
-//       fulltitle = getScript(
-//         1, 0, formatDateForDisplay(boxes.getBoxesTop()[0].end), null,
-//       )
-//     }
-//     // multiple day & all day
-//   } else if (dayLen > 0 && alldayLen > 0) {
-
-
-//     // only day entries
-//   } else {
-//     // & multiple day entries
-//     if (dayLen > 1) {
-//       temp = boxes.getBoxes()[dayLen - 1].end
-//       fulltitle = getScript(
-//         totalEntries,
-//         4,
-//         null,
-//         formatTime(temp.getHours(), temp.getMinutes()),
-//       )
-//     } else {
-//       temp = boxes.getBoxes()[dayLen - 1].end
-//       fulltitle = getScript(
-//         1, 5, null, formatTime(temp.getHours(), temp.getMinutes())
-//       )
-//     }
-//   }
-// }
 
 /***/ }),
 
@@ -4321,7 +4413,6 @@ function setListView(context, store, datepickerContext) {
       y = rectTop - modalHeight - height - 12;
     }
 
-    console.log(rectTop, window.innerHeight)
 
     let x = rectLeft;
     if (rectLeft + 150 > window.innerWidth) {
@@ -4372,24 +4463,26 @@ function setListView(context, store, datepickerContext) {
     }
 
     if (rgCell) {
-      // console.log(rgCell)
-      // rgCell.classList.toggle("rowgroup--cell-active")
       getRgContextMenu(rgCell)
       return;
     }
   }
 
-  const initListView = () => {
+  
+  function resetListview() {
     listviewBody.innerText = "";
+    console.log(listviewBody.innerHTML);
+  }
 
+  const initListView = () => {
+    resetListview()
+    store.setResetPreviousViewCallback(resetListview)
     const activeEnt = store.getActiveEntries();
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = "No Entries to Display";
       return;
     } else {
       // update : 1.02 -- (1/16/23)
-      // The following logic is in its first stage and will be optimized when I come up with a better solution.
-      // I'm debating on whether to use a load more system or an infinite scroll system.
       const entries = store.sortBy(activeEnt, "start", "desc");
 
       const groupedEntries = entries.reduce((acc, curr) => {
@@ -4503,7 +4596,7 @@ __webpack_require__.r(__webpack_exports__);
 // naming
 
 const monthNames = _locales_en__WEBPACK_IMPORTED_MODULE_11__["default"].labels.monthsShort
-
+// placePopup(popupWidth, popupHeight, coords, windowCoords)
 
 
 const resizeoverlay = document.querySelector(".resize-overlay")
@@ -4669,8 +4762,12 @@ function setMonthView(context, store, datepickerContext) {
     monthWrapper.appendChild(cell);
   }
 
-  function populateCells() {
+  function resetMonthview() {
     monthWrapper.innerText = "";
+  }
+
+  function populateCells() {
+    resetMonthview()
     montharray.length < 42
       ? monthWrapper.classList.add("five-weeks")
       : monthWrapper.classList.remove("five-weeks");
@@ -4783,6 +4880,7 @@ function setMonthView(context, store, datepickerContext) {
     const parent = box.parentElement;
     const cell = parent.parentElement;
     cell.classList.add("current-drop-zone");
+    const targetModal = document?.querySelector(".more-modal");
 
     const originalCellLength = parent.childElementCount;
     const [cellX, cellY] = getCoordinatesFromCell(cell);
@@ -4811,9 +4909,9 @@ function setMonthView(context, store, datepickerContext) {
     let [startcursorx, startcursory] = [e.clientX, e.clientY];
     let [movedX, movedY] = [0, 0];
     let [lastX, lastY] = [cellX, cellY];
-    let gaveStyles = false; 
+    let gaveStyles = false;
     let changeCursor = false;
-    
+
 
 
     const mousemove = e => {
@@ -4822,6 +4920,9 @@ function setMonthView(context, store, datepickerContext) {
       // Do not apply styles until user has moved the box at least 5px from starting position.
       if (movedX > 1 || movedY > 1) {
         if (!changeCursor) {
+          if (targetModal) {
+            targetModal.remove();
+          }
           document.body.style.cursor = "move";
           changeCursor = true;
         }
@@ -4904,6 +5005,7 @@ function setMonthView(context, store, datepickerContext) {
 
 
       // newcell not found 
+      // edge case, haven't come across this yet
       if (newCell === undefined || newCell === null) {
         (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setStylingForEvent)("dragend", monthWrapper, store);
         box.style.opacity = "1";
@@ -4920,16 +5022,19 @@ function setMonthView(context, store, datepickerContext) {
         boxmoved = false;
         box.style.opacity = "1";
         clone.remove();
+        if (targetModal) {
+          targetModal.remove();
+        }
         if (timeDiff < 200) {
           openFormOnClickMV(box, newCell);
-        } 
+        }
 
         // box was moved
       } else {
-        //    case 1 : cell has 6 or more items (more than 6 items)
-        //    case 2 : cell is not empty and not group (1-5 items)
-        //    case 3 : cell is now a group (6 items)
-        //    case 4 : cell is empty
+        // case 1 : cell has 6 or more items (more than 6 items)
+        // case 2 : cell is not empty and not group (1-5 items)
+        // case 3 : cell becomes group (6 items)
+        // case 4 : cell is empty
         // cases 1-4 : run update after to update styling
         // (click)     case 5 : box not moved 
         // movedX / movedY : cursor distance, i.e. (dragstart to dragend)
@@ -5021,7 +5126,7 @@ function setMonthView(context, store, datepickerContext) {
       modalEntry.classList.add("more-modal-entry");
       modalEntry.style.top = `${i * 22}px`;
 
-      modalEntry.style.width = `calc(100% - 4px)`;
+      modalEntry.style.width = `calc(100% - 16px)`;
       modalEntry.style.height = "20px";
       modalEntry.setAttribute("data-monthview-id", entry.id);
       modalEntry.setAttribute("data-mvhidden-category", entry.category);
@@ -5046,30 +5151,19 @@ function setMonthView(context, store, datepickerContext) {
     modal.classList.add("more-modal");
     modal.setAttribute("data-mv-modal", parent.getAttribute("data-mv-idx"));
 
-    const r = parent.getBoundingClientRect();
-    const [
-      parentTop, parentLeft,
-      parentBottom, parentWidth, parentHeight
-    ] = [r.top, r.left, r.bottom, r.width, r.height].map((x) => {
-      return Math.round(x)
-    });
-    const [pX, pY] = getCoordinatesFromCell(parent);
-    if (pX === 6) {
-      modal.style.right = `0`;
-    } else if (pX === 0) {
-      modal.style.left = `0`;
-    } else {
-      modal.style.left = `${parentLeft - parseInt(parentWidth * 0.25)}px`
+    let modalHeight = (moreModalEntries.length * 28) + 64;
+    if (modalHeight > 400) {
+      modalHeight = 400;
     }
+    const rect = parent.getBoundingClientRect();
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.placePopup)(
+      224,
+      modalHeight,
+      [parseInt(rect.left), parseInt(rect.top)],
+      [window.innerWidth, window.innerHeight]
+    );
 
-    modal.style.top = "10%";
-    modal.style.bottom = "10%";
-    modal.style.margin = "auto 0";
-    modal.style.minWidth = "160px";
-    modal.style.width = `${parentWidth + parseInt(parentWidth * 0.5)}px`;
-    modal.style.maxHeight = "300px";
-    modal.style.height = "40%";
-    modal.style.minHeight = "120px";
+    modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px;`)
 
     const modalHeader = document.createElement("div");
     modalHeader.classList.add("more-modal-header");
@@ -5110,10 +5204,11 @@ function setMonthView(context, store, datepickerContext) {
   }
 
   function dragOutOfModal(e) {
-    const targetModal = e.target.closest(".more-modal");
+    const targetModal = document.querySelector(".more-modal");
     const targetCellIdx = parseInt(targetModal.getAttribute("data-mv-modal"));
     const targetCell = document.querySelector(`[data-mv-idx="${targetCellIdx}"]`);
 
+    console.log(targetCell)
     const cloned = e.target.cloneNode(true);
     cloned.setAttribute("class", "monthview--box");
     cloned.firstChild.setAttribute("class", "monthview--title");
@@ -5136,9 +5231,10 @@ function setMonthView(context, store, datepickerContext) {
     }
 
     // instantiate drag engine on cloned element and destroy the more modal instance
+    // 
     dragEngineMonth(e, cloned);
     cloned.focus();
-    targetModal.remove();
+    targetModal.style.opacity = "0.8";
   }
 
   function openDayView(e) {
@@ -5178,22 +5274,14 @@ function setMonthView(context, store, datepickerContext) {
     const offsetColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.hextorgba)(color, 0.5);
     cell.classList.add("monthview--daycontent__form-temp");
     cell.style.backgroundColor = offsetColor;
-    const [x, y] = getCoordinatesFromCell(cell);
-    
-    let offX = cell.offsetLeft;
-    let offY = cell.offsetTop;
-    let offH = cell.offsetHeight;
-    let offW = cell.offsetWidth;
 
-    if (x >= 3) {
-      offX -= (offW * (x - 2));
-    }
-    if (y >= 2) {
-      offY -= (offH * 2);
-    } else {
-      offY += offH;
-    }
-
+    const rect = cell.getBoundingClientRect();
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_9__.placePopup)(
+      360,
+      165,
+      [parseInt(rect.left), parseInt(rect.top)],
+      [window.innerWidth, window.innerHeight]
+    )
     // *** config & open form ***
     store.setFormResetHandle("month", handleMonthviewEditFormClose);
 
@@ -5210,8 +5298,8 @@ function setMonthView(context, store, datepickerContext) {
     const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_2__["default"].getConfig(setup.getSetup());
     (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_4__["default"])(context, store, entry, datepickerContext, finishSetup);
     const modal = document.querySelector(".entry__options")
-    modal.style.top = offY + "px";
-    modal.style.left = offX + "px";
+    modal.style.top = y + "px";
+    modal.style.left = x + "px";
     // *******************
   }
 
@@ -5364,6 +5452,7 @@ function setMonthView(context, store, datepickerContext) {
     monthWrapper.onclick = delegateNewBox
     // const handlewindowResize = debounce(getMonthviewResize, 100)
     // store.setResizeHandle("month", handlewindowResize)
+    store.setResetPreviousViewCallback(resetMonthview)
     store.setResizeHandle("month", getMonthviewResize)
   }
 
@@ -5417,29 +5506,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
-
 // calendar overlay
 const resizeoverlay = document.querySelector(".resize-overlay")
-
 // weekview main grid wrapper & children
-const containerCalendars = document.querySelector(".container__calendars")
 const main = document.querySelector(".weekview")
 const container = document.querySelector(".weekview--calendar")
 const weekviewHeader = document.querySelector(".weekview--header")
 const weekviewHeaderDayNumber = document.querySelectorAll(".weekview--header-day__number")
-const weekviewHeaderTitle = document.querySelectorAll('.weekview--header-day__title');
 const weekviewHeaderDay = document.querySelectorAll(".weekview--header-day")
 const weekviewGrid = document.querySelector(".weekview__grid")
 const cols = document.querySelectorAll(".week--col")
-
 // weekview top grid & children
 const alldaymodule = document.querySelector(".weekview--allday-module")
 const topCols = document.querySelectorAll(".allday--col")
-
 function setWeekView(context, store, datepickerContext) {
   const weekArray = context.getWeekArray()
   let entries = store.getWeekEntries(weekArray)
@@ -5508,9 +5589,13 @@ function setWeekView(context, store, datepickerContext) {
     }
   }
 
-  function renderBoxes() {
+  function resetWeekviewBoxes() {
     cols.forEach(col => { col.innerText = "" })
     topCols.forEach(col => { col.innerText = "" })
+  }
+
+  function renderBoxes() {
+    resetWeekviewBoxes()
 
     boxes.getBoxes().forEach((entry) => {
       const col = cols[+entry.coordinates.x];
@@ -5699,11 +5784,8 @@ function setWeekView(context, store, datepickerContext) {
     _forms_formUtils__WEBPACK_IMPORTED_MODULE_2__["default"].getConfig(setup.getSetup());
   }
 
-
-
   // ***********************
   // CONTEXT MENU SETUP
-
   function getWeekViewContextMenu(cell, entry, handleCloseCallback, e) {
     const id = entry.id;
     const start = entry.start;
@@ -5739,10 +5821,7 @@ function setWeekView(context, store, datepickerContext) {
       modal.style.top = "64px";
     }
   }
-
   // ***********************
-
-
 
   /** DRAG NORTH, SOUTH, EAST, WEST */
   function dragEngineWeek(e, box) {
@@ -5854,7 +5933,6 @@ function setWeekView(context, store, datepickerContext) {
           e
         );
 
-
       } else {
         (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_10__.setBoxTimeAttributes)(box, "week");
         const time = (0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_7__["default"])(
@@ -5891,8 +5969,6 @@ function setWeekView(context, store, datepickerContext) {
     document.addEventListener("mousemove", mousemove)
     document.addEventListener("mouseup", mouseup)
   }
-
-
 
   /** RESIZE NORTH/SOUTH 
    * resizing will never trigger form
@@ -5985,25 +6061,6 @@ function setWeekView(context, store, datepickerContext) {
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
   }
-
-  function renderNewBox(newStartDate, newEndDate) {
-    // render after new entry is created
-    entries = store.getWeekEntries(weekArray)
-    boxes = new _factory_entries__WEBPACK_IMPORTED_MODULE_5__.Week(
-      entries.day,
-      entries.allDay
-    );
-
-    if (store.getBoxesByColumn().length === 0) {
-      // no need to check for collisions
-      renderBoxes();
-      renderSidebarDatepickerWeek();
-    } else {
-      renderDataForGrid();
-    }
-  }
-
-  // console.log()
 
   /** Drag down empty column to create box */
   function createBoxOnDrag(e) {
@@ -6103,6 +6160,10 @@ function setWeekView(context, store, datepickerContext) {
 
   function delegateGridTop(e) {
     if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_11__.getClosest)(e, ".allday--col")) {
+      // console.log()
+      if (e.target.childElementCount === 0) {
+        return;
+      }
       openAllDayModal(e, e.target);
       return;
     }
@@ -6117,14 +6178,11 @@ function setWeekView(context, store, datepickerContext) {
   const initWeek = () => {
     configureDaysOfWeek();
     renderDataForGrid();
+    store.setResetPreviousViewCallback(resetWeekviewBoxes)
     container.onmousedown = delegateGridEvents;
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
-
-  // console.log(containerCalendars.offsetWidth)
-  // console.log(window.innerWidth);
-  // console.log(main);
 }
 
 /***/ }),
@@ -6161,8 +6219,14 @@ function setYearView(context, store, datepickerContext) {
   const [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
   const entries = store.getGroupedYearEntries(store.getYearEntries(year));
 
+  function resetYearview() {
+    yearviewGrid.innerText = "";
+    // renderYearview();
+  }
+
   function renderMonthCells() {
-    yearviewGrid.innerText = ""
+    // yearviewGrid.innerText = ""
+    resetYearview()
     for (let i = 0; i < 12; i++) {
       if (entries[i]) {
         yearviewGrid.appendChild(createMonthCell(i, entries[i]));
@@ -6316,8 +6380,13 @@ function setYearView(context, store, datepickerContext) {
     }
   }
 
-  renderMonthCells();
-  yearviewGrid.onmousedown = delegateYearEvents;
+  const initYearview = () => {
+    renderMonthCells();
+    yearviewGrid.onmousedown = delegateYearEvents;
+    store.setResetPreviousViewCallback(resetYearview);
+  }
+
+  initYearview();
 }
 
 /***/ }),
@@ -6631,18 +6700,24 @@ function renderViews(context, datepickerContext, store) {
     } else {
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
+
       const resetdatepicker = store.getResetDatepickerCallback()
       if (resetdatepicker !== null) {
         resetdatepicker()
         store.setResetDatepickerCallback(null)
       }
+
       listviewBody.style.width = "100%";
       listviewBody.style.marginLeft = "0";
+
       toggleForm.classList.add("hide-toggle--form")
       viewsContainer.classList.add("container__calendars-sb-active")
       dateTimeWrapper.classList.add("datetime-inactive");
       sidebar.classList.remove("hide-sidebar");
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+
+      datepickerContext.setDate(
+        context.getYear(), context.getMonth(), context.getDay()
+      );
       datepickerContext.setDateSelected(context.getDay())
 
       renderSidebarCategories();
@@ -6711,12 +6786,9 @@ function renderViews(context, datepickerContext, store) {
     datepicker.classList.remove("hide-datepicker")
     datepickeroverlay.classList.remove("hide-datepicker-overlay")
     datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay())
-    headerPrevBtn.style.display = "none";
-    headerNextBtn.style.display = "none";
-
-
-
-    const newDatepickerLeft = parseInt(e.target.getBoundingClientRect().left) - 22
+    const rect = e.target.getBoundingClientRect()
+    const newDatepickerLeft = parseInt(rect.left)
+    // convert rect left into a percentage so that it scales with window resize
     const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
     datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
     ;(0,_components_menus_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"])(context, store, datepickerContext, "header")
@@ -7052,7 +7124,6 @@ const listComponentBody = document.querySelector('.listview__body');
  * 
  */
 
-let previousview = "month";
 let [prev1, prev2] = [null, null];
 function setViews(component, context, store, datepickerContext) {
   prev1 = prev2;
@@ -7067,8 +7138,10 @@ function setViews(component, context, store, datepickerContext) {
       listComponent
     ];
 
-    if (prev1 === "list") {
-      listComponentBody.innerText = "";
+    // reset previous view after switching to a new view
+    const resetPrevView = store.getResetPreviousViewCallback()
+    if (prev1 !== null && resetPrevView !== null) {
+      resetPrevView();
     }
     // only the month view relies on a resize listener
     // more info provided @readme > monthview > box queries
@@ -7970,6 +8043,9 @@ class Store {
         callback: null
       },
       calendars: {
+        "previous": {
+          reset: null,
+        },
         "month": {
           reset: null,
           resize: null,
@@ -8647,6 +8723,9 @@ class Store {
 
   /* ******************************************* */
   /*  STATE MANAGEMENT : RENDERING / RESET / RESIZE */
+  /**
+   * This got a bit more complicated than I anticipated, I'll come back to this later;
+   */
   setFormRenderHandle(type, callback) {
     this.handleRenders.calendars[type].render = callback;
   }
@@ -8675,12 +8754,20 @@ class Store {
     this.handleRenders.datepicker.reset = callback;
   }
 
+  setResetPreviousViewCallback(callback) {
+    this.handleRenders.calendars['previous'].reset = callback;
+  }
+
   setRenderCategoriesCallback(callback) {
     this.handleRenders.categories.callback = callback;
   }
 
   getRenderCategoriesCallback() {
     return this.handleRenders.categories.callback;
+  }
+
+  getResetPreviousViewCallback() {
+    return this.handleRenders.calendars['previous'].reset;
   }
 
   getResetDatepickerCallback() {
@@ -8898,8 +8985,8 @@ class Week {
     for (let i = 0; i < arr.length; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
-          collisions.add(bxs[i])
-          collisions.add(bxs[j])
+          collisions.add(bxs[i]);
+          collisions.add(bxs[j]);
         }
       }
     }
@@ -9027,6 +9114,7 @@ class Day {
         }
       }
     }
+    console.log(collisions)
     return this.sortByY([...collisions])
   }
 
@@ -9540,7 +9628,6 @@ function formatEntryOptionsDate(date1, date2) {
   let useTempDate = false;
   let tempdateone = new Date();
   if (isBeforeDate(date1, tempdateone)) {
-    // console.log(true)
     useTempDate = true;
   }
   // if same day, month, & year -- return time as start-end
@@ -9578,7 +9665,6 @@ function formatEntryOptionsDate(date1, date2) {
     // different year --- return full date
     let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
     let durationTime = formatDuration(duration);
-
 
     return {
       date: `${labels.monthsShort[m1]} ${d1}, ${y1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
@@ -9741,12 +9827,12 @@ function setBoxWidth(box, prepend, dataidx) {
       box.style.width = "calc((100% - 4px) * 1)"
       break;
     case `${prepend}two`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.9)";
+      box.style.left = "calc((100% - 0px) * 0.2 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.80)";
       break;
     case `${prepend}three`:
-      box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.85)";
+      box.style.left = "calc((100% - 0px) * 0.45 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.55)";
       break;
     case `${prepend}four`:
       box.style.left = "calc((100% - 0px) * 0.35 + 0px)"
@@ -9754,23 +9840,23 @@ function setBoxWidth(box, prepend, dataidx) {
       break;
     case `${prepend}five`:
       box.style.left = "calc((100% - 0px) * 0 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.34)"
+      box.style.width = "calc((100% - 4px) * 0.35)"
       break;
     case `${prepend}six`:
-      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
+      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
       box.style.width = "calc((100% - 4px) * 0.4)"
       break;
     case `${prepend}seven`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.38)"
+      box.style.left = "calc((100% - 0px) * 0.5 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.5)"
       break;
     case `${prepend}eight`:
-      box.style.left = "calc((100% - 0px) * 0.1)"
-      box.style.width = "calc((100% - 4px) * 0.4)"
+      box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.25)"
       break;
     case `${prepend}nine`:
-      box.style.left = "calc((100% - 0px) * 0.3)"
-      box.style.width = "calc((100% - 4px) * 0.7)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.35)"
       break;
     default:
       break;
@@ -9794,12 +9880,16 @@ function handleOverlap(col, view, boxes) {
 
   for (let i = 0; i < collisions.length; i++) {
     const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`)
+    let idx = i;
+    if (i >= 9) {
+      idx -= 8;
+    }
     if (i === 0) {
-      box.setAttribute("class", `${baseClass.base} ${identifyBox[i]}`)
-      box.setAttribute(boxIdxAttr, identifyBox[i])
+      box.setAttribute("class", `${baseClass.base} ${identifyBox[idx]}`)
+      box.setAttribute(boxIdxAttr, identifyBox[idx])
     } else {
-      box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[i]}`)
-      box.setAttribute(boxIdxAttr, identifyBox[i])
+      box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
+      box.setAttribute(boxIdxAttr, identifyBox[idx])
     }
     setBoxWidth(box, classPrepend, boxIdxAttr)
   }
@@ -9811,8 +9901,7 @@ function setStylingForEvent(clause, wrapper, store) {
 
   switch (clause) {
     case "dragstart":
-      // console.log(wrapper.offsetLeft)
-
+      // make sidebar slightly see through if it is open and the user is dragging or resizing (screens smaller than 840px);
       if (!sidebar.classList.contains("hide-sidebar")) {
         if (wrapper.offsetLeft === 0) {
           sidebar.classList.add("sidebar--dragged-over")
@@ -9862,7 +9951,7 @@ function createBox(col, entry, view, color) {
   const attrPrepend = identifiers.boxAttributes[view].prepend;
   const attrPrependTwo = identifiers.boxAttributes[view].prependtwo;
   const coord = entry.coordinates
-  
+
   const box = document.createElement('div');
   box.classList.add(baseClass);
   box.style.backgroundColor = color;
@@ -9970,7 +10059,7 @@ function calcDateOnClick(date, start, length) {
 }
 
 function getOriginalBoxObject(box) {
-  return { 
+  return {
     height: box.style.height,
     left: box.style.left,
     width: box.style.width,
@@ -10147,7 +10236,7 @@ function setTheme(context) {
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
  * @returns [left position, top position];
  */
-function placePopup(popupWidth, popupHeight, coords, windowCoords) {
+function placePopup(popupWidth, popupHeight, coords, windowCoords, center) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;
   const [winW, winH] = windowCoords;
@@ -10402,6 +10491,94 @@ const createMeatballVertIcon = (fill) => {
 
 /***/ }),
 
+/***/ "./src/utilities/testing.js":
+/*!**********************************!*\
+  !*** ./src/utilities/testing.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ generateRandomEvents)
+/* harmony export */ });
+/*
+  {
+    "userId": 1,
+    "id": 1,
+    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+  },
+
+*/
+
+const randomTitles = "quaerat velit veniam amet cupiditate aut numquam ut sequi".split(" ")
+
+const categoryNames = [
+  'default',
+  'misc',
+  'school'
+]
+let endYears = [2023, 2023]
+function generateStart() {
+  let year = endYears[Math.floor(Math.random() * 1)];
+  let month = Math.floor(Math.random() * 4);
+  let day = Math.floor(Math.random() * 30);
+  let hour = Math.floor(Math.random() * 4) + 8;
+  let minute = Math.round((Math.floor(Math.random() * 46) / 15)
+  ) * 15;
+
+  return new Date(
+    year, month, day, hour, minute, 0, 0,
+  )
+}
+
+function generateEnd(start) {
+  let endDay = Math.floor(Math.random() * 1)
+  let endHour = Math.floor(Math.random() * 4) + 12
+
+  return new Date(
+    start.getFullYear(), start.getMonth(), start.getDate() + endDay,
+    endHour, start.getMinutes(), 0, 0,
+  )
+}
+
+class FEntry {
+  constructor(category, completed, description, end, start, title) {
+    this.category = category;
+    this.completed = completed;
+    this.description = description;
+    this.end = end;
+    this.id = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    this.start = start;
+    this.title = title;
+  }
+}
+
+// const generateRandomEvents = () => {
+function generateRandomEvents(numberOfEvents) {
+  const events = []
+  if (numberOfEvents === undefined || numberOfEvents === null || numberOfEvents === 0 || numberOfEvents === NaN || numberOfEvents === Infinity || numberOfEvents === -Infinity || numberOfEvents === -0 || numberOfEvents > 1000) {
+    numberOfEvents = 100
+  }
+  for (let i = 0; i < numberOfEvents; i++) {
+    const start = generateStart();
+    const end = generateEnd(start);
+    events.push(
+      new FEntry(
+        categoryNames[Math.floor(Math.random() * categoryNames.length)],
+        true,
+        "random body",
+        end,
+        start,
+        randomTitles[Math.floor(Math.random() * randomTitles.length)]
+      )
+    )    
+  }
+  return events
+}
+
+/***/ }),
+
 /***/ "./src/utilities/timeutils.js":
 /*!************************************!*\
   !*** ./src/utilities/timeutils.js ***!
@@ -10410,6 +10587,7 @@ const createMeatballVertIcon = (fill) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "compareTimes": () => (/* binding */ compareTimes),
 /* harmony export */   "configMinutesForStore": () => (/* binding */ configMinutesForStore),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
 /* harmony export */   "formatStartEndTimes": () => (/* binding */ formatStartEndTimes),
@@ -10480,6 +10658,24 @@ function calcTime(start, length) {
   const boxtime = `${startingtime} – ${endingtime}`;
   return boxtime;
 }
+
+function compareTimes(time1, time2) {
+  let [hours1, minutes1] = time1.split(":");
+  let [hours2, minutes2] = time2.split(":");
+  // get time difference in minutes
+  let diff = (hours2 - hours1) * 60 + (minutes2 - minutes1);
+  let closest;
+
+  // if diff is negative, return the next closest time difference in 15 minute interval
+  if (diff < 0) {
+    closest = 15 * Math.ceil(diff / 15);
+  } else {
+    closest = true;
+  }
+
+  return [diff, closest];
+}
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calcTime);
 
@@ -10563,29 +10759,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context/store */ "./src/context/store.js");
 /* harmony import */ var _config_appDefaults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/appDefaults */ "./src/config/appDefaults.js");
 /* harmony import */ var _config_renderViews__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./config/renderViews */ "./src/config/renderViews.js");
-/* harmony import */ var _styles_root_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./styles/root.css */ "./src/styles/root.css");
-/* harmony import */ var _styles_header_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles/header.css */ "./src/styles/header.css");
-/* harmony import */ var _styles_containers_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/containers.css */ "./src/styles/containers.css");
-/* harmony import */ var _styles_yearview_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/yearview.css */ "./src/styles/yearview.css");
-/* harmony import */ var _styles_monthview_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/monthview.css */ "./src/styles/monthview.css");
-/* harmony import */ var _styles_weekview_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./styles/weekview.css */ "./src/styles/weekview.css");
-/* harmony import */ var _styles_dayview_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/dayview.css */ "./src/styles/dayview.css");
-/* harmony import */ var _styles_listview_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./styles/listview.css */ "./src/styles/listview.css");
-/* harmony import */ var _styles_sidebar_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./styles/sidebar.css */ "./src/styles/sidebar.css");
-/* harmony import */ var _styles_sbdatepicker_css__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./styles/sbdatepicker.css */ "./src/styles/sbdatepicker.css");
-/* harmony import */ var _styles_aside_toast_css__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./styles/aside/toast.css */ "./src/styles/aside/toast.css");
-/* harmony import */ var _styles_aside_goto_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./styles/aside/goto.css */ "./src/styles/aside/goto.css");
-/* harmony import */ var _styles_aside_toggleForm_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./styles/aside/toggleForm.css */ "./src/styles/aside/toggleForm.css");
-/* harmony import */ var _styles_aside_sidebarSubMenu_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./styles/aside/sidebarSubMenu.css */ "./src/styles/aside/sidebarSubMenu.css");
-/* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
-/* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
-/* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
-/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
-/* harmony import */ var _styles_datepicker_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/datepicker.css */ "./src/styles/datepicker.css");
-/* harmony import */ var _styles_aside_popup_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/aside/popup.css */ "./src/styles/aside/popup.css");
-/* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
-/* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
-/* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
+/* harmony import */ var _utilities_testing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utilities/testing */ "./src/utilities/testing.js");
+/* harmony import */ var _styles_root_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles/root.css */ "./src/styles/root.css");
+/* harmony import */ var _styles_header_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/header.css */ "./src/styles/header.css");
+/* harmony import */ var _styles_containers_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/containers.css */ "./src/styles/containers.css");
+/* harmony import */ var _styles_yearview_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/yearview.css */ "./src/styles/yearview.css");
+/* harmony import */ var _styles_monthview_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./styles/monthview.css */ "./src/styles/monthview.css");
+/* harmony import */ var _styles_weekview_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/weekview.css */ "./src/styles/weekview.css");
+/* harmony import */ var _styles_dayview_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./styles/dayview.css */ "./src/styles/dayview.css");
+/* harmony import */ var _styles_listview_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./styles/listview.css */ "./src/styles/listview.css");
+/* harmony import */ var _styles_sidebar_css__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./styles/sidebar.css */ "./src/styles/sidebar.css");
+/* harmony import */ var _styles_sbdatepicker_css__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./styles/sbdatepicker.css */ "./src/styles/sbdatepicker.css");
+/* harmony import */ var _styles_aside_toast_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./styles/aside/toast.css */ "./src/styles/aside/toast.css");
+/* harmony import */ var _styles_aside_goto_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./styles/aside/goto.css */ "./src/styles/aside/goto.css");
+/* harmony import */ var _styles_aside_toggleForm_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./styles/aside/toggleForm.css */ "./src/styles/aside/toggleForm.css");
+/* harmony import */ var _styles_aside_sidebarSubMenu_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/sidebarSubMenu.css */ "./src/styles/aside/sidebarSubMenu.css");
+/* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
+/* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
+/* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
+/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
+/* harmony import */ var _styles_datepicker_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/datepicker.css */ "./src/styles/datepicker.css");
+/* harmony import */ var _styles_aside_popup_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/popup.css */ "./src/styles/aside/popup.css");
+/* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
+/* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
+/* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
+
+
 
 
 
@@ -10627,16 +10826,21 @@ __webpack_require__.r(__webpack_exports__);
 // * finish privacy,terms,notes
 
 // FIX;
-// * clicking on item in more modal and then escaping out of form causes error
+// * set onclick to null when not in use
 // * validate .json files
-// * top modal for day and week view
-// * set min width for week view
+// * top modal for day view
 // * set toast to be removed on window focus
-// * time picker form
+// * more modal monthview 
+// * more modal monthview -- add edit btn
+// * timepicker small screens
+// * linter
+// * 
 
-// localStorage.clear()
+// store.setStoreForTesting(generateRandomEvents(1000))
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
+const tt = document.querySelector(".weekview__top")
+console.log(tt.offsetHeight)
 })();
 
 /******/ })()

@@ -11,36 +11,34 @@
 }
 
 .dayview--header {
-  max-height: 44px;
-  min-height: 44px;
-  background: var(--black0);
+  max-height: 24px;
+  min-height: 24px;
 }
 
 .dayview--header-day {
   align-items: center;
   display: flex;
-  height: 40px;
-  margin-left: 68px;
+  margin-left: 60px;
 }
 
 .dayview--header-day__number {
+  /* background: var(--primary1); */
+  /* height: 32px; */
+  /* width: 32px; */
   align-items: center;
-  background: var(--primary1);
   font-family: monospace, monospace;
   border-radius: 50%;
   color: var(--taskcolor0);
   display: flex;
   font-size: 18px;
-  height: 32px;
   justify-content: center;
   user-select: none;
-  width: 32px;
   transition: background .2s ease-in-out;
 }
 
 .dv-info-day-wrapper {
   display: flex;
-  height: 30px;
+  height: 24px;
   align-items: center;
   margin-left: 8px;
   width: auto;
@@ -59,11 +57,12 @@
 
 .dayview--header-day__info {
   font-family: var(--secondaryFont);
+  display:flex;
+  align-items: center;
   font-weight: 400;
   font-size: 13px;
   letter-spacing: 0.2px;
   padding-left: 4px;
-  line-height: 30px;
   color: var(--white2);
   padding-right: 12px;
 }
@@ -73,8 +72,8 @@
   border-top: none;
   border-bottom: 2px solid var(--black0);
   margin-left: 36px;
-  max-height: 28px;
-  min-height: 28px;
+  max-height: 24px;
+  min-height: 24px;
   overflow-y: scroll;
   width: 100%;
 }

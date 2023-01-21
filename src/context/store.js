@@ -153,6 +153,9 @@ class Store {
         callback: null
       },
       calendars: {
+        "previous": {
+          reset: null,
+        },
         "month": {
           reset: null,
           resize: null,
@@ -830,6 +833,9 @@ class Store {
 
   /* ******************************************* */
   /*  STATE MANAGEMENT : RENDERING / RESET / RESIZE */
+  /**
+   * This got a bit more complicated than I anticipated, I'll come back to this later;
+   */
   setFormRenderHandle(type, callback) {
     this.handleRenders.calendars[type].render = callback;
   }
@@ -858,12 +864,20 @@ class Store {
     this.handleRenders.datepicker.reset = callback;
   }
 
+  setResetPreviousViewCallback(callback) {
+    this.handleRenders.calendars['previous'].reset = callback;
+  }
+
   setRenderCategoriesCallback(callback) {
     this.handleRenders.categories.callback = callback;
   }
 
   getRenderCategoriesCallback() {
     return this.handleRenders.categories.callback;
+  }
+
+  getResetPreviousViewCallback() {
+    return this.handleRenders.calendars['previous'].reset;
   }
 
   getResetDatepickerCallback() {

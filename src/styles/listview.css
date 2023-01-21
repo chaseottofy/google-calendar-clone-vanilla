@@ -9,7 +9,6 @@
   border-left: var(--bordergrey);
   transition-property: margin-left, width;
   transition-timing-function: cubic-bezier(.4,0,.2,1);
-  /* border-top: 1px solid var(--mediumgrey1); */
   transition-duration: 0.3s;
 }
 

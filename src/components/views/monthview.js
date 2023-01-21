@@ -205,8 +205,12 @@ export default function setMonthView(context, store, datepickerContext) {
     monthWrapper.appendChild(cell);
   }
 
-  function populateCells() {
+  function resetMonthview() {
     monthWrapper.innerText = "";
+  }
+
+  function populateCells() {
+    resetMonthview()
     montharray.length < 42
       ? monthWrapper.classList.add("five-weeks")
       : monthWrapper.classList.remove("five-weeks");
@@ -891,6 +895,7 @@ export default function setMonthView(context, store, datepickerContext) {
     monthWrapper.onclick = delegateNewBox
     // const handlewindowResize = debounce(getMonthviewResize, 100)
     // store.setResizeHandle("month", handlewindowResize)
+    store.setResetPreviousViewCallback(resetMonthview)
     store.setResizeHandle("month", getMonthviewResize)
   }
 

@@ -15,8 +15,14 @@ export default function setYearView(context, store, datepickerContext) {
   const [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
   const entries = store.getGroupedYearEntries(store.getYearEntries(year));
 
+  function resetYearview() {
+    yearviewGrid.innerText = "";
+    // renderYearview();
+  }
+
   function renderMonthCells() {
-    yearviewGrid.innerText = ""
+    // yearviewGrid.innerText = ""
+    resetYearview()
     for (let i = 0; i < 12; i++) {
       if (entries[i]) {
         yearviewGrid.appendChild(createMonthCell(i, entries[i]));
@@ -170,6 +176,11 @@ export default function setYearView(context, store, datepickerContext) {
     }
   }
 
-  renderMonthCells();
-  yearviewGrid.onmousedown = delegateYearEvents;
+  const initYearview = () => {
+    renderMonthCells();
+    yearviewGrid.onmousedown = delegateYearEvents;
+    store.setResetPreviousViewCallback(resetYearview);
+  }
+
+  initYearview();
 }

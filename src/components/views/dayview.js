@@ -138,8 +138,13 @@ export default function setDayView(context, store, datepickerContext) {
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
 
+  function resetDayview() {
+    dvMainGrid.innerText = "";
+  }
+
   function renderBoxes() {
-    dvMainGrid.innerText = ""
+    // dvMainGrid.innerText = ""
+    resetDayview()
     boxes.getBoxes().forEach((entry) => {
       createBox(
         dvMainGrid,                         // column
@@ -465,140 +470,8 @@ export default function setDayView(context, store, datepickerContext) {
   const initDayView = () => {
     renderBoxesForGrid();
     configHeader();
+    store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
   }
   initDayView();
 }
-
-
-
-
-// function setBoxWidth(box) {
-//   switch (box.getAttribute("data-dv-box-index")) {
-//     case "dv-box-one":
-//       box.style.left = 'calc((100% - 0px) * 0 + 0px)';
-//       box.style.width = "calc((100% - 0px) * 1)"
-//       break;
-//     case "dv-box-two":
-//       box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.9)";
-//       break;
-//     case "dv-box-three":
-//       box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.85)";
-//       break;
-//     case "dv-box-four":
-//       box.style.left = "calc((100% - 0px) * 0.35 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.65)"
-//       break;
-//     case "dv-box-five":
-//       box.style.left = "calc((100% - 0px) * 0 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.34)"
-//       break;
-//     case "dv-box-six":
-//       box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.4)"
-//       break;
-//     case "dv-box-seven":
-//       box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-//       box.style.width = "calc((100% - 0px) * 0.38)"
-//       break;
-//     case "dv-box-eight":
-//       box.style.left = "calc((100% - 0px) * 0.1)"
-//       box.style.width = "calc((100% - 4px) * 0.4)"
-//       break;
-//     case "dv-box-nine":
-//       box.style.left = "calc((100% - 0px) * 0.3)"
-//       box.style.width = "calc((100% - 4px) * 0.7)"
-//       break;
-//     default:
-//       break;
-//   }
-// }
-
-// function handleOverlap() {
-//   // console.log(ho(null, "day",boxes.checkForCollision()))
-//   const collisions = boxes.checkForCollision()
-//   if (collisions.length > 0) {
-//     let boxnumarr = [
-//       'dv-box-one',
-//       'dv-box-two',
-//       'dv-box-three',
-//       'dv-box-four',
-//       'dv-box-five',
-//       'dv-box-six',
-//       'dv-box-seven',
-//       'dv-box-eight',
-//       'dv-box-nine'
-//     ]
-//     for (let i = 0; i < collisions.length; i++) {
-//       const box = document.querySelector(`[data-dv-box-id="${collisions[i].id}"]`)
-//       if (i === 0) {
-//         box.setAttribute("class", "dv-box box-one")
-//         box.setAttribute("data-dv-box-index", "dv-box-one")
-//       } else {
-//         box.setAttribute("class", `dv-box dv-box-ontop ${boxnumarr[i]}`)
-//         box.setAttribute("data-dv-box-index", boxnumarr[i])
-//       }
-//       setBoxWidth(box)
-//     }
-//   }
-// }
-
-
-
-
-  // function getScript(totalEntries, idx, endDate, endTime) {
-//   const scripts = [
-//     `1 entry ending on ${endDate}`,
-//     `1 entry ending at ${endTime}`,
-//     `${totalEntries} total entries ending on ${endDate}`, 
-//     `${totalEntries} total entries - last ending on ${endDate}`, 
-//     `${totalEntries} total entries - last ending at ${endTime}`,
-//     `${totalEntries} entry ending today at ${endTime}`,
-//   ];
-//   return scripts[idx]
-// }
-
-// console.log(boxes.getAllBoxes().filter((box) => {
-//   return box.end.getDate() === context.getDate() && box.end.getMonth() === context.getMonth() && box.end.getFullYear() === context.getYear()
-// }))
-// console.log(boxes.getEntriesEndingOnDay(context.getDay()))
-
-// if (totalEntries > 0) {
-
-//   // no day entries
-//   if (dayLen === 0) {
-//     if (alldayLen > 1) {
-//       // multiple all day entries 
-//       console.log(boxes)
-
-//     } else {
-//       // one all day entry
-//       fulltitle = getScript(
-//         1, 0, formatDateForDisplay(boxes.getBoxesTop()[0].end), null,
-//       )
-//     }
-//     // multiple day & all day
-//   } else if (dayLen > 0 && alldayLen > 0) {
-
-
-//     // only day entries
-//   } else {
-//     // & multiple day entries
-//     if (dayLen > 1) {
-//       temp = boxes.getBoxes()[dayLen - 1].end
-//       fulltitle = getScript(
-//         totalEntries,
-//         4,
-//         null,
-//         formatTime(temp.getHours(), temp.getMinutes()),
-//       )
-//     } else {
-//       temp = boxes.getBoxes()[dayLen - 1].end
-//       fulltitle = getScript(
-//         1, 5, null, formatTime(temp.getHours(), temp.getMinutes())
-//       )
-//     }
-//   }
-// }

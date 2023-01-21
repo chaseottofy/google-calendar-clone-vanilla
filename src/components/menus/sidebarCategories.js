@@ -76,7 +76,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       checkIcon = createCheckIcon("none")
     }
 
-    checkbox.style.border = `1px solid ${ctgcolor}`;
+    checkbox.style.border = `2px solid ${ctgcolor}`;
     checkbox.appendChild(checkIcon)
     checkboxWrapper.appendChild(checkbox)
 

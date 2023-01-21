@@ -204,9 +204,15 @@ export default function setListView(context, store, datepickerContext) {
     }
   }
 
-  const initListView = () => {
+  
+  function resetListview() {
     listviewBody.innerText = "";
+    console.log(listviewBody.innerHTML);
+  }
 
+  const initListView = () => {
+    resetListview()
+    store.setResetPreviousViewCallback(resetListview)
     const activeEnt = store.getActiveEntries();
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = "No Entries to Display";

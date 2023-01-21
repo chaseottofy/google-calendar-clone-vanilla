@@ -122,7 +122,7 @@
 
 .allday__cell:hover {
   background: var(--darkgrey2);
-  transition: background .2s ease-in-out;
+  /* transition: background 150ms ease-in-out; */
 }
 
 .wv-ad--taskicons {
