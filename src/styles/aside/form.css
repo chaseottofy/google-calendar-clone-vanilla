@@ -115,7 +115,7 @@
   flex-direction: column;
   height: 100%;
   overflow-y: scroll;
-  padding: 8px 16px 24px 0;
+  padding: 8px 16px 4px 0;
   width: 100%;
   user-select: none;
 }
@@ -240,19 +240,17 @@
 .form--body-start__date,
 .form--body-start__time {
   color: var(--white3);
-  height: 30px;
+  height: 40px;
   border-bottom: 2px solid transparent;
 }
 
 .form--body-end__date,
 .form--body-start__date {
   cursor: pointer;
-  line-height: 30px;
+  line-height: 40px;
   max-width: 108px;
   width: auto;
-  /* min-width: 108px; */
   padding: 0 6px;
-  /* padding-left: 13px; */
   text-align: center;
   margin-right: 13px;
 }
@@ -365,7 +363,7 @@
 }
 
 .category-modal-open {
-  box-shadow: var(--box-shadow1);
+  box-shadow: var(--box-shadow3);
   z-index: 1200
 }
 

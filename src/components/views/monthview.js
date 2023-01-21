@@ -903,8 +903,6 @@ export default function setMonthView(context, store, datepickerContext) {
     populateCells()
     monthWrapper.onmousedown = delegateMonthEvents
     monthWrapper.onclick = delegateNewBox
-    // const handlewindowResize = debounce(getMonthviewResize, 100)
-    // store.setResizeHandle("month", handlewindowResize)
     store.setResetPreviousViewCallback(resetMonthview)
     store.setResizeHandle("month", getMonthviewResize)
   }

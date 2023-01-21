@@ -149,7 +149,7 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
   if (center) {
     // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
-    if (targetWidth + x > winW) {
+    if (targetWidth + x >= winW) {
       console.log(true);
       popupX = winW - popupW - 4;
     }

@@ -38,7 +38,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 6px;
   color: var(--white4);
   font-size: 14px;
   cursor:pointer;
@@ -51,14 +51,4 @@
 .timepicker-time--selected {
   background: var(--black0);
   color: var(--primary1);
-}
-
-@media screen and (max-width: 530px) {
-  .timepicker {
-    right: 5% !important;
-    left: 25% !important;
-    bottom: 4% !important;
-    top: 40% !important;
-    margin: 0 auto !important;
-  }
 }

@@ -14,6 +14,7 @@ import toastCallbackSaving from "../toastPopups/toastCallbacks"
 // helpers
 import {
   getClosest,
+  placePopup
 } from "../../utilities/helpers"
 
 // date / time helpers
@@ -28,7 +29,13 @@ import {
 import {
   compareTimes,
 } from "../../utilities/timeutils"
-import { calcNewHourFromCoords, getOriginalBoxObject } from "../../utilities/dragutils"
+import { 
+  calcNewHourFromCoords, 
+  getOriginalBoxObject 
+} from "../../utilities/dragutils"
+
+
+
 
 
 // main app sidebar
@@ -164,6 +171,8 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepicker.classList.add("timepicker")
     timepicker.style.top = `${coords.y}px`
     timepicker.style.left = `${coords.x}px`
+
+
 
     const timepickerOverlay = document.createElement("div")
     timepickerOverlay.classList.add("timepicker-overlay")
@@ -761,8 +770,6 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function openCategoryModal(e, categories) {
     const length = categories.length;
-
-
     if (length === 1) return;
 
     closeCategoryModalBtn.removeAttribute("style");
@@ -844,10 +851,14 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function handleTimepickerSetup(target) {
     const rect = target.getBoundingClientRect()
-    return [
-      parseInt(rect.right) + 16,
-      parseInt(rect.top) - 24,
-    ]
+    let [x, y] = placePopup(
+      180,
+      200,
+      [parseInt(rect.left), parseInt(rect.top)],
+      [window.innerWidth, window.innerHeight],
+      false,
+    )
+    return [x, y]
   }
 
   function delegateEntryFormEvents(e) {
@@ -947,10 +958,13 @@ export default function setEntryForm(context, store, datepickerContext) {
       return;
     } else {
       const timep = document?.querySelector(".timepicker")
+      const catsAct = document?.querySelector(".hide-form-category-modal")
 
       if (e.key === "Escape") {
-        if (timep) {
+        if (timep !== null) {
           closetimepicker()
+        } else if (catsAct === null) {
+          closeCategoryModal()
         } else {
           handleFormClose(e);
         }
