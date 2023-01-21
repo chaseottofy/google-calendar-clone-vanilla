@@ -45,7 +45,7 @@ class FormConfig {
   }
 
   configFormPosition(cell, coordinates, top) {
-    console.log(coordinates)
+    // console.log(coordinates)
     // console.log(coordinates)
     // const [x, y] = coordinates;
     // const cellWidth = cell.offsetWidth;
@@ -64,8 +64,6 @@ class FormConfig {
 
   configFormTitleDescriptionInput(title, description) {
     this.formTitleDescription.forEach((input, idx) => {
-      // console.log(input, idx)
-      console.log(title, description)
       input.firstElementChild.value = [title, description][idx]
     })
   }

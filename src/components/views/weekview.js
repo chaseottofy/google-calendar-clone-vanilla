@@ -9,7 +9,8 @@ import calcTime, { formatTime } from "../../utilities/timeutils"
 
 import {
   createCloseIcon,
-  createMeatballVertIcon
+  createMeatballVertIcon,
+  createExpandDownIcon
 } from "../../utilities/svgs"
 
 import {
@@ -17,6 +18,7 @@ import {
   getTempDates,
   getFormDateObject,
   getDateFromAttribute,
+  getDayOrdinal
 } from "../../utilities/dateutils"
 
 import handleOverlap, {
@@ -45,6 +47,7 @@ import {
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
 // calendar overlay
+const calendarContainer = document.querySelector(".container__calendars")
 const resizeoverlay = document.querySelector(".resize-overlay")
 // weekview main grid wrapper & children
 const main = document.querySelector(".weekview")
@@ -162,7 +165,11 @@ export default function setWeekView(context, store, datepickerContext) {
     const celltitle = document.createElement("div");
     celltitle.classList.add("wv-ad--celltitle");
     celltitle.textContent = `${len} more`;
-    cell.append(taskicons, celltitle);
+    const cellexpand = document.createElement("div");
+    cellexpand.classList.add("wv-ad--cellexpand");
+    cellexpand.appendChild(createExpandDownIcon("var(--white3)"))
+
+    cell.append(taskicons, celltitle, cellexpand);
     col.appendChild(cell);
   }
 
@@ -209,28 +216,33 @@ export default function setWeekView(context, store, datepickerContext) {
     let daynumber = col.getAttribute("data-wvtop-day")
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
+    const rect = col.getBoundingClientRect();
 
-    let x;
-    const colLeft = col.offsetLeft;
-    if (colLeft + 240 + 32 > window.innerWidth) {
-      x = window.innerWidth - 268;
+    let [x, y] = placePopup(
+      240 + parseInt(calendarContainer.scrollLeft),
+      320,
+      [
+        parseInt(rect.left), 
+        parseInt(rect.top) + 24
+      ],
+      [window.innerWidth, window.innerHeight],
+      true,
+      Math.floor((window.innerWidth - 36 - weekviewGrid.offsetLeft) / 7)
+    )
+
+    if (x + 250 > window.innerWidth) {
+      modal.style.left = window.innerWidth - 240 + "px"
     } else {
-      x = colLeft + 32;
+      modal.style.left = x + "px"
     }
-    if (idx < 3) {
-      modal.style.left = (col.offsetLeft + 32) + "px"
-    } else {
-      modal.style.left = (col.offsetLeft + 32) - 160 + "px"
-    }
-    modal.style.left = x + "px"
-    modal.style.top = +weekviewGrid.offsetTop + "px"
+    modal.style.top = y + "px"
 
     const modalheader = document.createElement("div")
     modalheader.classList.add("allday-modal__header")
 
     const modaltitle = document.createElement("div")
     modaltitle.classList.add("allday-modal-title")
-    modaltitle.textContent = `${dayofweek} ${daynumber}, ${locales.labels.monthsLong[weekArray[idx].getMonth()]}`
+    modaltitle.textContent = `${dayofweek}, ${locales.labels.monthsLong[weekArray[idx].getMonth()]} ${daynumber}`
 
     const closeAlldayModalBtn = document.createElement("div");
     closeAlldayModalBtn.classList.add("close-allday-modal");
@@ -334,7 +346,7 @@ export default function setWeekView(context, store, datepickerContext) {
       400,
       165,
       [parseInt(rect.left), e.clientY],
-      [window.innerWidth, window.innerHeight]
+      [window.innerWidth, window.innerHeight],
     )
 
     store.setFormResetHandle("week", handleCloseCallback);
@@ -494,13 +506,6 @@ export default function setWeekView(context, store, datepickerContext) {
         } else {
           modal.style.top = "64px";
         }
-        // resetOriginalBox(box, boxorig);
-        // getWeekViewContextMenu(
-        //   box,
-        //   store.getEntry(box.getAttribute("data-box-id")),
-        //   handleWeekviewFormClose,
-        //   e
-        // );
 
       } else {
         tempbox.remove();
@@ -758,4 +763,6 @@ export default function setWeekView(context, store, datepickerContext) {
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
+
+
 }

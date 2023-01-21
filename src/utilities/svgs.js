@@ -158,7 +158,7 @@ const createCaretRightIcon = (fill) => {
   const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
   pathone.setAttribute("d", "m6 18.167-1.583-1.584L11 10 4.417 3.417 6 1.833 14.167 10Z");
   icon.appendChild(pathone)
-  return icon;  
+  return icon;
 }
 
 const createCheckIcon = (fill) => {
@@ -206,13 +206,34 @@ const createMeatballVertIcon = (fill) => {
   return icon;
 }
 
+const createExpandDownIcon = (fill) => {
+{/* <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg> */}
+  const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  icon.setAttribute("height", "18px");
+  icon.setAttribute("width", "18px");
+  icon.setAttribute("viewBox", "0 0 24 24")
+  // icon.setAttribute("fill", "")
+  if (!fill) {
+    icon.setAttribute("fill", "var(--white3)")
+  } else {
+    icon.setAttribute("fill", fill)
+  }
+  const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathone.setAttribute("d", "M0 0h24v24H0z")
+  pathone.setAttribute("fill", "none")
+  const pathtwo = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathtwo.setAttribute("d", "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z")
+  icon.append(pathone, pathtwo);  
+  return icon;
+}
+
 export {
   createSortPlaceholderIcon,
   createStatusIcon,
   createCategoryIcon,
   createEditIcon,
   createPencilIcon,
-  createTrashIcon, 
+  createTrashIcon,
   createCloseIcon,
   createCaretDownIcon,
   createCaretUpIcon,
@@ -220,4 +241,5 @@ export {
   createCheckIcon,
   createCheckBoxIcon,
   createMeatballVertIcon,
+  createExpandDownIcon
 }

@@ -122,6 +122,7 @@
   width: 100%;
   height: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
   user-select: none;
 }
@@ -143,26 +144,38 @@
 }
 
 .wv-ad--taskicon {
-  width: 5px;
-  height: 5px;
-  margin: 1px;
+  width: 4px;
+  height: 4px;
+  margin: 1px 0;
   border-radius: 50%;
   filter: brightness(1.6) contrast(1.4);
 }
 
 .wv-ad--celltitle {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 400;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
-  position: relative;
+  justify-content: flex-start;
   color: var(--white2);
   pointer-events: none;
 }
 
-.wv-ad--celltitle::after {
+.wv-ad--cellexpand {
+  pointer-events:none;
+  background: transparent;
+  height: 100%;
+  width: 18px;
+  display:flex;
+  align-items: center;
+  padding: 2px;
+  margin-top: 1px;
+  justify-content: flex-end;
+}
+
+/* .wv-ad--celltitle::after {
   content: "";
   position: absolute;
   right: 4px;
@@ -174,7 +187,7 @@
   border-right: 3px solid transparent;
   border-top: 3px solid var(--white3);
   border-radius: 2px;
-}
+} */
 
 .allday-modal {
   position: absolute;
@@ -201,7 +214,7 @@
   justify-content: space-between;
   padding: 6px 8px 0 8px;
   width: 100%;
-  height: 60px;
+  height: 36px;
 }
 
 .allday-modal-title {
@@ -588,30 +601,9 @@
 
 
 
-/* @media screen and (max-width: 640px) {
-  .weekview__top {
-    position: absolute;
-    width: 100%;
-    top: 0;
-  }
-  .weekview__grid {
-    margin-top: 46px;
-  }
-} */
-
 
 @media screen and (max-width: 530px) {
-  /* .weekview__top {
-    height: 46px;
-  } */
 
-  /* .weekview--header-day__title {
-    font-size: 8px;
-  } */
-
-  /* .weekview--header-day__number {
-    font-size: 9px;
-  } */
 
   .allday__cell {
     justify-content: center;
@@ -627,7 +619,7 @@
   }
 
   .allday__cell--active:hover {
-    background: #6F0C2B;
+    background: var(--primary3);
   }
 
   .allday-modal-subtitle {

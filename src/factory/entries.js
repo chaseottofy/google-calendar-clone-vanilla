@@ -271,7 +271,6 @@ class Day {
         }
       }
     }
-    console.log(collisions)
     return this.sortByY([...collisions])
   }
 

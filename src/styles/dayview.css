@@ -108,6 +108,141 @@
   position: relative;
 }
 
+
+
+
+.dv--ontop__more {
+  width: 100%;
+  cursor: pointer;
+  background: var(--black0);
+  color: var(--offwhite1);
+  font-size: 12px;
+  padding-left: 8px;
+  display:flex;
+  align-items: center;
+  height: 100%;
+  width: 100%; 
+}
+
+.dv--ontop__more:hover {
+  background: var(--black2);
+}
+
+.dv--morepopup__overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 979;
+  background: rgba(17, 20, 21, .6);
+}
+.dv--morepopup {
+  display:flex;
+  flex-direction: column;
+  position: absolute;
+  background: var(--black1);
+  box-shadow: var(--box-shadow3);
+  width: 320px;
+  border-radius: 6px;
+  padding: 8px;
+  overflow:hidden;
+  z-index: 980;
+}
+.dv--morepopup__header {
+  display:flex;
+  height: 32px;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.dv--morepopup__title {
+  color: var(--offwhite1);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 16px;
+  text-align: left;
+  padding-left: 8px;
+  width: 100%;
+}
+.dv--morepopup__close {
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.dv--morepopup__close:hover {
+  background: var(--mediumgrey1);
+}
+
+.dv--morepopup__body {
+  display:flex;
+  flex-direction: column;
+  height: auto;
+  overflow-y: auto;
+  max-height: 280px;
+  width: 100%;
+}
+
+.dv--morepopup__entry {
+  height: auto;
+  min-height: 42px;
+  width: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  margin-bottom: 4px;
+  padding: 2px;
+}
+
+.dv--morepopup__entry-title {
+  color: var(--taskcolor);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 11px;
+  padding: 6px;
+  pointer-events: none;
+}
+
+.dv--morepopup__entry-category,
+.dv--morepopup__entry-time {
+  color: var(--white4);
+  font-size: 10px;
+  font-weight: 400;
+  margin-top: 2px;
+  padding: 0 6px;
+  pointer-events: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.dv--ontop__grid {
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 1px 4px;
+
+}
+
 .dayview__grid {
   height: 100%;
   overflow-y: scroll;

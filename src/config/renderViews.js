@@ -465,23 +465,6 @@ export default function renderViews(context, datepickerContext, store) {
       }
     }
 
-    const getNextPrevMonth = (direction) => {
-      let comp = context.getComponent()
-      if (comp === "week" || comp === "day") {
-        if (direction === "next") {
-          context.setNextMonth()
-          fullRender(comp)
-          renderSidebarDatepicker()
-        } else {
-          context.setPrevMonth()
-          fullRender(comp)
-          renderSidebarDatepicker()
-        }
-      } else {
-        return;
-      }
-    }
-
     switch (e.key.toLowerCase()) {
       // switch to day view
       case "d":
@@ -588,7 +571,7 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
-  const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 200)
+  const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 150)
   // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
 
   // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.

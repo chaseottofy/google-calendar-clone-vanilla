@@ -9,7 +9,6 @@ import {
   CoordinateEntry
 } from "../../factory/entries"
 
-
 import calcTime, { formatTime } from "../../utilities/timeutils"
 
 import {
@@ -22,6 +21,8 @@ import {
   getFormDateObject,
   sortDates,
 } from "../../utilities/dateutils"
+
+import { createCloseIcon } from "../../utilities/svgs"
 
 import handleOverlap, {
   setStylingForEvent,
@@ -157,11 +158,103 @@ export default function setDayView(context, store, datepickerContext) {
 
   function resetDayview() {
     dvMainGrid.innerText = "";
+    dvOnTop.innerText = "";
+  }
+
+  function openDvMore(entr) {
+    store.addActiveOverlay("morepopup")
+    const morepopupoverlay = document.createElement("aside");
+    morepopupoverlay.classList.add("dv--morepopup__overlay");
+
+    const morepopup = document.createElement("aside");
+    morepopup.classList.add("dv--morepopup");
+    morepopup.style.left = `${dvOnTop.offsetLeft}px`;
+    morepopup.style.top = `${dvOnTop.offsetTop + dvOnTop.offsetHeight}px`;
+    morepopup.style.height = `${64 + (entr.length * 48)}px`;
+
+    const morepopupHeader = document.createElement("div");
+    morepopupHeader.classList.add("dv--morepopup__header");
+    const morepopupTitle = document.createElement("span");
+    morepopupTitle.classList.add("dv--morepopup__title");
+    morepopupTitle.textContent = "More entries";
+    const morepopupClose = document.createElement("span");
+    morepopupClose.classList.add("dv--morepopup__close");
+    morepopupClose.appendChild(createCloseIcon("var(--white3)"))
+    morepopupHeader.append(morepopupTitle, morepopupClose);
+    const morepopupBody = document.createElement("div");
+    morepopupBody.classList.add("dv--morepopup__body");
+
+    const createMorePopupEntry = (entry) => {
+      const morepopupEntry = document.createElement("div");
+      morepopupEntry.classList.add("dv--morepopup__entry");
+      morepopupEntry.style.backgroundColor = `${store.getCtgColor(entry.category)}`
+      const morepopupEntryTitle = document.createElement("span");
+      morepopupEntryTitle.classList.add("dv--morepopup__entry-title");
+      morepopupEntryTitle.textContent = entry.title;
+      const morepopupCategory = document.createElement("span");
+      morepopupCategory.classList.add("dv--morepopup__entry-category");
+      morepopupCategory.textContent = entry.category;
+      const morepopupEntryTime = document.createElement("span");
+      morepopupEntryTime.classList.add("dv--morepopup__entry-time");
+      morepopupEntryTime.textContent = formatStartEndTime(
+        new Date(entry.start),
+        new Date(entry.end)
+      );
+      morepopupEntry.append(morepopupEntryTitle, morepopupCategory, morepopupEntryTime);
+      return morepopupEntry;
+    }
+
+    entr.forEach((entry) => {
+      const morepopupEntry = createMorePopupEntry(entry);
+      morepopupBody.appendChild(morepopupEntry);
+    })
+
+    const closemp = () => {
+      morepopupoverlay.remove();
+      morepopup.remove();
+      store.removeActiveOverlay("morepopup");
+      document.removeEventListener("keydown", closeMpOnEsc)
+    }
+
+    const closeMpOnEsc = (e) => {
+      if (e.key === "Escape") {
+        closemp();
+        return;
+      }
+    }
+
+    morepopup.append(morepopupHeader, morepopupBody);
+    document.body.appendChild(morepopupoverlay);
+    document.body.appendChild(morepopup);
+    morepopupoverlay.onclick = closemp;
+    morepopupClose.onclick = closemp;
+    document.addEventListener("keydown", closeMpOnEsc)
+  }
+
+  function createDvTop(entr) {
+    const dvtopgrid = document.createElement("div");
+    dvtopgrid.classList.add("dv--ontop__grid");
+
+    const moremessage = document.createElement("div");
+    moremessage.classList.add("dv--ontop__more");
+    moremessage.textContent = `${entr.length} more...`
+    dvOnTop.appendChild(moremessage);
+    // dvtopgrid.appendChild(moremessage);
+    const opdm = () => openDvMore(entr)
+    moremessage.onclick = opdm
+    return;
+    // if (entries.length >= 6) {
+    // } else {
+    // }
+    // entries.forEach((entry) => {
+
+    // })
   }
 
   function renderBoxes() {
     // dvMainGrid.innerText = ""
     resetDayview()
+    createDvTop(boxes.getBoxesTop())
     boxes.getBoxes().forEach((entry) => {
       createBox(
         dvMainGrid,                         // column
@@ -171,6 +264,8 @@ export default function setDayView(context, store, datepickerContext) {
       )
     })
   }
+
+
 
   /** RESIZE NORTH/SOUTH */
   function resizeBoxNSDay(e, box) {
@@ -353,7 +448,7 @@ export default function setDayView(context, store, datepickerContext) {
         configHeader()
         setStylingForEvent("dragend", dvGrid, store)
       }
-      
+
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }
