@@ -181,12 +181,7 @@ export default function renderViews(context, datepickerContext, store) {
       dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
     }
 
-    // weekview is the only view that has a horizontal scrollbar, for the other views, hide this scrollbar when transitioning
-    // view.style.overflowX = "hidden";
-    // setTimeout(() => {
-    //   view.style.overflowX = "auto";
-    // }, 150)
-    if (!view.classList.contains("weekview")) {
+    if (!view.classList.contains("weekview--header")) {
       viewsContainer.style.overflowX = "hidden";
       setTimeout(() => {
         viewsContainer.style.overflowX = "auto";
@@ -295,11 +290,13 @@ export default function renderViews(context, datepickerContext, store) {
   function handleBtnPrev() {
     switch (context.getComponent()) {
       case "day":
-        // transition day header rather than entire view (too jarring)
-        handleTransition(daywrapper, "right", getPreviousDay)
+        handleTransition(
+          document.querySelector(".dayview--header-day__number"), "right",
+          getPreviousDay
+        );
         break;
       case "week":
-        handleTransition(weekwrapper, "right", getPreviousWeek)
+        handleTransition(document.querySelector(".weekview--header"), "right", getPreviousWeek)
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -315,12 +312,13 @@ export default function renderViews(context, datepickerContext, store) {
   function handleBtnNext() {
     switch (context.getComponent()) {
       case "day":
-        // transition day header rather than entire view (too jarring)
-        handleTransition(daywrapper, "left", getNextDay)
+        handleTransition(
+          document.querySelector(".dayview--header-day__number"), "left",
+          getNextDay
+        );
         break;
       case "week":
-        handleTransition(weekwrapper, "left", getNextWeek)
-        // handleTransition(document.querySelector(".weekview--calendar"), "left", getNextWeek)
+        handleTransition(document.querySelector(".weekview--header"), "left", getNextWeek)
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)

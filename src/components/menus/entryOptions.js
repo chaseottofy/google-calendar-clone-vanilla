@@ -176,6 +176,15 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
         formNegated();
       }
     }
+
+    if (e.key.toLowerCase() === "e") {
+      openEditForm();
+    }
+
+    if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "delete") {
+      openDeleteWarning();
+      
+    }
   }
 
   function delegateEntryOptions(e) {

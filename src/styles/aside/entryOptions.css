@@ -101,12 +101,13 @@
   position: absolute;
   top: 60%;
   transform: translate(-50%, 80%);
-  width: 78px;
+  width: 90px;
   z-index: 1000
 }
 
 .entry__options-icon:last-child:hover::after {
-  width: 48px;
+  width: 80px;
+  transform: translate(-100%, 80%);
 }
 
 .entry__options-icon svg {
@@ -201,6 +202,7 @@
   line-height: 16px;
   font-size: 14px;
   color: var(--white4);
+  user-select:none;
 }
 
 .delete-popup__btns {
@@ -209,6 +211,7 @@
   width: 100%;
   align-items: center;
   height: 42px;
+  user-select:none;
 }
 
 .delete-popup__cancel,

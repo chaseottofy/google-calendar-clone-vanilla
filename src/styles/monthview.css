@@ -2,7 +2,7 @@
   border-top: 1px solid var(--mediumgrey1);
   display:flex;
   justify-content:space-between;
-  height:16px;
+  height:12px;
   align-items:center;
   text-align:center;
   width:100%;
@@ -15,7 +15,7 @@
   width:100%;
   justify-content:center;
   align-items:center;
-  padding: 3px 0;
+  padding: 2px 0;
   font-size: 9px;
   letter-spacing: 0.5px;
   color: var(--white3);
@@ -28,7 +28,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  height: calc(100% - 15px);
+  height: calc(100% - 12px);
   width: 100%;
 }
 
@@ -48,6 +48,11 @@
   width: 100%;
   height:100%;
 }
+
+.monthview--day:nth-last-child(-n + 7) {
+  border-bottom: none;
+}
+
 
 .monthview--today {
   background: var(--black1);
@@ -98,7 +103,7 @@
 
 
 .monthview--daynumber {
-  font-size: 12px;
+  font-size: 10px;
   width: 100%;
   height: 16px;
   max-height:16px;

@@ -36,7 +36,6 @@ import handleOverlap, {
   startEndDefault,
   calcNewHourFromCoords,
   calcNewMinuteFromCoords,
-  calcDateOnClick,
   getOriginalBoxObject,
   resetOriginalBox,
 } from "../../utilities/dragutils"
@@ -82,10 +81,36 @@ export default function setDayView(context, store, datepickerContext) {
     entries.allDay
   );
 
+  function firstLastDates(bxs) {
+    let longest = 0;
+    let shortest = 100;
+    for (let i = 0; i < bxs.length; i++) {
+      console.log(bxs[i].coordinates)
+      let [tempshort, templong] = [
+        bxs[i].coordinates.y,
+        bxs[i].coordinates.e
+      ]
+      if (templong > longest) { longest = templong; }
+      if (tempshort < shortest) { shortest = tempshort; }
+    }
+    let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)]
+    let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15]
+    let [tempdate1, tempdate2] = [new Date(bxs[0].start), new Date(bxs[0].start)]
+    tempdate1.setHours(h1)
+    tempdate1.setMinutes(m1)
+    tempdate2.setHours(h2)
+    tempdate2.setMinutes(m2)
+    return formatStartEndTime(
+      tempdate1,
+      tempdate2
+    )
+  }
+
   function getDayviewHeaderEntryCount() {
     let allboxes = boxes.getAllBoxes();
     if (allboxes.length === 0) { return "no entries"; }
     let [endingToday, startingToday] = [0, 0];
+    let tempEndCase1;
 
     for (let i = 0; i < allboxes.length; i++) {
       const [start, end, current] = [
@@ -94,39 +119,21 @@ export default function setDayView(context, store, datepickerContext) {
         context.getDate(),
       ]
       if (start.getDate() === current.getDate()) { startingToday++; }
-      if (end.getDate() === current.getDate()) { endingToday++; }
+      if (end.getDate() === current.getDate()) { 
+        endingToday++; 
+        tempEndCase1 = allboxes[i];
+      }
     }
 
     if (startingToday === 1 && endingToday === 1) {
-      return `1 entry from ${formatStartEndTime(
+      return `1 entry ( ${formatStartEndTime(
         new Date(allboxes[0].start),
         new Date(allboxes[0].end)
-      )}`
+      )} )`
     }
 
     if (startingToday > 1 && (startingToday === endingToday)) {
-      let longest = 0;
-      let shortest = 100;
-      for (let i = 0; i < allboxes.length; i++) {
-        console.log(allboxes[i].coordinates)
-        let [tempshort, templong] = [
-          allboxes[i].coordinates.y,
-          allboxes[i].coordinates.e
-        ]
-        if (templong > longest) { longest = templong; }
-        if (tempshort < shortest) { shortest = tempshort; }
-      }
-      let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)]
-      let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15]
-      let [tempdate1, tempdate2] = [new Date(allboxes[0].start), new Date(allboxes[0].start)]
-      tempdate1.setHours(h1)
-      tempdate1.setMinutes(m1)
-      tempdate2.setHours(h2)
-      tempdate2.setMinutes(m2)
-      return `${startingToday} entries starting & ending today ( ${formatStartEndTime(
-        tempdate1,
-        tempdate2
-      )} )`;
+      return `${startingToday} entries starting & ending today ( ${firstLastDates(boxes.boxes)} )`;
     }
 
     let fulltitle = ""
@@ -142,9 +149,13 @@ export default function setDayView(context, store, datepickerContext) {
 
     if (endingToday > 0) {
       if (endingToday === 1) {
-        fulltitle += ` – ${endingToday} ending`
+        console.log(allboxes)
+        fulltitle += ` – ${endingToday} ending ( ${formatStartEndTime(
+          new Date(tempEndCase1.start),
+          new Date(tempEndCase1.end)
+        )} )`
       } else {
-        fulltitle += ` – ${endingToday} ending`
+        fulltitle += ` – ${endingToday} ending ( ${firstLastDates(boxes.boxes)} )`
       }
     } else {
       fulltitle += ` – no entries ending today`
@@ -164,7 +175,9 @@ export default function setDayView(context, store, datepickerContext) {
     }
 
     document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
-    dvHeaderDayOfWeek.textContent = context.getDay()
+    let day = context.getDay();
+    if (day < 10) { day = `0${day}` }
+    dvHeaderDayOfWeek.textContent = day
 
     if (context.isToday()) {
       dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today")

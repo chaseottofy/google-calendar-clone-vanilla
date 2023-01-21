@@ -3,6 +3,7 @@
   grid-template-columns: 36px 1fr;
   height: 78px;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .weekview__top::-webkit-scrollbar-track {
@@ -14,7 +15,9 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: 1fr 1fr;
   align-items: center;
-  overflow: hidden;
+  overflow:hidden;
+  /* overflow-x: hidden; */
+  max-width: 100%;
   position: relative;
   height: 54px;
 }
