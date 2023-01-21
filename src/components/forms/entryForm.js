@@ -198,6 +198,7 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
+      console.log(h, m)
       if (shouldTestReset) {
         if (h === 23 && m >= 15) {
           setEndDateToNextDay();
@@ -210,8 +211,8 @@ export default function setEntryForm(context, store, datepickerContext) {
         if (m === 45) {
           setEndDateToNextDay();
         } else {
-          hours = hours.slice(-1)
-          md = md.slice(-1)
+          hours = [12]
+          md = ['pm']
           m = m.slice(-1)
         }
       } else {

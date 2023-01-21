@@ -71,6 +71,7 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   function configureDaysOfWeek() {
+    document.querySelector(".wv-gmt").textContent = `UTC ${context.getGmt()}`
     let hasToday;
     let hasSelected;
     let dayNumbers = []

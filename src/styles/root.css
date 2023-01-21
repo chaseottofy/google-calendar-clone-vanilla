@@ -91,9 +91,12 @@
     rgba(83, 88, 95, 0.14) 0px 4px 5px 0px,
     rgba(0, 0, 0, 0.2) 0px 1px 10px 0px,
     rgba(83, 88, 95, 0.1) 0px 1px 2px -1px;
+  --box-shadow3:
+    rgba(0, 0, 0, 0.19) 0 10px 20px,
+    rgba(0, 0, 0, 0.23) 0 6px 6px;
   --box-shadow4:
-    0px 1px 2px 0px rgba(60, 64, 67, 0.3),
-    0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   --box-shadow5:
     rgba(0, 0, 0, 0.14) 0px 8px 4px 0px,
     rgba(0, 0, 0, 0.12) 0px 3px 6px 0px,
@@ -103,19 +106,19 @@
     rgba(0, 0, 0, 0.2) 0px 1px 10px 0px,
     rgba(83, 88, 95, 0.1) 0px 4px 5px 0px;
   --box-shadow2-hover:
-    0px 4px 4px 0px rgba(60, 64, 67, 0.302),
-    0px 8px 10px 4px rgba(60, 64, 67, 0.149);
+    rgba(60, 64, 67, 0.302) 0px 4px 4px 0px,
+    rgba(60, 64, 67, 0.149) 0px 8px 10px 4px;
   --box-shadowbottom:
     rgba(0, 0, 0, 0.1) 3px 4px 5px 0px,
     rgba(0, 0, 0, 0.1) 3px 3px 6px 0px,
     rgba(0, 0, 0, 0.2) 3px 3px 4px -1px;
   --box-shadowinset1:
-    inset 3px 4px 5px 0px rgba(0, 0, 0, 0.2),
-    inset -1px -2px 3px 0px rgba(0, 0, 0, 0.1),
-    inset 3px 3px 6px 0px rgba(0, 0, 0, 0.1),
-    inset 3px 3px 4px -1px rgba(0, 0, 0, 0.2);
+    rgba(0, 0, 0, 0.2) inset 3px 4px 5px 0px,
+    rgba(0, 0, 0, 0.1) inset -1px -2px 3px 0px,
+    rgba(0, 0, 0, 0.1) inset 3px 3px 6px 0px,
+    rgba(0, 0, 0, 0.2) inset 3px 3px 4px -1px;
   --box-shadow-sbfixed:
-    4px 6px 6px 0 rgba(0, 0, 0, .3);
+    rgba(0, 0, 0, .3) 4px 6px 6px 0;
 }
 
 *,
@@ -201,7 +204,7 @@ html {
   --black000: #0c0e0e;
   --black0: #0c0e0e;
   --black1: #000000;
-  --black2: #1c1f21;
+  --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;
   --darkgrey0: #111415;
@@ -219,12 +222,15 @@ html {
   --scrollerThumbBackgroundHover: #505b65;
   --scrollerTrackBackground: var(--black1);
   --box-shadow1:
-    rgba(20, 20, 20, 0.5) 0px 8px 10px 1px;
+    rgba(20, 20, 20, 0 .5) 0px 8px 10px 1px;
+  --box-shadow3:
+  rgba(54, 147, 255, 0.2) 0 10px 20px,
+    rgba(0, 0, 0, 0.23) 0 6px 6px;
   --box-shadow-sbfixed:
-    4px 8px 12px 0 rgba(59, 88, 108, .2);
+    rgba(59, 88, 108, .2) 4px 8px 12px 0;
   --box-shadow5:
-    0px 1px 2px 0px rgba(60, 64, 67, 0.4), 
-    0px 1px 3px 1px rgba(60, 64, 67, 0.2);
+    rgba(60, 64, 67, 0.4) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.2) 0px 1px 3px 1px;
 }
 
 select,

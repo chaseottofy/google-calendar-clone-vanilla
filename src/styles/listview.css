@@ -13,16 +13,16 @@
 }
 
 .listview__rowgroup {
-  border-bottom: var(--bordergrey);
+  border-top: var(--bordergrey);
   display:flex;
   width: 100%;
   height: auto;
   flex-direction: row;
 }
 
-.listview__rowgroup:last-child {
+/* .listview__rowgroup:last-child {
   border-bottom: none;
-}
+} */
             
 .rowgroup-header {
   display:flex;

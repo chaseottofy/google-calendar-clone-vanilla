@@ -23,10 +23,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   height: 100%;
   width: 34px;
-  border-bottom: 2px solid transparent; 
+  border-bottom: 2px solid transparent;
 }
 
 .dayview--header-day__title {
@@ -70,25 +70,42 @@
 
 .dayview--header-day__info {
   font-family: var(--secondaryFont);
-  display:flex;
-  align-items: center;
+  display: flex;
+  align-items: flex-end;
+  /* background: var(--black000); */
+
+  height: 30px;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.2px;
   padding-left: 4px;
   color: var(--white2);
   padding-right: 12px;
 }
 
+.dv-ontop-row2 {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  height: 24px;
+  width: 100%;
+}
+
+.dv-gmt {
+  color: var(--offwhite1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+}
+
 .dayview--ontop-container {
-  border: 1px solid var(--mediumgrey1);
-  border-top: none;
+  border-left: 1px solid var(--mediumgrey1);
   border-bottom: 2px solid var(--black0);
-  margin-left: 36px;
   max-height: 24px;
   min-height: 24px;
   overflow-y: scroll;
   width: 100%;
+  position: relative;
 }
 
 .dayview__grid {
@@ -106,8 +123,11 @@
 }
 
 .dayview__grid--wrapper {
-  background-image: linear-gradient(
-    to bottom, var(--mediumgrey1) 1px, transparent 1px);
+  /* background-image: linear-gradient(
+    to bottom, var(--mediumgrey1) 1px, transparent 1px
+  ); */
+  background-image:
+    linear-gradient(to bottom, var(--mediumgrey1) 2%, transparent 0);
   background-size: 100% 4%;
   display: flex;
   max-height: 1250px;
@@ -143,7 +163,7 @@
 
 .dv-sidegrid--cell {
   color: var(--offwhite1);
-  display:flex;
+  display: flex;
   justify-content: center;
   font-size: 8px;
   height: 50px;
@@ -178,10 +198,10 @@
   user-select: none;
   z-index: 3;
   color: var(--taskcolor) !important;
-  transition-property: left, width; 
+  transition-property: left, width;
   transition-duration: 200ms;
   transition-timing-function: ease-in-out;
-  padding: 2px;
+  padding: 4px 2px;
 }
 
 .dv-box__header {
@@ -247,7 +267,7 @@
 }
 
 .dv-box-ontop {
-  border: 1px solid var(--black0)
+  border: 1px solid var(--black0);
 }
 
 .dv-temporary-box {

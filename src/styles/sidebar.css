@@ -38,7 +38,7 @@
 
 .sb-toggle-form-btn {
   position: absolute;
-  left: 5px;
+  left: 8px;
   top: 1px;
   width: 132px;
   height: 44px;
@@ -75,9 +75,9 @@
 
 .stfb {
   position: absolute;
-  left: 7px;
-  top: 0;
+  left: 9px;
   background: transparent;
+  top: 0;
   border-radius: 24px;
   height: 46px;
   width: 46px;

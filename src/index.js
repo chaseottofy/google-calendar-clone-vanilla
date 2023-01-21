@@ -51,6 +51,5 @@ import "./styles/aside/shortcuts.css"
 // * linter
 // * 
 
-// store.setStoreForTesting(generateRandomEvents(1000))
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);

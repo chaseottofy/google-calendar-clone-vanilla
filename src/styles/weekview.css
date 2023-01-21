@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 36px 1fr;
   height: 78px;
-  overflow-y:scroll;
+  overflow-y: scroll;
 }
 
 .weekview__top::-webkit-scrollbar-track {
@@ -17,6 +17,14 @@
   overflow: hidden;
   position: relative;
   height: 54px;
+}
+
+.wv-gmt {
+  color: var(--offwhite1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
 }
 
 .weekview--header-day {
@@ -37,7 +45,7 @@
   font-size: 10px;
   letter-spacing: 0.8px;
   line-height: 16px;
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .weekview--header-day__number {
@@ -46,8 +54,8 @@
   width: 34px;
   height: 34px;
   text-align: center;
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   justify-content: center;
   border-radius: 50%;
   color: var(--offwhite1);
@@ -67,6 +75,7 @@
   background: var(--primary1);
   color: var(--taskcolor0) !important;
 }
+
 .wvh--today:hover {
   background: var(--primarylight1);
 }
@@ -78,10 +87,8 @@
   width: 100%;
   align-items: center;
   position: relative;
-  border-bottom: 2px solid var(--black0);
-  background-size: calc(100%/7) 100%;
-  background-image:
-    linear-gradient(to right, var(--mediumgrey1) 1px, transparent 1px);
+  border-bottom: 1px solid var(--mediumgrey1);
+  box-shadow: 2px 4px 2px 0 rgba(0, 0, 0, 0.25);
 }
 
 .weekview--allday-module__title {
@@ -176,7 +183,7 @@
   border-radius: 8px;
   border: none;
   max-height: 280px;
-  box-shadow: 0px 1px 2px 0px rgba(60, 64, 67, 0.302), 0px 1px 3px 1px rgba(60, 64, 67, 0.149);
+  box-shadow: 0px 1px 2px 0px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
   background: var(--black1);
   display: flex;
   flex-direction: column;
@@ -184,6 +191,7 @@
   user-select: none;
   overflow: hidden;
 }
+
 .allday-modal__cell--open {
   background: var(--mediumgrey1);
 }
@@ -212,6 +220,7 @@
   align-items: center;
   cursor: pointer;
 }
+
 .close-allday-modal:hover {
   background: var(--mediumgrey1);
 }
@@ -220,7 +229,7 @@
   height: 100%;
   width: 100%;
   overflow-y: scroll;
-  display:flex;
+  display: flex;
   flex-direction: column;
   padding-left: 6px;
 }
@@ -235,7 +244,7 @@
 }
 
 .allday-modal__cell-content {
-  display:flex;
+  display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
@@ -243,14 +252,14 @@
 }
 
 .allday-modal__cell-action-icons {
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
-  align-items:center;
+  align-items: center;
   width: 24px;
   margin-left: auto;
   cursor: pointer;
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .allday-modal__cell-action-icons:hover {
@@ -266,12 +275,12 @@
   color: var(--taskcolor);
   padding: 6px;
   line-height: 11px;
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .allday-modal__cellend-date,
 .allday-modal__cellcategory-title {
-  pointer-events:none;
+  pointer-events: none;
   margin-top: 2px;
   font-size: 10px;
   font-weight: 400;
@@ -294,7 +303,7 @@
   height: calc(100% - 36px);
   width: 100%;
   min-width: 100%;
-  overflow-y:scroll;
+  overflow-y: scroll;
   grid-template-columns: 36px 1fr;
 }
 
@@ -324,10 +333,13 @@
   display: flex;
   justify-content: center;
 }
+
 .sidegrid-cell:not(:first-child) {
   margin-top: -4px;
 }
 
+/* linear-gradient(
+  to right, var(--mediumgrey1) 1px, transparent 1px), */
 .weekview--calendar {
   overflow: hidden;
   min-height: 1250px;
@@ -337,11 +349,9 @@
   background: var(--black1);
   grid-template-columns: repeat(7, 1fr);
   background-size: calc(100% / 7) 4%;
+  /* background-image: linear-gradient(to bottom,var0(--mediumgrey1) 1px, transparent 0px); */
   background-image:
-    linear-gradient(
-      to right, var(--mediumgrey1) 1px, transparent 1px),
-    linear-gradient(
-      to bottom, var(--mediumgrey1) 1px, transparent 1px);
+    linear-gradient(to bottom, var(--mediumgrey1) 1%, transparent 1%);
 }
 
 .week--col {
@@ -350,6 +360,7 @@
   position: relative;
   width: 100%;
   padding-right: 8px;
+  border-left: 1px solid var(--mediumgrey1);
 }
 
 .box {
@@ -378,7 +389,7 @@
 /* box events */
 .box-ontop {
   border: 1px solid var(--black1);
-  transition-property: left, width; 
+  transition-property: left, width;
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
 }

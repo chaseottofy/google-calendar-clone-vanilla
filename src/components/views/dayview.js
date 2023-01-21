@@ -134,6 +134,14 @@ export default function setDayView(context, store, datepickerContext) {
       el.innerText = "";
     })
 
+    let gmtOffset = new Date().getTimezoneOffset() / 60
+    if (gmtOffset < 0) {
+      gmtOffset = `+${Math.abs(gmtOffset)}`
+    }
+
+    document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
+
+
     dvHeaderDayOfWeek.textContent = context.getDay()
     if (context.isToday()) {
       dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today")

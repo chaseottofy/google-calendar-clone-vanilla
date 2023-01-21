@@ -41,6 +41,7 @@ const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
 const weekwrapper = document.querySelector(".weekview")
+const daywrapper = document.querySelector(".dayview")
 const listviewBody = document.querySelector(".listview__body");
 
 export default function renderViews(context, datepickerContext, store) {
@@ -181,12 +182,16 @@ export default function renderViews(context, datepickerContext, store) {
     }
 
     // weekview is the only view that has a horizontal scrollbar, for the other views, hide this scrollbar when transitioning
-    if (!view.classList.contains("weekview")) {
-      viewsContainer.style.overflowX = "hidden";
-      setTimeout(() => {
-        viewsContainer.style.overflowX = "auto";
-      }, 200);
-    }
+    viewsContainer.style.overflowX = "hidden";
+    setTimeout(() => {
+      viewsContainer.style.overflowX = "auto";
+    }, 200)
+    // if (!view.classList.contains("weekview")) {
+    //   viewsContainer.style.overflowX = "hidden";
+    //   setTimeout(() => {
+    //     viewsContainer.style.overflowX = "auto";
+    //   }, 200);
+    // }
 
     removeslide(keyframeDirection)
     const slide = `transition--${keyframeDirection}`
@@ -291,7 +296,7 @@ export default function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         // transition day header rather than entire view (too jarring)
-        handleTransition(document.querySelector(".dayview--header-day"), "right", getPreviousDay)
+        handleTransition(daywrapper, "right", getPreviousDay)
         break;
       case "week":
         handleTransition(weekwrapper, "right", getPreviousWeek)
@@ -311,7 +316,7 @@ export default function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         // transition day header rather than entire view (too jarring)
-        handleTransition(document.querySelector(".dayview--header-day"), "left", getNextDay)
+        handleTransition(daywrapper, "left", getNextDay)
         break;
       case "week":
         handleTransition(weekwrapper, "left", getNextWeek)

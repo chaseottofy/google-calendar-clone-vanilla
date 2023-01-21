@@ -26,6 +26,8 @@ import {
   getDurationSeconds,
 } from "../../utilities/dateutils"
 
+import { createCloseIcon } from "../../utilities/svgs";
+
 // general utilities
 import {
   getClosest,
@@ -625,7 +627,8 @@ export default function setMonthView(context, store, datepickerContext) {
 
     const modalHeaderClose = document.createElement("div");
     modalHeaderClose.classList.add("more-modal-header-close");
-    modalHeaderClose.textContent = "X";
+    modalHeaderClose.appendChild(createCloseIcon("var(--white3)"))
+    // modalHeaderClose.textContent = "X";
     modalHeaderClose.setAttribute("data-tooltip", "Close");
 
     modalHeaderTitle.append(modalHeaderClose, dowspan, daynspan);

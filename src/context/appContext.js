@@ -8,11 +8,13 @@ class Context {
     this.component = "month";
     this.sidebarState = "hide";
     this.date = new Date();
+    this.gmt = new Date().getTimezoneOffset() / 60;
 
     this.dateSelected = 1;
     this.daySelected = this.date.getDate();
     this.monthSelected = this.date.getMonth();
     this.yearSelected = this.date.getFullYear();
+
 
     this.month = this.getMonth();
     this.monthArray = this.getMonthArray();
@@ -250,6 +252,10 @@ class Context {
 
   /* ************** */
   /* GETTERS */
+  getGmt() {
+    return this.gmt;
+  }
+
   getDateSelected() {
     return +Context.getLocalDateSelected() || this.date.getDate();
     // return this.dateSelected;
