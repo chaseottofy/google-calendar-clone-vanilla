@@ -3,7 +3,6 @@ import localStoreKeyNames from "./constants"
 import { testDate, compareDates } from '../utilities/dateutils'
 import locales from "../locales/en"
 import defautlKeyboardShortcuts from "../locales/kbDefault"
-import testdata from "../testdata.json"
 const colors = locales.colors
 /*
   ***************************************

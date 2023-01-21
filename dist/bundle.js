@@ -510,6 +510,7 @@ function setEntryForm(context, store, datepickerContext) {
         } else {
           hours = [12]
           md = ['pm']
+          console.log(m)
           m = m.slice(-1)
         }
       } else {
@@ -1327,7 +1328,7 @@ class FormConfig {
   }
 
   configFormPosition(cell, coordinates, top) {
-    console.log(coordinates)
+    // console.log(coordinates)
     // console.log(coordinates)
     // const [x, y] = coordinates;
     // const cellWidth = cell.offsetWidth;
@@ -1346,8 +1347,6 @@ class FormConfig {
 
   configFormTitleDescriptionInput(title, description) {
     this.formTitleDescription.forEach((input, idx) => {
-      // console.log(input, idx)
-      console.log(title, description)
       input.firstElementChild.value = [title, description][idx]
     })
   }
@@ -2278,6 +2277,11 @@ function getEntryOptionModal(context, store, entry, datepickerContext, finishSet
     const submitDelete = () => {
       proceedDelete(entry);
       removeDeletePopup();
+      const resetCurrentView = store.getFormResetHandle(context.getComponent())
+      if (resetCurrentView !== null) {
+        resetCurrentView()
+      }
+
     }
 
     deletepopupCancel.onclick = removeDeletePopup
@@ -2300,6 +2304,7 @@ function getEntryOptionModal(context, store, entry, datepickerContext, finishSet
     entryOptionsOverlay.classList.add("entry__options--hidden");
     store.removeActiveOverlay("entry__options--hidden")
     entryOptionDescription.parentElement.removeAttribute("style");
+
     document.removeEventListener("keydown", handleEntryOptionKD);
   }
 
@@ -2384,6 +2389,14 @@ function getEntryOptionModal(context, store, entry, datepickerContext, finishSet
       } else {
         formNegated();
       }
+    }
+
+    if (e.key.toLowerCase() === "e") {
+      openEditForm();
+    }
+
+    if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "delete") {
+      openDeleteWarning();
     }
   }
 
@@ -2525,11 +2538,11 @@ function handleShortCutsModal(store) {
       const or = document.createElement("span")
       or.textContent = " or "
       const keytwo = document.createElement("span")
-      keyone.textContent = key[0]
-      keytwo.textContent = key[1]
+      keyone.textContent = key[0].toUpperCase()
+      keytwo.textContent = key[1].toUpperCase()
       shortcutKey.append(keyone, or, keytwo)
     } else {
-      keyone.textContent = key;
+      keyone.textContent = key.toUpperCase();
       shortcutKey.appendChild(keyone);
     }
 
@@ -3838,13 +3851,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _factory_entries__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../factory/entries */ "./src/factory/entries.js");
 /* harmony import */ var _utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utilities/timeutils */ "./src/utilities/timeutils.js");
 /* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utilities/dateutils */ "./src/utilities/dateutils.js");
-/* harmony import */ var _utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/dragutils */ "./src/utilities/dragutils.js");
-/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
-/* harmony import */ var _toastPopups_toast__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../toastPopups/toast */ "./src/components/toastPopups/toast.js");
-/* harmony import */ var _toastPopups_toastCallbacks__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../toastPopups/toastCallbacks */ "./src/components/toastPopups/toastCallbacks.js");
-/* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
+/* harmony import */ var _utilities_svgs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utilities/svgs */ "./src/utilities/svgs.js");
+/* harmony import */ var _utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utilities/dragutils */ "./src/utilities/dragutils.js");
+/* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utilities/helpers */ "./src/utilities/helpers.js");
+/* harmony import */ var _toastPopups_toast__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../toastPopups/toast */ "./src/components/toastPopups/toast.js");
+/* harmony import */ var _toastPopups_toastCallbacks__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../toastPopups/toastCallbacks */ "./src/components/toastPopups/toastCallbacks.js");
+/* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../locales/en */ "./src/locales/en.js");
 // import setViews from "../../config/setViews"
 // import setSidebarDatepicker from "../../components/menus/sidebarDatepicker";
+
 
 
 
@@ -3892,10 +3907,35 @@ function setDayView(context, store, datepickerContext) {
     entries.allDay
   );
 
+  function firstLastDates(bxs) {
+    let longest = 0;
+    let shortest = 100;
+    for (let i = 0; i < bxs.length; i++) {
+      let [tempshort, templong] = [
+        bxs[i].coordinates.y,
+        bxs[i].coordinates.e
+      ];
+      if (templong > longest) { longest = templong; }
+      if (tempshort < shortest) { shortest = tempshort; }
+    }
+    let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)];
+    let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15];
+    let [tempdate1, tempdate2] = [new Date(bxs[0].start), new Date(bxs[0].start)];
+    tempdate1.setHours(h1);
+    tempdate1.setMinutes(m1);
+    tempdate2.setHours(h2);
+    tempdate2.setMinutes(m2);
+    return (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
+      tempdate1,
+      tempdate2
+    );
+  }
+
   function getDayviewHeaderEntryCount() {
     let allboxes = boxes.getAllBoxes();
     if (allboxes.length === 0) { return "no entries"; }
     let [endingToday, startingToday] = [0, 0];
+    let tempEndCase1;
 
     for (let i = 0; i < allboxes.length; i++) {
       const [start, end, current] = [
@@ -3904,21 +3944,25 @@ function setDayView(context, store, datepickerContext) {
         context.getDate(),
       ]
       if (start.getDate() === current.getDate()) { startingToday++; }
-      if (end.getDate() === current.getDate()) { endingToday++; }
+      if (end.getDate() === current.getDate()) { 
+        endingToday++; 
+        tempEndCase1 = allboxes[i];
+      }
     }
 
     if (startingToday === 1 && endingToday === 1) {
-      return `1 entry from ${(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
+      return `1 entry ( ${(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
         new Date(allboxes[0].start),
         new Date(allboxes[0].end)
-      )}`
+      )} )`
     }
 
     if (startingToday > 1 && (startingToday === endingToday)) {
-      return `${startingToday} entries starting & ending today`;
+      return `${startingToday} entries starting & ending today ( ${firstLastDates(boxes.boxes)} )`;
     }
 
-    let fulltitle = ""
+
+    let fulltitle = "";
     if (startingToday > 0) {
       if (startingToday === 1) {
         fulltitle += `${startingToday} entry starting today`
@@ -3931,14 +3975,17 @@ function setDayView(context, store, datepickerContext) {
 
     if (endingToday > 0) {
       if (endingToday === 1) {
-        fulltitle += ` – ${endingToday} ending`
+        console.log(allboxes)
+        fulltitle += ` – ${endingToday} ending ( ${(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
+          new Date(tempEndCase1.start),
+          new Date(tempEndCase1.end)
+        )} )`
       } else {
-        fulltitle += ` – ${endingToday} ending`
+        fulltitle += ` – ${endingToday} ending ( ${firstLastDates(boxes.boxes)} )`
       }
     } else {
       fulltitle += ` – no entries ending today`
     }
-
     return fulltitle;
   }
 
@@ -3953,7 +4000,9 @@ function setDayView(context, store, datepickerContext) {
     }
 
     document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
-    dvHeaderDayOfWeek.textContent = context.getDay()
+    let day = context.getDay();
+    // if (day < 10) { day = `0${day}` }
+    dvHeaderDayOfWeek.textContent = day
 
     if (context.isToday()) {
       dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today")
@@ -3962,19 +4011,110 @@ function setDayView(context, store, datepickerContext) {
       dvHeaderDayOfWeek.classList.remove("dayview--header-day__number--today")
       dvHeaderDayNumber.removeAttribute("style");
     }
-    dvHeaderDayNumber.textContent = _locales_en__WEBPACK_IMPORTED_MODULE_10__["default"].labels.weekdaysShort[context.getWeekday()].toUpperCase();
+    dvHeaderDayNumber.textContent = _locales_en__WEBPACK_IMPORTED_MODULE_11__["default"].labels.weekdaysShort[context.getWeekday()].toUpperCase();
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
 
   function resetDayview() {
     dvMainGrid.innerText = "";
+    dvOnTop.innerText = "";
+  }
+
+  function openDvMore(entr) {
+    store.addActiveOverlay("morepopup")
+    const morepopupoverlay = document.createElement("aside");
+    morepopupoverlay.classList.add("dv--morepopup__overlay");
+
+    const morepopup = document.createElement("aside");
+    morepopup.classList.add("dv--morepopup");
+    morepopup.style.left = `${dvOnTop.offsetLeft}px`;
+    morepopup.style.top = `${dvOnTop.offsetTop + dvOnTop.offsetHeight}px`;
+    morepopup.style.height = `${64 + (entr.length * 48)}px`;
+
+    const morepopupHeader = document.createElement("div");
+    morepopupHeader.classList.add("dv--morepopup__header");
+    const morepopupTitle = document.createElement("span");
+    morepopupTitle.classList.add("dv--morepopup__title");
+    morepopupTitle.textContent = "More entries";
+    const morepopupClose = document.createElement("span");
+    morepopupClose.classList.add("dv--morepopup__close");
+    morepopupClose.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_6__.createCloseIcon)("var(--white3)"))
+    morepopupHeader.append(morepopupTitle, morepopupClose);
+    const morepopupBody = document.createElement("div");
+    morepopupBody.classList.add("dv--morepopup__body");
+
+    const createMorePopupEntry = (entry) => {
+      const morepopupEntry = document.createElement("div");
+      morepopupEntry.classList.add("dv--morepopup__entry");
+      morepopupEntry.style.backgroundColor = `${store.getCtgColor(entry.category)}`
+      const morepopupEntryTitle = document.createElement("span");
+      morepopupEntryTitle.classList.add("dv--morepopup__entry-title");
+      morepopupEntryTitle.textContent = entry.title;
+      const morepopupCategory = document.createElement("span");
+      morepopupCategory.classList.add("dv--morepopup__entry-category");
+      morepopupCategory.textContent = entry.category;
+      const morepopupEntryTime = document.createElement("span");
+      morepopupEntryTime.classList.add("dv--morepopup__entry-time");
+      morepopupEntryTime.textContent = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
+        new Date(entry.start),
+        new Date(entry.end)
+      );
+      morepopupEntry.append(morepopupEntryTitle, morepopupCategory, morepopupEntryTime);
+      return morepopupEntry;
+    }
+
+    entr.forEach((entry) => {
+      const morepopupEntry = createMorePopupEntry(entry);
+      morepopupBody.appendChild(morepopupEntry);
+    })
+
+    const closemp = () => {
+      morepopupoverlay.remove();
+      morepopup.remove();
+      store.removeActiveOverlay("morepopup");
+      document.removeEventListener("keydown", closeMpOnEsc)
+    }
+
+    const closeMpOnEsc = (e) => {
+      if (e.key === "Escape") {
+        closemp();
+        return;
+      }
+    }
+
+    morepopup.append(morepopupHeader, morepopupBody);
+    document.body.appendChild(morepopupoverlay);
+    document.body.appendChild(morepopup);
+    morepopupoverlay.onclick = closemp;
+    morepopupClose.onclick = closemp;
+    document.addEventListener("keydown", closeMpOnEsc)
+  }
+
+  function createDvTop(entr) {
+    const dvtopgrid = document.createElement("div");
+    dvtopgrid.classList.add("dv--ontop__grid");
+
+    if (entries.length >= 6) {
+      const moremessage = document.createElement("div");
+      moremessage.classList.add("dv--ontop__more");
+      moremessage.textContent = `${entr.length} more...`
+      dvOnTop.appendChild(moremessage);
+      // dvtopgrid.appendChild(moremessage);
+      const opdm = () => openDvMore(entr)
+      moremessage.onclick = opdm
+      return;
+    } else {
+    }
+    // entries.forEach((entry) => {
+
+    // })
   }
 
   function renderBoxes() {
-    // dvMainGrid.innerText = ""
     resetDayview()
+    createDvTop(boxes.getBoxesTop())
     boxes.getBoxes().forEach((entry) => {
-      ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createBox)(
+      ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.createBox)(
         dvMainGrid,                         // column
         entry,                              // entry object
         "day",                              // current view 
@@ -3985,21 +4125,21 @@ function setDayView(context, store, datepickerContext) {
 
   /** RESIZE NORTH/SOUTH */
   function resizeBoxNSDay(e, box) {
-    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
+    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragstart", dvGrid, store)
     document.body.style.cursor = "move";
     const col = box.parentElement
 
     let boxhasOnTop = false;
-    const boxorig = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.getOriginalBoxObject)(box)
+    const boxorig = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.getOriginalBoxObject)(box)
     if (box.classList.contains("dv-box-ontop")) {
       boxhasOnTop = true;
-      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetStyleOnClick)("day", box)
+      (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.resetStyleOnClick)("day", box)
     }
 
     box.classList.add("dv-box-resizing")
     const boxTop = box.offsetTop
-    const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
-    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTemporaryBox)(box, col, boxhasOnTop, "day")
+    const headerOffset = parseInt(dvGrid.offsetTop);
+    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.createTemporaryBox)(box, col, boxhasOnTop, "day")
 
     let amountScrolled = parseInt(dvGrid.scrollTop)
     const mousemove = (e) => {
@@ -4021,20 +4161,20 @@ function setDayView(context, store, datepickerContext) {
       if (boxhasOnTop) { box.classList.add("dv-box-ontop"); }
 
       if (boxorig.height === box.offsetHeight) {
-        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetOriginalBox)(box, boxorig);
+        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.resetOriginalBox)(box, boxorig);
       } else {
-        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setBoxTimeAttributes)(box, "day")
+        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setBoxTimeAttributes)(box, "day")
         const start = +box.getAttribute("data-dv-start-time")
         const length = +box.getAttribute("data-dv-time-intervals")
         const time = (0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__["default"])(start, length)
         box.setAttribute("data-dv-time", time)
         box.firstChild.nextSibling.firstElementChild.textContent = time
 
-        ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.updateBoxCoordinates)(box, "day", boxes)
+        ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.updateBoxCoordinates)(box, "day", boxes)
         boxes.updateStore(store, box.getAttribute("data-dv-box-id"))
         // check if new position overlaps with other boxes and handle
         if (boxes.getBoxes().length > 1) {
-          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__["default"])(null, "day", boxes)
+          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__["default"])(null, "day", boxes)
         } else {
           box.setAttribute("data-dv-box-index", "box-one")
         }
@@ -4042,7 +4182,7 @@ function setDayView(context, store, datepickerContext) {
 
 
       configHeader()
-      ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store);
+      ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragend", dvGrid, store);
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }
@@ -4052,14 +4192,14 @@ function setDayView(context, store, datepickerContext) {
 
   /** DRAG NORTH/ SOUTH, EAST/ WEST */
   function dragEngineDay(e, box) {
-    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
+    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragstart", dvGrid, store)
     const col = box.parentElement
     let boxhasOnTop = false;
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
-    const startCursorY = e.pageY - dvGrid.offsetTop;
-    const headerOffset = dvGrid.offsetTop;
+    const startCursorY = e.pageY - parseInt(dvGrid.offsetTop);
+    const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
     let [tempX, tempY] = [e.pageX, e.pageY];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
@@ -4074,10 +4214,10 @@ function setDayView(context, store, datepickerContext) {
           document.body.style.cursor = "move";
           if (box.classList.contains("dv-box-ontop")) {
             boxhasOnTop = true;
-            (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.resetStyleOnClick)("day", box);
+            (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.resetStyleOnClick)("day", box);
           }
           box.classList.add("dv-box-dragging")
-          ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTemporaryBox)(box, col, boxhasOnTop, "day")
+          ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.createTemporaryBox)(box, col, boxhasOnTop, "day")
           sX = 0;
           sY = 0;
         }
@@ -4101,8 +4241,9 @@ function setDayView(context, store, datepickerContext) {
       // click event to open form
       if (tempbox === null) {
         const setResetDv = () => {
-          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
+          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragend", dvGrid, store)
           box.classList.remove("dv-box-clicked")
+
         }
         box.classList.add("dv-box-clicked")
         const id = box.getAttribute("data-dv-box-id");
@@ -4111,7 +4252,7 @@ function setDayView(context, store, datepickerContext) {
         const color = box.style.backgroundColor;
         const rect = box.getBoundingClientRect()
 
-        let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.placePopup)(
+        let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.placePopup)(
           400,
           165,
           [parseInt(rect.left) + 32, parseInt(rect.top) + 32],
@@ -4142,29 +4283,29 @@ function setDayView(context, store, datepickerContext) {
         box.classList.remove("dv-box-dragging")
         if (boxhasOnTop) { box.classList.add("dv-box-ontop") }
 
-        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setBoxTimeAttributes)(box, "day")
+        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setBoxTimeAttributes)(box, "day")
         const start = +box.getAttribute("data-dv-start-time")
         const length = +box.getAttribute("data-dv-time-intervals")
         const time = (0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__["default"])(start, length)
         box.setAttribute("data-dv-time", time)
 
         box.children[1].children[0].textContent = time;
-        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.updateBoxCoordinates)(box, "day", boxes)
+        (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.updateBoxCoordinates)(box, "day", boxes)
         boxes.updateStore(
           store,
           box.getAttribute("data-dv-box-id")
         )
         // check if new position overlaps with other boxes and handle
         if (boxes.getBoxes().length > 1) {
-          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__["default"])(null, "day", boxes)
+          (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__["default"])(null, "day", boxes)
         } else {
           box.setAttribute("data-dv-box-index", "box-one")
         }
 
         configHeader()
-        ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
+        ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragend", dvGrid, store)
       }
-      
+
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }
@@ -4215,7 +4356,7 @@ function setDayView(context, store, datepickerContext) {
   /** CREATE BOX ON DRAG */
   /** Drag down empty column to create box */
   function createBoxOnDragDay(e) {
-    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragstart", dvGrid, store)
+    (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragstart", dvGrid, store)
     document.body.style.cursor = "move";
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair()
 
@@ -4223,8 +4364,7 @@ function setDayView(context, store, datepickerContext) {
     box.setAttribute("class", "dv-box dv-box-dragging dayview-temp-box");
 
     // boxheader is static - create from template
-    const boxheader = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.createTempBoxHeader)("day")
-
+    const boxheader = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.createTempBoxHeader)("day")
 
     const boxcontent = document.createElement('div');
     const boxtime = document.createElement('span');
@@ -4233,15 +4373,15 @@ function setDayView(context, store, datepickerContext) {
     boxtime.classList.add('dv-box-time');
     boxtimeend.classList.add('dv-box-time');
 
-    const headerOffset = 72 + header.offsetHeight;
+    const headerOffset = parseInt(dvGrid.offsetTop);
     const scrolled = parseInt(dvGrid.scrollTop);
     const startCursorY = e.pageY - headerOffset;
 
     let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
-    box.setAttribute("style", (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.getBoxDefaultStyle)(y, color))
+    box.setAttribute("style", (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.getBoxDefaultStyle)(y, color))
 
     let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 }
-    let [starthour, startmin, endhour, endmin] = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.startEndDefault)(y);
+    let [starthour, startmin, endhour, endmin] = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.startEndDefault)(y);
 
     function mousemove(e) {
       let newHeight = Math.round(((e.pageY + scrolled) - y - headerOffset) / 12.5) * 12.5
@@ -4252,8 +4392,8 @@ function setDayView(context, store, datepickerContext) {
       coords.h = +newHeight / 12.5
       coords.e = +coords.y + coords.h
 
-      endhour = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.calcNewHourFromCoords)(newHeight, y)
-      endmin = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.calcNewMinuteFromCoords)(newHeight, y)
+      endhour = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.calcNewHourFromCoords)(newHeight, y)
+      endmin = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.calcNewMinuteFromCoords)(newHeight, y)
 
       boxtime.style.wordBreak = "break-word"
       boxtime.textContent = `${(0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__.formatTime)(starthour, startmin)} – `
@@ -4280,7 +4420,7 @@ function setDayView(context, store, datepickerContext) {
         ["create", null, null, null],
       )
 
-      ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__.setStylingForEvent)("dragend", dvGrid, store)
+      ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragend", dvGrid, store)
       document.removeEventListener("mouseup", mouseup)
       document.removeEventListener("mousemove", mousemove)
     }
@@ -4290,21 +4430,21 @@ function setDayView(context, store, datepickerContext) {
 
   function renderBoxesForGrid() {
     renderBoxes()
-    ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_6__["default"])(null, "day", boxes)
+    ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__["default"])(null, "day", boxes)
   }
 
   function delegateDayView(e) {
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".dv-box-resize-s")) {
+    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv-box-resize-s")) {
       resizeBoxNSDay(e, e.target.parentElement);
       return;
     }
 
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".dv-box")) {
+    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv-box")) {
       dragEngineDay(e, e.target);
       return;
     }
 
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".dayview--main-grid")) {
+    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dayview--main-grid")) {
       createBoxOnDragDay(e, e.target);
       return;
     }
@@ -4315,6 +4455,32 @@ function setDayView(context, store, datepickerContext) {
     configHeader();
     store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
+    const elementCount = dvMainGrid.childElementCount;
+    if (elementCount > 0) {
+      setTimeout(() => {
+        let fc;
+        let checkForBOT = document?.querySelector(".dv-box-one")
+        if (checkForBOT !== null) {
+          fc = checkForBOT
+        } else {
+          fc = dvMainGrid.children[0];
+        }
+
+        dvGrid.scrollTo({
+          top: parseInt(fc.style.top),
+          behavior: "instant",
+        })
+      }, 4)
+    } else {
+      setTimeout(() => {
+        let tempdate = new Date()
+        let temphour = tempdate.getHours() * 50
+        dvGrid.scrollTo({
+          top: temphour - 50 > 0 ? temphour - 50 : 0,
+          behavior: "auto",
+        })
+      }, 4)
+    }
   }
   initDayView();
 }
@@ -5583,6 +5749,7 @@ __webpack_require__.r(__webpack_exports__);
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
 // calendar overlay
+const calendarContainer = document.querySelector(".container__calendars")
 const resizeoverlay = document.querySelector(".resize-overlay")
 // weekview main grid wrapper & children
 const main = document.querySelector(".weekview")
@@ -5700,7 +5867,11 @@ function setWeekView(context, store, datepickerContext) {
     const celltitle = document.createElement("div");
     celltitle.classList.add("wv-ad--celltitle");
     celltitle.textContent = `${len} more`;
-    cell.append(taskicons, celltitle);
+    const cellexpand = document.createElement("div");
+    cellexpand.classList.add("wv-ad--cellexpand");
+    cellexpand.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_8__.createExpandDownIcon)("var(--white3)"))
+
+    cell.append(taskicons, celltitle, cellexpand);
     col.appendChild(cell);
   }
 
@@ -5747,28 +5918,33 @@ function setWeekView(context, store, datepickerContext) {
     let daynumber = col.getAttribute("data-wvtop-day")
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
+    const rect = col.getBoundingClientRect();
 
-    let x;
-    const colLeft = col.offsetLeft;
-    if (colLeft + 240 + 32 > window.innerWidth) {
-      x = window.innerWidth - 268;
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_11__.placePopup)(
+      240 + parseInt(calendarContainer.scrollLeft),
+      320,
+      [
+        parseInt(rect.left), 
+        parseInt(rect.top) + 24
+      ],
+      [window.innerWidth, window.innerHeight],
+      true,
+      Math.floor((window.innerWidth - 36 - weekviewGrid.offsetLeft) / 7)
+    )
+
+    if (x + 250 > window.innerWidth) {
+      modal.style.left = window.innerWidth - 240 + "px"
     } else {
-      x = colLeft + 32;
+      modal.style.left = x + "px"
     }
-    if (idx < 3) {
-      modal.style.left = (col.offsetLeft + 32) + "px"
-    } else {
-      modal.style.left = (col.offsetLeft + 32) - 160 + "px"
-    }
-    modal.style.left = x + "px"
-    modal.style.top = +weekviewGrid.offsetTop + "px"
+    modal.style.top = y + "px"
 
     const modalheader = document.createElement("div")
     modalheader.classList.add("allday-modal__header")
 
     const modaltitle = document.createElement("div")
     modaltitle.classList.add("allday-modal-title")
-    modaltitle.textContent = `${dayofweek} ${daynumber}, ${_locales_en__WEBPACK_IMPORTED_MODULE_6__["default"].labels.monthsLong[weekArray[idx].getMonth()]}`
+    modaltitle.textContent = `${dayofweek}, ${_locales_en__WEBPACK_IMPORTED_MODULE_6__["default"].labels.monthsLong[weekArray[idx].getMonth()]} ${daynumber}${(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_9__.getDayOrdinal)(daynumber)}`
 
     const closeAlldayModalBtn = document.createElement("div");
     closeAlldayModalBtn.classList.add("close-allday-modal");
@@ -5872,7 +6048,7 @@ function setWeekView(context, store, datepickerContext) {
       400,
       165,
       [parseInt(rect.left), e.clientY],
-      [window.innerWidth, window.innerHeight]
+      [window.innerWidth, window.innerHeight],
     )
 
     store.setFormResetHandle("week", handleCloseCallback);
@@ -6032,13 +6208,6 @@ function setWeekView(context, store, datepickerContext) {
         } else {
           modal.style.top = "64px";
         }
-        // resetOriginalBox(box, boxorig);
-        // getWeekViewContextMenu(
-        //   box,
-        //   store.getEntry(box.getAttribute("data-box-id")),
-        //   handleWeekviewFormClose,
-        //   e
-        // );
 
       } else {
         tempbox.remove();
@@ -6296,6 +6465,8 @@ function setWeekView(context, store, datepickerContext) {
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
+
+
 }
 
 /***/ }),
@@ -6747,12 +6918,7 @@ function renderViews(context, datepickerContext, store) {
       dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
     }
 
-    // weekview is the only view that has a horizontal scrollbar, for the other views, hide this scrollbar when transitioning
-    // view.style.overflowX = "hidden";
-    // setTimeout(() => {
-    //   view.style.overflowX = "auto";
-    // }, 150)
-    if (!view.classList.contains("weekview")) {
+    if (!view.classList.contains("weekview--header")) {
       viewsContainer.style.overflowX = "hidden";
       setTimeout(() => {
         viewsContainer.style.overflowX = "auto";
@@ -6861,11 +7027,13 @@ function renderViews(context, datepickerContext, store) {
   function handleBtnPrev() {
     switch (context.getComponent()) {
       case "day":
-        // transition day header rather than entire view (too jarring)
-        handleTransition(daywrapper, "right", getPreviousDay)
+        handleTransition(
+          document.querySelector(".dayview--header-day__number"), "right",
+          getPreviousDay
+        );
         break;
       case "week":
-        handleTransition(weekwrapper, "right", getPreviousWeek)
+        handleTransition(document.querySelector(".weekview--header"), "right", getPreviousWeek)
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -6881,12 +7049,13 @@ function renderViews(context, datepickerContext, store) {
   function handleBtnNext() {
     switch (context.getComponent()) {
       case "day":
-        // transition day header rather than entire view (too jarring)
-        handleTransition(daywrapper, "left", getNextDay)
+        handleTransition(
+          document.querySelector(".dayview--header-day__number"), "left",
+          getNextDay
+        );
         break;
       case "week":
-        handleTransition(weekwrapper, "left", getNextWeek)
-        // handleTransition(document.querySelector(".weekview--calendar"), "left", getNextWeek)
+        handleTransition(document.querySelector(".weekview--header"), "left", getNextWeek)
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)
@@ -7031,23 +7200,6 @@ function renderViews(context, datepickerContext, store) {
       }
     }
 
-    const getNextPrevMonth = (direction) => {
-      let comp = context.getComponent()
-      if (comp === "week" || comp === "day") {
-        if (direction === "next") {
-          context.setNextMonth()
-          fullRender(comp)
-          renderSidebarDatepicker()
-        } else {
-          context.setPrevMonth()
-          fullRender(comp)
-          renderSidebarDatepicker()
-        }
-      } else {
-        return;
-      }
-    }
-
     switch (e.key.toLowerCase()) {
       // switch to day view
       case "d":
@@ -7154,7 +7306,7 @@ function renderViews(context, datepickerContext, store) {
     }
   }
 
-  const getKeyPressThrottled = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.throttle)(delegateGlobalKeyDown, 200)
+  const getKeyPressThrottled = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.throttle)(delegateGlobalKeyDown, 150)
   // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
 
   // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
@@ -8021,8 +8173,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utilities_dateutils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utilities/dateutils */ "./src/utilities/dateutils.js");
 /* harmony import */ var _locales_en__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../locales/en */ "./src/locales/en.js");
 /* harmony import */ var _locales_kbDefault__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../locales/kbDefault */ "./src/locales/kbDefault.js");
-/* harmony import */ var _testdata_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../testdata.json */ "./src/testdata.json");
-
 
 
 
@@ -9228,7 +9378,14 @@ class Day {
   }
 
   sortByY(bxs) {
-    return bxs.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
+    return bxs.sort((a, b) => {
+      let diff = +a.coordinates.y - +b.coordinates.y
+      if (diff === 0) {
+        return +a.coordinates.e - +b.coordinates.e
+      } else {
+        return diff;
+      }
+    })
   }
 
   checkForCollision() {
@@ -9271,7 +9428,6 @@ class Day {
       endhours = 23
       endminutes = 59
     }
-
     endDate.setHours(endhours)
     endDate.setMinutes(endminutes)
 
@@ -9458,13 +9614,15 @@ __webpack_require__.r(__webpack_exports__);
   7: { shortcut: 't', action: 'set date to today' },
   8: { shortcut: "g", action: 'enter date manually' },
   9: { shortcut: "n", action: 'next period' },
-  10: {shortcut: "p", action: 'previous period.'},
+  10: { shortcut: "p", action: 'previous period' },
   11: { shortcut: 's', action: 'toggle sidebar' },
   12: { shortcut: 'f', action: 'open form' },
   13: { shortcut: '+', action: 'open new category form' },
   14: { shortcut: 'a', action: 'open settings' },
   15: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
-  16: { shortcut: "esc", action: 'return to calendar' },
+  16: { shortcut: "ESC", action: 'return to calendar' },
+  17: { shortcut: "e", action: '(entry options) opens form with entry details' },
+  18: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
 });
 
 /***/ }),
@@ -9491,6 +9649,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getDateFormatted": () => (/* binding */ getDateFormatted),
 /* harmony export */   "getDateFromAttribute": () => (/* binding */ getDateFromAttribute),
 /* harmony export */   "getDateTimeFormatted": () => (/* binding */ getDateTimeFormatted),
+/* harmony export */   "getDayOrdinal": () => (/* binding */ getDayOrdinal),
 /* harmony export */   "getDuration": () => (/* binding */ getDuration),
 /* harmony export */   "getDurationSeconds": () => (/* binding */ getDurationSeconds),
 /* harmony export */   "getFormDateObject": () => (/* binding */ getFormDateObject),
@@ -9819,6 +9978,16 @@ function longerThanDay(date1, date2) {
   return getDurationSeconds(date1, date2) > 86400;
 }
 
+function getDayOrdinal(day) {
+  if (day > 3 && day < 21) return 'th';
+  switch (day % 10) {
+    case 1: return "st";
+    case 2: return "nd";
+    case 3: return "rd";
+    default: return "th";
+  }
+}
+
 
 
 /***/ }),
@@ -9877,12 +10046,15 @@ const identifiers = {
       'box-one', 'box-two', 'box-three',
       'box-four', 'box-five', 'box-six',
       'box-seven', 'box-eight', 'box-nine',
-      'box-ten',
+      'box-ten', 'box-eleven', 'box-twelve',
+      'box-thirteen', 'box-fourteen', 'box-fifteen',
     ],
     day: [
       'dv-box-one', 'dv-box-two', 'dv-box-three',
       'dv-box-four', 'dv-box-five', 'dv-box-six',
       'dv-box-seven', 'dv-box-eight', 'dv-box-nine',
+      'dv-box-ten', 'dv-box-eleven', 'dv-box-twelve',
+      'dv-box-thirteen', 'dv-box-fourteen', 'dv-box-fifteen',
     ],
   },
 
@@ -9952,9 +10124,10 @@ function calcNewLeft(index) {
   }
 }
 
+
+// *** I'm using a temporary switch statement to try and fine tune the collision handling for now
 function setBoxWidthWeek(box, prepend, dataidx) {
   const attr = box.getAttribute(dataidx);
-
   switch (attr) {
     case `${prepend}one`:
       box.style.left = 'calc((100% - 0px) * 0 + 0px)';
@@ -9992,11 +10165,34 @@ function setBoxWidthWeek(box, prepend, dataidx) {
       box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
       box.style.width = "calc((100% - 4px) * 0.35)"
       break;
+    case `${prepend}ten`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}eleven`:
+      box.style.left = "calc((100% - 0px) * 0.70 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}twelve`:
+      box.style.left = "calc((100% - 0px) * 0.85 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}thirteen`:
+      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fourteen`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fifteen`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
     default:
       break;
   }
 }
-
 
 function setBoxWidthDay(box, prepend, dataidx) {
   const attr = box.getAttribute(dataidx);
@@ -10007,7 +10203,7 @@ function setBoxWidthDay(box, prepend, dataidx) {
       break;
     case `${prepend}two`:
       box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.75)";
+      box.style.width = "calc((100% - 4px) * 0.85)";
       break;
     case `${prepend}three`:
       box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
@@ -10026,16 +10222,40 @@ function setBoxWidthDay(box, prepend, dataidx) {
       box.style.width = "calc((100% - 4px) * 0.25)"
       break;
     case `${prepend}seven`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.3)"
+      box.style.left = "calc((100% - 0px) * 0.10 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
       break;
     case `${prepend}eight`:
       box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.25)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
       break;
     case `${prepend}nine`:
-      box.style.left = "calc((100% - 0px) * 0.40 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.65)"
+      box.style.left = "calc((100% - 0px) * 0.4 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}ten`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}eleven`:
+      box.style.left = "calc((100% - 0px) * 0.70 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}twelve`:
+      box.style.left = "calc((100% - 0px) * 0.85 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.15)"
+      break;
+    case `${prepend}thirteen`:
+      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fourteen`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
+      break;
+    case `${prepend}fifteen`:
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 16px) * 0.25)"
       break;
     default:
       break;
@@ -10060,8 +10280,8 @@ function handleOverlap(col, view, boxes) {
   for (let i = 0; i < collisions.length; i++) {
     const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`)
     let idx = i;
-    if (i >= 9) {
-      idx -= 8;
+    if (i >= 15) {
+      idx -= 12;
     }
     if (i === 0) {
       box.setAttribute("class", `${baseClass.base} ${identifyBox[idx]}`)
@@ -10070,8 +10290,8 @@ function handleOverlap(col, view, boxes) {
       box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
       box.setAttribute(boxIdxAttr, identifyBox[idx])
     }
-    view === "day" 
-      ? setBoxWidthDay(box, classPrepend, boxIdxAttr) 
+    view === "day"
+      ? setBoxWidthDay(box, classPrepend, boxIdxAttr)
       : setBoxWidthWeek(box, classPrepend, boxIdxAttr)
   }
 }
@@ -10088,7 +10308,6 @@ function setStylingForEvent(clause, wrapper, store) {
           sidebar.classList.add("sidebar--dragged-over")
         }
       }
-
       store.addActiveOverlay("hide-resize-overlay");
       resizeoverlay.classList.remove("hide-resize-overlay");
       break;
@@ -10424,10 +10643,11 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupX;
   if (center) {
+    // console.log("center")
     // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
-    if (targetWidth + x >= winW) {
-      console.log(true);
+    if (targetWidth + x + 4 >= winW) {
+      // console.log(true);
       popupX = winW - popupW - 4;
     }
   } else {
@@ -10462,6 +10682,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createCheckIcon": () => (/* binding */ createCheckIcon),
 /* harmony export */   "createCloseIcon": () => (/* binding */ createCloseIcon),
 /* harmony export */   "createEditIcon": () => (/* binding */ createEditIcon),
+/* harmony export */   "createExpandDownIcon": () => (/* binding */ createExpandDownIcon),
 /* harmony export */   "createMeatballVertIcon": () => (/* binding */ createMeatballVertIcon),
 /* harmony export */   "createPencilIcon": () => (/* binding */ createPencilIcon),
 /* harmony export */   "createSortPlaceholderIcon": () => (/* binding */ createSortPlaceholderIcon),
@@ -10629,7 +10850,7 @@ const createCaretRightIcon = (fill) => {
   const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
   pathone.setAttribute("d", "m6 18.167-1.583-1.584L11 10 4.417 3.417 6 1.833 14.167 10Z");
   icon.appendChild(pathone)
-  return icon;  
+  return icon;
 }
 
 const createCheckIcon = (fill) => {
@@ -10674,6 +10895,27 @@ const createMeatballVertIcon = (fill) => {
   const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
   pathone.setAttribute("d", "M6 14q-.825 0-1.412-.588Q4 12.825 4 12t.588-1.413Q5.175 10 6 10t1.412.587Q8 11.175 8 12q0 .825-.588 1.412Q6.825 14 6 14Zm6 0q-.825 0-1.412-.588Q10 12.825 10 12t.588-1.413Q11.175 10 12 10t1.413.587Q14 11.175 14 12q0 .825-.587 1.412Q12.825 14 12 14Zm6 0q-.825 0-1.413-.588Q16 12.825 16 12t.587-1.413Q17.175 10 18 10q.825 0 1.413.587Q20 11.175 20 12q0 .825-.587 1.412Q18.825 14 18 14Z")
   icon.appendChild(pathone)
+  return icon;
+}
+
+const createExpandDownIcon = (fill) => {
+{/* <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg> */}
+  const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  icon.setAttribute("height", "18px");
+  icon.setAttribute("width", "18px");
+  icon.setAttribute("viewBox", "0 0 24 24")
+  // icon.setAttribute("fill", "")
+  if (!fill) {
+    icon.setAttribute("fill", "var(--white3)")
+  } else {
+    icon.setAttribute("fill", fill)
+  }
+  const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathone.setAttribute("d", "M0 0h24v24H0z")
+  pathone.setAttribute("fill", "none")
+  const pathtwo = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathtwo.setAttribute("d", "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z")
+  icon.append(pathone, pathtwo);  
   return icon;
 }
 
@@ -10871,16 +11113,6 @@ function compareTimes(time1, time2) {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calcTime);
 
 
-/***/ }),
-
-/***/ "./src/testdata.json":
-/*!***************************!*\
-  !*** ./src/testdata.json ***!
-  \***************************/
-/***/ ((module) => {
-
-module.exports = JSON.parse('[{"category":"misc","completed":true,"description":"random body","end":"2023-04-15T20:15:00.000Z","id":"lcyzz1b7xjg52g9oqr","start":"2023-04-15T15:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-11T19:15:00.000Z","id":"lcyzz1b7407g7llfyvn","start":"2023-04-11T17:15:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-16T21:15:00.000Z","id":"lcyzz1b7xtffrq8x4v","start":"2023-01-16T18:15:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-02-25T20:45:00.000Z","id":"lcyzz1b79kor7hmrctm","start":"2023-02-25T17:45:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-03-16T19:30:00.000Z","id":"lcyzz1b71k84n5phpwk","start":"2023-03-16T16:30:00.000Z","title":"aut"},{"category":"school","completed":true,"description":"random body","end":"2023-01-14T22:15:00.000Z","id":"lcyzz1b7nwkxf09f71n","start":"2023-01-14T18:15:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-02-09T21:30:00.000Z","id":"lcyzz1b7la0c9e75p5","start":"2023-02-09T16:30:00.000Z","title":"cupiditate"},{"category":"school","completed":true,"description":"random body","end":"2023-03-02T22:00:00.000Z","id":"lcyzz1b7gzwvc1dsfr","start":"2023-03-02T18:00:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-25T22:45:00.000Z","id":"lcyzz1b75xkzv4chxnv","start":"2023-02-25T18:45:00.000Z","title":"ut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-21T21:15:00.000Z","id":"lcyzz1b789qc02795fr","start":"2023-03-21T16:15:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-01-05T20:45:00.000Z","id":"lcyzz1b7i0lnwlp3vf9","start":"2023-01-05T18:45:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-05T22:00:00.000Z","id":"lcyzz1b767n4tsdgyfa","start":"2023-02-05T17:00:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-01-28T20:30:00.000Z","id":"lcyzz1b7w60bn9jabu","start":"2023-01-28T18:30:00.000Z","title":"aut"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-01T22:15:00.000Z","id":"lcyzz1b7uu2pbffmxi9","start":"2023-03-01T16:15:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-08T20:15:00.000Z","id":"lcyzz1b7q5nh9aiix6i","start":"2023-03-08T18:15:00.000Z","title":"ut"},{"category":"school","completed":true,"description":"random body","end":"2023-03-19T21:45:00.000Z","id":"lcyzz1b7py9dapvhdj","start":"2023-03-19T17:45:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-23T22:15:00.000Z","id":"lcyzz1b7w4cxu8q6m19","start":"2023-01-23T18:15:00.000Z","title":"amet"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-24T21:45:00.000Z","id":"lcyzz1b79fdbr3s7j1","start":"2023-01-24T17:45:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-20T21:00:00.000Z","id":"lcyzz1b70cqbpwyhzod","start":"2023-04-20T17:00:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-03-27T19:45:00.000Z","id":"lcyzz1b7ltydi5300gb","start":"2023-03-27T14:45:00.000Z","title":"aut"},{"category":"school","completed":true,"description":"random body","end":"2023-01-04T22:15:00.000Z","id":"lcyzz1b74nqhz7ggtds","start":"2023-01-04T17:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-11T21:00:00.000Z","id":"lcyzz1b7hqw154flvl","start":"2023-03-11T16:00:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-14T20:30:00.000Z","id":"lcyzz1b7jxw0rgf5p7l","start":"2023-02-14T15:30:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-12T22:00:00.000Z","id":"lcyzz1b7suc6pbfpfj","start":"2023-02-12T17:00:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-02-04T21:30:00.000Z","id":"lcyzz1b7bqwgb51pl4g","start":"2023-02-04T17:30:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-22T21:15:00.000Z","id":"lcyzz1b7er3ijvxs17n","start":"2023-02-22T15:15:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-19T19:30:00.000Z","id":"lcyzz1b7ydgl5w630wl","start":"2023-03-19T14:30:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-04T19:00:00.000Z","id":"lcyzz1b7em75utmslq","start":"2023-03-04T16:00:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-01-05T22:45:00.000Z","id":"lcyzz1b7elkzuui9j15","start":"2023-01-05T17:45:00.000Z","title":"aut"},{"category":"school","completed":true,"description":"random body","end":"2023-01-06T19:45:00.000Z","id":"lcyzz1b8jb0e8up08qk","start":"2023-01-06T18:45:00.000Z","title":"ut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-18T21:15:00.000Z","id":"lcyzz1b81rm6tgjli87","start":"2023-03-18T17:15:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-03-09T20:15:00.000Z","id":"lcyzz1b8944638sdqow","start":"2023-03-09T15:15:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-01-01T20:15:00.000Z","id":"lcyzz1b811u9k1n81j7c","start":"2023-01-01T17:15:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-01T19:15:00.000Z","id":"lcyzz1b8iwnoaer7h4","start":"2023-02-01T15:15:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-12T20:30:00.000Z","id":"lcyzz1b8kwqbt7l8uqq","start":"2023-04-12T16:30:00.000Z","title":"amet"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-05T21:00:00.000Z","id":"lcyzz1b8xgrfhnibxm","start":"2023-04-05T17:00:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-01-04T20:30:00.000Z","id":"lcyzz1b8sx988lxtqbj","start":"2023-01-04T18:30:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-05T21:00:00.000Z","id":"lcyzz1b8a39jfb85p34","start":"2023-03-05T15:00:00.000Z","title":"sequi"},{"category":"school","completed":true,"description":"random body","end":"2023-01-27T20:15:00.000Z","id":"lcyzz1b80h18szgwu7eg","start":"2023-01-27T15:15:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-03-03T19:00:00.000Z","id":"lcyzz1b8jbsw14dm4qh","start":"2023-03-03T15:00:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-15T19:00:00.000Z","id":"lcyzz1b8tiamqxlnn7b","start":"2023-02-15T18:00:00.000Z","title":"cupiditate"},{"category":"school","completed":true,"description":"random body","end":"2023-01-15T19:15:00.000Z","id":"lcyzz1b8ixa8qpwp32b","start":"2023-01-15T17:15:00.000Z","title":"veniam"},{"category":"school","completed":true,"description":"random body","end":"2023-03-10T22:00:00.000Z","id":"lcyzz1b83bw8wpp03n1","start":"2023-03-10T15:00:00.000Z","title":"aut"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-04T20:00:00.000Z","id":"lcyzz1b8p16xdz25yzd","start":"2023-04-04T15:00:00.000Z","title":"veniam"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-18T21:30:00.000Z","id":"lcyzz1b8mwtcbxttn0f","start":"2023-03-18T14:30:00.000Z","title":"ut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-01T20:15:00.000Z","id":"lcyzz1b8e60f3909m1","start":"2023-03-01T15:15:00.000Z","title":"numquam"},{"category":"default","completed":true,"description":"random body","end":"2023-03-24T18:15:00.000Z","id":"lcyzz1b8kp93ioso7cm","start":"2023-03-24T17:15:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-04-18T20:00:00.000Z","id":"lcyzz1b85ofx41z4mdq","start":"2023-04-18T15:00:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-03-10T22:30:00.000Z","id":"lcyzz1b8u9ib2hwj64i","start":"2023-03-10T15:30:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-04-14T20:00:00.000Z","id":"lcyzz1b827hdjhysoxp","start":"2023-04-14T16:00:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-01-12T19:15:00.000Z","id":"lcyzz1b8uoe7uwrgom","start":"2023-01-12T16:15:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-10T22:30:00.000Z","id":"lcyzz1b8gwja7vshfao","start":"2023-01-10T17:30:00.000Z","title":"cupiditate"},{"category":"default","completed":true,"description":"random body","end":"2023-04-01T18:45:00.000Z","id":"lcyzz1b817w0g6nf6gi","start":"2023-04-01T17:45:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-13T19:30:00.000Z","id":"lcyzz1b8ovp6ugqqkb","start":"2023-02-13T17:30:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-02-25T19:30:00.000Z","id":"lcyzz1b8js5ux3ohvn","start":"2023-02-25T15:30:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-28T20:30:00.000Z","id":"lcyzz1b8tn32a56oya","start":"2023-02-28T17:30:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-04-18T20:45:00.000Z","id":"lcyzz1b8hgzvgsru4gd","start":"2023-04-18T15:45:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-02-01T21:45:00.000Z","id":"lcyzz1b80zh2ih2no7hh","start":"2023-02-01T16:45:00.000Z","title":"quaerat"},{"category":"school","completed":true,"description":"random body","end":"2023-04-29T20:30:00.000Z","id":"lcyzz1b8vf4836e4zt","start":"2023-04-29T17:30:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-26T22:15:00.000Z","id":"lcyzz1b80esjk0zdfv4k","start":"2023-02-26T17:15:00.000Z","title":"numquam"},{"category":"default","completed":true,"description":"random body","end":"2023-04-26T19:30:00.000Z","id":"lcyzz1b8qxk4ph55g6k","start":"2023-04-26T17:30:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-05T21:00:00.000Z","id":"lcyzz1b8funzwgb5wov","start":"2023-02-05T16:00:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-09T22:30:00.000Z","id":"lcyzz1b80s862yx55zem","start":"2023-02-09T16:30:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-01-06T21:15:00.000Z","id":"lcyzz1b84uik5hvhex4","start":"2023-01-06T16:15:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-12T19:00:00.000Z","id":"lcyzz1b8z2zq0cjen6n","start":"2023-03-12T15:00:00.000Z","title":"ut"},{"category":"school","completed":true,"description":"random body","end":"2023-02-14T20:45:00.000Z","id":"lcyzz1b84wx8fdjossv","start":"2023-02-14T17:45:00.000Z","title":"ut"},{"category":"school","completed":true,"description":"random body","end":"2023-04-27T18:30:00.000Z","id":"lcyzz1b8aw9ujxrmlgd","start":"2023-04-27T16:30:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-02-03T19:45:00.000Z","id":"lcyzz1b8qdxefp21ddk","start":"2023-02-03T17:45:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-03-05T19:30:00.000Z","id":"lcyzz1b87g3ccxbqaav","start":"2023-03-05T18:30:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-14T19:00:00.000Z","id":"lcyzz1b82nu4n6th2pj","start":"2023-04-14T15:00:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-02-27T20:15:00.000Z","id":"lcyzz1b8n4o3kp5hoag","start":"2023-02-27T16:15:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-04-28T20:30:00.000Z","id":"lcyzz1b8mn1l6zpmeu","start":"2023-04-28T15:30:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-15T22:30:00.000Z","id":"lcyzz1b8kb805gbvib","start":"2023-01-15T15:30:00.000Z","title":"cupiditate"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-16T21:15:00.000Z","id":"lcyzz1b8idclct2pcn","start":"2023-04-16T15:15:00.000Z","title":"ut"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-12T20:00:00.000Z","id":"lcyzz1b8xyvee6qfjdt","start":"2023-01-12T18:00:00.000Z","title":"veniam"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-24T20:15:00.000Z","id":"lcyzz1b8iza0u2z8ta9","start":"2023-04-24T14:15:00.000Z","title":"amet"},{"category":"default","completed":true,"description":"random body","end":"2023-03-06T21:30:00.000Z","id":"lcyzz1b80edqilz9sl1s","start":"2023-03-06T16:30:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-03-28T21:00:00.000Z","id":"lcyzz1b8wr2qjtbt0hh","start":"2023-03-28T16:00:00.000Z","title":"numquam"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-10T19:30:00.000Z","id":"lcyzz1b8u04mxgxyxq","start":"2023-04-10T14:30:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-01-28T20:00:00.000Z","id":"lcyzz1b8z3kgiina9in","start":"2023-01-28T17:00:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-15T20:15:00.000Z","id":"lcyzz1b8tb7ankosvff","start":"2023-02-15T16:15:00.000Z","title":"veniam"},{"category":"default","completed":true,"description":"random body","end":"2023-02-02T22:15:00.000Z","id":"lcyzz1b8ygsv2ptyq6r","start":"2023-02-02T18:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-14T19:30:00.000Z","id":"lcyzz1b8vntxdf9lbx","start":"2023-02-14T16:30:00.000Z","title":"veniam"},{"category":"school","completed":true,"description":"random body","end":"2023-04-01T21:30:00.000Z","id":"lcyzz1b853wjfcgbrpw","start":"2023-04-01T17:30:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-01-31T19:00:00.000Z","id":"lcyzz1b80kz82u429wzd","start":"2023-01-31T17:00:00.000Z","title":"amet"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-03T21:15:00.000Z","id":"lcyzz1b8dos82soa5vh","start":"2023-01-03T17:15:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-03-07T19:15:00.000Z","id":"lcyzz1b8kn7cvh91q0m","start":"2023-03-07T16:15:00.000Z","title":"quaerat"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-02T19:15:00.000Z","id":"lcyzz1b8w0y9p8mck9","start":"2023-04-02T17:15:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-12T18:15:00.000Z","id":"lcyzz1b86kzh4wmy8o","start":"2023-03-12T16:15:00.000Z","title":"aut"},{"category":"misc","completed":true,"description":"random body","end":"2023-04-12T20:30:00.000Z","id":"lcyzz1b88o12io1qctc","start":"2023-04-12T16:30:00.000Z","title":"aut"},{"category":"default","completed":true,"description":"random body","end":"2023-03-25T21:30:00.000Z","id":"lcyzz1b89mx9ijwsx7","start":"2023-03-25T17:30:00.000Z","title":"cupiditate"},{"category":"school","completed":true,"description":"random body","end":"2023-01-08T19:30:00.000Z","id":"lcyzz1b8litv2bbkrv","start":"2023-01-08T17:30:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-04-29T19:45:00.000Z","id":"lcyzz1b8idg7gmnjwi","start":"2023-04-29T15:45:00.000Z","title":"numquam"},{"category":"default","completed":true,"description":"random body","end":"2023-03-08T21:00:00.000Z","id":"lcyzz1b8lg81ocaz1ii","start":"2023-03-08T16:00:00.000Z","title":"numquam"},{"category":"school","completed":true,"description":"random body","end":"2023-04-24T20:30:00.000Z","id":"lcyzz1b80305v16m33b8","start":"2023-04-24T14:30:00.000Z","title":"sequi"},{"category":"default","completed":true,"description":"random body","end":"2023-02-01T19:15:00.000Z","id":"lcyzz1b8r24ytr1tg49","start":"2023-02-01T18:15:00.000Z","title":"quaerat"},{"category":"default","completed":true,"description":"random body","end":"2023-02-27T21:00:00.000Z","id":"lcyzz1b8k8c76lxdd0i","start":"2023-02-27T16:00:00.000Z","title":"velit"},{"category":"default","completed":true,"description":"random body","end":"2023-03-13T19:45:00.000Z","id":"lcyzz1b8gpy4rdrcvgt","start":"2023-03-13T14:45:00.000Z","title":"velit"},{"category":"misc","completed":true,"description":"random body","end":"2023-02-09T19:45:00.000Z","id":"lcyzz1b8rklmd4gcl4m","start":"2023-02-09T16:45:00.000Z","title":"sequi"},{"category":"misc","completed":true,"description":"random body","end":"2023-01-01T22:45:00.000Z","id":"lcyzz1b8q84d5wezdu8","start":"2023-01-01T18:45:00.000Z","title":"numquam"}]');
-
 /***/ })
 
 /******/ 	});
@@ -10986,6 +11218,7 @@ __webpack_require__.r(__webpack_exports__);
 // css variables and reset
 
 
+
 // <main>
 
 
@@ -10998,6 +11231,7 @@ __webpack_require__.r(__webpack_exports__);
 // </main>
 
 // popup / modals
+// <aside>
 
 
 
@@ -11011,8 +11245,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// </aside>
 /*!*************************************!*/
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 // NOTES;
 // * finish settings
 // * finish privacy,terms,notes
@@ -11020,15 +11255,11 @@ __webpack_require__.r(__webpack_exports__);
 // FIX;
 // * set onclick to null when not in use
 // * validate .json files
-// * top modal for day view
 // * set toast to be removed on window focus
 // * more modal monthview 
-// * more modal monthview -- add edit btn
-// * timepicker small screens
 // * linter
 // * 
-
-// store.setStoreForTesting(generateRandomEvents(1000))
+// store.setStoreForTesting(generateRandomEvents(1000));
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
