@@ -111,12 +111,33 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     if (getDateTime.time !== null) {
       if (getDateTime.time === undefined) {
         let tempdate = new Date()
-        let daysSince = tempdate.getTime() - end.getTime()
-        daysSince = Math.floor(daysSince / (1000 * 60 * 60 * 24))
+        let secondsDiff = tempdate.getTime() - end.getTime()
+        let daysSince = Math.floor(secondsDiff / (1000 * 60 * 60 * 24))
         let timeheadertitle;
-        console.log(' is today')
+
+        /**
+         * If the entry has ended, display the time since it ended
+         * If the entry has ended today, display the time since it ended
+         * If the entry has ended yesterday, display "ended yesterday"
+         * If the entry starts today, display how long until it is scheduled to end
+         * If the entry is yet to start, display how long until it is scheduled to start
+         * 
+         */
+
         if (daysSince === 0) {
-          timeheadertitle = "ended today"
+          let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60))
+          let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60))
+          if (hourSince === 0) {
+            if (minSince === 1) {
+              timeheadertitle = `ended ${minSince} minute ago`
+            } else {
+              timeheadertitle = `ended ${minSince} minutes ago`
+            }
+          } else if (hourSince === 1) {
+            timeheadertitle = `ended ${hourSince} hour ago`
+          } else if (hourSince > 1) {
+            timeheadertitle = `ended ${hourSince} hours ago`
+          } 
         } else if (daysSince === 1) {
           timeheadertitle = "ended yesterday"
         } else {

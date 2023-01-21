@@ -465,7 +465,6 @@ export default function setWeekView(context, store, datepickerContext) {
           e
         );
 
-
       } else {
         setBoxTimeAttributes(box, "week");
         const time = calcTime(

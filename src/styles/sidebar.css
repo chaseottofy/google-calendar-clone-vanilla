@@ -30,8 +30,8 @@
 }
 
 .sidebar-content--header {
-  height: 76px;
-  min-height: 76px;
+  height: 64px;
+  min-height: 56px;
   width: 100%;
   position: relative;
 }
@@ -39,7 +39,7 @@
 .sb-toggle-form-btn {
   position: absolute;
   left: 5px;
-  top: 12px;
+  top: 6px;
   width: 132px;
   height: 44px;
   background: transparent;
@@ -76,7 +76,7 @@
 .stfb {
   position: absolute;
   left: 7px;
-  top: 10px;
+  top: 4px;
   background: transparent;
   border-radius: 24px;
   height: 48px;
@@ -100,7 +100,7 @@
 .sb-data-btn {
   position: absolute;
   left: 156px;
-  top: 21px;
+  top: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -120,12 +120,10 @@
     rgba(83, 88, 95, 0.1) 0px 4px 5px 0px;
 }
 
-/* 
-*/
 .sb-theme-btn {
   position: absolute;
   left: 196px;
-  top: 21px;
+  top: 16px;
   display: flex;
   justify-content: center;
   align-items: center;

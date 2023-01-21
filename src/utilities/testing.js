@@ -52,9 +52,12 @@ class FEntry {
 }
 
 // const generateRandomEvents = () => {
-export default function generateRandomEvents() {
+export default function generateRandomEvents(numberOfEvents) {
   const events = []
-  for (let i = 0; i < 100; i++) {
+  if (numberOfEvents === undefined || numberOfEvents === null || numberOfEvents === 0 || numberOfEvents === NaN || numberOfEvents === Infinity || numberOfEvents === -Infinity || numberOfEvents === -0 || numberOfEvents > 1000) {
+    numberOfEvents = 100
+  }
+  for (let i = 0; i < numberOfEvents; i++) {
     const start = generateStart();
     const end = generateEnd(start);
     events.push(

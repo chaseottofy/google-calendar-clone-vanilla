@@ -40,3 +40,12 @@ For now, you can view the app through screenshots (link below), or simply downlo
 * improved context menus.
 * links now crawable.
 * improved keyframes.
+
+### Jan 20, 2023
+
+* Entry popup modlas will now provide the following details :
+  * If the entry has ended, display the time since it ended.
+  * If the entry ends today and has started, display a countdown until complete.
+  * If the entry ends today and hasn't started, display the length in hours/minutes.
+  * If the entry ended yesterday, display "ended yesterday".
+  * If the entry is yet to start and is not in the past, display how long until it is scheduled to start.

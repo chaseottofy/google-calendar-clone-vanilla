@@ -16,14 +16,14 @@ export default function setHeader(context, component, store) {
   const configHeader = (borderstyle, componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
     datetimeWrapper.classList.remove("datetime-inactive");
-    header.style.borderBottom = borderstyle;
+    // header.style.borderBottom = borderstyle;
     datetimeWrapper.style.paddingRight = "0";
     datetimeContent.removeAttribute("style")
   }
 
   const configListHeader = (componentTitle) => {
     dateTimeTitle.textContent = componentTitle;
-    header.style.borderBottom = "1px solid var(--mediumgrey1)"
+    // header.style.borderBottom = "1px solid var(--mediumgrey1)"
     datetimeWrapper.classList.add("datetime-inactive");
   }
 
@@ -46,7 +46,9 @@ export default function setHeader(context, component, store) {
       setHeaderAttributes("week");
       break;
     case "month":
-      configHeader("var(--bordergrey)", `${context.getMonthName()} ${context.getYear()}`);
+      // 1px solid transparent
+      // var(--bordergrey)
+      configHeader("1px solid transparent", `${context.getMonthName()} ${context.getYear()}`);
       setHeaderAttributes("month");
       break;
     case "year":
@@ -56,7 +58,7 @@ export default function setHeader(context, component, store) {
     case "list":
       // !Important : text content is set in list.js after data is fetched
       setHeaderAttributes("list");
-      header.style.borderBottom = "1px solid var(--mediumgrey1)"
+      // header.style.borderBottom = "1px solid var(--mediumgrey1)"
       datetimeWrapper.classList.add("datetime-inactive");
       break;
     default:

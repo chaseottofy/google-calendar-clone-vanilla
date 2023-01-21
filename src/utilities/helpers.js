@@ -140,7 +140,7 @@ function setTheme(context) {
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
  * @returns [left position, top position];
  */
-function placePopup(popupWidth, popupHeight, coords, windowCoords) {
+function placePopup(popupWidth, popupHeight, coords, windowCoords, center) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;
   const [winW, winH] = windowCoords;

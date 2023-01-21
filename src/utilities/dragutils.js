@@ -111,12 +111,12 @@ function setBoxWidth(box, prepend, dataidx) {
       box.style.width = "calc((100% - 4px) * 1)"
       break;
     case `${prepend}two`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.9)";
+      box.style.left = "calc((100% - 0px) * 0.2 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.80)";
       break;
     case `${prepend}three`:
-      box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.85)";
+      box.style.left = "calc((100% - 0px) * 0.45 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.55)";
       break;
     case `${prepend}four`:
       box.style.left = "calc((100% - 0px) * 0.35 + 0px)"
@@ -124,23 +124,23 @@ function setBoxWidth(box, prepend, dataidx) {
       break;
     case `${prepend}five`:
       box.style.left = "calc((100% - 0px) * 0 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.34)"
+      box.style.width = "calc((100% - 4px) * 0.35)"
       break;
     case `${prepend}six`:
-      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
+      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
       box.style.width = "calc((100% - 4px) * 0.4)"
       break;
     case `${prepend}seven`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.38)"
+      box.style.left = "calc((100% - 0px) * 0.5 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.5)"
       break;
     case `${prepend}eight`:
-      box.style.left = "calc((100% - 0px) * 0.1)"
-      box.style.width = "calc((100% - 4px) * 0.4)"
+      box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.25)"
       break;
     case `${prepend}nine`:
-      box.style.left = "calc((100% - 0px) * 0.3)"
-      box.style.width = "calc((100% - 4px) * 0.7)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.35)"
       break;
     default:
       break;
@@ -164,12 +164,16 @@ function handleOverlap(col, view, boxes) {
 
   for (let i = 0; i < collisions.length; i++) {
     const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`)
+    let idx = i;
+    if (i >= 9) {
+      idx -= 8;
+    }
     if (i === 0) {
-      box.setAttribute("class", `${baseClass.base} ${identifyBox[i]}`)
-      box.setAttribute(boxIdxAttr, identifyBox[i])
+      box.setAttribute("class", `${baseClass.base} ${identifyBox[idx]}`)
+      box.setAttribute(boxIdxAttr, identifyBox[idx])
     } else {
-      box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[i]}`)
-      box.setAttribute(boxIdxAttr, identifyBox[i])
+      box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
+      box.setAttribute(boxIdxAttr, identifyBox[idx])
     }
     setBoxWidth(box, classPrepend, boxIdxAttr)
   }
@@ -181,8 +185,7 @@ function setStylingForEvent(clause, wrapper, store) {
 
   switch (clause) {
     case "dragstart":
-      // console.log(wrapper.offsetLeft)
-
+      // make sidebar slightly see through if it is open and the user is dragging or resizing (screens smaller than 840px);
       if (!sidebar.classList.contains("hide-sidebar")) {
         if (wrapper.offsetLeft === 0) {
           sidebar.classList.add("sidebar--dragged-over")
@@ -232,7 +235,7 @@ function createBox(col, entry, view, color) {
   const attrPrepend = identifiers.boxAttributes[view].prepend;
   const attrPrependTwo = identifiers.boxAttributes[view].prependtwo;
   const coord = entry.coordinates
-  
+
   const box = document.createElement('div');
   box.classList.add(baseClass);
   box.style.backgroundColor = color;
@@ -340,7 +343,7 @@ function calcDateOnClick(date, start, length) {
 }
 
 function getOriginalBoxObject(box) {
-  return { 
+  return {
     height: box.style.height,
     left: box.style.left,
     width: box.style.width,

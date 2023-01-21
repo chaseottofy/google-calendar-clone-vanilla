@@ -1,5 +1,6 @@
 import locales from "../../locales/en"
 import { createCheckIcon } from "../../utilities/svgs";
+import { placePopup } from "../../utilities/helpers";
 const checkIcon = createCheckIcon('var(--taskcolor');
 const colors = Object.values(locales.colors)
 
@@ -91,9 +92,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   function validateNewCategory(categoryName, color) {
     const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
     const origName = formhelper.getOriginalName();
-    // const [origNameIdx, newNameIdx] = [
-    //   store.getCategoryIndex(origName)
-    // ]
 
     let errormsg = false;
     if (trimName.length < 1) {
@@ -105,7 +103,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
         errormsg = true;
       }
     }
-
 
     if (errormsg) {
       ctgErrMsg.classList.remove("hide-ctg-err");

@@ -67,6 +67,43 @@ const selectedCategoryTitle = document.querySelector(".form--body__category-moda
 // reset / save btns
 const formSubmitButton = document.querySelector(".form--footer__button-save");
 
+
+/**
+ * list of methods -- I plan on cleaning the form up
+ * 
+ * closetimepicker
+ * setEndDateToNextDay
+ * setEndDateToNextHour
+ * createTimepicker
+ * renderSidebarDatepickerForm
+ * getDefaultCategory
+ * setInitialFormCategory
+ * setFormInitialValues
+ * getDatePicker
+ * handleOverlayClose
+ * handleSetDate
+ * getDateFormatViaAttr
+ * getTimeFormatViaAttr
+ * getDateTimeFormatted
+ * configDatesForStore
+ * checkFormValidity
+ * removeErrorMessages
+ * handleFormErrors
+ * removeLastFormEntry
+ * handleFormClose
+ * handleSubmissionRender
+ * handleFormSubmission
+ * handleCategorySelection
+ * closeCategoryModal
+ * createCategoryOptions
+ * openCategoryModal
+ * dragFormAnywhere
+ * delegateCategorySelection
+ * handleTimepickerSetup
+ * delegateEntryFormEvents
+ * delegateFormKeyDown
+ */
+
 export default function setEntryForm(context, store, datepickerContext) {
   let categories;
   let activeCategories;

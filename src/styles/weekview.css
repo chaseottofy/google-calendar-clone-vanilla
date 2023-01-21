@@ -79,7 +79,6 @@
   width: 100%;
   align-items: center;
   position: relative;
-  border-top: 1px solid var(--mediumgrey1);
   border-bottom: 2px solid var(--black0);
   background-size: calc(100%/7) 100%;
   background-image:
@@ -320,14 +319,9 @@
   pointer-events: none;
 }
 
-.weekview--sidebar:hover {
-  background: rgba(0, 0, 0, .3);
-}
-
 .sidegrid-cell {
   font-size: 8px;
   color: var(--offwhite1);
-  text-transform: uppercase;
   height: 50px;
   display: flex;
   justify-content: center;
@@ -384,6 +378,9 @@
 /* box events */
 .box-ontop {
   border: 1px solid var(--black1);
+  transition-property: left, width; 
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
 }
 
 .temporary-box {
@@ -552,6 +549,11 @@
 
 .box-resizing {
   z-index: 1000;
+}
+
+.box-dragging,
+.box-resizing {
+  transition: none;
 }
 
 

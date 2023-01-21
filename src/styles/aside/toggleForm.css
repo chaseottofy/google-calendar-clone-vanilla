@@ -3,7 +3,7 @@
   position: fixed;
   display:flex;
   left: 9px;
-  top:77px;
+  top: 64px;
   width: 44px;
   height: 44px;
   background: transparent;
@@ -72,6 +72,6 @@
 @media screen and (max-height: 470px) {
   /* .toggle-form{ display:none; } */
   .toggle-form {
-    top: 62px;
+    top: 56px;
   }
 }

@@ -2,6 +2,8 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
+import generateRandomEvents from "./utilities/testing"
+
 /*!*************************************!*\
 // (CSS) 
 /*!*************************************!*/
@@ -43,6 +45,14 @@ import "./styles/aside/shortcuts.css"
 // * validate .json files
 // * top modal for day view
 // * set toast to be removed on window focus
-// localStorage.clear()
+// * more modal monthview 
+// * more modal monthview -- add edit btn
+// * timepicker small screens
+// * linter
+// * 
+
+// store.setStoreForTesting(generateRandomEvents(1000))
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
+const tt = document.querySelector(".weekview__top")
+console.log(tt.offsetHeight)

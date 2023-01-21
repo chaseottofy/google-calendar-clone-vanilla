@@ -27,9 +27,10 @@ import {
 } from "../../utilities/dateutils"
 
 // general utilities
-import debounce, {
+import {
   getClosest,
   hextorgba,
+  placePopup
 } from '../../utilities/helpers'
 
 // drag&drop / resize utilities
@@ -38,7 +39,7 @@ import { setStylingForEvent } from "../../utilities/dragutils"
 // naming
 import locales from "../../locales/en"
 const monthNames = locales.labels.monthsShort
-
+// placePopup(popupWidth, popupHeight, coords, windowCoords)
 
 
 const resizeoverlay = document.querySelector(".resize-overlay")
@@ -318,6 +319,7 @@ export default function setMonthView(context, store, datepickerContext) {
     const parent = box.parentElement;
     const cell = parent.parentElement;
     cell.classList.add("current-drop-zone");
+    const targetModal = document?.querySelector(".more-modal");
 
     const originalCellLength = parent.childElementCount;
     const [cellX, cellY] = getCoordinatesFromCell(cell);
@@ -346,9 +348,9 @@ export default function setMonthView(context, store, datepickerContext) {
     let [startcursorx, startcursory] = [e.clientX, e.clientY];
     let [movedX, movedY] = [0, 0];
     let [lastX, lastY] = [cellX, cellY];
-    let gaveStyles = false; 
+    let gaveStyles = false;
     let changeCursor = false;
-    
+
 
 
     const mousemove = e => {
@@ -357,6 +359,9 @@ export default function setMonthView(context, store, datepickerContext) {
       // Do not apply styles until user has moved the box at least 5px from starting position.
       if (movedX > 1 || movedY > 1) {
         if (!changeCursor) {
+          if (targetModal) {
+            targetModal.remove();
+          }
           document.body.style.cursor = "move";
           changeCursor = true;
         }
@@ -439,6 +444,7 @@ export default function setMonthView(context, store, datepickerContext) {
 
 
       // newcell not found 
+      // edge case, haven't come across this yet
       if (newCell === undefined || newCell === null) {
         setStylingForEvent("dragend", monthWrapper, store);
         box.style.opacity = "1";
@@ -455,16 +461,19 @@ export default function setMonthView(context, store, datepickerContext) {
         boxmoved = false;
         box.style.opacity = "1";
         clone.remove();
+        if (targetModal) {
+          targetModal.remove();
+        }
         if (timeDiff < 200) {
           openFormOnClickMV(box, newCell);
-        } 
+        }
 
         // box was moved
       } else {
-        //    case 1 : cell has 6 or more items (more than 6 items)
-        //    case 2 : cell is not empty and not group (1-5 items)
-        //    case 3 : cell is now a group (6 items)
-        //    case 4 : cell is empty
+        // case 1 : cell has 6 or more items (more than 6 items)
+        // case 2 : cell is not empty and not group (1-5 items)
+        // case 3 : cell becomes group (6 items)
+        // case 4 : cell is empty
         // cases 1-4 : run update after to update styling
         // (click)     case 5 : box not moved 
         // movedX / movedY : cursor distance, i.e. (dragstart to dragend)
@@ -556,7 +565,7 @@ export default function setMonthView(context, store, datepickerContext) {
       modalEntry.classList.add("more-modal-entry");
       modalEntry.style.top = `${i * 22}px`;
 
-      modalEntry.style.width = `calc(100% - 4px)`;
+      modalEntry.style.width = `calc(100% - 16px)`;
       modalEntry.style.height = "20px";
       modalEntry.setAttribute("data-monthview-id", entry.id);
       modalEntry.setAttribute("data-mvhidden-category", entry.category);
@@ -581,30 +590,19 @@ export default function setMonthView(context, store, datepickerContext) {
     modal.classList.add("more-modal");
     modal.setAttribute("data-mv-modal", parent.getAttribute("data-mv-idx"));
 
-    const r = parent.getBoundingClientRect();
-    const [
-      parentTop, parentLeft,
-      parentBottom, parentWidth, parentHeight
-    ] = [r.top, r.left, r.bottom, r.width, r.height].map((x) => {
-      return Math.round(x)
-    });
-    const [pX, pY] = getCoordinatesFromCell(parent);
-    if (pX === 6) {
-      modal.style.right = `0`;
-    } else if (pX === 0) {
-      modal.style.left = `0`;
-    } else {
-      modal.style.left = `${parentLeft - parseInt(parentWidth * 0.25)}px`
+    let modalHeight = (moreModalEntries.length * 28) + 64;
+    if (modalHeight > 400) {
+      modalHeight = 400;
     }
+    const rect = parent.getBoundingClientRect();
+    let [x, y] = placePopup(
+      224,
+      modalHeight,
+      [parseInt(rect.left), parseInt(rect.top)],
+      [window.innerWidth, window.innerHeight]
+    );
 
-    modal.style.top = "10%";
-    modal.style.bottom = "10%";
-    modal.style.margin = "auto 0";
-    modal.style.minWidth = "160px";
-    modal.style.width = `${parentWidth + parseInt(parentWidth * 0.5)}px`;
-    modal.style.maxHeight = "300px";
-    modal.style.height = "40%";
-    modal.style.minHeight = "120px";
+    modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px;`)
 
     const modalHeader = document.createElement("div");
     modalHeader.classList.add("more-modal-header");
@@ -645,10 +643,11 @@ export default function setMonthView(context, store, datepickerContext) {
   }
 
   function dragOutOfModal(e) {
-    const targetModal = e.target.closest(".more-modal");
+    const targetModal = document.querySelector(".more-modal");
     const targetCellIdx = parseInt(targetModal.getAttribute("data-mv-modal"));
     const targetCell = document.querySelector(`[data-mv-idx="${targetCellIdx}"]`);
 
+    console.log(targetCell)
     const cloned = e.target.cloneNode(true);
     cloned.setAttribute("class", "monthview--box");
     cloned.firstChild.setAttribute("class", "monthview--title");
@@ -671,9 +670,10 @@ export default function setMonthView(context, store, datepickerContext) {
     }
 
     // instantiate drag engine on cloned element and destroy the more modal instance
+    // 
     dragEngineMonth(e, cloned);
     cloned.focus();
-    targetModal.remove();
+    targetModal.style.opacity = "0.8";
   }
 
   function openDayView(e) {
@@ -713,22 +713,14 @@ export default function setMonthView(context, store, datepickerContext) {
     const offsetColor = hextorgba(color, 0.5);
     cell.classList.add("monthview--daycontent__form-temp");
     cell.style.backgroundColor = offsetColor;
-    const [x, y] = getCoordinatesFromCell(cell);
-    
-    let offX = cell.offsetLeft;
-    let offY = cell.offsetTop;
-    let offH = cell.offsetHeight;
-    let offW = cell.offsetWidth;
 
-    if (x >= 3) {
-      offX -= (offW * (x - 2));
-    }
-    if (y >= 2) {
-      offY -= (offH * 2);
-    } else {
-      offY += offH;
-    }
-
+    const rect = cell.getBoundingClientRect();
+    let [x, y] = placePopup(
+      360,
+      165,
+      [parseInt(rect.left), parseInt(rect.top)],
+      [window.innerWidth, window.innerHeight]
+    )
     // *** config & open form ***
     store.setFormResetHandle("month", handleMonthviewEditFormClose);
 
@@ -745,8 +737,8 @@ export default function setMonthView(context, store, datepickerContext) {
     const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
     const modal = document.querySelector(".entry__options")
-    modal.style.top = offY + "px";
-    modal.style.left = offX + "px";
+    modal.style.top = y + "px";
+    modal.style.left = x + "px";
     // *******************
   }
 
