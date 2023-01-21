@@ -331,7 +331,7 @@ export default function setWeekView(context, store, datepickerContext) {
     const rect = cols[col].getBoundingClientRect()
 
     let [x, y] = placePopup(
-      360,
+      400,
       165,
       [parseInt(rect.left), e.clientY],
       [window.innerWidth, window.innerHeight]
@@ -366,15 +366,15 @@ export default function setWeekView(context, store, datepickerContext) {
     const col = box.parentElement
     const originalColumn = col.getAttribute("data-column-index")
     let currentColumn = col.getAttribute("data-column-index")
-
     let boxhasOnTop = false;
+
     const boxorig = getOriginalBoxObject(box)
     if (box.classList.contains("box-ontop")) {
       boxhasOnTop = true;
       resetStyleOnClick("week", box);
     }
-
     box.classList.add("box-dragging")
+
     box.setAttribute("data-box-col", currentColumn)
     // show original position while dragging
     createTemporaryBox(box, col, boxhasOnTop, "week")

@@ -173,7 +173,7 @@ html {
   --white1: #3c4043;
   --white2: #3c4043;
   --white3: #879096;
-  --white4: #3c4043;
+  --white4: #90999e;
   --offwhite1: #70757A;
   --offwhite2: #3C4043;
   --bordergrey: 1px solid #dadce0;
@@ -292,7 +292,7 @@ svg {
 
 ::-webkit-scrollbar {
   width: 16px;
-  height: 16px;
+  height: 20px;
 }
 
 ::-webkit-scrollbar-thumb {

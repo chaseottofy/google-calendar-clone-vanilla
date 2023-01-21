@@ -905,7 +905,7 @@ class Store {
   }
   
   getFormResetHandle(type) {
-    if (this.handleRenders.calendars[type] === undefined) {
+    if (this.handleRenders.calendars[type].reset === undefined) {
       return null;
     } else {
       return this.handleRenders.calendars[type].reset;

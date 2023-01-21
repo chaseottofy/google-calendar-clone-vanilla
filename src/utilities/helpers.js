@@ -140,12 +140,21 @@ function setTheme(context) {
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
  * @returns [left position, top position];
  */
-function placePopup(popupWidth, popupHeight, coords, windowCoords, center) {
+function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;
   const [winW, winH] = windowCoords;
 
-  let popupX = x + popupW > winW ? x - popupW - 6 : x;
+  let popupX;
+  if (center) {
+    // align to center of target element (targetWidth)
+    popupX = x - (popupW / 2) + (targetWidth / 2);
+    // popupX = x / ;
+    // align to center 
+  } else {
+    popupX = x + popupW > winW ? x - popupW - 6 : x;
+  }
+
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
   if (popupX < 0) popupX = winW - popupW - 24;

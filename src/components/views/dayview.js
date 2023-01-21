@@ -2,11 +2,12 @@
 // import setSidebarDatepicker from "../../components/menus/sidebarDatepicker";
 import fullFormConfig from "../forms/formUtils"
 import FormSetup from "../forms/setForm";
+import getEntryOptionModal from "../menus/entryOptions";
+
 import {
   Day,
   CoordinateEntry
 } from "../../factory/entries"
-import getEntryOptionModal from "../menus/entryOptions";
 
 
 import calcTime, { formatTime } from "../../utilities/timeutils"
@@ -42,6 +43,7 @@ import handleOverlap, {
 import {
   generateId,
   getClosest,
+  placePopup
 } from "../../utilities/helpers"
 
 import createToast from "../toastPopups/toast"
@@ -140,9 +142,8 @@ export default function setDayView(context, store, datepickerContext) {
     }
 
     document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
-
-
     dvHeaderDayOfWeek.textContent = context.getDay()
+
     if (context.isToday()) {
       dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today")
       dvHeaderDayNumber.style.color = "var(--primary1)";
@@ -242,16 +243,8 @@ export default function setDayView(context, store, datepickerContext) {
   function dragEngineDay(e, box) {
     setStylingForEvent("dragstart", dvGrid, store)
     const col = box.parentElement
-
+    // const boxorig = getOriginalBoxObject(box);
     let boxhasOnTop = false;
-    const boxorig = getOriginalBoxObject(box);
-    if (box.classList.contains("dv-box-ontop")) {
-      boxhasOnTop = true;
-      resetStyleOnClick("day", box);
-    }
-
-    box.classList.add("dv-box-dragging")
-    createTemporaryBox(box, col, boxhasOnTop, "day")
 
     const startTop = +box.style.top.split("px")[0]
     const boxHeight = +box.style.height.split("px")[0]
@@ -261,7 +254,6 @@ export default function setDayView(context, store, datepickerContext) {
     let [tempX, tempY] = [e.pageX, e.pageY];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
-    let movedY = 0;
 
     /** DRAG NORTH SOUTH */
     const mousemove = (e) => {
@@ -269,8 +261,14 @@ export default function setDayView(context, store, datepickerContext) {
       sY = Math.abs(e.clientY - tempY);
       if (!hasStyles) {
         if (sX > 3 || sY > 3) {
-          document.body.style.cursor = "move";
           hasStyles = true;
+          document.body.style.cursor = "move";
+          if (box.classList.contains("dv-box-ontop")) {
+            boxhasOnTop = true;
+            resetStyleOnClick("day", box);
+          }
+          box.classList.add("dv-box-dragging")
+          createTemporaryBox(box, col, boxhasOnTop, "day")
           sX = 0;
           sY = 0;
         }
@@ -286,48 +284,55 @@ export default function setDayView(context, store, datepickerContext) {
         return;
       }
       box.style.top = `${newTop}px`
-      movedY = newOffsetY
     }
 
     const mouseup = () => {
-      document.querySelector(".dv-temporary-box").remove()
-      box.classList.remove("dv-box-dragging")
-      if (boxhasOnTop) { box.classList.add("dv-box-ontop") }
-
+      const tempbox = document?.querySelector(".dv-temporary-box")
       // if box did not move, no render needed
       // click event to open form
-      if (Math.abs(movedY) <= 6) {
-        // @function setReset() is provided to the form via the store
-        // it will call once the form is either submitted or cancelled
+      if (tempbox === null) {
         const setReset = () => {
-          resetOriginalBox(box, boxorig);
-          document.querySelector(".dayview-temp-box")?.remove()
-          configHeader()
           setStylingForEvent("dragend", dvGrid, store)
         }
-        store.setFormResetHandle("day", setReset)
-
         const id = box.getAttribute("data-dv-box-id");
-        const tempEntry = store.getEntry(id);
+        const entry = store.getEntry(id);
+        const start = entry.start;
         const color = box.style.backgroundColor;
-        let offsetColor = color;
-        // let offsetColor = `${color.slice(0,3)}a(${color.slice(4, color.length - 1)}, 0.4)`;
 
-        const dates = calcDateOnClick(
-          new Date(tempEntry.start),
-          +box.getAttribute("data-dv-start-time"),
-          +box.getAttribute("data-dv-time-intervals"),
-        );
+        const rect = box.getBoundingClientRect()
 
-        openDayviewForm(
-          box,
-          [1, 3],
-          [tempEntry.category, color, offsetColor],
-          dates,
-          ["edit", id, tempEntry.title, tempEntry.description],
-        );
+        let [x, y] = placePopup(
+          400,
+          165,
+          [parseInt(rect.left), parseInt(rect.top)],
+          [window.innerWidth, window.innerHeight],
+          false
+        )
+        store.setFormResetHandle("day", setReset)
+        const setup = new FormSetup();
+        setup.setSubmission("edit", id, entry.title, entry.description);
+        setup.setCategory(entry.category, color, color);
+        setup.setPosition(x, [x, y], y);
+        setup.setDates(getFormDateObject(start, entry.end));
+        fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
+
+        const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
+        getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
+
+        const modal = document.querySelector(".entry__options")
+        if (window.innerWidth > 580) {
+          modal.style.top = +y + 20 + "px";
+          modal.style.left = x + "px";
+        } else {
+          modal.style.top = "64px";
+        }
+
         // ******************
       } else {
+        tempbox.remove()
+        box.classList.remove("dv-box-dragging")
+        if (boxhasOnTop) { box.classList.add("dv-box-ontop") }
+
         setBoxTimeAttributes(box, "day")
         const start = +box.getAttribute("data-dv-start-time")
         const length = +box.getAttribute("data-dv-time-intervals")
@@ -347,11 +352,10 @@ export default function setDayView(context, store, datepickerContext) {
           box.setAttribute("data-dv-box-index", "box-one")
         }
 
-
         configHeader()
+        setStylingForEvent("dragend", dvGrid, store)
       }
-
-      setStylingForEvent("dragend", dvGrid, store)
+      
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
     }

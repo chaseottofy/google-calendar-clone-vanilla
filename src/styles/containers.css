@@ -1,7 +1,7 @@
 @keyframes swipe-left {
   0% {
     opacity: 0.5;
-    transform: translateX(32px);
+    transform: translateX(24px);
   }
 
   100% {
@@ -13,7 +13,7 @@
 @keyframes swipe-right {
   0% {
     opacity: 0.5;
-    transform: translateX(-32px);
+    transform: translateX(-24px);
   }
 
   100% {

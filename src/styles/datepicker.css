@@ -164,6 +164,7 @@
 
 .datepicker__body--datename-entries {
   color: var(--primarylight1);
+  /* border: 1px solid var(--primary1); */
 }
 
 

@@ -14,7 +14,7 @@
   z-index: 1020;
   width: 180px;
   background: var(--black1);
-  box-shadow: var(--box-shadow1);
+  box-shadow: var(--box-shadow3);
   border-radius: 4px;
   height: 200px;
   overflow-y: scroll;
@@ -22,7 +22,7 @@
 }
 
 .timepicker::-webkit-scrollbar-thumb {
-  min-height: 40px;
+  min-height: 60px;
 }
 
 .timepicker-times__container {
@@ -49,7 +49,7 @@
 }
 
 .timepicker-time--selected {
-  background: var(--black3);
+  background: var(--black0);
   color: var(--primary1);
 }
 

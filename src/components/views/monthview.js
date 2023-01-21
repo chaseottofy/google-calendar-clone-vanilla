@@ -602,10 +602,12 @@ export default function setMonthView(context, store, datepickerContext) {
     }
     const rect = parent.getBoundingClientRect();
     let [x, y] = placePopup(
-      224,
+      216,
       modalHeight,
       [parseInt(rect.left), parseInt(rect.top)],
-      [window.innerWidth, window.innerHeight]
+      [window.innerWidth, window.innerHeight],
+      true,
+      parseInt(rect.width)
     );
 
     modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px;`)
