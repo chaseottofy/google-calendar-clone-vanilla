@@ -73,7 +73,7 @@ export default function setEntryForm(context, store, datepickerContext) {
   let currentComponent;
   let [year, month, day] = [null, null, null]
 
-  const closetimepicker = () => {
+  function closetimepicker() {
     const timep = document?.querySelector(".timepicker")
     const timepoverlay = document?.querySelector(".timepicker-overlay")
     const activeTimeElement = document?.querySelector(".active-form-time")
@@ -186,7 +186,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     let count = 0
     let si;
     hours.forEach((hour, houridx) => {
-      minutes.forEach((min, minidx) => {
+      minutes.forEach(min => {
         const timepickerTime = document.createElement("div")
         timepickerTime.classList.add("timepicker-time")
         let attr;
@@ -205,10 +205,7 @@ export default function setEntryForm(context, store, datepickerContext) {
           }
         }
 
-
-        
         timepickerTime.setAttribute("data-tp-time", attr)
-        console.log(attr)
         timepickerTime.textContent = `${hour}:${min}${md[houridx]}`
         count++
 
@@ -238,7 +235,6 @@ export default function setEntryForm(context, store, datepickerContext) {
         startTimeInput.setAttribute("data-form-time", attr)
 
         let [testhour, testminute] = attr.split(":").map(x => +x)
-        console.log(testhour)
         let [endTestHour, endTestMinute] = endTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x))
 
         if (isSameDay) {
@@ -269,8 +265,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepicker.setAttribute("style", `top:${y}px; left:${x}px;`)
     document.body.prepend(timepickerOverlay);
     document.body.prepend(timepicker)
-    // timepicker.scrollTo(0, 0)
-    console.log(si)
     timepickerOverlay.onclick = closetimepicker;
     timepickerTimesContainer.onclick = delegateNewTime;
     if (!end) {
@@ -321,6 +315,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     // ****************************************** //
     // title / description
     descriptionInput.value = "";
+    titleInput.blur();
     titleInput.value = "";
     setTimeout(() => {
       titleInput.focus();
@@ -802,7 +797,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
   }
 
-
   function handleTimepickerSetup(target) {
     const rect = target.getBoundingClientRect()
     return [
@@ -923,7 +917,5 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
   }
 
-
-  titleInput.blur()
   setFormInitialValues()
 }

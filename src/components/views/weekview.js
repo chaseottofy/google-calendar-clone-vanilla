@@ -14,14 +14,9 @@ import {
 
 import {
   formatStartEndDate,
-  formatStartEndTime,
-  getDuration,
-  getDateTimeFormatted,
   getTempDates,
   getFormDateObject,
   getDateFromAttribute,
-  formatEntryOptionsDate,
-  isBeforeDate
 } from "../../utilities/dateutils"
 
 import handleOverlap, {
@@ -34,9 +29,6 @@ import handleOverlap, {
   resetStyleOnClick,
   createTempBoxHeader,
   startEndDefault,
-  calcNewHourFromCoords,
-  calcNewMinuteFromCoords,
-  calcDateOnClick,
   getOriginalBoxObject,
   resetOriginalBox,
 } from "../../utilities/dragutils"
@@ -50,29 +42,21 @@ import {
   removeToastNoCategorySelected,
 } from "../toastPopups/toastCallbacks"
 
-
-
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
-
 // calendar overlay
 const resizeoverlay = document.querySelector(".resize-overlay")
-
 // weekview main grid wrapper & children
-const containerCalendars = document.querySelector(".container__calendars")
 const main = document.querySelector(".weekview")
 const container = document.querySelector(".weekview--calendar")
 const weekviewHeader = document.querySelector(".weekview--header")
 const weekviewHeaderDayNumber = document.querySelectorAll(".weekview--header-day__number")
-const weekviewHeaderTitle = document.querySelectorAll('.weekview--header-day__title');
 const weekviewHeaderDay = document.querySelectorAll(".weekview--header-day")
 const weekviewGrid = document.querySelector(".weekview__grid")
 const cols = document.querySelectorAll(".week--col")
-
 // weekview top grid & children
 const alldaymodule = document.querySelector(".weekview--allday-module")
 const topCols = document.querySelectorAll(".allday--col")
-
 export default function setWeekView(context, store, datepickerContext) {
   const weekArray = context.getWeekArray()
   let entries = store.getWeekEntries(weekArray)
@@ -332,11 +316,8 @@ export default function setWeekView(context, store, datepickerContext) {
     fullFormConfig.getConfig(setup.getSetup());
   }
 
-
-
   // ***********************
   // CONTEXT MENU SETUP
-
   function getWeekViewContextMenu(cell, entry, handleCloseCallback, e) {
     const id = entry.id;
     const start = entry.start;
@@ -372,10 +353,7 @@ export default function setWeekView(context, store, datepickerContext) {
       modal.style.top = "64px";
     }
   }
-
   // ***********************
-
-
 
   /** DRAG NORTH, SOUTH, EAST, WEST */
   function dragEngineWeek(e, box) {
@@ -525,8 +503,6 @@ export default function setWeekView(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup)
   }
 
-
-
   /** RESIZE NORTH/SOUTH 
    * resizing will never trigger form
   */
@@ -618,25 +594,6 @@ export default function setWeekView(context, store, datepickerContext) {
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
   }
-
-  function renderNewBox(newStartDate, newEndDate) {
-    // render after new entry is created
-    entries = store.getWeekEntries(weekArray)
-    boxes = new Week(
-      entries.day,
-      entries.allDay
-    );
-
-    if (store.getBoxesByColumn().length === 0) {
-      // no need to check for collisions
-      renderBoxes();
-      renderSidebarDatepickerWeek();
-    } else {
-      renderDataForGrid();
-    }
-  }
-
-  // console.log()
 
   /** Drag down empty column to create box */
   function createBoxOnDrag(e) {
@@ -754,8 +711,4 @@ export default function setWeekView(context, store, datepickerContext) {
     alldaymodule.onmousedown = delegateGridTop;
   }
   initWeek();
-
-  // console.log(containerCalendars.offsetWidth)
-  // console.log(window.innerWidth);
-  // console.log(main);
 }

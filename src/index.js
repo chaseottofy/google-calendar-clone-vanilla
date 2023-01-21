@@ -39,6 +39,7 @@ import "./styles/aside/shortcuts.css"
 // * finish privacy,terms,notes
 
 // FIX;
+// * set onclick to null when not in use
 // * validate .json files
 // * top modal for day view
 // * set toast to be removed on window focus

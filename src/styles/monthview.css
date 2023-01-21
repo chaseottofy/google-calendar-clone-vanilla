@@ -407,6 +407,7 @@
   .monthview--daynumber {
     font-size: 9px;
   }
+
   .monthview__top-weekname {
     font-size:8px;
   }
@@ -416,10 +417,10 @@
   }
 }
 @media screen and (max-width:380px) {
-  .monthview--title {
+  /* .monthview--title {
     font-size:10px;
     margin-left:0;
-  }
+  } */
 }
 
 @media screen and (max-height:470px) {

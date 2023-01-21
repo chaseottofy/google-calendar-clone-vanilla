@@ -269,8 +269,8 @@
 
 @media screen and (max-width: 580px) {
   .entry__options {
-    left: 4% !important;
-    right: 4% !important;
+    left: 2% !important;
+    right: 2% !important;
     margin: 0 auto;
   }
 
@@ -293,6 +293,6 @@
 
 @media screen and (max-width: 420px) {
   .entry__options {
-    min-width: 100%;
+    min-width: 90%;
   }
 }

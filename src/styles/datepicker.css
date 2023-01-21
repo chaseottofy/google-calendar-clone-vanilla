@@ -165,3 +165,12 @@
 .datepicker__body--datename-entries {
   color: var(--primarylight1);
 }
+
+
+@media screen and (max-width: 400px) {
+  .datepicker {
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 auto !important;
+  } 
+}

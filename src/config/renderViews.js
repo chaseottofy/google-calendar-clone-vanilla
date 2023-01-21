@@ -247,18 +247,24 @@ export default function renderViews(context, datepickerContext, store) {
     } else {
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
+
       const resetdatepicker = store.getResetDatepickerCallback()
       if (resetdatepicker !== null) {
         resetdatepicker()
         store.setResetDatepickerCallback(null)
       }
+
       listviewBody.style.width = "100%";
       listviewBody.style.marginLeft = "0";
+
       toggleForm.classList.add("hide-toggle--form")
       viewsContainer.classList.add("container__calendars-sb-active")
       dateTimeWrapper.classList.add("datetime-inactive");
       sidebar.classList.remove("hide-sidebar");
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+
+      datepickerContext.setDate(
+        context.getYear(), context.getMonth(), context.getDay()
+      );
       datepickerContext.setDateSelected(context.getDay())
 
       renderSidebarCategories();
@@ -327,12 +333,9 @@ export default function renderViews(context, datepickerContext, store) {
     datepicker.classList.remove("hide-datepicker")
     datepickeroverlay.classList.remove("hide-datepicker-overlay")
     datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay())
-    headerPrevBtn.style.display = "none";
-    headerNextBtn.style.display = "none";
-
-
-
-    const newDatepickerLeft = parseInt(e.target.getBoundingClientRect().left) - 22
+    const rect = e.target.getBoundingClientRect()
+    const newDatepickerLeft = parseInt(rect.left)
+    // convert rect left into a percentage so that it scales with window resize
     const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
     datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
     setDatepicker(context, store, datepickerContext, "header")
