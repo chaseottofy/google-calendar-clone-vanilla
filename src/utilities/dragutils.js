@@ -157,7 +157,7 @@ function setBoxWidthDay(box, prepend, dataidx) {
       break;
     case `${prepend}two`:
       box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.75)";
+      box.style.width = "calc((100% - 4px) * 0.85)";
       break;
     case `${prepend}three`:
       box.style.left = "calc((100% - 0px) * 0.30 + 0px)"

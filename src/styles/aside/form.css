@@ -497,12 +497,13 @@
 
 .entries__form--footer {
   align-items: center;
+  /* background: var(--black000); */
   background: transparent;
   display: flex;
   height: 56px;
   justify-content: flex-end;
   margin-left: auto;
-  padding: 18px 16px 12px 0;
+  padding: 8px 16px 18px 0;
   width: 100%;
   user-select: none;
   z-index: 1200

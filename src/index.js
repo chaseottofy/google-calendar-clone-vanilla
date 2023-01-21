@@ -2,7 +2,7 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
-import generateRandomEvents from "./utilities/testing"
+// import generateRandomEvents from "./utilities/testing"
 
 /*!*************************************!*\
 // (CSS) 
@@ -10,6 +10,7 @@ import generateRandomEvents from "./utilities/testing"
 // css variables and reset
 import "./styles/root.css";
 import "./styles/header.css"
+
 // <main>
 import "./styles/containers.css"
 import "./styles/yearview.css"
@@ -22,6 +23,7 @@ import "./styles/sbdatepicker.css"
 // </main>
 
 // popup / modals
+// <aside>
 import "./styles/aside/datepicker.css"
 import "./styles/aside/toast.css"
 import "./styles/aside/goto.css"
@@ -35,8 +37,9 @@ import "./styles/aside/deleteCategoryPopup.css"
 import "./styles/aside/entryOptions.css"
 import "./styles/aside/info.css"
 import "./styles/aside/shortcuts.css"
+// </aside>
 /*!*************************************!*/
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 // NOTES;
 // * finish settings
 // * finish privacy,terms,notes
@@ -44,14 +47,10 @@ import "./styles/aside/shortcuts.css"
 // FIX;
 // * set onclick to null when not in use
 // * validate .json files
-// * top modal for day view
 // * set toast to be removed on window focus
 // * more modal monthview 
-// * more modal monthview -- add edit btn
-// * timepicker small screens
 // * linter
 // * 
 
-// store.setStoreForTesting(generateRandomEvents(1000))
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);

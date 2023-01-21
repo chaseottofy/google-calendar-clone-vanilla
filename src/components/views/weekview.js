@@ -242,7 +242,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const modaltitle = document.createElement("div")
     modaltitle.classList.add("allday-modal-title")
-    modaltitle.textContent = `${dayofweek}, ${locales.labels.monthsLong[weekArray[idx].getMonth()]} ${daynumber}`
+    modaltitle.textContent = `${dayofweek}, ${locales.labels.monthsLong[weekArray[idx].getMonth()]} ${daynumber}${getDayOrdinal(daynumber)}`
 
     const closeAlldayModalBtn = document.createElement("div");
     closeAlldayModalBtn.classList.add("close-allday-modal");

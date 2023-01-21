@@ -254,7 +254,7 @@
 }
 
 .dayview__grid::-webkit-scrollbar-thumb {
-  min-height: 40px
+  min-height: 100px
 }
 
 .dayview__grid--wrapper {

@@ -105,7 +105,23 @@ export default function setDayView(context, store, datepickerContext) {
     }
 
     if (startingToday > 1 && (startingToday === endingToday)) {
-      return `${startingToday} entries starting & ending today`;
+      let longest = 0;
+      for (let i = 0; i < allboxes.length; i++) {
+        let temp = allboxes[i].coordinates.e
+        if (temp > longest) {
+          longest = temp;
+        }
+      }
+
+      let hour = Math.floor(longest / 4)
+      let minute = (longest % 4) * 15
+      let tempdate = new Date(allboxes[0].start)
+      tempdate.setHours(hour)
+      tempdate.setMinutes(minute)
+      return `${startingToday} entries starting & ending today ( ${formatStartEndTime(
+        new Date(allboxes[0].start),
+        tempdate
+      )} )`;
     }
 
     let fulltitle = ""
@@ -235,17 +251,17 @@ export default function setDayView(context, store, datepickerContext) {
     const dvtopgrid = document.createElement("div");
     dvtopgrid.classList.add("dv--ontop__grid");
 
-    const moremessage = document.createElement("div");
-    moremessage.classList.add("dv--ontop__more");
-    moremessage.textContent = `${entr.length} more...`
-    dvOnTop.appendChild(moremessage);
-    // dvtopgrid.appendChild(moremessage);
-    const opdm = () => openDvMore(entr)
-    moremessage.onclick = opdm
-    return;
-    // if (entries.length >= 6) {
-    // } else {
-    // }
+    if (entries.length >= 6) {
+      const moremessage = document.createElement("div");
+      moremessage.classList.add("dv--ontop__more");
+      moremessage.textContent = `${entr.length} more...`
+      dvOnTop.appendChild(moremessage);
+      // dvtopgrid.appendChild(moremessage);
+      const opdm = () => openDvMore(entr)
+      moremessage.onclick = opdm
+      return;
+    } else {
+    }
     // entries.forEach((entry) => {
 
     // })
