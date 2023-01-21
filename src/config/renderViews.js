@@ -243,7 +243,6 @@ export default function renderViews(context, datepickerContext, store) {
       sidebar.classList.add("hide-sidebar");
       dateTimeWrapper.classList.remove("datetime-inactive");
       listviewBody.removeAttribute("style");
-      // listviewBody.style.width = "100%";
     } else {
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar

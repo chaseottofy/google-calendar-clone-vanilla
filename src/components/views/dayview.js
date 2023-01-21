@@ -2,9 +2,9 @@
 // import setSidebarDatepicker from "../../components/menus/sidebarDatepicker";
 import fullFormConfig from "../forms/formUtils"
 import FormSetup from "../forms/setForm";
-import { 
-  Day, 
-  CoordinateEntry 
+import {
+  Day,
+  CoordinateEntry
 } from "../../factory/entries"
 import getEntryOptionModal from "../menus/entryOptions";
 
@@ -81,12 +81,12 @@ export default function setDayView(context, store, datepickerContext) {
 
   function getDayviewHeaderEntryCount() {
     let allboxes = boxes.getAllBoxes();
-    if (allboxes.length === 0) { return "no entries"; } 
+    if (allboxes.length === 0) { return "no entries"; }
     let [endingToday, startingToday] = [0, 0];
 
     for (let i = 0; i < allboxes.length; i++) {
       const [start, end, current] = [
-        new Date(allboxes[i].start), 
+        new Date(allboxes[i].start),
         new Date(allboxes[i].end),
         context.getDate(),
       ]
@@ -96,7 +96,7 @@ export default function setDayView(context, store, datepickerContext) {
 
     if (startingToday === 1 && endingToday === 1) {
       return `1 entry from ${formatStartEndTime(
-        new Date(allboxes[0].start), 
+        new Date(allboxes[0].start),
         new Date(allboxes[0].end)
       )}`
     }
@@ -104,7 +104,7 @@ export default function setDayView(context, store, datepickerContext) {
     if (startingToday > 1 && (startingToday === endingToday)) {
       return `${startingToday} entries starting & ending today`;
     }
-    
+
     let fulltitle = ""
     if (startingToday > 0) {
       if (startingToday === 1) {
@@ -135,6 +135,13 @@ export default function setDayView(context, store, datepickerContext) {
     })
 
     dvHeaderDayOfWeek.textContent = context.getDay()
+    if (context.isToday()) {
+      dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today")
+      dvHeaderDayNumber.style.color = "var(--primary1)";
+    } else {
+      dvHeaderDayOfWeek.classList.remove("dayview--header-day__number--today")
+      dvHeaderDayNumber.removeAttribute("style");
+    }
     dvHeaderDayNumber.textContent = locales.labels.weekdaysShort[context.getWeekday()].toUpperCase();
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
@@ -191,7 +198,7 @@ export default function setDayView(context, store, datepickerContext) {
     function mouseup() {
       document.querySelector(".dv-temporary-box").remove();
       box.classList.remove("dv-box-resizing");
-      if (boxhasOnTop) {box.classList.add("dv-box-ontop");}
+      if (boxhasOnTop) { box.classList.add("dv-box-ontop"); }
 
       if (boxorig.height === box.offsetHeight) {
         resetOriginalBox(box, boxorig);
@@ -335,7 +342,7 @@ export default function setDayView(context, store, datepickerContext) {
 
         configHeader()
       }
-      
+
       setStylingForEvent("dragend", dvGrid, store)
       document.removeEventListener("mousemove", mousemove)
       document.removeEventListener("mouseup", mouseup)
@@ -411,14 +418,14 @@ export default function setDayView(context, store, datepickerContext) {
 
     let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
     box.setAttribute("style", getBoxDefaultStyle(y, color))
-    
+
     let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 }
     let [starthour, startmin, endhour, endmin] = startEndDefault(y);
-    
+
     function mousemove(e) {
       let newHeight = Math.round(((e.pageY + scrolled) - y - headerOffset) / 12.5) * 12.5
-      if (newHeight <= 12.5) {newHeight = 12.5;}
-      if ((newHeight + y) > 1188) {newHeight = 1187.5 - y;}
+      if (newHeight <= 12.5) { newHeight = 12.5; }
+      if ((newHeight + y) > 1188) { newHeight = 1187.5 - y; }
 
       box.style.height = `${newHeight}px`
       coords.h = +newHeight / 12.5
@@ -470,7 +477,7 @@ export default function setDayView(context, store, datepickerContext) {
       resizeBoxNSDay(e, e.target.parentElement);
       return;
     }
-    
+
     if (getClosest(e, ".dv-box")) {
       dragEngineDay(e, e.target);
       return;

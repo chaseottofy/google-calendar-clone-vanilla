@@ -26,7 +26,6 @@
   align-items:center;
   height: 100%;
   width: 34px;
-  background: var(--black000);
   border-bottom: 2px solid transparent; 
 }
 
@@ -52,6 +51,11 @@
   justify-content: center;
   user-select: none;
   transition: background .2s ease-in-out;
+}
+
+.dayview--header-day__number--today {
+  background: var(--primary1);
+  color: var(--taskcolor);
 }
 
 

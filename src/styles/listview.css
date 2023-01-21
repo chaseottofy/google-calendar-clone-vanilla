@@ -35,14 +35,14 @@
 .rowgroup--header__datenumber {
   font-size: 18px;
   margin-top: 14px;
-  height: 32px;
-  width: 32px;
-  border-radius: 16px;
+  height: 34px;
+  width: 34px;
+  border-radius: 50%;
   display:flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-family: monospace, monospace;
+  /* font-family: monospace, monospace; */
   font-weight: 500;
   color: var(--offwhite1);
 }
@@ -189,7 +189,7 @@
 
 @media screen and (max-width: 530px) {
   .listview__body {
-    margin-left: 6px;
+    margin-left: 6px !important;
     width: 100% !important;
   }
 }
