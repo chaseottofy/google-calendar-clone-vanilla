@@ -106,21 +106,26 @@ export default function setDayView(context, store, datepickerContext) {
 
     if (startingToday > 1 && (startingToday === endingToday)) {
       let longest = 0;
+      let shortest = 100;
       for (let i = 0; i < allboxes.length; i++) {
-        let temp = allboxes[i].coordinates.e
-        if (temp > longest) {
-          longest = temp;
-        }
+        console.log(allboxes[i].coordinates)
+        let [tempshort, templong] = [
+          allboxes[i].coordinates.y,
+          allboxes[i].coordinates.e
+        ]
+        if (templong > longest) { longest = templong; }
+        if (tempshort < shortest) { shortest = tempshort; }
       }
-
-      let hour = Math.floor(longest / 4)
-      let minute = (longest % 4) * 15
-      let tempdate = new Date(allboxes[0].start)
-      tempdate.setHours(hour)
-      tempdate.setMinutes(minute)
+      let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)]
+      let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15]
+      let [tempdate1, tempdate2] = [new Date(allboxes[0].start), new Date(allboxes[0].start)]
+      tempdate1.setHours(h1)
+      tempdate1.setMinutes(m1)
+      tempdate2.setHours(h2)
+      tempdate2.setMinutes(m2)
       return `${startingToday} entries starting & ending today ( ${formatStartEndTime(
-        new Date(allboxes[0].start),
-        tempdate
+        tempdate1,
+        tempdate2
       )} )`;
     }
 
@@ -615,6 +620,31 @@ export default function setDayView(context, store, datepickerContext) {
     configHeader();
     store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
+    const elementCount = dvMainGrid.childElementCount;
+    if (elementCount > 0) {
+      setTimeout(() => {
+        let fc;
+        if (elementCount === 1) {
+          fc = dvMainGrid.children[0];
+        } else {
+          fc = document.querySelector(".dv-box-one")
+        }
+
+        dvGrid.scrollTo({
+          top: parseInt(fc.style.top),
+          behavior: "instant",
+        })
+      }, 4)
+    } else {
+      setTimeout(() => {
+        let tempdate = new Date()
+        let temphour = tempdate.getHours() * 50
+        dvGrid.scrollTo({
+          top: temphour - 50 > 0 ? temphour - 50 : 0,
+          behavior: "instant",
+        })
+      }, 4)
+    }
   }
   initDayView();
 }
