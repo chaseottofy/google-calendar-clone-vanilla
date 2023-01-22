@@ -46,7 +46,7 @@ module.exports = {
       title: "output management",
       template: "./src/index.html",
       favicon: "./src/favicon.ico",
-      filename: "testbundle.html",
+      filename: "index.html",
       inject: "head",
       minify: {
         removeComments: true,
