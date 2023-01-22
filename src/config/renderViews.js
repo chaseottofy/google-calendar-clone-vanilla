@@ -23,9 +23,6 @@ const sbToggleThemeBtn = document.querySelector(".sb-theme-btn")
 const formOverlay = document.querySelector(".form-overlay")
 const form = document.querySelector(".entries__form")
 
-const headerPrevBtn = document.querySelector(".prev")
-const headerNextBtn = document.querySelector(".next")
-
 const datepicker = document.querySelector(".datepicker")
 const datepickeroverlay = document.querySelector(".datepicker-overlay")
 const dateTimeWrapper = document.querySelector(".datetime-wrapper")
@@ -40,8 +37,6 @@ const sidebar = document.querySelector(".sidebar");
 const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
-const weekwrapper = document.querySelector(".weekview")
-const daywrapper = document.querySelector(".dayview")
 const listviewBody = document.querySelector(".listview__body");
 
 export default function renderViews(context, datepickerContext, store) {
@@ -291,12 +286,17 @@ export default function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), "right",
+          document.querySelector(".dayview--header-day__number"), 
+          "right",
           getPreviousDay
         );
         break;
       case "week":
-        handleTransition(document.querySelector(".weekview--header"), "right", getPreviousWeek)
+        handleTransition(
+          document.querySelector(".weekview--header"), 
+          "right", 
+          getPreviousWeek
+          );
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -313,12 +313,17 @@ export default function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), "left",
+          document.querySelector(".dayview--header-day__number"), 
+          "left",
           getNextDay
         );
         break;
       case "week":
-        handleTransition(document.querySelector(".weekview--header"), "left", getNextWeek)
+        handleTransition(
+          document.querySelector(".weekview--header"),
+          "left", 
+          getNextWeek
+          );
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)
@@ -375,8 +380,6 @@ export default function renderViews(context, datepickerContext, store) {
       renderSidebarDatepicker()
     }
     document.activeElement.blur()
-
-    // handleTransition(option, keyframeDirection, callback)
   }
 
   function handleSelect(e) {
@@ -450,7 +453,7 @@ export default function renderViews(context, datepickerContext, store) {
   /* configure keyboard shortcuts */
   /* 2022-01-14
   * Google calendar has recently updated their app wide throttling from a global value of around 150 to the minimum of 4ms(might be 10) for period changes and (250-300) for view changes. 
-  * For now, I'm keeping the throttle at 150ms. 
+  * For now, I'm keeping global throttle at 150ms. 
   */
   function delegateGlobalKeyDown(e) {
     const toggleChangeview = (e) => {
@@ -581,17 +584,17 @@ export default function renderViews(context, datepickerContext, store) {
     if (store.hasActiveOverlay()) return;
 
     // prevent ctrl + key shortcuts from triggering at all
-    lk = e.key
+    lk = e.key;
     if (lk === "Control") {
-      lk2 = "Control"
+      lk2 = "Control";
+      return;
+    }
+    if (lk2 === "Control" && lk !== "Control") {
+      lk2 = "";
       return;
     }
 
-    if (lk2 === "Control" && lk !== "Control") {
-      lk2 = ""
-      return;
-    }
-    getKeyPressThrottled(e)
+    getKeyPressThrottled(e);
   }
 
   const appinit = () => {
@@ -604,8 +607,8 @@ export default function renderViews(context, datepickerContext, store) {
     // supply callbacks to store for opening form and sidebar
     store.setRenderFormCallback(handleForm);
     const ensureSidebarIsOpen = () => {
-      context.setSidebarState("open")
-      handleBtnMainMenu()
+      context.setSidebarState("open");
+      handleBtnMainMenu();
     }
     store.setRenderSidebarCallback(ensureSidebarIsOpen);
     /*************************/
@@ -615,6 +618,5 @@ export default function renderViews(context, datepickerContext, store) {
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
   }
-  // store.setShortcutsStatus(true)
   appinit();
 }

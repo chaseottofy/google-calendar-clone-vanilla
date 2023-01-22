@@ -253,7 +253,7 @@ class Context {
   /* ************** */
   /* GETTERS */
   getGmt() {
-    return this.gmt;
+    return this.gmt;  // UTC Offset
   }
 
   getDateSelected() {
@@ -319,8 +319,9 @@ class Context {
     }
   }
 
+  // ** not in use **
   getWeekNumber() {
-    // fuction to get the week number for a date 1 - 52
+    // returns week index 1 - 52
     let d = new Date(Date.UTC(this.getYear(), this.getMonth(), this.getDay()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
@@ -375,7 +376,6 @@ class Context {
     let daysInMonth = this.getDaysInMonth();
     let [year, month] = [this.getYear(), this.getMonth()];
     let end = this.getMonthArrayEnd();
-    let tempend;
 
     for (let i = start.length - 1; i >= 0; i--) {
       monthArray.push(start[i]);
@@ -385,8 +385,6 @@ class Context {
       monthArray.push(new Date(year, month, i));
     }
     monthArray[monthArray.length - 1].setHours(23, 59, 59, 999);
-
-
 
     if (monthArray.length === 28 && end.length < 7) {
       end = this.getMonthArrayEnd(true);
@@ -398,6 +396,7 @@ class Context {
       }
       monthArray.push(end[i]);
     }
+    
     return monthArray;
   }
 

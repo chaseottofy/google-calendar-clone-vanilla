@@ -273,13 +273,13 @@ class Day {
     for (let i = 0; i < arr.length; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
-          collisions.add(bxs[i])
-          collisions.add(bxs[j])
+          collisions.add(bxs[i]);
+          collisions.add(bxs[j]);
         }
       }
     }
-    console.log(collisions)
-    return this.sortByY([...collisions])
+    
+    return this.sortByY([...collisions]);
   }
 
   updateStore(store, id) {

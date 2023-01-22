@@ -430,7 +430,6 @@ class Store {
 
     return activeEntries.filter((entry) => {
       let entryDate = new Date(entry.start)
-      // console.log(entryDate)
       return entryDate >= montharr[0] && entryDate <= montharr[montharr.length - 1]
     })
   }
@@ -630,7 +629,6 @@ class Store {
       Store.setStore(this.store)
     }
     this.deleteCategory(category)
-    console.log(this.getEntriesByCtg('test'))
   }
   
   removeCategoryAndEntries(category) {
@@ -655,7 +653,6 @@ class Store {
    * @desc updates the color of a category
    */
   updateCtgColor(categoryName, color) {
-    console.log("ran new color")
     if (this.hasCtg(categoryName)) {
       this.ctg[categoryName].color = color;
       Store.setCtg(this.ctg)
@@ -672,10 +669,9 @@ class Store {
    * @param {string} newColor 
    * @param {string} oldName 
    * @returns new category object
-   * @desc note that 'value' @ [key, value] is necessary to segment the object, even if it is not directly referenced
+   * @desc note that 'value' of [key, value] is necessary to segment the object, even if it is not directly referenced
    */
   updateCtg(newName, newColor, oldName) {
-    console.log('ran update everything')
     let entries = Object.entries(this.ctg);
     let hasColor = newColor !== null;
     let count = 0;
@@ -708,8 +704,8 @@ class Store {
         oldName, 
         newName, 
         true
-      )
-      Store.setCtg(this.ctg)
+      );
+      Store.setCtg(this.ctg);
     }
   }
   /* ********************* */
@@ -719,7 +715,7 @@ class Store {
   /* ***************************** */
   /*  KEYBOARD SHORTCUT MANAGEMENT */
   getShortcuts() {
-    return this.keyboardShortcuts
+    return this.keyboardShortcuts;
   }
 
   setShortCut(shortcut) {
@@ -733,12 +729,12 @@ class Store {
   }
 
   setShortcutsStatus(status) {
-    this.keyboardShortcutsStatus = status
-    Store.setShortcutsStatus(status)
+    this.keyboardShortcutsStatus = status;
+    Store.setShortcutsStatus(status);
   }
 
   getShortcutsStatus() {
-    const status = Store.getShortcutsStatus()
+    const status = Store.getShortcutsStatus();
     return status !== null ? status : true;
   }
   /* ***************************** */
@@ -781,7 +777,6 @@ class Store {
   validateUserUpload(userUpload) {
     const keys = Object.keys(userUpload);
     let message = {};
-    console.log(userUpload)
     if (keys.length > localStoreKeyNames.length) {
       message.err1 = "invalid number of keys (too many)"
     }
@@ -802,14 +797,12 @@ class Store {
 
   setUserUpload(userUpload) {
     const validation = this.validateUserUpload(userUpload);
-    console.log(validation)
     let validated;
     if (validation === true) {
       localStorage.clear()
       validated = true;
       for (const [key, value] of Object.entries(userUpload)) {
         localStorage.setItem(key, value)
-        console.log(key)
       }
     } else {
       return validation;

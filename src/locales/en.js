@@ -26,8 +26,6 @@ export default {
 
   /*
     - the following are colors for calendar categories
-    - they are optimized for dark modes 
-
   */
   colors: {
     red: {

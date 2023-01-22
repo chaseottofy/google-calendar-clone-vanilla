@@ -129,7 +129,6 @@ function formatStartEndDate(start, end, flag) {
 
 function formatStartEndTime(start, end) {
   [start, end] = [new Date(start), new Date(end)]
-
   let startmin = start.getMinutes()
   let endmin = end.getMinutes()
   endmin = endmin % 15 === 0 ? endmin : endmin + (15 - (endmin % 15))
@@ -139,7 +138,6 @@ function formatStartEndTime(start, end) {
   if (starttime.slice(-2) === endtime.slice(-2)) {
     starttime = starttime.slice(0, -2)
   }
-
   return `${starttime} – ${endtime}`
 }
 
@@ -263,7 +261,6 @@ function formatEntryOptionsDate(date1, date2) {
     if (m1 === m2) {
       if (d1 === d2) {
         // === year, month, day
-
         let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
         let durationTime = formatDurationHourMin(duration);
         return {
@@ -292,10 +289,9 @@ function formatEntryOptionsDate(date1, date2) {
     // different year --- return full date
     let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
     let durationTime = formatDuration(duration);
-
     return {
       date: `${labels.monthsShort[m1]} ${d1}, ${y1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
-      time: formatDuration(duration),
+      time: durationTime,
     }
   }
 }

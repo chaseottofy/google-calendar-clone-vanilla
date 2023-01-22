@@ -116,8 +116,10 @@ export default function setDayView(context, store, datepickerContext) {
         new Date(allboxes[i].start),
         new Date(allboxes[i].end),
         context.getDate(),
-      ]
+      ];
+
       if (start.getDate() === current.getDate()) { startingToday++; }
+
       if (end.getDate() === current.getDate()) { 
         endingToday++; 
         tempEndCase1 = allboxes[i];
@@ -149,16 +151,15 @@ export default function setDayView(context, store, datepickerContext) {
 
     if (endingToday > 0) {
       if (endingToday === 1) {
-        console.log(allboxes)
         fulltitle += ` – ${endingToday} ending ( ${formatStartEndTime(
           new Date(tempEndCase1.start),
           new Date(tempEndCase1.end)
-        )} )`
+        )} )`;
       } else {
-        fulltitle += ` – ${endingToday} ending ( ${firstLastDates(boxes.boxes)} )`
+        fulltitle += ` – ${endingToday} ending ( ${firstLastDates(boxes.boxes)} )`;
       }
     } else {
-      fulltitle += ` – no entries ending today`
+      fulltitle += ` – no entries ending today`;
     }
     return fulltitle;
   }
@@ -175,7 +176,6 @@ export default function setDayView(context, store, datepickerContext) {
 
     document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
     let day = context.getDay();
-    // if (day < 10) { day = `0${day}` }
     dvHeaderDayOfWeek.textContent = day
 
     if (context.isToday()) {
@@ -279,9 +279,7 @@ export default function setDayView(context, store, datepickerContext) {
       return;
     } else {
     }
-    // entries.forEach((entry) => {
 
-    // })
   }
 
   function renderBoxes() {
@@ -353,7 +351,6 @@ export default function setDayView(context, store, datepickerContext) {
           box.setAttribute("data-dv-box-index", "box-one")
         }
       }
-
 
       configHeader()
       setStylingForEvent("dragend", dvGrid, store);
