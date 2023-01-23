@@ -1,4 +1,4 @@
-import { getClosest } from "../../utilities/helpers"
+import { getClosest, throttle } from "../../utilities/helpers"
 import {
   getDateForStore,
   compareDates,
@@ -27,6 +27,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   let hasweek;
   // let currentdate = [];
   let [checkmonth, checkyear] = [null, null];
+  const datepickerKeypressThrottle = throttle(handleKeydownNav, 100);
 
   function setDatepickerHeader() {
     const y = datepickerContext.getYear()
@@ -105,13 +106,13 @@ export default function setDatepicker(context, store, datepickerContext, type) {
       headerPrevBtn.removeAttribute("style");
       headerNextBtn.removeAttribute("style");
     }
-    
+
     if (type === "form") {
       document.querySelector(".active-form-date")?.classList.remove("active-form-date")
     }
-    
+
     datepickeroverlay.onclick = null;
-    document.removeEventListener("keydown", handleKeydownNav)
+    document.removeEventListener("keydown", datepickerKeypressThrottle)
     montharray = [];
   }
 
@@ -150,8 +151,18 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     }
   }
 
-  function setNewDate(e) {
-    const [y, m, d] = getDateFromAttribute(e.target, "data-datepicker-date")
+  function setNewDate(e, data) {
+    let [y, m, d] = [null, null, null]
+    if (e === null) {
+      y = data[0]
+      m = data[1]
+      d = data[2]
+    } else {
+      let temp = getDateFromAttribute(e.target, "data-datepicker-date")
+      y = temp[0]
+      m = temp[1]
+      d = temp[2]
+    }
     if (type === "form") {
       handleFormDate(y, m, d)
       closeDatepicker()
@@ -168,7 +179,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   function getMonthYearCheck() {
     return checkmonth === datepickerContext.getMonth() && checkyear === datepickerContext.getYear()
   }
-  
 
   function renderNextMonth() {
     datepickerContext.setNextMonth()
@@ -185,7 +195,49 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   function setSelectedToNextDay() {
-    console.log(datepickerContext.getDateSelected())
+    let curr = document.querySelector(".datepicker__body--datename-selected")
+    const parent = curr.parentElement;
+    const next = parent?.nextElementSibling?.firstElementChild;
+
+    if (!next || next === undefined || next === null) {
+      renderNextMonth();
+      datepickerContext.setDateSelected(1);
+      curr = document.querySelector(".datepicker__body--datename-selected")
+      curr.classList.remove("datepicker__body--datename-selected")
+      let frst = document.querySelectorAll(".datepicker__body--datename");
+      frst[0].classList.add("datepicker__body--datename-selected")
+      return;
+    } else {
+      curr.classList.remove("datepicker__body--datename-selected")
+      next.classList.add("datepicker__body--datename-selected")
+      let attr = next.getAttribute("data-datepicker-date");
+      let newDateSelected = parseInt(attr.split("-")[2])
+      console.log(newDateSelected)
+      datepickerContext.setDateSelected(newDateSelected)
+      // datepickerContext.setDay(newDateSelected)
+      return;
+    }
+  }
+
+  function setSelectedToPrevDay() {
+    let curr = document.querySelector(".datepicker__body--datename-selected")
+    const parent = curr.parentElement;
+    const prev = parent?.previousElementSibling?.firstElementChild;
+
+    if (!prev || prev === undefined || prev === null) {
+      renderPrevMonth();
+      const lastday = datepickerContext.getDaysInMonth()
+      datepickerContext.setDateSelected(+lastday);
+      curr = document.querySelector(".datepicker__body--datename-selected")
+      curr.classList.remove("datepicker__body--datename-selected")
+      let last = document.querySelectorAll(".datepicker__body--datename");
+      last[last.length - 1].classList.add ("datepicker__body--datename-selected");
+      return;
+    } else {
+      curr.classList.remove("datepicker__body--datename-selected");
+      prev.classList.add("datepicker__body--datename-selected");
+      return;
+    }
   }
 
   function openChangeDateModal() {
@@ -230,6 +282,20 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     if (newyear == +datepickerContext.getYear()) return;
     datepickerContext.setYear(newyear);
     yearpickerTitle.textContent = newyear;
+  }
+
+  function handleMonthpicker(dir) {
+    const target = document.querySelector(".monthpicker__active-month");
+    let attr = parseInt(target.getAttribute("data-dp-month"));
+    if (dir === "next") {
+      monthpickerSetMonth((attr + 1) % 12);
+    } else {
+      if (attr === 0) {
+        monthpickerSetMonth(11);
+      } else {
+        monthpickerSetMonth(attr - 1);
+      }
+    }
   }
 
   function delegateDatepickerEvents(e) {
@@ -286,25 +352,36 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   function handleKeydownNav(e) {
+    // functionality will change depending on whether the change date modal is open -- use flag to check
+    const flag = datepickerChangeDate.classList.contains("show-dpcd");
     switch (e.key) {
       case "ArrowDown":
-        renderPrevMonth();
+        flag ? yearpickerSetYear(-1, false) : renderPrevMonth();
         break;
       case "ArrowUp":
-        renderNextMonth();
+        flag ? yearpickerSetYear(1, false) : renderNextMonth();
         break;
       case "ArrowRight":
-        setSelectedToNextDay();
+        flag ? handleMonthpicker("next") : setSelectedToNextDay();
+        break;
+      case "ArrowLeft":
+        flag ? handleMonthpicker("prev") : setSelectedToPrevDay();
         break;
       case "Enter":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
           closeChangeDateModal();
         } else {
           const target = document.querySelector(".datepicker__body--datename-selected")
-          if (!target) {
-            closeDatepicker()
+          if (target === null || !target) {
+            // the last selected day in the previous month was longer than the days in the current month
+            setNewDate(null, [
+              datepickerContext.getYear(),
+              datepickerContext.getMonth(),
+              28
+            ]);
           } else {
-            setNewDate(target) 
+            let attr = getDateFromAttribute(target, "data-datepicker-date")
+            setNewDate(null, attr);
           }
         }
         break;
@@ -327,7 +404,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     store.setResetDatepickerCallback(closeDatepicker)
     datepickeroverlay.onclick = closeDatepicker;
     datepicker.onmousedown = delegateDatepickerEvents;
-    document.addEventListener("keydown", handleKeydownNav);
+    document.addEventListener("keydown", datepickerKeypressThrottle);
     montharray = [];
   }
 

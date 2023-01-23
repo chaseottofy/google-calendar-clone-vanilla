@@ -321,7 +321,7 @@
 
 .datepicker__body--datename-selected {
   background: var(--primary3);
-  color: var(--taskcolor0);
+  color: var(--taskcolor0) !important;
 }
 
 .datepicker__body--datename-today {

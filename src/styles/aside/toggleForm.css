@@ -70,8 +70,7 @@
 }
 
 @media screen and (max-height: 470px) {
-  /* .toggle-form{ display:none; } */
   .toggle-form {
-    top: 54px;
+    top: 56px;
   }
 }

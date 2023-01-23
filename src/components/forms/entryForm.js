@@ -773,10 +773,12 @@ export default function setEntryForm(context, store, datepickerContext) {
     if (length === 1) return;
 
     closeCategoryModalBtn.removeAttribute("style");
-    entriesFormBody.scrollTo({
-      top: entriesFormBody.scrollHeight,
-      behavior: "smooth"
-    })
+    setTimeout(() => {
+      entriesFormBody.scrollTo({
+        top: entriesFormBody.scrollHeight,
+        behavior: "smooth"
+      })
+    }, 5)
 
     if (length >= 5) {
       closeCategoryModalBtn.setAttribute("style", `top: -100px`)

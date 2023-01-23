@@ -93,6 +93,7 @@
   width: 100%;
   height: 100%;
   user-select: none;
+
 }
 
 .listview {
@@ -107,7 +108,7 @@
 }
 
 .monthview {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .weekview {

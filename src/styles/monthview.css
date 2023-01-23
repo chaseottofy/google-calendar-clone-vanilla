@@ -87,6 +87,7 @@
   width: 100%;
   position: relative;
 }
+
 .monthview--dayofmonth-selected {
   color: var(--primarylight1);
   transition: background .2s ease-in-out;
