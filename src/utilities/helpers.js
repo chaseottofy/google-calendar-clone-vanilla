@@ -160,9 +160,6 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
-  // console.log(x + popupW, winW)
-  console.log(popupX)
-
   if (popupX < 0) popupX = Math.abs(popupX);
   if (popupY < 0) popupY = 56;
   return [popupX, popupY];

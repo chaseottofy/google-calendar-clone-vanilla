@@ -155,8 +155,9 @@
 }
 
 .wv-ad--celltitle {
+  font-family: var(--primaryFont);
   font-size: 9px;
-  font-weight: 400;
+  font-weight: 500;
   width: 100%;
   height: 100%;
   display: flex;

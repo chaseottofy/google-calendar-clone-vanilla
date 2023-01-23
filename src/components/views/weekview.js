@@ -288,7 +288,6 @@ export default function setWeekView(context, store, datepickerContext) {
 
   function openAllDayModal(e, cell) {
     const col = cell.parentElement
-    // console.log(cell)
     cell.classList.add("allday-modal__cell--open")
     cell.firstChild.firstChild.style.backgroundColor = "#01635b"
     const colidx = parseInt(col.getAttribute("data-allday-column"))
@@ -350,6 +349,8 @@ export default function setWeekView(context, store, datepickerContext) {
       165,
       [parseInt(rect.left), e.clientY],
       [window.innerWidth, window.innerHeight],
+      true,
+      240
     )
 
     store.setFormResetHandle("week", handleCloseCallback);
@@ -358,7 +359,6 @@ export default function setWeekView(context, store, datepickerContext) {
     setup.setCategory(entry.category, color, color);
     setup.setPosition(x, [x, y], y);
     setup.setDates(getFormDateObject(start, entry.end));
-    console.log(getFormDateObject(start, entry.end))
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
 
     const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
@@ -482,7 +482,7 @@ export default function setWeekView(context, store, datepickerContext) {
         let [x, y] = placePopup(
           400,
           165,
-          [parseInt(rect.left), parseInt(rect.top) + 32],
+          [parseInt(rect.left), parseInt(rect.top) + 56],
           [window.innerWidth, window.innerHeight],
           false,
         );
@@ -576,14 +576,6 @@ export default function setWeekView(context, store, datepickerContext) {
       } else {
         amountScrolled += headerOffset;
       }
-
-
-
-      // console.log(window.innerHeight, e.pageY)
-
-      // if (window.innerHeight < e.pageY) {
-      //   main.scrollBy(0, Math.abs(window.innerHeight - e.pageY));
-      // }
 
       const newHeight = Math.round(((e.pageY - boxTop - headerOffset) + amountScrolled) / 12.5) * 12.5;
 
@@ -695,8 +687,6 @@ export default function setWeekView(context, store, datepickerContext) {
         [starthour, endhour],
         [startmin, endmin],
       );
-      console.log(starthour, endhour)
-      console.log(startmin, endmin)
 
       openWeekviewForm(
         box,
@@ -739,7 +729,6 @@ export default function setWeekView(context, store, datepickerContext) {
 
   function delegateGridTop(e) {
     if (getClosest(e, ".allday--col")) {
-      // console.log()
       if (e.target.childElementCount === 0) {
         return;
       }

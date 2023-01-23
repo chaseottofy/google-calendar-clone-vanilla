@@ -85,7 +85,6 @@
 .dv-ontop-row2 {
   display: grid;
   grid-template-columns: 36px 1fr;
-  /* min-height: 48px; */
   width: 100%;
 }
 
@@ -99,11 +98,11 @@
 
 .dayview--ontop-container {
   border-left: 1px solid var(--mediumgrey1);
-  border-bottom: 2px solid var(--mediumgrey1);
+  border-bottom: 1px solid var(--mediumgrey1);
   height: auto;
   min-height: 24px;
   overflow-y: scroll;
-  width: calc(100% - 16px);
+  width: calc(100% - 18px);
   position: relative;
 }
 
@@ -562,13 +561,17 @@
   }
 }
 
-@media screen and (max-width:530px) {
+@media screen and (max-width:550px) {
   .dayview--header-day {
     width: 36px;
   }
 
   .dayview--header-day__info {
     font-size: 12px;
+  }
+
+  .dayview--ontop__grid {
+    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
   }
 
   .dv--morepopup__body {
@@ -581,4 +584,7 @@
     margin: 0 auto;
     max-height: 320px !important;
   }
+}
+
+@media screen and (max-width: 440px) {
 }
