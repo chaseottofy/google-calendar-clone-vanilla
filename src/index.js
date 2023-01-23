@@ -37,32 +37,6 @@ import "./styles/aside/info.css"
 import "./styles/aside/shortcuts.css"
 // </aside>
 /*!*************************************!*/
-
-/*
-  about
-* This is a front end recreation of the google calendar app in its entirety (aside from google api / third party resources).
-* At the moment it works using local storage but there are options to backup data and load previous saved data using json.
-* I've included several features that are not in the original app to improve the user experience. These include but are not limited to :
-  * header content still visible under 840px (app is viable on mobile)
-  * dark theme
-  * high contrast theme
-  * Keyboard shortcuts are available for most actions but they do differ from the original app. Use "?" or "/" to open the shortcuts menu (23 in total).
-  * month date picker
-  * year date picker
-  * datepicker highlights current week if in week view
-  * datepicker highlights day if it has events
-  * download calendar as json file & upload calendar from json file
-  * year view days with events are highlighted
-  * move all events from one category to another
-  * entire app is a single page, no page refreshes, no load times.
-  * first contentful paint : .2 seconds
-  * time to interactive : .2 seconds
-  * speed index : .2 seconds
-  * total blocking time : 0 seconds (no database / third party resources)
-  * lighthouse : 100% (performance, accessibility, best practices, seo)
-* 
-*/
-
 // NOTES;
 // * finish settings
 // * finish privacy,terms,notes
