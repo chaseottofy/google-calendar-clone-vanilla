@@ -615,12 +615,17 @@ export default function renderViews(context, datepickerContext, store) {
       },
       ['week']: {
         component: document.querySelector(".weekview--header"),
+        componentBody: document.querySelector(".weekview__grid"),
         collapse: "wvh-collapse",
+        componentBodytoggle: "wvh-body-collapse"
       },
     };
 
     if (view === "week" || view === "day") {
       headers[view].component.classList.toggle(headers[view].collapse);
+      if (view === "week") {
+        headers[view].componentBody.classList.toggle(headers[view].componentBodytoggle)
+      }
     }
   }
 

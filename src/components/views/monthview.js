@@ -851,6 +851,7 @@ export default function setMonthView(context, store, datepickerContext) {
     // target : entry within more modal 
     // execute : drag box (e.target) out of the more modal for reassignment, (same day works as well)
     if (groupedBoxItem) {
+      if (window.innerHeight <= 300) return;
       dragOutOfModal(e)
       return;
     }

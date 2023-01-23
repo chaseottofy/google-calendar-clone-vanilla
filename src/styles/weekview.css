@@ -2,7 +2,6 @@
   display: grid;
   grid-template-columns: 36px 1fr;
   height: auto;
-  /* height: 78px; */
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -16,7 +15,7 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: 1fr 1fr;
   align-items: center;
-  overflow:hidden;
+  overflow: hidden;
   /* overflow-x: hidden; */
   max-width: 100%;
   position: relative;
@@ -168,11 +167,11 @@
 }
 
 .wv-ad--cellexpand {
-  pointer-events:none;
+  pointer-events: none;
   background: transparent;
   height: 100%;
   width: 18px;
-  display:flex;
+  display: flex;
   align-items: center;
   padding: 2px;
   margin-top: 1px;
@@ -609,6 +608,10 @@
   min-height: 0;
   opacity: 0;
   transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
+}
+
+.wvh-body-collapse {
+  height: 100%;
 }
 
 
