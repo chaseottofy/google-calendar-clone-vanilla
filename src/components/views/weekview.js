@@ -201,7 +201,12 @@ export default function setWeekView(context, store, datepickerContext) {
     cellcategoryTitle.textContent = "category: " + entry.category;
 
     const getContextMenuViaMeatball = (e) => {
-      getWeekViewContextMenu(col, entry, handleCloseCallback, e);
+      getWeekViewContextMenu(
+        +col.getAttribute("data-allday-column"),
+        entry, 
+        handleCloseCallback, 
+        e
+      );
     }
 
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
@@ -339,9 +344,7 @@ export default function setWeekView(context, store, datepickerContext) {
     const id = entry.id;
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
-    const col = +cell.getAttribute("data-box-col")
-    const rect = cols[col].getBoundingClientRect()
-
+    const rect = cols[+cell].getBoundingClientRect()
     let [x, y] = placePopup(
       400,
       165,
@@ -363,12 +366,8 @@ export default function setWeekView(context, store, datepickerContext) {
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
 
     const modal = document.querySelector(".entry__options")
-    if (window.innerWidth > 580) {
-      modal.style.top = y + "px";
-      modal.style.left = x + "px";
-    } else {
-      modal.style.top = "64px";
-    }
+    modal.style.top = y + "px";
+    modal.style.left = x + "px";
   }
   // ***********************
 
