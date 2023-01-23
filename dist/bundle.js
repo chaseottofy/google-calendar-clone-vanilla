@@ -731,8 +731,8 @@ function setEntryForm(context, store, datepickerContext) {
       datepickerTop -= 40;
     }
 
-    if (window.innerHeight - 216 < bott) {
-      datepickerTop = window.innerHeight - 216;
+    if (window.innerHeight - 216 <= bott) {
+      datepickerTop = window.innerHeight - 242;
     }
 
     datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`)
@@ -1749,15 +1749,22 @@ const datepicker = document.querySelector(".datepicker");
 const datepickeroverlay = document.querySelector(".datepicker-overlay")
 const datepickerBody = document.querySelector(".datepicker__body--dates");
 const datepickerTitle = document.querySelector(".datepicker-title");
+const datepickerChangeDate = document.querySelector(".datepicker-change-date")
+
 // prev and next buttons aside from main app header datewrapper
 const headerPrevBtn = document.querySelector(".prev")
 const headerNextBtn = document.querySelector(".next")
+
+const yearpickerTitle = document.querySelector(".yearpicker-title")
+const monthpickerMonths = document.querySelectorAll(".monthpicker__month")
 
 
 function setDatepicker(context, store, datepickerContext, type) {
   let montharray = datepickerContext.getMonthArray();
   let count = 0;
   let hasweek;
+  // let currentdate = [];
+  let [checkmonth, checkyear] = [null, null];
 
   function setDatepickerHeader() {
     const y = datepickerContext.getYear()
@@ -1829,19 +1836,21 @@ function setDatepicker(context, store, datepickerContext, type) {
   function closeDatepicker() {
     datepicker.classList.add("hide-datepicker");
     datepickeroverlay.classList.add("hide-datepicker-overlay")
+    closeChangeDateModal();
     const formOpen = store.getActiveOverlay().has("hide-form-overlay");
     const listOpen = context.getComponent() !== "list";
     if (listOpen || !formOpen) {
       headerPrevBtn.removeAttribute("style");
       headerNextBtn.removeAttribute("style");
     }
-    montharray = []
-
+    
     if (type === "form") {
       document.querySelector(".active-form-date")?.classList.remove("active-form-date")
     }
-
+    
+    datepickeroverlay.onclick = null;
     document.removeEventListener("keydown", handleKeydownNav)
+    montharray = [];
   }
 
   function renderpicker(y, m, d) {
@@ -1889,6 +1898,16 @@ function setDatepicker(context, store, datepickerContext, type) {
     }
   }
 
+  function setCheckMonthYear() {
+    checkmonth = datepickerContext.getMonth()
+    checkyear = datepickerContext.getYear()
+  }
+
+  function getMonthYearCheck() {
+    return checkmonth === datepickerContext.getMonth() && checkyear === datepickerContext.getYear()
+  }
+  
+
   function renderNextMonth() {
     datepickerContext.setNextMonth()
     montharray = datepickerContext.getMonthArray()
@@ -1907,23 +1926,100 @@ function setDatepicker(context, store, datepickerContext, type) {
     console.log(datepickerContext.getDateSelected())
   }
 
+  function openChangeDateModal() {
+    setCheckMonthYear()
+    datepickerChangeDate.classList.add("show-dpcd")
+    yearpickerSetYear(null, true);
+    monthpickerSetMonth(datepickerContext.getMonth(), true);
+    console.log(datepickerContext.getMonth());
+  }
+
+  function closeChangeDateModal() {
+    // check if date has changed;
+    if (!getMonthYearCheck()) {
+      console.log(true);
+      montharray = datepickerContext.getMonthArray();
+      createCells(montharray);
+      setDatepickerHeader();
+    }
+    datepickerChangeDate.classList.remove("show-dpcd");
+  }
+
+  function monthpickerSetMonth(val, init) {
+    const newmonth = val;
+
+    if (!init && newmonth === datepickerContext.getMonth()) return;
+    datepickerContext.setMonth(newmonth);
+    monthpickerMonths.forEach((month, idx) => {
+      if (idx === newmonth) {
+        month.classList.add("monthpicker__active-month")
+      } else {
+        month.classList.remove("monthpicker__active-month")
+      }
+    })
+  }
+
+  function yearpickerSetYear(increment, init) {
+    if (init) {
+      yearpickerTitle.textContent = datepickerContext.getYear();
+      return;
+    }
+
+    const newyear = parseInt(datepickerContext.getYear()) + increment;
+    if (newyear == +datepickerContext.getYear()) return;
+    datepickerContext.setYear(newyear);
+    yearpickerTitle.textContent = newyear;
+  }
+
   function delegateDatepickerEvents(e) {
-    const datenumber = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker__body--datename")
-    const navnext = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker-nav--next")
-    const navprev = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker-nav--prev")
+    const datenumber = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker__body--datename");
+    const navnext = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker-nav--next");
+    const navprev = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker-nav--prev");
+    const title = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".datepicker-title");
+    const closeChangeDateBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".close-change-date");
+    const ypNext = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".yearpicker-next");
+    const ypPrev = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".yearpicker-prev");
+    const mpMonth = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".monthpicker__month");
 
     if (datenumber) {
-      setNewDate(e)
+      setNewDate(e);
       return;
     }
 
     if (navnext) {
-      renderNextMonth()
+      renderNextMonth();
       return;
     }
 
     if (navprev) {
-      renderPrevMonth()
+      renderPrevMonth();
+      return;
+    }
+
+    if (title) {
+      openChangeDateModal();
+      return;
+    }
+
+    if (closeChangeDateBtn) {
+      closeChangeDateModal();
+      return;
+    }
+
+    if (ypNext) {
+      yearpickerSetYear(1, false);
+      return;
+    }
+
+    if (ypPrev) {
+      yearpickerSetYear(-1, false);
+      return;
+    }
+
+    if (mpMonth) {
+      const newmonth = parseInt(e.target.getAttribute("data-dp-month"))
+      console.log(newmonth)
+      monthpickerSetMonth(newmonth, false);
       return;
     }
   }
@@ -1940,7 +2036,11 @@ function setDatepicker(context, store, datepickerContext, type) {
         setSelectedToNextDay();
         break;
       case "Escape":
-        closeDatepicker();
+        if (datepickerChangeDate.classList.contains("show-dpcd")) {
+          closeChangeDateModal();
+        } else {
+          closeDatepicker();
+        }
         break;
       default:
         break;
@@ -1948,16 +2048,16 @@ function setDatepicker(context, store, datepickerContext, type) {
   }
 
   const initDatepicker = () => {
-    datepickeroverlay.addEventListener("click", e => {
-      closeDatepicker()
-    }, { once: true })
+    // closeChangeDateModal();
     setDatepickerHeader();
     createCells(montharray);
+    store.setResetDatepickerCallback(closeDatepicker)
+    datepickeroverlay.onclick = closeDatepicker;
     datepicker.onmousedown = delegateDatepickerEvents;
     document.addEventListener("keydown", handleKeydownNav);
     montharray = [];
-    store.setResetDatepickerCallback(closeDatepicker)
   }
+
   initDatepicker()
 }
 
@@ -3041,6 +3141,11 @@ __webpack_require__.r(__webpack_exports__);
 const datepicker = document.querySelector(".datepicker-sidebar");
 const datepickerBody = document.querySelector(".sbdatepicker__body--dates");
 const datepickerTitle = document.querySelector(".sbdatepicker-title");
+
+const sbdatepickerChangeDate = document.querySelector(".sb-datepicker-change-date")
+
+const sbyearpickerTitle = document.querySelector(".sb-yearpicker-title")
+const sbmonthpickerMonths = document.querySelectorAll(".sb-monthpicker__month");
 function setSidebarDatepicker(context, store, datepickerContext) {
 
   datepickerContext.setDate(
@@ -3054,6 +3159,7 @@ function setSidebarDatepicker(context, store, datepickerContext) {
   let currentWeekStart = context.getWeek();
   let hasweek = false;
   let count = 0;
+  let [checkmonth, checkyear] = [null, null];
 
   function setDatepickerHeader() {
     const month = datepickerContext.getMonthName()
@@ -3174,6 +3280,17 @@ function setSidebarDatepicker(context, store, datepickerContext) {
     montharray = [];
   }
 
+
+  /**
+   * 
+   * @param {*} e 
+   * @description some extra steps required for the sidebar datepicker 
+   * vs any other datepicker due to the fact that the sidebar datepicker will stay open after a date is selected.
+   * These extra steps include:
+   *  1. do not re render datepicker if the selected date is in the current month, just update the selected date
+   *  2. the one exception to above rule is if the component is the week view and the selected date is not in the current week, then re render the datepicker
+   *  3. if the component is in the list view (schedule), do not re render the view, just update the selected date
+   */
   function setNewDate(e) {
     const target = e.target;
     let [y, m, d] = target.getAttribute("data-datepicker-date").split('-').map(x => parseInt(x));
@@ -3226,31 +3343,128 @@ function setSidebarDatepicker(context, store, datepickerContext) {
     }
   }
 
+  function setCheckMonthYear() {
+    checkmonth = datepickerContext.getMonth()
+    checkyear = datepickerContext.getYear()
+  }
+
+  function getMonthYearCheck() {
+    return checkmonth === datepickerContext.getMonth() && checkyear === datepickerContext.getYear()
+  }
+
+  function openChangeDateModal() {
+    setCheckMonthYear()
+    sbdatepickerChangeDate.classList.add("show-sbdpcd")
+    yearpickerSetYear(null, true);
+    monthpickerSetMonth(datepickerContext.getMonth(), true);
+    console.log(datepickerContext.getMonth());
+  }
+
+
+  function closeChangeDateModal() {
+    // check if date has changed;
+    if (!getMonthYearCheck()) {
+      console.log(true);
+      resetpickerData()
+      createCells(montharray);
+      setDatepickerHeader();
+      montharray = [];
+    }
+    sbdatepickerChangeDate.classList.remove("show-sbdpcd");
+  }
+
+  function monthpickerSetMonth(val, init) {
+    const newmonth = val;
+
+    if (!init && newmonth === datepickerContext.getMonth()) return;
+    datepickerContext.setMonth(newmonth);
+    sbmonthpickerMonths.forEach((month, idx) => {
+      if (idx === newmonth) {
+        month.classList.add("monthpicker__active-month")
+      } else {
+        month.classList.remove("monthpicker__active-month")
+      }
+    })
+  }
+  
+  function yearpickerSetYear(increment, init) {
+    if (init) {
+      sbyearpickerTitle.textContent = datepickerContext.getYear();
+      return;
+    }
+
+    const newyear = parseInt(datepickerContext.getYear()) + increment;
+    if (newyear == +datepickerContext.getYear()) return;
+    datepickerContext.setYear(newyear);
+    sbyearpickerTitle.textContent = newyear;
+  }
+
   function delegateDatepickerEvents(e) {
     const datenumber = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sbdatepicker__body--datename")
     const navnext = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sbdatepicker-nav--next")
     const navprev = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sbdatepicker-nav--prev")
+    const title = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sbdatepicker-title");
+    const closeChangeDateBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sb-close-change-date");
+    const ypNext = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sb-yearpicker-next");
+    const ypPrev = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sb-yearpicker-prev");
+    const mpMonth = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.getClosest)(e, ".sb-monthpicker__month");
 
     if (datenumber) {
-      setNewDate(e)
+      setNewDate(e);
       return;
     }
 
     if (navnext) {
-      rendernextMonth()
+      rendernextMonth();
       return;
     }
 
     if (navprev) {
-      renderprevMonth()
+      renderprevMonth();
+      return;
+    }
+
+    if (datenumber) {
+      setNewDate(e);
+      return;
+    }
+
+    if (title) {
+      openChangeDateModal();
+      return;
+    }
+
+    if (closeChangeDateBtn) {
+      closeChangeDateModal();
+      return;
+    }
+
+    if (ypNext) {
+      yearpickerSetYear(1, false);
+      return;
+    }
+
+    if (ypPrev) {
+      yearpickerSetYear(-1, false);
+      return;
+    }
+
+    if (mpMonth) {
+      const newmonth = parseInt(e.target.getAttribute("data-sbdp-month"))
+      console.log(newmonth)
+      monthpickerSetMonth(newmonth, false);
       return;
     }
   }
 
-  setDatepickerHeader();
-  createCells(montharray);
-  datepicker.onmousedown = delegateDatepickerEvents;
-  montharray = [];
+  const initsbdatepicker = () => {
+    sbdatepickerChangeDate.classList.remove("show-sbdpcd");
+    setDatepickerHeader();
+    createCells(montharray);
+    datepicker.onmousedown = delegateDatepickerEvents;
+    montharray = [];
+  }
+  initsbdatepicker();
 }
 
 /***/ }),
@@ -3942,8 +4156,10 @@ function setDayView(context, store, datepickerContext) {
         new Date(allboxes[i].start),
         new Date(allboxes[i].end),
         context.getDate(),
-      ]
+      ];
+
       if (start.getDate() === current.getDate()) { startingToday++; }
+
       if (end.getDate() === current.getDate()) { 
         endingToday++; 
         tempEndCase1 = allboxes[i];
@@ -3975,16 +4191,15 @@ function setDayView(context, store, datepickerContext) {
 
     if (endingToday > 0) {
       if (endingToday === 1) {
-        console.log(allboxes)
         fulltitle += ` – ${endingToday} ending ( ${(0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
           new Date(tempEndCase1.start),
           new Date(tempEndCase1.end)
-        )} )`
+        )} )`;
       } else {
-        fulltitle += ` – ${endingToday} ending ( ${firstLastDates(boxes.boxes)} )`
+        fulltitle += ` – ${endingToday} ending ( ${firstLastDates(boxes.boxes)} )`;
       }
     } else {
-      fulltitle += ` – no entries ending today`
+      fulltitle += ` – no entries ending today`;
     }
     return fulltitle;
   }
@@ -4001,7 +4216,6 @@ function setDayView(context, store, datepickerContext) {
 
     document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`
     let day = context.getDay();
-    // if (day < 10) { day = `0${day}` }
     dvHeaderDayOfWeek.textContent = day
 
     if (context.isToday()) {
@@ -4105,9 +4319,7 @@ function setDayView(context, store, datepickerContext) {
       return;
     } else {
     }
-    // entries.forEach((entry) => {
 
-    // })
   }
 
   function renderBoxes() {
@@ -4179,7 +4391,6 @@ function setDayView(context, store, datepickerContext) {
           box.setAttribute("data-dv-box-index", "box-one")
         }
       }
-
 
       configHeader()
       ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragend", dvGrid, store);
@@ -6687,17 +6898,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ setAppDefaults)
 /* harmony export */ });
 /* harmony import */ var _utilities_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utilities/helpers */ "./src/utilities/helpers.js");
-// import setHeader from "../components/menus/header"
 
 const appBody = document.querySelector(".body");
 function setAppDefaults(context, store) {
   const disableTransitionsOnLoad = () => {
     setTimeout(() => {
-      appBody.classList.remove("preload")
+      appBody.classList.remove("preload");
     }, 10)
   }
-  disableTransitionsOnLoad()
-  ;(0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.setTheme)(context)
+  disableTransitionsOnLoad();
+  (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.setTheme)(context);
 }
 
 function checkLocalStorageAllowed() {
@@ -6760,9 +6970,6 @@ const sbToggleThemeBtn = document.querySelector(".sb-theme-btn")
 const formOverlay = document.querySelector(".form-overlay")
 const form = document.querySelector(".entries__form")
 
-const headerPrevBtn = document.querySelector(".prev")
-const headerNextBtn = document.querySelector(".next")
-
 const datepicker = document.querySelector(".datepicker")
 const datepickeroverlay = document.querySelector(".datepicker-overlay")
 const dateTimeWrapper = document.querySelector(".datetime-wrapper")
@@ -6777,8 +6984,6 @@ const sidebar = document.querySelector(".sidebar");
 const viewsContainer = document.querySelector(".container__calendars")
 const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
-const weekwrapper = document.querySelector(".weekview")
-const daywrapper = document.querySelector(".dayview")
 const listviewBody = document.querySelector(".listview__body");
 
 function renderViews(context, datepickerContext, store) {
@@ -7028,12 +7233,17 @@ function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), "right",
+          document.querySelector(".dayview--header-day__number"), 
+          "right",
           getPreviousDay
         );
         break;
       case "week":
-        handleTransition(document.querySelector(".weekview--header"), "right", getPreviousWeek)
+        handleTransition(
+          document.querySelector(".weekview--header"), 
+          "right", 
+          getPreviousWeek
+          );
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -7050,12 +7260,17 @@ function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), "left",
+          document.querySelector(".dayview--header-day__number"), 
+          "left",
           getNextDay
         );
         break;
       case "week":
-        handleTransition(document.querySelector(".weekview--header"), "left", getNextWeek)
+        handleTransition(
+          document.querySelector(".weekview--header"),
+          "left", 
+          getNextWeek
+          );
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)
@@ -7078,6 +7293,7 @@ function renderViews(context, datepickerContext, store) {
     const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
     datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
     ;(0,_components_menus_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"])(context, store, datepickerContext, "header")
+    
   }
 
   function setOptionStyle(option) {
@@ -7112,8 +7328,6 @@ function renderViews(context, datepickerContext, store) {
       renderSidebarDatepicker()
     }
     document.activeElement.blur()
-
-    // handleTransition(option, keyframeDirection, callback)
   }
 
   function handleSelect(e) {
@@ -7187,7 +7401,7 @@ function renderViews(context, datepickerContext, store) {
   /* configure keyboard shortcuts */
   /* 2022-01-14
   * Google calendar has recently updated their app wide throttling from a global value of around 150 to the minimum of 4ms(might be 10) for period changes and (250-300) for view changes. 
-  * For now, I'm keeping the throttle at 150ms. 
+  * For now, I'm keeping global throttle at 150ms. 
   */
   function delegateGlobalKeyDown(e) {
     const toggleChangeview = (e) => {
@@ -7318,17 +7532,17 @@ function renderViews(context, datepickerContext, store) {
     if (store.hasActiveOverlay()) return;
 
     // prevent ctrl + key shortcuts from triggering at all
-    lk = e.key
+    lk = e.key;
     if (lk === "Control") {
-      lk2 = "Control"
+      lk2 = "Control";
+      return;
+    }
+    if (lk2 === "Control" && lk !== "Control") {
+      lk2 = "";
       return;
     }
 
-    if (lk2 === "Control" && lk !== "Control") {
-      lk2 = ""
-      return;
-    }
-    getKeyPressThrottled(e)
+    getKeyPressThrottled(e);
   }
 
   const appinit = () => {
@@ -7341,8 +7555,8 @@ function renderViews(context, datepickerContext, store) {
     // supply callbacks to store for opening form and sidebar
     store.setRenderFormCallback(handleForm);
     const ensureSidebarIsOpen = () => {
-      context.setSidebarState("open")
-      handleBtnMainMenu()
+      context.setSidebarState("open");
+      handleBtnMainMenu();
     }
     store.setRenderSidebarCallback(ensureSidebarIsOpen);
     /*************************/
@@ -7352,7 +7566,6 @@ function renderViews(context, datepickerContext, store) {
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
   }
-  // store.setShortcutsStatus(true)
   appinit();
 }
 
@@ -7387,7 +7600,6 @@ const monthComponent = document.querySelector(".monthview")
 const weekComponent = document.querySelector(".weekview")
 const dayComponent = document.querySelector(".dayview")
 const listComponent = document.querySelector(".listview")
-const listComponentBody = document.querySelector('.listview__body');
 
 /**
  * 
@@ -7400,8 +7612,6 @@ const listComponentBody = document.querySelector('.listview__body');
  */
 
 let [prev1, prev2] = [null, null];
-let lastReset = null;
-let count = 0;
 function setViews(component, context, store, datepickerContext) {
   prev1 = prev2;
   prev2 = component;
@@ -7419,7 +7629,6 @@ function setViews(component, context, store, datepickerContext) {
     // reset previous view after switching to a new view
     const resetPrevView = store.getResetPreviousViewCallback()
     if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
-      console.log('ran')
       resetPrevView();
     }
     
@@ -7750,7 +7959,7 @@ class Context {
   /* ************** */
   /* GETTERS */
   getGmt() {
-    return this.gmt;
+    return this.gmt;  // UTC Offset
   }
 
   getDateSelected() {
@@ -7816,8 +8025,9 @@ class Context {
     }
   }
 
+  // ** not in use **
   getWeekNumber() {
-    // fuction to get the week number for a date 1 - 52
+    // returns week index 1 - 52
     let d = new Date(Date.UTC(this.getYear(), this.getMonth(), this.getDay()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
     let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
@@ -7872,7 +8082,6 @@ class Context {
     let daysInMonth = this.getDaysInMonth();
     let [year, month] = [this.getYear(), this.getMonth()];
     let end = this.getMonthArrayEnd();
-    let tempend;
 
     for (let i = start.length - 1; i >= 0; i--) {
       monthArray.push(start[i]);
@@ -7882,8 +8091,6 @@ class Context {
       monthArray.push(new Date(year, month, i));
     }
     monthArray[monthArray.length - 1].setHours(23, 59, 59, 999);
-
-
 
     if (monthArray.length === 28 && end.length < 7) {
       end = this.getMonthArrayEnd(true);
@@ -7895,6 +8102,7 @@ class Context {
       }
       monthArray.push(end[i]);
     }
+    
     return monthArray;
   }
 
@@ -8605,7 +8813,6 @@ class Store {
 
     return activeEntries.filter((entry) => {
       let entryDate = new Date(entry.start)
-      // console.log(entryDate)
       return entryDate >= montharr[0] && entryDate <= montharr[montharr.length - 1]
     })
   }
@@ -8805,7 +9012,6 @@ class Store {
       Store.setStore(this.store)
     }
     this.deleteCategory(category)
-    console.log(this.getEntriesByCtg('test'))
   }
   
   removeCategoryAndEntries(category) {
@@ -8830,7 +9036,6 @@ class Store {
    * @desc updates the color of a category
    */
   updateCtgColor(categoryName, color) {
-    console.log("ran new color")
     if (this.hasCtg(categoryName)) {
       this.ctg[categoryName].color = color;
       Store.setCtg(this.ctg)
@@ -8847,10 +9052,9 @@ class Store {
    * @param {string} newColor 
    * @param {string} oldName 
    * @returns new category object
-   * @desc note that 'value' @ [key, value] is necessary to segment the object, even if it is not directly referenced
+   * @desc note that 'value' of [key, value] is necessary to segment the object, even if it is not directly referenced
    */
   updateCtg(newName, newColor, oldName) {
-    console.log('ran update everything')
     let entries = Object.entries(this.ctg);
     let hasColor = newColor !== null;
     let count = 0;
@@ -8883,8 +9087,8 @@ class Store {
         oldName, 
         newName, 
         true
-      )
-      Store.setCtg(this.ctg)
+      );
+      Store.setCtg(this.ctg);
     }
   }
   /* ********************* */
@@ -8894,7 +9098,7 @@ class Store {
   /* ***************************** */
   /*  KEYBOARD SHORTCUT MANAGEMENT */
   getShortcuts() {
-    return this.keyboardShortcuts
+    return this.keyboardShortcuts;
   }
 
   setShortCut(shortcut) {
@@ -8908,12 +9112,12 @@ class Store {
   }
 
   setShortcutsStatus(status) {
-    this.keyboardShortcutsStatus = status
-    Store.setShortcutsStatus(status)
+    this.keyboardShortcutsStatus = status;
+    Store.setShortcutsStatus(status);
   }
 
   getShortcutsStatus() {
-    const status = Store.getShortcutsStatus()
+    const status = Store.getShortcutsStatus();
     return status !== null ? status : true;
   }
   /* ***************************** */
@@ -8956,7 +9160,6 @@ class Store {
   validateUserUpload(userUpload) {
     const keys = Object.keys(userUpload);
     let message = {};
-    console.log(userUpload)
     if (keys.length > _constants__WEBPACK_IMPORTED_MODULE_1__["default"].length) {
       message.err1 = "invalid number of keys (too many)"
     }
@@ -8977,14 +9180,12 @@ class Store {
 
   setUserUpload(userUpload) {
     const validation = this.validateUserUpload(userUpload);
-    console.log(validation)
     let validated;
     if (validation === true) {
       localStorage.clear()
       validated = true;
       for (const [key, value] of Object.entries(userUpload)) {
         localStorage.setItem(key, value)
-        console.log(key)
       }
     } else {
       return validation;
@@ -9400,13 +9601,13 @@ class Day {
     for (let i = 0; i < arr.length; i++) {
       for (let j = i + 1; j < arr.length; j++) {
         if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
-          collisions.add(bxs[i])
-          collisions.add(bxs[j])
+          collisions.add(bxs[i]);
+          collisions.add(bxs[j]);
         }
       }
     }
-    console.log(collisions)
-    return this.sortByY([...collisions])
+    
+    return this.sortByY([...collisions]);
   }
 
   updateStore(store, id) {
@@ -9525,8 +9726,6 @@ __webpack_require__.r(__webpack_exports__);
 
   /*
     - the following are colors for calendar categories
-    - they are optimized for dark modes 
-
   */
   colors: {
     red: {
@@ -9795,7 +9994,6 @@ function formatStartEndDate(start, end, flag) {
 
 function formatStartEndTime(start, end) {
   [start, end] = [new Date(start), new Date(end)]
-
   let startmin = start.getMinutes()
   let endmin = end.getMinutes()
   endmin = endmin % 15 === 0 ? endmin : endmin + (15 - (endmin % 15))
@@ -9805,7 +10003,6 @@ function formatStartEndTime(start, end) {
   if (starttime.slice(-2) === endtime.slice(-2)) {
     starttime = starttime.slice(0, -2)
   }
-
   return `${starttime} – ${endtime}`
 }
 
@@ -9929,7 +10126,6 @@ function formatEntryOptionsDate(date1, date2) {
     if (m1 === m2) {
       if (d1 === d2) {
         // === year, month, day
-
         let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
         let durationTime = formatDurationHourMin(duration);
         return {
@@ -9958,10 +10154,9 @@ function formatEntryOptionsDate(date1, date2) {
     // different year --- return full date
     let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2)
     let durationTime = formatDuration(duration);
-
     return {
       date: `${labels.monthsShort[m1]} ${d1}, ${y1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
-      time: formatDuration(duration),
+      time: durationTime,
     }
   }
 }
@@ -11262,7 +11457,7 @@ __webpack_require__.r(__webpack_exports__);
 // store.setStoreForTesting(generateRandomEvents(1000));
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-
+console.log(_context_store__WEBPACK_IMPORTED_MODULE_1__["default"].getAllCtg())
 })();
 
 /******/ })()

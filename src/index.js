@@ -54,3 +54,4 @@ import "./styles/aside/shortcuts.css"
 // store.setStoreForTesting(generateRandomEvents(1000));
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
+console.log(store.getAllCtg())
