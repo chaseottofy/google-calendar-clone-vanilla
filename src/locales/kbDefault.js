@@ -18,4 +18,6 @@ export default {
   16: { shortcut: "ESC", action: 'return to calendar' },
   17: { shortcut: "e", action: '(entry options) opens form with entry details' },
   18: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
+  19: { shortcut: '↑', action: '(datepicker) set date to next month/week' },
+  20: { shortcut: '↓', action: '(datepicker) set date to prev month/week'},
 }

@@ -222,14 +222,12 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     sbdatepickerChangeDate.classList.add("show-sbdpcd")
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
-    console.log(datepickerContext.getMonth());
   }
 
 
   function closeChangeDateModal() {
     // check if date has changed;
     if (!getMonthYearCheck()) {
-      console.log(true);
       resetpickerData()
       createCells(montharray);
       setDatepickerHeader();
@@ -316,7 +314,6 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
 
     if (mpMonth) {
       const newmonth = parseInt(e.target.getAttribute("data-sbdp-month"))
-      console.log(newmonth)
       monthpickerSetMonth(newmonth, false);
       return;
     }

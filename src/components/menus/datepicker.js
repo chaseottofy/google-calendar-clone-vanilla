@@ -193,7 +193,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     datepickerChangeDate.classList.add("show-dpcd")
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
-    console.log(datepickerContext.getMonth());
   }
 
   function closeChangeDateModal() {
@@ -296,6 +295,18 @@ export default function setDatepicker(context, store, datepickerContext, type) {
         break;
       case "ArrowRight":
         setSelectedToNextDay();
+        break;
+      case "Enter":
+        if (datepickerChangeDate.classList.contains("show-dpcd")) {
+          closeChangeDateModal();
+        } else {
+          const target = document.querySelector(".datepicker__body--datename-selected")
+          if (!target) {
+            closeDatepicker()
+          } else {
+            setNewDate(target) 
+          }
+        }
         break;
       case "Escape":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {

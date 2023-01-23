@@ -52,3 +52,9 @@
   background: var(--black0);
   color: var(--primary1);
 }
+
+@media screen and (max-width: 420px) {
+  .timepicker {
+    width: 112px;
+  } 
+}

@@ -23,19 +23,22 @@
   border-radius: 8px;
   box-shadow: var(--box-shadow1);
   z-index: 1041;
-  overflow:hidden;
+  overflow: hidden;
 }
 
-.hide-shortcuts {display:none;}
+.hide-shortcuts {
+  display: none;
+}
 
 .shortcuts-modal-header {
-  display:flex;
+  display: flex;
   height: 48px;
   width: 100%;
-  align-items:center;
-  justify-content:space-between;
+  align-items: center;
+  justify-content: space-between;
   background: var(--black0);
 }
+
 .keyboard-disabled-sm-two {
   display: flex;
   justify-content: center;
@@ -43,7 +46,7 @@
   height: 48px;
   width: 48px;
   cursor: pointer;
-  position: relative;  
+  position: relative;
   margin-left: 16px;
 }
 
@@ -69,30 +72,30 @@
 }
 
 .close-shortcuts-modal {
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 40px;
   width: 48px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .close-shortcuts-modal svg {
-  user-select:none;
+  user-select: none;
   pointer-events: none;
 }
 
 .shortcuts-modal__body {
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
 }
 
 
 .shortcuts-modal-title {
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   height: 48px;
   width: auto;
   font-size: 17px;
@@ -103,7 +106,7 @@
 }
 
 .shortcuts-modal-content {
-  display:flex;
+  display: flex;
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
@@ -120,8 +123,8 @@
 }
 
 .sm-item {
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   height: 42px;
   width: 100%;
   margin-bottom: 8px;
@@ -134,7 +137,7 @@
 .sm-key {
   font-weight: 500;
   font-size: 16px;
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
   flex-direction: row-reverse;
@@ -145,7 +148,7 @@
   color: var(--white2);
 }
 
-.sm-item:first-child .sm-key:first-child span { 
+.sm-item:first-child .sm-key:first-child span {
   font-family: monospace !important;
 }
 
@@ -157,6 +160,7 @@
   text-align: center;
   background: var(--darkgrey0);
 }
+
 .sm-key span:nth-child(2) {
   padding: 0 4px;
   text-align: center;
@@ -174,4 +178,38 @@
   background: var(--black0);
   color: var(--white2);
   padding-left: 8px;
+}
+
+
+@media screen and (max-width: 560px) {
+  .shortcuts__modal {
+    left: 2%;
+    right: 2%;
+  }
+
+  .shortcuts-modal-content {
+    padding: 6px;
+  }
+
+  .sm-key {
+    font-size: 13px;
+    width: 120px;
+  }
+
+  .sm-key span:first-child,
+  .sm-key span:last-child {
+    width: 30px;
+  }
+
+  .sm-description {
+    font-size: 11px;
+    line-height: 15px;
+    display:flex;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 380px) {
+
+
 }
