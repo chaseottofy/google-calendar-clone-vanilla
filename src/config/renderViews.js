@@ -346,6 +346,7 @@ export default function renderViews(context, datepickerContext, store) {
     const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
     datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
     setDatepicker(context, store, datepickerContext, "header")
+    
   }
 
   function setOptionStyle(option) {

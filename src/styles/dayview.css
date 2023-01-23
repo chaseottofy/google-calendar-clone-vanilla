@@ -75,7 +75,6 @@
   font-family: var(--secondaryFont);
   display: flex;
   align-items: center;
-  /* background: var(--black000); */
   height: 30px;
   font-weight: 400;
   font-size: 14px;
@@ -102,7 +101,7 @@
 
 .dayview--ontop-container {
   border-left: 1px solid var(--mediumgrey1);
-  border-bottom: 2px solid var(--black0);
+  border-bottom: 2px solid var(--black000);
   max-height: 24px;
   min-height: 24px;
   overflow-y: scroll;

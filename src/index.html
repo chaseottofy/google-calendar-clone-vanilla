@@ -518,6 +518,46 @@
       </div>
       <div class="datepicker__body--dates"></div>
     </div>
+
+    <aside class="datepicker-change-date hide-dpcd">
+      <aside class="close-change-date">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+        </svg>
+      </aside>
+
+      <div class="yearpicker">
+        <div class="yearpicker-prev">
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white4)">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+          </svg>
+        </div>
+        <div class="yearpicker-title">2023</div>
+        <div class="yearpicker-next">
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white4)">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+          </svg>
+        </div>
+      </div>
+      <div class="monthpicker">
+        <div class="monthpicker__month" data-dp-month="0">January</div>
+        <div class="monthpicker__month" data-dp-month="1">February</div>
+        <div class="monthpicker__month" data-dp-month="2">March</div>
+        <div class="monthpicker__month" data-dp-month="3">April</div>
+        <div class="monthpicker__month" data-dp-month="4">May</div>
+        <div class="monthpicker__month" data-dp-month="5">June</div>
+        <div class="monthpicker__month" data-dp-month="6">July</div>
+        <div class="monthpicker__month" data-dp-month="7">August</div>
+        <div class="monthpicker__month" data-dp-month="8">September</div>
+        <div class="monthpicker__month" data-dp-month="9">October</div>
+        <div class="monthpicker__month" data-dp-month="10">November</div>
+        <div class="monthpicker__month" data-dp-month="11">December</div>
+      </div>
+    </aside>
   </aside>
   <!-- click calendar entry to view details -->
 
@@ -541,7 +581,11 @@
 
         <div class="entry__options--header-icons">
           <div class="entry__options-icon eoi__edit" data-tooltip="edit event (e)">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="var(--white2)"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="var(--white2)">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+            </svg>
           </div>
 
           <div class="entry__options-icon eoi__delete" data-tooltip="delete event (d)">

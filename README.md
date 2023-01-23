@@ -50,3 +50,9 @@ For now, you can view the app through screenshots (link below), or simply downlo
   * If the entry ended yesterday, display "ended yesterday".
   * If the entry is yet to start and is not in the past, display how long until it is scheduled to start.
 * Improve collisions [screenshot](https://ibb.co/CwN951Z)
+
+### Jan 23, 2023
+
+* Improve custom datepicker with month & year picker picker.
+  * click on datepicker title to open month/year picker.
+  * [screenshot](https://ibb.co/QkgXHHC)

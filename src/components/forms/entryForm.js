@@ -444,8 +444,8 @@ export default function setEntryForm(context, store, datepickerContext) {
       datepickerTop -= 40;
     }
 
-    if (window.innerHeight - 216 < bott) {
-      datepickerTop = window.innerHeight - 216;
+    if (window.innerHeight - 216 <= bott) {
+      datepickerTop = window.innerHeight - 242;
     }
 
     datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`)

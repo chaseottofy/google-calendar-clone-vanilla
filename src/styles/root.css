@@ -32,8 +32,6 @@
     url('../roboto-v30-latin-500.woff2') format('woff2');
 }
 
-
-
 :root {
   --primaryFont: "Roboto", sans-serif;
   --secondaryFont: "Google Sans", sans-serif;
@@ -222,7 +220,9 @@ html {
   --scrollerThumbBackgroundHover: #505b65;
   --scrollerTrackBackground: var(--black1);
   --box-shadow1:
-    rgba(20, 20, 20, 0 .5) 0px 8px 10px 1px;
+    /* rgba(20, 20, 20, 0 .5) 0px 8px 10px 1px; */
+    rgba(54, 147, 255, 0.12) 0 10px 14px,
+    rgba(0, 0, 0, 0.15) 0 6px 6px;
   --box-shadow3:
   rgba(54, 147, 255, 0.2) 0 10px 20px,
     rgba(0, 0, 0, 0.23) 0 6px 6px;
