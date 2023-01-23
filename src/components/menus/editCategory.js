@@ -1,6 +1,6 @@
 import locales from "../../locales/en"
 import { createCheckIcon } from "../../utilities/svgs";
-import { placePopup } from "../../utilities/helpers";
+import { isNumeric, placePopup } from "../../utilities/helpers";
 const checkIcon = createCheckIcon('var(--taskcolor');
 const colors = Object.values(locales.colors)
 
@@ -90,7 +90,12 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function validateNewCategory(categoryName, color) {
-    const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
+    let trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s]+|\s{2,}/g, ' ').trim();
+
+    if (isNumeric(trimName)) {
+      trimName = `category ${trimName}`;
+    }
+    
     const origName = formhelper.getOriginalName();
 
     let errormsg = false;

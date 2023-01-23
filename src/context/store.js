@@ -5,6 +5,10 @@ import locales from "../locales/en"
 import defautlKeyboardShortcuts from "../locales/kbDefault"
 const colors = locales.colors
 /*
+  this is a temporary list of store methods for development purposes, it is not a complete list of methods
+
+
+
   ***************************************
   // ENTRY MANAGEMENT
   "addEntry",
@@ -50,6 +54,7 @@ const colors = locales.colors
   "removeCategoryAndEntries",
   "setCategoryStatus",
   "updateCtgColor",
+  "updateCtg"
   ***************************************
 
 
@@ -677,11 +682,17 @@ class Store {
     let count = 0;
     let length = entries.length;
 
+    const isNumeric = (n) => !isNaN(parseFloat(n)) && isFinite(n);
+    if (isNumeric(newName)) {
+      newName = "category " + newName;
+    }
+    
     for (let [key, value] of entries) {
       count++
       if (count === 1) {
+        // changing the default category;
         if (oldName === key) {
-          entries[0][0] = newName
+          entries[0][0] = newName;
           if (hasColor) {
             entries[0][1].color = newColor
           }

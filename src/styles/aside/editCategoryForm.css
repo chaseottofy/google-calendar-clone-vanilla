@@ -37,8 +37,7 @@
   height: auto;
   position: relative;
   padding: 20px 12px 4px 12px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow:hidden;
 }
 
 .category__form-input {
@@ -63,13 +62,13 @@
 .category__form-error {
   border-bottom: 2px solid var(--red1);
   background: var(--black0);
-  color: var(--white4);
+  color: var(--taskcolor);
 }
 .category__form-input:focus {
   border-bottom: 2px solid var(--primary2);
 }
 .category__form-input::placeholder {
-  color: var(--white4);
+  color: var(--white2);
 }
 
 .ctg-input--err {
@@ -176,7 +175,7 @@
 }
 
 .category__form--cancel {
-  color: var(--white3);
+  color: var(--white2);
   border-radius: 4px 0 0 0;
   background: var(--black2);
 }

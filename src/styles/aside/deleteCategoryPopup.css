@@ -47,12 +47,12 @@
   background: var(--black000);
   font-size: 20px;
   font-weight: 500;
-  width: max-content
+  width: max-content;
+  color: var(--taskcolor);
 }
 
 .popup-delete-ctg__stats,
 .popup-delete-ctg__title {
-  color: var(--taskcolor0);
   height: min-content;
   padding: 2px 16px
 }
@@ -88,7 +88,8 @@
   min-height: 60px;
   padding: 0 8px;
   position: relative;
-  width: 100%
+  width: 100%;
+  transition: all .2s ease-in-out;
 }
 
 input[type=radio] {
@@ -102,7 +103,7 @@ input[type=radio] {
 .popup-delete-ctg__option--move,
 .popup-delete-ctg__option--move span {
   align-items: center;
-  color: var(--taskcolor);
+  color: var(--white4);
   display: flex;
   height: 100%;
   justify-content: flex-end;
@@ -116,7 +117,7 @@ input[type=radio] {
 
 .popup-delete-ctg__option--move-select {
   border: 1px solid var(--mediumgrey1);
-  color: var(--taskcolor);
+  color: var(--white4);
   cursor: pointer;
   font-size: 16px;
   margin-left: 6px;
@@ -134,10 +135,14 @@ input[type=radio] {
 }
 
 .popup-delete-ctg__option--remove span {
-  color: var(--taskcolor);
+  color: var(--white4);
   padding-right: 8px;
   pointer-events: none;
   user-select: none
+}
+
+.popup-delete-act span {
+  color: var(--taskcolor0) !important;
 }
 
 .popup-delete-act svg {
@@ -156,7 +161,7 @@ input[type=radio] {
 .popup-delete-ctg__btn--cancel {
   background: var(--black2);
   border: 1px solid var(--black000);
-  color: var(--taskcolor0)
+  color: var(--taskcolor);
 }
 
 .popup-delete-ctg__btn--cancel:hover {
@@ -173,7 +178,6 @@ input[type=radio] {
   height: 40px;
   justify-content: center;
   margin: 0 4px;
-  transition: all .2s ease-in-out;
   width: 100%
 }
 
@@ -184,7 +188,7 @@ input[type=radio] {
 
 .popup-delete-ctg__btn--proceed:hover {
   background: var(--red1);
-  color: var(--taskcolor0)
+  color: var(--white4)
 }
 
 @media screen and (max-width:440px) {

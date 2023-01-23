@@ -165,6 +165,11 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
   return [popupX, popupY];
 }
 
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+
 export default debounce;
 export {
   getClosest,
@@ -172,5 +177,6 @@ export {
   generateId,
   throttle,
   setTheme,
-  placePopup
+  placePopup,
+  isNumeric
 } 

@@ -495,7 +495,6 @@ function setEntryForm(context, store, datepickerContext) {
 
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
-      console.log(h, m)
       if (shouldTestReset) {
         if (h === 23 && m >= 15) {
           setEndDateToNextDay();
@@ -1931,7 +1930,6 @@ function setDatepicker(context, store, datepickerContext, type) {
     datepickerChangeDate.classList.add("show-dpcd")
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
-    console.log(datepickerContext.getMonth());
   }
 
   function closeChangeDateModal() {
@@ -2034,6 +2032,18 @@ function setDatepicker(context, store, datepickerContext, type) {
         break;
       case "ArrowRight":
         setSelectedToNextDay();
+        break;
+      case "Enter":
+        if (datepickerChangeDate.classList.contains("show-dpcd")) {
+          closeChangeDateModal();
+        } else {
+          const target = document.querySelector(".datepicker__body--datename-selected")
+          if (!target) {
+            closeDatepicker()
+          } else {
+            setNewDate(target) 
+          }
+        }
         break;
       case "Escape":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
@@ -2169,7 +2179,12 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
   }
 
   function validateNewCategory(categoryName, color) {
-    const trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
+    let trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s]+|\s{2,}/g, ' ').trim();
+
+    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_2__.isNumeric)(trimName)) {
+      trimName = `category ${trimName}`;
+    }
+    
     const origName = formhelper.getOriginalName();
 
     let errormsg = false;
@@ -3357,14 +3372,12 @@ function setSidebarDatepicker(context, store, datepickerContext) {
     sbdatepickerChangeDate.classList.add("show-sbdpcd")
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
-    console.log(datepickerContext.getMonth());
   }
 
 
   function closeChangeDateModal() {
     // check if date has changed;
     if (!getMonthYearCheck()) {
-      console.log(true);
       resetpickerData()
       createCells(montharray);
       setDatepickerHeader();
@@ -3451,7 +3464,6 @@ function setSidebarDatepicker(context, store, datepickerContext) {
 
     if (mpMonth) {
       const newmonth = parseInt(e.target.getAttribute("data-sbdp-month"))
-      console.log(newmonth)
       monthpickerSetMonth(newmonth, false);
       return;
     }
@@ -8388,6 +8400,10 @@ __webpack_require__.r(__webpack_exports__);
 
 const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
 /*
+  this is a temporary list of store methods for development purposes, it is not a complete list of methods
+
+
+
   ***************************************
   // ENTRY MANAGEMENT
   "addEntry",
@@ -8433,6 +8449,7 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "removeCategoryAndEntries",
   "setCategoryStatus",
   "updateCtgColor",
+  "updateCtg"
   ***************************************
 
 
@@ -9060,11 +9077,17 @@ class Store {
     let count = 0;
     let length = entries.length;
 
+    const isNumeric = (n) => !isNaN(parseFloat(n)) && isFinite(n);
+    if (isNumeric(newName)) {
+      newName = "category " + newName;
+    }
+    
     for (let [key, value] of entries) {
       count++
       if (count === 1) {
+        // changing the default category;
         if (oldName === key) {
-          entries[0][0] = newName
+          entries[0][0] = newName;
           if (hasColor) {
             entries[0][1].color = newColor
           }
@@ -9822,6 +9845,8 @@ __webpack_require__.r(__webpack_exports__);
   16: { shortcut: "ESC", action: 'return to calendar' },
   17: { shortcut: "e", action: '(entry options) opens form with entry details' },
   18: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
+  19: { shortcut: '↑', action: '(datepicker) set date to next month/week' },
+  20: { shortcut: '↓', action: '(datepicker) set date to prev month/week'},
 });
 
 /***/ }),
@@ -10685,6 +10710,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "generateId": () => (/* binding */ generateId),
 /* harmony export */   "getClosest": () => (/* binding */ getClosest),
 /* harmony export */   "hextorgba": () => (/* binding */ hextorgba),
+/* harmony export */   "isNumeric": () => (/* binding */ isNumeric),
 /* harmony export */   "placePopup": () => (/* binding */ placePopup),
 /* harmony export */   "setTheme": () => (/* binding */ setTheme),
 /* harmony export */   "throttle": () => (/* binding */ throttle)
@@ -10855,6 +10881,11 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
   if (popupY < 0) popupY = 56;
   return [popupX, popupY];
 }
+
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (debounce);
  
