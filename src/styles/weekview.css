@@ -97,7 +97,7 @@
 .weekview--allday-module__title {
   font-size: 9px;
   text-align: center;
-  color: var(--white4);
+  color: var(--taskcolor);
   font-weight: 500;
   display: flex;
   pointer-events: none;
@@ -131,7 +131,7 @@
 }
 
 .allday__cell:hover {
-  background: var(--darkgrey2);
+  background: var(--black2);
 }
 
 .wv-ad--taskicons {
@@ -290,7 +290,7 @@
 .allday-modal__celltitle {
   font-size: 11px;
   font-weight: 500;
-  color: var(--taskcolor);
+  color: var(--taskcolor0);
   padding: 6px;
   line-height: 11px;
   pointer-events: none;
@@ -302,7 +302,7 @@
   margin-top: 2px;
   font-size: 10px;
   font-weight: 400;
-  color: var(--white4);
+  color: var(--taskcolor);
   padding: 0 6px;
 }
 
@@ -606,8 +606,6 @@
 
 
 @media screen and (max-width: 530px) {
-
-
   .allday__cell {
     justify-content: center;
     padding: 0 2px;

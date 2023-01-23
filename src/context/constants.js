@@ -1,20 +1,20 @@
 const localStoreKeyNames = [
-  "activeCtg",
+  "animationStatus",
+  "colorScheme",
+  "component",
+  "ctg",
   "dateSelected",
+  "daySelected",
+  "keyboardShortcutsStatus",
+  "monthSelected",
+  "pickerDateSelected",
   "pickerDaySelected",
   "pickerMonthSelected",
-  "sidebarState",
-  "refresh",
-  "component",
-  "yearSelected",
-  "ctg",
-  "monthSelected",
-  "daySelected",
-  "pickerDateSelected",
   "pickerYearSelected",
+  "refresh",
+  "sidebarState",
   "store",
-  "colorScheme",
-  "keyboardShortcutsStatus",
+  "yearSelected"
 ]
 
 export default localStoreKeyNames

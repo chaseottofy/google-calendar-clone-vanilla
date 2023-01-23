@@ -159,7 +159,7 @@ html {
 
 .light-mode {
   --primary5: #e9eff6;
-  --black000: #E8F0FE;
+  --black000: rgb(224, 229, 237);
   --black0: #E8F0FE;
   --black1: #ffffff;
   --black2: #E8F0FE;

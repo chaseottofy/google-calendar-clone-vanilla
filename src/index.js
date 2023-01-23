@@ -46,5 +46,6 @@ import "./styles/aside/shortcuts.css"
 // * set toast to be removed on window focus
 // * linter
 // * 
+// localStorage.clear();
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);

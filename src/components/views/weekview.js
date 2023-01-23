@@ -205,7 +205,7 @@ export default function setWeekView(context, store, datepickerContext) {
     }
 
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
-    cellIcons.appendChild(createMeatballVertIcon("var(--white4"));
+    cellIcons.appendChild(createMeatballVertIcon("var(--taskcolor"));
     cell.append(cellcontent, cellIcons);
     cellIcons.onclick = getContextMenuViaMeatball;
     return cell;

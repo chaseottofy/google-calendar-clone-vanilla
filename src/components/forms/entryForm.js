@@ -911,6 +911,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     const submitbtn = getClosest(e, ".form--footer__button-save");
 
     if (dragHeader) {
+      if (window.innerWidth < 500 || window.innerHeight < 500) {
+        return;
+      } else 
       dragFormAnywhere(e);
       return;
     }

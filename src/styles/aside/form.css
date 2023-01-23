@@ -619,3 +619,15 @@
     display: none
   }
 }
+
+@media screen and (max-width: 500px) {
+  .form-header--dragarea {
+    cursor:default;
+  }
+}
+
+@media screen and (max-height: 500px) {
+  .form-header--dragarea {
+    cursor:default;
+  }
+}

@@ -20,6 +20,7 @@ import {
   getTempDates,
   getFormDateObject,
   sortDates,
+  formatEntryOptionsDate
 } from "../../utilities/dateutils"
 
 import { createCloseIcon } from "../../utilities/svgs"
@@ -202,14 +203,13 @@ export default function setDayView(context, store, datepickerContext) {
     const morepopup = document.createElement("aside");
     morepopup.classList.add("dv--morepopup");
     morepopup.style.left = `${dvOnTop.offsetLeft}px`;
-    morepopup.style.top = `${dvOnTop.offsetTop + dvOnTop.offsetHeight}px`;
-    morepopup.style.height = `${64 + (entr.length * 48)}px`;
+    morepopup.style.top = `${dvOnTop.offsetTop}px`;
 
     const morepopupHeader = document.createElement("div");
     morepopupHeader.classList.add("dv--morepopup__header");
     const morepopupTitle = document.createElement("span");
     morepopupTitle.classList.add("dv--morepopup__title");
-    morepopupTitle.textContent = "More entries";
+    morepopupTitle.textContent = "Events spanning multiple days";
     const morepopupClose = document.createElement("span");
     morepopupClose.classList.add("dv--morepopup__close");
     morepopupClose.appendChild(createCloseIcon("var(--white3)"))
@@ -221,6 +221,7 @@ export default function setDayView(context, store, datepickerContext) {
       const morepopupEntry = document.createElement("div");
       morepopupEntry.classList.add("dv--morepopup__entry");
       morepopupEntry.style.backgroundColor = `${store.getCtgColor(entry.category)}`
+      morepopupEntry.setAttribute("data-sdvt-id", entry.id)
       const morepopupEntryTitle = document.createElement("span");
       morepopupEntryTitle.classList.add("dv--morepopup__entry-title");
       morepopupEntryTitle.textContent = entry.title;
@@ -229,10 +230,10 @@ export default function setDayView(context, store, datepickerContext) {
       morepopupCategory.textContent = entry.category;
       const morepopupEntryTime = document.createElement("span");
       morepopupEntryTime.classList.add("dv--morepopup__entry-time");
-      morepopupEntryTime.textContent = formatStartEndTime(
+      morepopupEntryTime.textContent = formatEntryOptionsDate(
         new Date(entry.start),
         new Date(entry.end)
-      );
+      ).date
       morepopupEntry.append(morepopupEntryTitle, morepopupCategory, morepopupEntryTime);
       return morepopupEntry;
     }
@@ -256,16 +257,78 @@ export default function setDayView(context, store, datepickerContext) {
       }
     }
 
+    function getEntrItem(e) {
+      if (getClosest(e, ".dv--morepopup__entry")) {
+        openStackEntryOnTop(e, closemp);
+        return;
+      }
+    }
+
     morepopup.append(morepopupHeader, morepopupBody);
     document.body.appendChild(morepopupoverlay);
     document.body.appendChild(morepopup);
     morepopupoverlay.onclick = closemp;
     morepopupClose.onclick = closemp;
+    morepopupBody.onclick = getEntrItem;
     document.addEventListener("keydown", closeMpOnEsc)
   }
 
+  function openStackEntryOnTop(e, closearg) {
+    const target = e.target;
+    const id = target.getAttribute("data-sdvt-id")
+    const setResetDv = () => {
+      console.log('reset')
+    }
+
+    const entry = store.getEntry(id);
+    const start = entry.start;
+    const color = store.getCtgColor(entry.category);
+    const rect = target.getBoundingClientRect()
+
+    let [x, y] = placePopup(
+      400,
+      165,
+      [
+        parseInt(rect.left), 
+        parseInt(rect.top) + 24
+      ],
+      [
+        window.innerWidth, 
+        window.innerHeight
+      ],
+      false,
+    );
+
+    closearg ? store.setFormResetHandle("day", closearg) : store.setFormResetHandle("day", setResetDv);
+    const setup = new FormSetup();
+    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setCategory(entry.category, color, color);
+    setup.setPosition(x, [x, y], y);
+    setup.setDates(getFormDateObject(start, entry.end));
+    fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
+
+    const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
+    getEntryOptionModal(
+      context, store, entry, datepickerContext, finishSetup
+    );
+
+    const modal = document.querySelector(".entry__options")
+    modal.style.top = +y + "px";
+    modal.style.left = +x + "px";
+  }
+
   function createStackableEntriesOnTop(entr) {
-    
+    const dvOnTopGrid = document.createElement("div")
+    dvOnTopGrid.classList.add("dayview--ontop__grid")
+    entr.forEach((ent) => {
+      const dvOnTopEntry = document.createElement("div");
+      dvOnTopEntry.classList.add("dayview--ontop__grid-item");
+      dvOnTopEntry.textContent = ent.title;
+      dvOnTopEntry.style.backgroundColor = store.getCtgColor(ent.category);
+      dvOnTopEntry.setAttribute("data-sdvt-id", ent.id)
+      dvOnTopGrid.appendChild(dvOnTopEntry)
+    })
+    dvOnTop.appendChild(dvOnTopGrid)
   }
 
   function createDvTop(entr) {
@@ -281,9 +344,8 @@ export default function setDayView(context, store, datepickerContext) {
       moremessage.onclick = opdm
       return;
     } else {
-
+      createStackableEntriesOnTop(entr)
     }
-
   }
 
   function renderBoxes() {
@@ -418,8 +480,8 @@ export default function setDayView(context, store, datepickerContext) {
         const setResetDv = () => {
           setStylingForEvent("dragend", dvGrid, store)
           box.classList.remove("dv-box-clicked")
-
         }
+
         box.classList.add("dv-box-clicked")
         const id = box.getAttribute("data-dv-box-id");
         const entry = store.getEntry(id);
@@ -525,7 +587,6 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   /** CREATE BOX ON DRAG */
-  /** Drag down empty column to create box */
   function createBoxOnDragDay(e) {
     setStylingForEvent("dragstart", dvGrid, store)
     document.body.style.cursor = "move";
@@ -630,42 +691,52 @@ export default function setDayView(context, store, datepickerContext) {
     handleOverlap(null, "day", boxes)
   }
 
+  function delegateDayViewOnTop(e) {
+    const dvhboxTop = getClosest(e, ".dayview--ontop__grid-item");
+    if (dvhboxTop) {
+      openStackEntryOnTop(e);
+      return;
+    }
+  }
+
   function delegateDayView(e) {
-    if (getClosest(e, ".dv-box-resize-s")) {
+    const dvhresizehandle = getClosest(e, ".dv-box-resize-s");
+    const dvhbox = getClosest(e, ".dv-box");
+    const dvhgrid = getClosest(e, ".dayview--main-grid");
+
+    if (dvhresizehandle) {
       resizeBoxNSDay(e, e.target.parentElement);
       return;
     }
 
-    if (getClosest(e, ".dv-box")) {
+    if (dvhbox) {
       dragEngineDay(e, e.target);
       return;
     }
 
-    if (getClosest(e, ".dayview--main-grid")) {
+    if (dvhgrid) {
       createBoxOnDragDay(e, e.target);
       return;
     }
   }
 
-  const initDayView = () => {
-    renderBoxesForGrid();
-    configHeader();
-    store.setResetPreviousViewCallback(resetDayview);
-    dvGrid.onmousedown = delegateDayView;
+  function handleScrollToOnInit() {
     const elementCount = dvMainGrid.childElementCount;
     if (elementCount > 0) {
       setTimeout(() => {
         let fc;
-        let checkForBOT = document?.querySelector(".dv-box-one")
+        let checkForBOT = document?.querySelector('[data-dv-box-index="dv-box-one"');
         if (checkForBOT !== null) {
-          fc = checkForBOT
+          fc = checkForBOT;
         } else {
           fc = dvMainGrid.children[0];
         }
+        let top = parseInt(fc.style.top);
+        top -= top < 50 ? 0 : 25;
         dvGrid.scrollTo({
-          top: parseInt(fc.style.top),
-          behavior: "instant",
-        })
+          top: top,
+          behavior: "instant", 
+        });
       }, 4)
     } else {
       setTimeout(() => {
@@ -677,6 +748,15 @@ export default function setDayView(context, store, datepickerContext) {
         })
       }, 4)
     }
+  }
+
+  const initDayView = () => {
+    renderBoxesForGrid();
+    configHeader();
+    store.setResetPreviousViewCallback(resetDayview);
+    dvGrid.onmousedown = delegateDayView;
+    dvOnTop.onmousedown = delegateDayViewOnTop
+    handleScrollToOnInit();
   }
   initDayView();
 }

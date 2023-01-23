@@ -138,6 +138,8 @@ function setTheme(context) {
  * @param {number} popupHeight 
  * @param {array} coords [x: e.clientX, y: e.clientY]
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
+ * @param {boolean} center should popup be centered ?
+ * @param {number} targetWidth if center is true, targetWidth required to center
  * @returns [left position, top position];
  */
 function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
@@ -147,11 +149,9 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupX;
   if (center) {
-    // console.log("center")
     // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
     if (targetWidth + x + 4 >= winW) {
-      // console.log(true);
       popupX = winW - popupW - 4;
     }
   } else {
@@ -160,7 +160,10 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
-  if (popupX < 0) popupX = x;
+  // console.log(x + popupW, winW)
+  console.log(popupX)
+
+  if (popupX < 0) popupX = Math.abs(popupX);
   if (popupY < 0) popupY = 56;
   return [popupX, popupY];
 }

@@ -25,9 +25,8 @@
   align-items: center;
   height: 100%;
   width: calc((100% / 7));
-  margin-left: 32px;
+  margin-left: 42px;
   max-width: 80px;
-  margin-right: 18px;
   border-bottom: 2px solid transparent;
 }
 
@@ -86,7 +85,7 @@
 .dv-ontop-row2 {
   display: grid;
   grid-template-columns: 36px 1fr;
-  min-height: 48px;
+  /* min-height: 48px; */
   width: 100%;
 }
 
@@ -101,15 +100,38 @@
 .dayview--ontop-container {
   border-left: 1px solid var(--mediumgrey1);
   border-bottom: 2px solid var(--darkgrey1);
-  height: 100%;
-  /* max-height: 24px; */
-  /* min-height: 24px; */
+  height: auto;
+  min-height: 24px;
   overflow-y: scroll;
   width: 100%;
   position: relative;
 }
 
+.dayview--ontop__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-rows: 20px;
+  column-gap: 4px;
+  height: auto;
+  width: calc(100% - 32px);
+  position: relative;
+}
 
+.dayview--ontop__grid-item {
+  border-radius: 4px;
+  color: var(--taskcolor);
+  height: 18px;
+  line-height: 17px;
+  font-size: 12px;
+  padding: 0 4px;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.dayview--ontop__grid-item:hover {
+  filter: brightness(1.2);
+}
 
 
 .dv--ontop__more {
@@ -126,7 +148,7 @@
 }
 
 .dv--ontop__more:hover {
-  background: var(--black2);
+  background: var(--black000);
 }
 
 .dv--morepopup__overlay {
@@ -136,41 +158,45 @@
   left: 0;
   top: 0;
   z-index: 979;
-  background: rgba(17, 20, 21, .6);
+  background: transparent;
 }
+
 .dv--morepopup {
   display:flex;
   flex-direction: column;
   position: absolute;
   background: var(--black1);
   box-shadow: var(--box-shadow3);
-  width: 320px;
+  width: calc(100% - 64px);
+  bottom: 2%;
+  max-width: 540px;
+  max-height: 400px;
   border-radius: 6px;
-  padding: 8px;
+  padding: 6px 16px 8px 16px;
   overflow:hidden;
   z-index: 980;
 }
+
 .dv--morepopup__header {
   display:flex;
-  height: 32px;
+  height: 24px;
   width: 100%;
   justify-content: space-between;
   align-items: center;
 }
 .dv--morepopup__title {
-  color: var(--offwhite1);
-  font-size: 14px;
+  color: var(--white2);
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.2px;
-  line-height: 16px;
+  line-height: 24px;
   text-align: left;
-  padding-left: 8px;
+  padding-left: 4px;
   width: 100%;
 }
 .dv--morepopup__close {
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  width: 20px;
+  height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,52 +207,45 @@
 }
 
 .dv--morepopup__body {
-  display:flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  column-gap: 4px;
+  row-gap: 2px;
   height: auto;
-  overflow-y: auto;
-  max-height: 280px;
+  overflow-y:auto;
+  overflow-x:hidden;
   width: 100%;
 }
 
 .dv--morepopup__entry {
   height: auto;
-  min-height: 42px;
   width: 100%;
   border-radius: 4px;
   display: flex;
-  align-items: center;
   flex-direction: column;
   cursor: pointer;
   margin-bottom: 4px;
-  padding: 2px;
+  padding: 1px 2px 4px 2px;
 }
 
 .dv--morepopup__entry-title {
-  color: var(--taskcolor);
+  color: var(--taskcolor0);
   font-size: 11px;
   font-weight: 500;
-  line-height: 11px;
-  padding: 6px;
+  padding: 0 4px;
   pointer-events: none;
 }
 
 .dv--morepopup__entry-category,
 .dv--morepopup__entry-time {
-  color: var(--white4);
+  color: var(--taskcolor);
   font-size: 10px;
+  line-height: 10px;
   font-weight: 400;
-  margin-top: 2px;
-  padding: 0 6px;
+  margin-top: 4px;
+  padding: 0 4px;
   pointer-events: none;
 }
-
-
-
-
-
-
-
 
 
 
@@ -241,7 +260,6 @@
   width: 100%;
   height: 100%;
   padding: 1px 4px;
-
 }
 
 .dayview__grid {
@@ -530,14 +548,32 @@
   z-index: 899;
 }
 
+@media screen and (max-width: 640px) {
+  .dayview--header-day {
+    width: 64px;
+    margin-right: 4px;
+    align-items: flex-end;
+    margin-left: 32px;
+  }
+}
+
 @media screen and (max-width:530px) {
   .dayview--header-day {
-    /* max-width: 56px; */
-    width: 48px;
-    margin-left: 28px;
-
+    width: 36px;
   }
-  /* .dayview--header {
-    margin-left: 36px;
-  } */
+
+  .dayview--header-day__info {
+    font-size: 12px;
+  }
+
+  .dv--morepopup__body {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+
+  .dv--morepopup {
+    left: 1% !important;
+    right: 1% !important; 
+    margin: 0 auto;
+    max-height: 320px !important;
+  }
 }

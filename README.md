@@ -120,3 +120,4 @@ Starts the webpack development server on `localhost:3000`.
   * Will open above if no space below target & viceversa
   * [screenshot](https://ibb.co/Ln75k7W)
 * Added switch to turn animations/transitions on and off in settings
+* Added top modal compartment for dayview (events that span longer than the calendar day) [screenshot](https://ibb.co/Byq1vJb)

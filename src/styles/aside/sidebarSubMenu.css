@@ -143,7 +143,7 @@
 .sub-menu-content {
   display: flex;
   height: calc(100% - 56px);
-  background: var(--black000);
+  background: var(--black1);
   flex-direction: column;
   padding: 8px 8px 0 10px;
   overflow-x: hidden;
@@ -218,7 +218,6 @@
   cursor: pointer;
   justify-content: space-between;
   padding: 0 8px;
-  background: var(--black2);
 }
 
 .sm-json-btn:last-child {
@@ -226,7 +225,7 @@
 }
 
 .sm-json-btn:hover {
-  filter: brightness(1.2);
+  background: var(--black0);
 }
 
 .sm-download-json-icon,
