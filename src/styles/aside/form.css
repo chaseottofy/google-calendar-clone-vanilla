@@ -247,8 +247,8 @@
 .form--body-start__date {
   cursor: pointer;
   line-height: 40px;
+  min-width: 100px;
   max-width: 108px;
-  width: auto;
   padding: 0 6px;
   text-align: center;
   margin-right: 13px;
@@ -496,7 +496,6 @@
 
 .entries__form--footer {
   align-items: center;
-  background: var(--black0) !important;
   background: transparent;
   display: flex;
   height: 52px;

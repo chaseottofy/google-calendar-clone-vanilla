@@ -212,9 +212,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
       next.classList.add("datepicker__body--datename-selected")
       let attr = next.getAttribute("data-datepicker-date");
       let newDateSelected = parseInt(attr.split("-")[2])
-      console.log(newDateSelected)
       datepickerContext.setDateSelected(newDateSelected)
-      // datepickerContext.setDay(newDateSelected)
       return;
     }
   }
@@ -384,6 +382,10 @@ export default function setDatepicker(context, store, datepickerContext, type) {
             setNewDate(null, attr);
           }
         }
+        break;
+      case "Tab":
+        flag ? closeChangeDateModal() : openChangeDateModal();
+        
         break;
       case "Escape":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
