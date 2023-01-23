@@ -322,9 +322,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
-
 // main app sidebar
 const sidebar = document.querySelector(".sidebar")
 // main app datepicker / overlay
@@ -1095,14 +1092,23 @@ function setEntryForm(context, store, datepickerContext) {
   }
 
   function dragFormAnywhere(e) {
-    const target = e.target;
-    const wrapper = entriesFormWrapper;
-    if (wrapper.style.margin === "auto") {
-      wrapper.setAttribute("style", `left:${+wrapper.offsetLeft}px;top:${+wrapper.offsetTop}px;margin:0;max-width:450px;height:420px;`)
-    }
+    const closeBtn = document.querySelector(".form--header__icon-close")
+    const rect = entriesFormWrapper.getBoundingClientRect();
+    const [currleft, currtop] = [
+      parseInt(rect.left),
+      parseInt(rect.top),
+    ]; 
 
-    wrapper.style.opacity = "0.8";
-    wrapper.style.userSelect = "none";
+    entriesFormWrapper.style.margin = "0";
+    entriesFormWrapper.style.opacity = "0.8";
+    entriesFormWrapper.style.userSelect = "none";
+    entriesFormWrapper.style.top = currtop + "px";
+    entriesFormWrapper.style.left = currleft + "px";
+    entriesFormWrapper.style.bottom = "0";
+    entriesFormWrapper.style.right = "0";
+    closeBtn.style.pointerEvents = "none";
+    entriesForm.style.pointerEvents = "none";
+    
     let [leftBefore, topBefore] = [e.clientX, e.clientY];
     const [winH, winW] = [window.innerHeight, window.innerWidth];
 
@@ -1114,21 +1120,39 @@ function setEntryForm(context, store, datepickerContext) {
       leftBefore = e.clientX;
       topBefore = e.clientY;
 
-      if ((wrapper.offsetHeight + wrapper.offsetTop) > winH) {
-        wrapper.style.top = winH - wrapper.offsetHeight + "px";
+      if (entriesFormWrapper.offsetTop < 0) {
+        entriesFormWrapper.style.top = "0px";
       }
 
-      wrapper.style.top = wrapper.offsetTop - topAfter + "px";
-      wrapper.style.left = wrapper.offsetLeft - leftAfter + "px";
+      if (entriesFormWrapper.offsetLeft < 0) {
+        entriesFormWrapper.style.left = "0px";
+      }
+
+      if ((entriesFormWrapper.offsetLeft + entriesFormWrapper.offsetWidth) > winW) {
+        entriesFormWrapper.style.left = winW - entriesFormWrapper.offsetWidth + "px";
+      }
+
+      if ((entriesFormWrapper.offsetTop + entriesFormWrapper.offsetHeight) > winH) {
+        entriesFormWrapper.style.top = winH - entriesFormWrapper.offsetHeight + "px";
+      }
+      
+
+      entriesFormWrapper.style.top = entriesFormWrapper.offsetTop - topAfter + "px";
+      entriesFormWrapper.style.left = entriesFormWrapper.offsetLeft - leftAfter + "px";
     }
+    
+    const throttlemove = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.throttle)(mousemove, 15);
 
     function mouseup() {
-      wrapper.style.opacity = "1";
-      wrapper.style.userSelect = "all";
-      document.removeEventListener("mousemove", mousemove);
+      entriesFormWrapper.style.opacity = "1";
+      entriesFormWrapper.style.userSelect = "all";
+      closeBtn.removeAttribute("style")
+      entriesForm.removeAttribute("style")
+      document.removeEventListener("mousemove", throttlemove);
       document.removeEventListener("mouseup", mouseup);
     }
-    document.addEventListener("mousemove", mousemove);
+
+    document.addEventListener("mousemove", throttlemove);
     document.addEventListener("mouseup", mouseup);
   }
 
@@ -1173,6 +1197,9 @@ function setEntryForm(context, store, datepickerContext) {
     const submitbtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_7__.getClosest)(e, ".form--footer__button-save");
 
     if (dragHeader) {
+      if (window.innerWidth < 500 || window.innerHeight < 500) {
+        return;
+      } else 
       dragFormAnywhere(e);
       return;
     }
@@ -2309,7 +2336,6 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
     if (resetParent !== null) {
       resetParent.removeAttribute("style");
     }
-
     ctgform.classList.add("hide-ctg-form");
     ctgformoverlay.classList.add("hide-ctg-form");
     ctgformInput.value = "";
@@ -2370,7 +2396,6 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
       handleColorSelection(e, formhelper.getColor());
       return;
     }
-
 
     if (submitctgBtn) {
       validateNewCategory(ctgformInput.value, formhelper.getColor());
@@ -2532,9 +2557,7 @@ function getEntryOptionModal(context, store, entry, datepickerContext, finishSet
          * If the entry has ended yesterday, display "ended yesterday"
          * If the entry starts today, display how long until it is scheduled to end
          * If the entry is yet to start, display how long until it is scheduled to start
-         * 
          */
-
         if (daysSince === 0) {
           let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60))
           let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60))
@@ -2592,7 +2615,7 @@ function getEntryOptionModal(context, store, entry, datepickerContext, finishSet
       openEditForm();
     }
 
-    if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "delete") {
+    if (e.key === "Delete") {
       openDeleteWarning();
     }
   }
@@ -2738,7 +2761,7 @@ function handleShortCutsModal(store) {
       keytwo.textContent = key[1].toUpperCase()
       shortcutKey.append(keyone, or, keytwo)
     } else {
-      if (key == "ENTER" || key == "ESCAPE") {
+      if (key == "ENTER" || key == "ESCAPE" || key == "DELETE") {
         keyone.classList.add("key-full");
       }
       keyone.textContent = key.toUpperCase();
@@ -2913,7 +2936,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       checkIcon = (0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createCheckIcon)("none")
     }
 
-    checkbox.style.border = `1px solid ${ctgcolor}`;
+    checkbox.style.border = `2px solid ${ctgcolor}`;
     checkbox.appendChild(checkIcon)
     checkboxWrapper.appendChild(checkbox)
 
@@ -2964,7 +2987,8 @@ function handleSidebarCategories(context, store, datepickerContext) {
   function createDeleteCategoryPopup(e) {
     const ctgname = e.target.getAttribute("data-sbch-category")
     const ctgcolor = store.getCtgColor(ctgname)
-    const offsetColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.hextorgba)(ctgcolor, 0.8)
+    // const offsetColor = hextorgba(ctgcolor, 0.8)
+    const offsetColor = ctgcolor;
     const categoryLength = store.getCtgLength(ctgname)
     let noEntries = false;
 
@@ -3147,7 +3171,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
     if (status === "true") {
       checkbox.setAttribute("data-sbch-checked", "false")
       store.setCategoryStatus(cat, false)
-      checkbox.style.backgroundColor = "var(--black0)"
+      checkbox.style.backgroundColor = "var(--black1)"
       checkbox.firstChild.setAttribute("fill", "none")
     } else {
       checkbox.setAttribute("data-sbch-checked", "true")
@@ -3252,6 +3276,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       return;
     }
 
+    // open category options menu (edit, turn others off, turn others on)
     if (editctgBtn) {
       const targetcat = {
         name: e.target.getAttribute("data-sbch-category"),
@@ -3259,11 +3284,9 @@ function handleSidebarCategories(context, store, datepickerContext) {
       }
       const targetparent = e.target.parentElement.parentElement
       targetparent.style.borderBottom = `2px solid ${targetcat.color}`
-      const createCategoryFormData = [
-        targetcat,
-        e.target.parentElement.parentElement
-      ];
-      openCategoryOptionsMenu(e, createCategoryFormData)
+      openCategoryOptionsMenu(
+        e, [targetcat, targetparent]
+      );
       return;
     }
 
@@ -3790,11 +3813,11 @@ const themeRadioOptions = ["dark", "light", "contrast"];
 
 // keyboard shortcut toggle on/off | open modal
 const shortcutSwitch = document.querySelector(".smia-toggle-shortcuts-checkbox")
+const animationsSwitch = document.querySelector(".smdt-toggle-checkbox")
 const shortcutTitle = document.querySelector(".smia-set-status-title")
 const notifyDisabledShortcutsIcon = document.querySelector(".keyboard-disabled-sm")
 
 function getSidebarSubMenu(store, context) {
-
 
   function closeSubOnEscape(e) {
     const popup = document.querySelector(".sb-sub-popup-confirm");
@@ -3914,8 +3937,9 @@ function getSidebarSubMenu(store, context) {
       shortcutSwitch.checked = false;
     }
 
-    store.addActiveOverlay(closemenu)
-    sidebarSubMenu.classList.remove(closemenu)
+    animationsSwitch.checked = store.getAnimationStatus();
+    store.addActiveOverlay(closemenu);
+    sidebarSubMenu.classList.remove(closemenu);
     sidebarSubMenuOverlay.classList.remove(closemenu);
     document.addEventListener("keydown", closeSubOnEscape);
     sidebarSubMenuOverlay.onclick = closeSubMenu;
@@ -4048,6 +4072,16 @@ function getSidebarSubMenu(store, context) {
     shortcutSwitch.checked = status ? true : false;
   }
 
+  function toggleAnimations() {
+    const status = animationsSwitch.checked ? false : true;
+    store.setAnimationStatus(status)
+    if (status) {
+      appBody.classList.remove("disable-transitions")
+    } else {
+      appBody.classList.add("disable-transitions")
+    }
+  }
+
   function delegateSubMenuEvents(e) {
     const downloadjsonBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".down-json");
     const uploadjsonBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".upload-json");
@@ -4055,6 +4089,7 @@ function getSidebarSubMenu(store, context) {
     const kbShortcutMenu = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".toggle-kb-shortcuts-btn__smia")
     const shortcutSwitch = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".smia-disable-shortcuts__btn")
     const shortcutSwitchNotifyIcon = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".keyboard-disabled-sm")
+    const animationsSwitch = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_0__.getClosest)(e, ".smdt-toggle")
 
 
     if (downloadjsonBtn) {
@@ -4084,6 +4119,11 @@ function getSidebarSubMenu(store, context) {
 
     if (shortcutSwitchNotifyIcon) {
       toggleShortcutsIcon();
+      return;
+    }
+
+    if (animationsSwitch) {
+      toggleAnimations();
       return;
     }
   }
@@ -4341,8 +4381,8 @@ function setDayView(context, store, datepickerContext) {
 
       if (start.getDate() === current.getDate()) { startingToday++; }
 
-      if (end.getDate() === current.getDate()) { 
-        endingToday++; 
+      if (end.getDate() === current.getDate()) {
+        endingToday++;
         tempEndCase1 = allboxes[i];
       }
     }
@@ -4423,14 +4463,13 @@ function setDayView(context, store, datepickerContext) {
     const morepopup = document.createElement("aside");
     morepopup.classList.add("dv--morepopup");
     morepopup.style.left = `${dvOnTop.offsetLeft}px`;
-    morepopup.style.top = `${dvOnTop.offsetTop + dvOnTop.offsetHeight}px`;
-    morepopup.style.height = `${64 + (entr.length * 48)}px`;
+    morepopup.style.top = `${dvOnTop.offsetTop}px`;
 
     const morepopupHeader = document.createElement("div");
     morepopupHeader.classList.add("dv--morepopup__header");
     const morepopupTitle = document.createElement("span");
     morepopupTitle.classList.add("dv--morepopup__title");
-    morepopupTitle.textContent = "More entries";
+    morepopupTitle.textContent = "Events spanning multiple days";
     const morepopupClose = document.createElement("span");
     morepopupClose.classList.add("dv--morepopup__close");
     morepopupClose.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_6__.createCloseIcon)("var(--white3)"))
@@ -4442,6 +4481,7 @@ function setDayView(context, store, datepickerContext) {
       const morepopupEntry = document.createElement("div");
       morepopupEntry.classList.add("dv--morepopup__entry");
       morepopupEntry.style.backgroundColor = `${store.getCtgColor(entry.category)}`
+      morepopupEntry.setAttribute("data-sdvt-id", entry.id)
       const morepopupEntryTitle = document.createElement("span");
       morepopupEntryTitle.classList.add("dv--morepopup__entry-title");
       morepopupEntryTitle.textContent = entry.title;
@@ -4450,10 +4490,10 @@ function setDayView(context, store, datepickerContext) {
       morepopupCategory.textContent = entry.category;
       const morepopupEntryTime = document.createElement("span");
       morepopupEntryTime.classList.add("dv--morepopup__entry-time");
-      morepopupEntryTime.textContent = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatStartEndTime)(
+      morepopupEntryTime.textContent = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.formatEntryOptionsDate)(
         new Date(entry.start),
         new Date(entry.end)
-      );
+      ).date
       morepopupEntry.append(morepopupEntryTitle, morepopupCategory, morepopupEntryTime);
       return morepopupEntry;
     }
@@ -4477,30 +4517,95 @@ function setDayView(context, store, datepickerContext) {
       }
     }
 
+    function getEntrItem(e) {
+      if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv--morepopup__entry")) {
+        openStackEntryOnTop(e, closemp);
+        return;
+      }
+    }
+
     morepopup.append(morepopupHeader, morepopupBody);
     document.body.appendChild(morepopupoverlay);
     document.body.appendChild(morepopup);
     morepopupoverlay.onclick = closemp;
     morepopupClose.onclick = closemp;
+    morepopupBody.onclick = getEntrItem;
     document.addEventListener("keydown", closeMpOnEsc)
+  }
+
+  function openStackEntryOnTop(e, closearg) {
+    const target = e.target;
+    const id = target.getAttribute("data-sdvt-id")
+    const setResetDv = () => {
+      console.log('reset')
+    }
+
+    const entry = store.getEntry(id);
+    const start = entry.start;
+    const color = store.getCtgColor(entry.category);
+    const rect = target.getBoundingClientRect()
+
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.placePopup)(
+      400,
+      165,
+      [
+        parseInt(rect.left), 
+        parseInt(rect.top) + 24
+      ],
+      [
+        window.innerWidth, 
+        window.innerHeight
+      ],
+      false,
+    );
+
+    closearg ? store.setFormResetHandle("day", closearg) : store.setFormResetHandle("day", setResetDv);
+    const setup = new _forms_setForm__WEBPACK_IMPORTED_MODULE_1__["default"]();
+    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setCategory(entry.category, color, color);
+    setup.setPosition(x, [x, y], y);
+    setup.setDates((0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.getFormDateObject)(start, entry.end));
+    _forms_formUtils__WEBPACK_IMPORTED_MODULE_0__["default"].setFormDatepickerDate(context, datepickerContext, start);
+
+    const finishSetup = () => _forms_formUtils__WEBPACK_IMPORTED_MODULE_0__["default"].getConfig(setup.getSetup());
+    (0,_menus_entryOptions__WEBPACK_IMPORTED_MODULE_2__["default"])(
+      context, store, entry, datepickerContext, finishSetup
+    );
+
+    const modal = document.querySelector(".entry__options")
+    modal.style.top = +y + "px";
+    modal.style.left = +x + "px";
+  }
+
+  function createStackableEntriesOnTop(entr) {
+    const dvOnTopGrid = document.createElement("div")
+    dvOnTopGrid.classList.add("dayview--ontop__grid")
+    entr.forEach((ent) => {
+      const dvOnTopEntry = document.createElement("div");
+      dvOnTopEntry.classList.add("dayview--ontop__grid-item");
+      dvOnTopEntry.textContent = ent.title;
+      dvOnTopEntry.style.backgroundColor = store.getCtgColor(ent.category);
+      dvOnTopEntry.setAttribute("data-sdvt-id", ent.id)
+      dvOnTopGrid.appendChild(dvOnTopEntry)
+    })
+    dvOnTop.appendChild(dvOnTopGrid)
   }
 
   function createDvTop(entr) {
     const dvtopgrid = document.createElement("div");
     dvtopgrid.classList.add("dv--ontop__grid");
 
-    if (entries.length >= 6) {
+    if (entr.length > 6) {
       const moremessage = document.createElement("div");
       moremessage.classList.add("dv--ontop__more");
       moremessage.textContent = `${entr.length} more...`
       dvOnTop.appendChild(moremessage);
-      // dvtopgrid.appendChild(moremessage);
       const opdm = () => openDvMore(entr)
       moremessage.onclick = opdm
       return;
     } else {
+      createStackableEntriesOnTop(entr)
     }
-
   }
 
   function renderBoxes() {
@@ -4635,8 +4740,8 @@ function setDayView(context, store, datepickerContext) {
         const setResetDv = () => {
           (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragend", dvGrid, store)
           box.classList.remove("dv-box-clicked")
-
         }
+
         box.classList.add("dv-box-clicked")
         const id = box.getAttribute("data-dv-box-id");
         const entry = store.getEntry(id);
@@ -4705,14 +4810,11 @@ function setDayView(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup)
   }
 
-
   function handleDayviewClose() {
     document.querySelector(".dayview-temp-box")?.remove()
   }
 
-
   function openDayviewForm(box, coords, category, dates, type) {
-    // store.setFormResetHandle("week", handleWeekviewFormClose);
     store.setFormResetHandle("day", handleDayviewClose);
 
     const openForm = store.getRenderFormCallback();
@@ -4744,9 +4846,7 @@ function setDayView(context, store, datepickerContext) {
     _forms_formUtils__WEBPACK_IMPORTED_MODULE_0__["default"].getConfig(setup.getSetup());
   }
 
-
   /** CREATE BOX ON DRAG */
-  /** Drag down empty column to create box */
   function createBoxOnDragDay(e) {
     (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.setStylingForEvent)("dragstart", dvGrid, store)
     document.body.style.cursor = "move";
@@ -4757,7 +4857,6 @@ function setDayView(context, store, datepickerContext) {
 
     // boxheader is static - create from template
     const boxheader = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.createTempBoxHeader)("day")
-
     const boxcontent = document.createElement('div');
     const boxtime = document.createElement('span');
     const boxtimeend = document.createElement('span');
@@ -4774,8 +4873,11 @@ function setDayView(context, store, datepickerContext) {
 
     let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 }
     let [starthour, startmin, endhour, endmin] = (0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__.startEndDefault)(y);
+    let movedY = 0;
 
     function mousemove(e) {
+      // console.log(e)
+      movedY += e.movementY;
       let newHeight = Math.round(((e.pageY + scrolled) - y - headerOffset) / 12.5) * 12.5
       if (newHeight <= 12.5) { newHeight = 12.5; }
       if ((newHeight + y) > 1188) { newHeight = 1187.5 - y; }
@@ -4798,6 +4900,30 @@ function setDayView(context, store, datepickerContext) {
     e.target.appendChild(box)
 
     function mouseup() {
+      if (movedY <= 20) {
+        if (+coords.y >= 92) {
+          coords.y = 92;
+          coords.e = 95;
+          coords.h = 3;
+          box.style.height = "37.5px";
+          box.style.top = "1150px";
+          [starthour, startmin] = [23, 0];
+          [endhour, endmin] = [23, 45];
+          boxtime.textContent = `${(0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__.formatTime)(starthour, startmin)} – `
+          boxtimeend.textContent = `${(0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__.formatTime)(endhour, endmin)}`
+        } else {
+          coords.y = starthour * 4;
+          coords.e = +coords.y + 4;
+          coords.h = 4;
+          box.style.height = "50px";
+          box.style.top = `${+coords.y * 12.5}px`;
+          [starthour, startmin] = [starthour, 0];
+          [endhour, endmin] = [starthour + 1, 0];
+          boxtime.textContent = `${(0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__.formatTime)(starthour, startmin)} – `
+          boxtimeend.textContent = `${(0,_utilities_timeutils__WEBPACK_IMPORTED_MODULE_4__.formatTime)(endhour, endmin)}`
+        }
+      }
+
       const datesData = (0,_utilities_dateutils__WEBPACK_IMPORTED_MODULE_5__.getTempDates)(
         new Date(context.getDate()),
         [starthour, endhour],
@@ -4825,43 +4951,52 @@ function setDayView(context, store, datepickerContext) {
     ;(0,_utilities_dragutils__WEBPACK_IMPORTED_MODULE_7__["default"])(null, "day", boxes)
   }
 
+  function delegateDayViewOnTop(e) {
+    const dvhboxTop = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dayview--ontop__grid-item");
+    if (dvhboxTop) {
+      openStackEntryOnTop(e);
+      return;
+    }
+  }
+
   function delegateDayView(e) {
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv-box-resize-s")) {
+    const dvhresizehandle = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv-box-resize-s");
+    const dvhbox = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv-box");
+    const dvhgrid = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dayview--main-grid");
+
+    if (dvhresizehandle) {
       resizeBoxNSDay(e, e.target.parentElement);
       return;
     }
 
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dv-box")) {
+    if (dvhbox) {
       dragEngineDay(e, e.target);
       return;
     }
 
-    if ((0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_8__.getClosest)(e, ".dayview--main-grid")) {
+    if (dvhgrid) {
       createBoxOnDragDay(e, e.target);
       return;
     }
   }
 
-  const initDayView = () => {
-    renderBoxesForGrid();
-    configHeader();
-    store.setResetPreviousViewCallback(resetDayview);
-    dvGrid.onmousedown = delegateDayView;
+  function handleScrollToOnInit() {
     const elementCount = dvMainGrid.childElementCount;
     if (elementCount > 0) {
       setTimeout(() => {
         let fc;
-        let checkForBOT = document?.querySelector(".dv-box-one")
+        let checkForBOT = document?.querySelector('[data-dv-box-index="dv-box-one"');
         if (checkForBOT !== null) {
-          fc = checkForBOT
+          fc = checkForBOT;
         } else {
           fc = dvMainGrid.children[0];
         }
-
+        let top = parseInt(fc.style.top);
+        top -= top < 50 ? 0 : 25;
         dvGrid.scrollTo({
-          top: parseInt(fc.style.top),
-          behavior: "instant",
-        })
+          top: top,
+          behavior: "instant", 
+        });
       }, 4)
     } else {
       setTimeout(() => {
@@ -4873,6 +5008,15 @@ function setDayView(context, store, datepickerContext) {
         })
       }, 4)
     }
+  }
+
+  const initDayView = () => {
+    renderBoxesForGrid();
+    configHeader();
+    store.setResetPreviousViewCallback(resetDayview);
+    dvGrid.onmousedown = delegateDayView;
+    dvOnTop.onmousedown = delegateDayViewOnTop
+    handleScrollToOnInit();
   }
   initDayView();
 }
@@ -5024,7 +5168,8 @@ function setListView(context, store, datepickerContext) {
     const entry = store.getEntry(id);
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
-    cell.style.backgroundColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.hextorgba)(color, 0.2);
+    cell.style.backgroundColor = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.hextorgba)(color, 0.7);
+    // cell.style.backgroundColor = color;
 
     const rect = cell.getBoundingClientRect();
     const height = cell.offsetHeight;
@@ -6299,7 +6444,7 @@ function setWeekView(context, store, datepickerContext) {
     }
 
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
-    cellIcons.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_8__.createMeatballVertIcon)("var(--white4"));
+    cellIcons.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_8__.createMeatballVertIcon)("var(--taskcolor"));
     cell.append(cellcontent, cellIcons);
     cellIcons.onclick = getContextMenuViaMeatball;
     return cell;
@@ -7309,30 +7454,35 @@ function renderViews(context, datepickerContext, store) {
    */
   let tm = 250; // define timeout out of scope so that it can be 
   function handleTransition(view, keyframeDirection, callback) {
-    const removeslide = (dir) => {
-      dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
-    }
-
-    if (!view.classList.contains("weekview--header")) {
-      viewsContainer.style.overflowX = "hidden";
-      setTimeout(() => {
-        viewsContainer.style.overflowX = "auto";
-      }, 200);
-    }
-
-    removeslide(keyframeDirection)
-    const slide = `transition--${keyframeDirection}`
-    if (view.classList.contains(slide)) {
-      // prevent transition from firing too often
+    if (!store.getAnimationStatus()) {
       callback()
-      tm += 250
+      return;
     } else {
-      view.classList.add(slide)
-      setTimeout(() => {
-        view.classList.remove(slide)
-      }, tm)
-      callback()
-      tm = 250;
+      const removeslide = (dir) => {
+        dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
+      }
+
+      if (!view.classList.contains("weekview--header")) {
+        viewsContainer.style.overflowX = "hidden";
+        setTimeout(() => {
+          viewsContainer.style.overflowX = "auto";
+        }, 200);
+      }
+
+      removeslide(keyframeDirection)
+      const slide = `transition--${keyframeDirection}`
+      if (view.classList.contains(slide)) {
+        // prevent transition from firing too often
+        callback()
+        tm += 250
+      } else {
+        view.classList.add(slide)
+        setTimeout(() => {
+          view.classList.remove(slide)
+        }, tm)
+        callback()
+        tm = 250;
+      }
     }
   }
 
@@ -7423,17 +7573,17 @@ function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), 
+          document.querySelector(".dayview--header-day__number"),
           "right",
           getPreviousDay
         );
         break;
       case "week":
         handleTransition(
-          document.querySelector(".weekview--header"), 
-          "right", 
+          document.querySelector(".weekview--header"),
+          "right",
           getPreviousWeek
-          );
+        );
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -7450,7 +7600,7 @@ function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), 
+          document.querySelector(".dayview--header-day__number"),
           "left",
           getNextDay
         );
@@ -7458,9 +7608,9 @@ function renderViews(context, datepickerContext, store) {
       case "week":
         handleTransition(
           document.querySelector(".weekview--header"),
-          "left", 
+          "left",
           getNextWeek
-          );
+        );
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)
@@ -7483,7 +7633,7 @@ function renderViews(context, datepickerContext, store) {
     const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
     datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
     ;(0,_components_menus_datepicker__WEBPACK_IMPORTED_MODULE_1__["default"])(context, store, datepickerContext, "header")
-    
+
   }
 
   function setOptionStyle(option) {
@@ -7756,6 +7906,7 @@ function renderViews(context, datepickerContext, store) {
     sbToggleForm.onclick = handleForm;
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
+    store.getAnimationStatus() === true ? appBody.classList.remove("disable-transitions") : appBody.classList.add("disable-transitions");
   }
   appinit();
 }
@@ -8535,22 +8686,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 const localStoreKeyNames = [
-  "activeCtg",
+  "animationStatus",
+  "colorScheme",
+  "component",
+  "ctg",
   "dateSelected",
+  "daySelected",
+  "keyboardShortcutsStatus",
+  "monthSelected",
+  "pickerDateSelected",
   "pickerDaySelected",
   "pickerMonthSelected",
-  "sidebarState",
-  "refresh",
-  "component",
-  "yearSelected",
-  "ctg",
-  "monthSelected",
-  "daySelected",
-  "pickerDateSelected",
   "pickerYearSelected",
+  "refresh",
+  "sidebarState",
   "store",
-  "colorScheme",
-  "keyboardShortcutsStatus",
+  "yearSelected"
 ]
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (localStoreKeyNames);
@@ -8639,6 +8790,12 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "setShortCut",
   "setShortcutsStatus",
   "getShortcutsStatus",
+  ***************************************
+
+  ***************************************
+  // ANIMATION MANAGEMENT
+  "setAnimationStatus",
+  "getAnimationStatus"
   ***************************************
 
 
@@ -8754,6 +8911,7 @@ class Store {
 
     this.keyboardShortcuts = _locales_kbDefault__WEBPACK_IMPORTED_MODULE_4__["default"];
     this.keyboardShortcutsStatus = true;
+    this.animationStatus = true;
   }
 
   setStoreForTesting(store) {
@@ -8789,6 +8947,10 @@ class Store {
     return JSON.parse(localStorage.getItem("keyboardShortcutsStatus"));
   }
 
+  static getAnimationStatus() {
+    return JSON.parse(localStorage.getItem("animationStatus"));
+  }
+
   // *******************
   static setStore(store) {
     localStorage.setItem("store", JSON.stringify(store));
@@ -8804,6 +8966,10 @@ class Store {
 
   static setShortcutsStatus(status) {
     localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status))
+  }
+
+  static setAnimationStatus(status) {
+    localStorage.setItem("animationStatus", JSON.stringify(status))
   }
   /* ************************* */
 
@@ -9333,6 +9499,20 @@ class Store {
   getShortcutsStatus() {
     const status = Store.getShortcutsStatus();
     return status !== null ? status : true;
+  }
+  /* ***************************** */
+
+  /* ***************************** */
+  /*  ANIMATION MANAGEMENT */
+
+  getAnimationStatus() {
+    const status = Store.getAnimationStatus();
+    return status !== null ? status : true;
+  }
+
+  setAnimationStatus(status) {
+    this.animationStatus = status;
+    Store.setAnimationStatus(status);
   }
   /* ***************************** */
 
@@ -10034,27 +10214,37 @@ __webpack_require__.r(__webpack_exports__);
   14: { shortcut: 'a', action: 'open settings' },
   15: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
   16: { shortcut: "e", action: '(entry options) opens form with entry details' },
-  17: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
-  18: { shortcut: '↑', action: [
-    '(datepicker) set date to next month/week',
-    '(yearpicker) set year to next year'
-  ] },
-  19: { shortcut: '↓', action: [
-    '(datepicker) set date to prev month/week',
-    '(yearpicker) set year to prev year'
-  ] },
-  20: { shortcut: '←', action: [
-    '(datepicker) set date to prev day',
-    '(monthpicker) set month to prev month',
-  ] },
-  21: { shortcut: '→', action: [
-    '(datepicker) set date to next day',
-    '(monthpicker) set month to next month',
-  ] },
-  22: { shortcut: 'ENTER', action: [
-    '(datepicker) set date to selected date',
-    '(form) submit form',
-  ] },
+  17: {
+    shortcut: '↑', action: [
+      '(datepicker) set date to next month/week',
+      '(yearpicker) set year to next year'
+    ]
+  },
+  18: {
+    shortcut: '↓', action: [
+      '(datepicker) set date to prev month/week',
+      '(yearpicker) set year to prev year'
+    ]
+  },
+  19: {
+    shortcut: '←', action: [
+      '(datepicker) set date to prev day',
+      '(monthpicker) set month to prev month',
+    ]
+  },
+  20: {
+    shortcut: '→', action: [
+      '(datepicker) set date to next day',
+      '(monthpicker) set month to next month',
+    ]
+  },
+  21: { shortcut: 'DELETE', action: '(entry options) delete entry' },
+  22: {
+    shortcut: 'ENTER', action: [
+      '(datepicker) set date to selected date',
+      '(form) submit form',
+    ]
+  },
   23: { shortcut: "ESCAPE", action: 'close any active modal/popup/form' },
 });
 
@@ -11064,6 +11254,8 @@ function setTheme(context) {
  * @param {number} popupHeight 
  * @param {array} coords [x: e.clientX, y: e.clientY]
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
+ * @param {boolean} center should popup be centered ?
+ * @param {number} targetWidth if center is true, targetWidth required to center
  * @returns [left position, top position];
  */
 function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
@@ -11073,11 +11265,9 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupX;
   if (center) {
-    // console.log("center")
     // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
     if (targetWidth + x + 4 >= winW) {
-      // console.log(true);
       popupX = winW - popupW - 4;
     }
   } else {
@@ -11086,7 +11276,10 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
 
-  if (popupX < 0) popupX = x;
+  // console.log(x + popupW, winW)
+  console.log(popupX)
+
+  if (popupX < 0) popupX = Math.abs(popupX);
   if (popupY < 0) popupY = 56;
   return [popupX, popupY];
 }
@@ -11289,17 +11482,22 @@ const createCaretRightIcon = (fill) => {
 }
 
 const createCheckIcon = (fill) => {
+  // <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
   const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  icon.setAttribute("height", "20");
-  icon.setAttribute("width", "20");
+  icon.setAttribute("height", "18px");
+  icon.setAttribute("width", "18px");
+  icon.setAttribute("viewBox", "0 0 24 24")
   if (!fill) {
     icon.setAttribute("fill", "var(--white2)")
   } else {
     icon.setAttribute("fill", fill)
   }
   const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  pathone.setAttribute("d", "m8.229 14.062-3.521-3.541L5.75 9.479l2.479 2.459 6.021-6L15.292 7Z")
-  icon.appendChild(pathone)
+  pathone.setAttribute("d", "M0 0h24v24H0z")
+  pathone.setAttribute("fill", "none")
+  const pathtwo = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathtwo.setAttribute("d", "M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z")
+  icon.append(pathone, pathtwo)
   return icon;
 }
 
@@ -11591,7 +11789,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // </aside>
 /*!*************************************!*/
-
 // NOTES;
 // * finish settings
 // * finish privacy,terms,notes
@@ -11601,6 +11798,7 @@ __webpack_require__.r(__webpack_exports__);
 // * set toast to be removed on window focus
 // * linter
 // * 
+// localStorage.clear();
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 })();
