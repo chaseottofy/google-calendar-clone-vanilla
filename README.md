@@ -53,6 +53,8 @@ For now, you can view the app through screenshots (link below), or simply downlo
 
 ### Jan 23, 2023
 
-* Improve custom datepicker with month & year picker picker.
-  * click on datepicker title to open month/year picker [screenshot](https://ibb.co/QkgXHHC)
+* Click on datepicker title to open a month/year picker.
+  * header datepicker [screenshot](https://ibb.co/qNXBXJ2)
+  * sidebar datepicker [screenshot](https://ibb.co/nMNpjmf)
+  * form datepicker [screenshot](https://ibb.co/kqTH6rQ)
 * Add date search component [screenshot](https://ibb.co/ZMQbjgG)

@@ -760,40 +760,86 @@
 
         <!-- datepicker -->
         <div class="datepicker-sidebar">
-          <div class="sbdatepicker__header">
-            <div class="sbdatepicker-title">October 2022</div>
-            <div class="sbdatepicker-nav">
-              <div class="sbdatepicker-nav--prev">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
-                  fill="var(--white3)" style="user-select:none; pointer-events:none">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-                </svg>
-              </div>
-              <div class="sbdatepicker-nav--next">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
-                  fill="var(--white3)" style="user-select:none; pointer-events:none">
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path d="M8.59 16.59L10 18l6-6-6-6L8.59 7.41 13.17 12z"></path>
-                </svg>
+          <div class="sb-datepicker__content">
+
+            <div class="sbdatepicker__header">
+              <div class="sbdatepicker-title">October 2022</div>
+              <div class="sbdatepicker-nav">
+                <div class="sbdatepicker-nav--prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                    fill="var(--white3)" style="user-select:none; pointer-events:none">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                  </svg>
+                </div>
+                <div class="sbdatepicker-nav--next">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                    fill="var(--white3)" style="user-select:none; pointer-events:none">
+                    <path d="M0 0h24v24H0z" fill="none"></path>
+                    <path d="M8.59 16.59L10 18l6-6-6-6L8.59 7.41 13.17 12z"></path>
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="sbdatepicker__body">
-            <!-- create a 7x7 table -->
+            <div class="sbdatepicker__body">
+              <!-- create a 7x7 table -->
 
-            <div class="sbdatepicker__body--header">
-              <div class="sbdatepicker__body--header-cell">S</div>
-              <div class="sbdatepicker__body--header-cell">M</div>
-              <div class="sbdatepicker__body--header-cell">T</div>
-              <div class="sbdatepicker__body--header-cell">W</div>
-              <div class="sbdatepicker__body--header-cell">T</div>
-              <div class="sbdatepicker__body--header-cell">F</div>
-              <div class="sbdatepicker__body--header-cell">S</div>
+              <div class="sbdatepicker__body--header">
+                <div class="sbdatepicker__body--header-cell">S</div>
+                <div class="sbdatepicker__body--header-cell">M</div>
+                <div class="sbdatepicker__body--header-cell">T</div>
+                <div class="sbdatepicker__body--header-cell">W</div>
+                <div class="sbdatepicker__body--header-cell">T</div>
+                <div class="sbdatepicker__body--header-cell">F</div>
+                <div class="sbdatepicker__body--header-cell">S</div>
+              </div>
+
+              <div class="sbdatepicker__body--dates"></div>
+
             </div>
 
-            <div class="sbdatepicker__body--dates"></div>
+            <aside class="sb-datepicker-change-date hide-sbdpcd">
+              <aside class="sb-close-change-date">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px"
+                  fill="var(--white3)">
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                </svg>
+              </aside>
 
+              <div class="sb-yearpicker">
+                <div class="sb-yearpicker-prev">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px"
+                    fill="var(--white4)">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                  </svg>
+                </div>
+                <div class="sb-yearpicker-title">2023</div>
+                <div class="sb-yearpicker-next">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px"
+                    fill="var(--white4)">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                  </svg>
+                </div>
+              </div>
+              <div class="sb-monthpicker">
+                <div class="sb-monthpicker__month" data-sbdp-month="0">January</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="1">February</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="2">March</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="3">April</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="4">May</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="5">June</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="6">July</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="7">August</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="8">September</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="9">October</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="10">November</div>
+                <div class="sb-monthpicker__month" data-sbdp-month="11">December</div>
+              </div>
+            </aside>
           </div>
         </div>
 

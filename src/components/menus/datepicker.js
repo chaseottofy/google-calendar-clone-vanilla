@@ -310,6 +310,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   const initDatepicker = () => {
+    // closeChangeDateModal();
     setDatepickerHeader();
     createCells(montharray);
     store.setResetDatepickerCallback(closeDatepicker)
@@ -318,5 +319,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     document.addEventListener("keydown", handleKeydownNav);
     montharray = [];
   }
+
   initDatepicker()
 }
