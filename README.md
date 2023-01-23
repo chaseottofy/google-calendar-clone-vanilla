@@ -1,4 +1,4 @@
-# quick about
+# About
 
 ## contact: ottofy@zohomail.com
 
@@ -14,32 +14,51 @@ View the app through screenshots (link below), or simply download the repo and o
 
 At the moment it works using local storage but there are options to backup data and load previously saved data using json.
 
-* I've included several features that are not in the original app to improve the user experience. These include but are not limited to :
-  * header content still visible under 840px (app is viable on mobile)
-  * dark theme
-  * high contrast
-  * keyboard shortcuts are available for most actions but they do differ from the original app. Use "?" or "/" to open the shortcuts menu (23 in total).
-  * month date picker
-  * year date picker
+I've implemented several new features to improve the user experience but overall tried to stay as true as possible to the original application.
+
+* These changes include but are not limited to :
+  * fully responsive up to 250px.
+  * **THEMES:**
+    * Dark
+    * High Contrast
+    * Light
+    * (coming soon) color blind options
+    * some colors are changed here and there to accommodate any accessibility concerns.
+  * Keyboard Shortcuts differ slightly from the original app. Use "?" or "/" to open the shortcuts menu when in app (23 in total).
+  * **New Keyboard Shortcuts:**
+    * toggle sidebar open/closed.
+    * open event and category forms.
+    * Datepicker: set date to next&prev month/week.
+    * Datepicker: set date to next&prev days.
+  * **Datepicker now has:**
+    * monthpicker
+    * yearpicker
+    * days with events are highlighted
+    * current week highlighted in weekview
   * sidebar converts to fixed positioning under 840px and main content inherits the full page width.
-  * more details provided on when events start/end/ended (see Jan 20th notes)
-  * collision animations in month/week/day views.
-  * datepicker highlights current week if in week view
-  * datepicker highlights day if it has events
-  * download calendar as json file & upload calendar from json file
-  * year view days with events are highlighted
-  * monthview cells are highlighted when dragged over
-  * resize bar for week & day events
-  * 42 color options for categories
-  * move all events from one category to another
-  * entire app is a single page. No page refreshes, no load times.
-  * At MAX there will be 4 active event listeners. Practically all memory that can be freed up will be.
+  * animation times adjusted.
+    * option to turn off animations alltogether coming shortly.
+  * more details provided for when events start/end/ended **(see Jan 20th notes).**
+  * Sorting animations for month/week/day view events.
+  * Dayview header details how many entries are starting/ending on that day and the timeframes of first - last entry.
+  * when yearview is opened page will automatically scroll to current selected month if not in view.
+  * when dayview is opened page will automatically scroll to the top of first task if it is not in view.
+  * throttling optimized to always ensure content is visible during any keydown action.
+  * **Download/Upload:**
+    * all calendar events/categories/settings can be downloaded & uploaded.
+  * Year view days with events are highlighted.
+  * monthview cells are highlighted when dragged over.
+  * resize bar for week & day events.
+  * 42 color options for categories.
+  * Move all events from one category to another
+  * Single page. No page refreshes, no load times.
+  * At MAX there will be 4 active event listeners. Aggressive memory handling.
   * Statistics page coming soon.
-  * first contentful paint : 200ms
-  * time to interactive : 200ms
-  * speed index : 200ms
-  * total blocking time : 0 seconds (no database / third party resources)
-  * lighthouse : 100% (performance, accessibility, best practices, seo)
+  * first contentful paint : 200ms.
+  * time to interactive : 200ms.
+  * speed index : 200ms.
+  * total blocking time : 0 seconds (no database / third party resources).
+  * lighthouse : 100% (performance, accessibility, best practices, seo).
 
 ## Cloning this repo
 
