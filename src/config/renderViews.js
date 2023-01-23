@@ -39,6 +39,8 @@ const yearwrapper = document.querySelector(".yearview")
 const monthwrapper = document.querySelector(".monthview")
 const listviewBody = document.querySelector(".listview__body");
 
+const collapsebtn = document.querySelector(".collapse-view")
+
 export default function renderViews(context, datepickerContext, store) {
   function setColorScheme() {
     const darkicon = document.querySelector(".sbti-one")
@@ -604,6 +606,26 @@ export default function renderViews(context, datepickerContext, store) {
     getKeyPressThrottled(e);
   }
 
+  function handleCollapse() {
+    const view = context.getComponent();
+    const headers = {
+      ['day']: {
+        component: document.querySelector(".dayview--header"),
+        collapse: "dvh-collapse",
+      },
+      ['week']: {
+        component: document.querySelector(".weekview--header"),
+        collapse: "wvh-collapse",
+      },
+    };
+
+    if (view === "week" || view === "day") {
+      headers[view].component.classList.toggle(headers[view].collapse);
+    }
+  }
+
+
+
   const appinit = () => {
     /*************************/
     // render initial view and set initial attributes
@@ -622,6 +644,8 @@ export default function renderViews(context, datepickerContext, store) {
     // establish delegation
     toggleForm.onclick = handleForm;
     sbToggleForm.onclick = handleForm;
+    collapsebtn.onclick = handleCollapse;
+
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
     store.getAnimationStatus() === true ? appBody.classList.remove("disable-transitions") : appBody.classList.add("disable-transitions");

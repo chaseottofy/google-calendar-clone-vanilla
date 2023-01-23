@@ -38,21 +38,22 @@
 
 .collapse-view {
   position: absolute;
-  top: 64px;
+  top: 54px;
   right: 16px;
   width: 26px;
   height: 26px;
   border-radius: 50%;
   background: var(--black1);
-  box-shadow:
-  rgba(60,64,67,0.3) 0px 1px 2px 0px,
-  rgba(60,64,67,0.15) 0px 1px 3px 1px;
-  cursor:pointer;
+  cursor: pointer;
   z-Index: 902;
-  display:flex;
+  display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   transition: all 200ms ease-in-out;
+}
+
+.hide-cbt {
+  display:none;
 }
 
 .collapse-view svg {
@@ -89,7 +90,6 @@
   background: var(--black1);
 }
 
-/* 1.02 */
 .container__calendars {
   height: 100%;
   width: 100%;
@@ -149,7 +149,9 @@
   .container__calendars {
     width: 100% !important;
   }
+}
 
+@media screen and (max-width: 740px) {
   .collapse-view {
     right: 6px;
   }
@@ -157,7 +159,7 @@
 
 @media screen and (max-width: 580px) {
   .container__calendars::-webkit-scrollbar {
-    display:inherit;
+    display: inherit;
   }
 }
 
@@ -165,8 +167,9 @@
   .main {
     height: calc(100% - 54px);
   }
+
   .collapse-view {
-    top: 54px;
+    top: 45px;
   }
 }
 
@@ -176,6 +179,6 @@
   }
 
   .collapse-view {
-    top: 54px;
+    top: 47px;
   }
 }

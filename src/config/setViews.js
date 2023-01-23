@@ -12,6 +12,7 @@ const weekComponent = document.querySelector(".weekview")
 const dayComponent = document.querySelector(".dayview")
 const listComponent = document.querySelector(".listview")
 
+
 /**
  * 
  * @param {string} component 

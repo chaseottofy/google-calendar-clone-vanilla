@@ -99,11 +99,11 @@
 
 .dayview--ontop-container {
   border-left: 1px solid var(--mediumgrey1);
-  border-bottom: 2px solid var(--darkgrey1);
+  border-bottom: 2px solid var(--mediumgrey1);
   height: auto;
   min-height: 24px;
   overflow-y: scroll;
-  width: 100%;
+  width: calc(100% - 16px);
   position: relative;
 }
 
@@ -113,7 +113,7 @@
   grid-template-rows: 20px;
   column-gap: 4px;
   height: auto;
-  width: calc(100% - 32px);
+  width: calc(100% - 48px);
   position: relative;
 }
 
@@ -426,11 +426,7 @@
 }
 
 .dv-box-ontop {
-  /* border: 1px solid var(--black0); */
-  border-left: 1px solid var(--black0);
-  border-bottom: 1px solid var(--black2);
-  border-top: 1px solid var(--black2);
-  border-right: 1px solid var(--black3);
+  border: 1px solid var(--black1);
   box-shadow:none;
 }
 

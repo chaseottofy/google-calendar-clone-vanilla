@@ -733,7 +733,6 @@ export default function setDayView(context, store, datepickerContext) {
           fc = dvMainGrid.children[0];
         }
         let top = parseInt(fc.style.top);
-        top -= top < 50 ? 0 : 25;
         dvGrid.scrollTo({
           top: top,
           behavior: "instant", 
@@ -751,10 +750,10 @@ export default function setDayView(context, store, datepickerContext) {
     }
   }
 
-  function collapseDayView() {
-    console.log('collapse');
-    dvHeader.classList.toggle("dvh-collapse")
-  }
+  // function collapseDayView() {
+  //   console.log('collapse');
+  //   dvHeader.classList.toggle("dvh-collapse")
+  // }
 
   const initDayView = () => {
     renderBoxesForGrid();
@@ -762,7 +761,7 @@ export default function setDayView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
     dvOnTop.onmousedown = delegateDayViewOnTop
-    collapsebtn.onclick = collapseDayView;
+  // collapsebtn.onclick = collapseDayView;
     handleScrollToOnInit();
   }
   initDayView();

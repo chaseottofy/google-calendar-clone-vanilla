@@ -1,7 +1,8 @@
 .weekview__top {
   display: grid;
   grid-template-columns: 36px 1fr;
-  height: 78px;
+  height: auto;
+  /* height: 78px; */
   overflow-y: scroll;
   overflow-x: hidden;
 }
@@ -602,7 +603,13 @@
   border-top: var(--borderdarkgrey);
 }
 
-
+.wvh-collapse {
+  transform: scaleY(0);
+  height: 0;
+  min-height: 0;
+  opacity: 0;
+  transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
+}
 
 
 @media screen and (max-width: 530px) {
