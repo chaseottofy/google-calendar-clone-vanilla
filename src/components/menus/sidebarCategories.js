@@ -12,6 +12,7 @@ import {
 import debounce, {
   getClosest,
   hextorgba,
+  placePopup
 } from "../../utilities/helpers"
 
 import createCategoryForm from "./editCategory"
@@ -30,6 +31,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
   function updateComponent() {
     setViews(context.getComponent(), context, store, datepickerContext)
   }
+
 
   function renderSidebarDatepickerCtg() {
     setSidebarDatepicker(context, store, datepickerContext)
@@ -104,7 +106,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       coltwo.appendChild(deleteicon)
     }
 
-    
+
     editicon.appendChild(createEditIcon("var(--white2)"))
     coltwo.appendChild(editicon)
     row.append(colone, coltwo)
@@ -200,7 +202,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       }
       optionMove.append(optionMoveTitle, optionMoveSelect);
       optionsWrapperOne.append(optionMoveRadio, optionMove);
-      
+
 
       /* ************ */
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
@@ -238,7 +240,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
       optionRemove.append(optionRemoveTitle, optionRemoveIcon)
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
-      
+
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
       popupBox.appendChild(popupBody)
       optionsWrapperOne.onclick = handleWrapperClick;
@@ -322,6 +324,87 @@ export default function handleSidebarCategories(context, store, datepickerContex
     updateComponent()
   }
 
+  function openCategoryOptionsMenu(e, data) {
+    const [targetCtg, targetElement] = data;
+    let [x, y] = placePopup(
+      192,
+      128,
+      [
+        e.clientX, 
+        parseInt(targetElement.getBoundingClientRect().top) - 8
+      ],
+      [window.innerWidth, window.innerHeight],
+      false,
+      null
+    )
+
+    console.log(targetElement.offsetTop)
+    const popupBox = document.createElement("div");
+    popupBox.classList.add("popup-ctg-options");
+    popupBox.style.top = `${y}px`;
+    popupBox.style.left = `${x}px`;
+    const popupBoxOverlay = document.createElement("div");
+    popupBoxOverlay.classList.add("popup-ctg-options__overlay");
+    store.addActiveOverlay("popup-ctg-options__overlay");
+
+    const optionEdit = document.createElement("div");
+    optionEdit.classList.add("option__open-ctg-edit");
+    optionEdit.textContent = "Edit category (name, color)";
+    const optionTurnOff = document.createElement("div");
+    optionTurnOff.classList.add("option__close-other-ctg");
+    optionTurnOff.textContent = "Display this only";
+    const optionTurnOn = document.createElement("div")
+    optionTurnOn.classList.add("option__open-other-ctg");
+    optionTurnOn.textContent = "Display all but this";
+
+    function closeCategoryOptionsMenu(flag, chckbox) {
+      document.querySelector(".popup-ctg-options").remove()
+      document.querySelector(".popup-ctg-options__overlay").remove()
+      store.removeActiveOverlay("popup-ctg-options__overlay");
+      if (flag) { chckbox.removeAttribute("style") }
+      document.removeEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu)
+    }
+
+    function handleOpenEditCtg() {
+      createCategoryForm(store, targetCtg, true, targetElement);
+      closeCategoryOptionsMenu();
+    }
+
+    function rerender() {
+      renderSidebarDatepickerCtg();
+      updateComponent();
+      renderCategories();
+    }
+
+    function closeAndRemoveStyle() {
+      closeCategoryOptionsMenu(true, targetElement)
+    }
+
+    function turnoff() {
+      store.setAllCategoryStatusExcept(targetCtg.name, false)
+      closeAndRemoveStyle();
+      rerender();
+    }
+
+    function turnon() {
+      store.setAllCategoryStatusExcept(targetCtg.name, true)
+      closeAndRemoveStyle();
+      rerender();
+    }
+
+    function handleCloseOnEscapeCtgOptionsMenu(e) {
+      if (e.key === "Escape") { closeAndRemoveStyle(); }
+    }
+
+    popupBox.append(optionEdit, optionTurnOff, optionTurnOn);
+    document.body.prepend(popupBoxOverlay, popupBox);
+    document.addEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu);
+    optionEdit.onclick = handleOpenEditCtg;
+    popupBoxOverlay.onclick = closeAndRemoveStyle;
+    optionTurnOff.onclick = turnoff;
+    optionTurnOn.onclick = turnon;
+  }
+
   function delegateCategoryEvents(e) {
     const ctgtoggleModal = getClosest(e, ".sbch-col__one")
     const editctgBtn = getClosest(e, ".sbch-col--actions__edit-icon")
@@ -341,12 +424,11 @@ export default function handleSidebarCategories(context, store, datepickerContex
       }
       const targetparent = e.target.parentElement.parentElement
       targetparent.style.borderBottom = `2px solid ${targetcat.color}`
-      createCategoryForm(
-        store, 
-        targetcat, 
-        true,
+      const createCategoryFormData = [
+        targetcat,
         e.target.parentElement.parentElement
-      );
+      ];
+      openCategoryOptionsMenu(e, createCategoryFormData)
       return;
     }
 
@@ -357,6 +439,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
     // toggle category checkbox and display entries
     if (ctgChck) {
+      console.log(true);
       handleCategorySelection(e)
       return;
     }

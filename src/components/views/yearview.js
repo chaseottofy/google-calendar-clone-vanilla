@@ -180,7 +180,16 @@ export default function setYearView(context, store, datepickerContext) {
     renderMonthCells();
     yearviewGrid.onmousedown = delegateYearEvents;
     store.setResetPreviousViewCallback(resetYearview);
+    const currentmonth = document?.querySelector(".cell-current")
+    // should always be true
+    if (currentmonth) {
+      setTimeout(() => {
+        yearviewGrid.scrollTo({
+          top: parseInt(currentmonth.offsetTop) - 100,
+          behavior: "smooth"
+        });
+      }, 4)
+    }
   }
-
   initYearview();
 }

@@ -53,6 +53,7 @@ const colors = locales.colors
   "moveCategoryEntriesToNewCategory",
   "removeCategoryAndEntries",
   "setCategoryStatus",
+  "setAllCategoryStatusExcept",
   "updateCtgColor",
   "updateCtg"
   ***************************************
@@ -649,6 +650,17 @@ class Store {
       this.ctg[category].active = status;
       Store.setCtg(this.ctg)
     }
+  }
+
+  setAllCategoryStatusExcept(category, status) {
+    for (let key in this.ctg) {
+      if (key !== category) {
+        this.ctg[key].active = status;
+      } else {
+        this.ctg[key].active = !status;
+      }
+    }
+    Store.setCtg(this.ctg)
   }
 
   /**

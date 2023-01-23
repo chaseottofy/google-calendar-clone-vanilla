@@ -45,13 +45,25 @@ import "./styles/aside/shortcuts.css"
 // * finish privacy,terms,notes
 
 // FIX;
-// * set onclick to null when not in use
 // * validate .json files
 // * set toast to be removed on window focus
-// * more modal monthview 
 // * linter
 // * 
-// store.setStoreForTesting(generateRandomEvents(1000));
 setAppDefaults(context, store);
+/*
+// store.setAllCategoryStatusExcept("default", false)
+store.addNewCtg("seven", "#2C52BA")
+store.addNewCtg("eight", "#2C52BA")
+store.addNewCtg("nine", "#2C52BA")
+store.addNewCtg("ten", "#2C52BA")
+store.addNewCtg("eleven", "#2C52BA")
+store.addNewCtg("twelve", "#2C52BA")
+store.addNewCtg("thirteen", "#2C52BA")
+store.addNewCtg("fourteen", "#2C52BA")
+store.addNewCtg("fifteen", "#2C52BA")
+store.addNewCtg("sixteen", "#2C52BA")
+store.addNewCtg("seventeen", "#2C52BA")
+*/
+
 renderViews(context, datepickerContext, store);
-console.log(store.getAllCtg())
+// addNewCtg

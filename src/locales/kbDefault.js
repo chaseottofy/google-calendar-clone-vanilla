@@ -1,10 +1,10 @@
 export default {
   0: { shortcut: '0', action: "change app theme" },
-  1: { shortcut: ['d', '1'], action: 'open day view' },
-  2: { shortcut: ['w', '2'], action: 'open week view' },
-  3: { shortcut: ['m', '3'], action: 'open month view' },
-  4: { shortcut: ['y', '4'], action: 'open year view' },
-  5: { shortcut: ['l', '5'], action: 'open list view' },
+  1: { shortcut: ['1', 'D'], action: 'open day view' },
+  2: { shortcut: ['2', 'W'], action: 'open week view' },
+  3: { shortcut: ['3', 'M'], action: 'open month view' },
+  4: { shortcut: ['4', 'Y'], action: 'open year view' },
+  5: { shortcut: ['5', 'L'], action: 'open list view' },
   6: { shortcut: 'v', action: 'toggle view options' },
   7: { shortcut: 't', action: 'set date to today' },
   8: { shortcut: "g", action: 'enter date manually' },
@@ -15,9 +15,27 @@ export default {
   13: { shortcut: '+', action: 'open new category form' },
   14: { shortcut: 'a', action: 'open settings' },
   15: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
-  16: { shortcut: "ESC", action: 'return to calendar' },
-  17: { shortcut: "e", action: '(entry options) opens form with entry details' },
-  18: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
-  19: { shortcut: '↑', action: '(datepicker) set date to next month/week' },
-  20: { shortcut: '↓', action: '(datepicker) set date to prev month/week'},
+  16: { shortcut: "e", action: '(entry options) opens form with entry details' },
+  17: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
+  18: { shortcut: '↑', action: [
+    '(datepicker) set date to next month/week',
+    '(yearpicker) set year to next year'
+  ] },
+  19: { shortcut: '↓', action: [
+    '(datepicker) set date to prev month/week',
+    '(yearpicker) set year to prev year'
+  ] },
+  20: { shortcut: '←', action: [
+    '(datepicker) set date to prev day',
+    '(monthpicker) set month to prev month',
+  ] },
+  21: { shortcut: '→', action: [
+    '(datepicker) set date to next day',
+    '(monthpicker) set month to next month',
+  ] },
+  22: { shortcut: 'ENTER', action: [
+    '(datepicker) set date to selected date',
+    '(form) submit form',
+  ] },
+  23: { shortcut: "ESCAPE", action: 'close any active modal/popup/form' },
 }

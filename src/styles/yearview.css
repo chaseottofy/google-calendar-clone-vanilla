@@ -169,16 +169,15 @@
 }
 
 
-@media screen and (max-width: 530px) {
+@media screen and (max-width: 800px) {
   .calendar__yearview {
     padding: 16px 8px;
   }
-}
 
-@media screen and (max-width: 400px) {
   .calendar__yearview {
     padding: 16px 2px;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-rows: repeat(auto-fit, minmax(272px, 1fr));
   }
 
   .yv-monthcell {
@@ -196,5 +195,9 @@
   .yv-monthcell__header--weekdays,
   .yv-monthcell__body {
     max-width: 278px;
+  }
+
+  .yv-monthcell__body {
+    padding-bottom: 6px;
   }
 }

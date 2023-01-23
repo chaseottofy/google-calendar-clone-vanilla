@@ -560,6 +560,7 @@ export default function renderViews(context, datepickerContext, store) {
       // opens search modal
       case "g":
         createGoTo(context, store, datepickerContext);
+        // document.querySelector("")
         break;
 
       case "+":

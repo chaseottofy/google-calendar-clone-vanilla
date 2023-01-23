@@ -176,10 +176,10 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       if (editing) {
         ctgformInput.value = formhelper.getName();
       } else {
-        ctgformInput.placeholder = "Enter Category Name";
+        ctgformInput.placeholder = "Create new category";
       }
       ctgformInput.focus();
-    }, 10)
+    }, 4)
   }
 
   function gc(e, element) {
@@ -200,6 +200,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       handleColorSelection(e, formhelper.getColor());
       return;
     }
+
 
     if (submitctgBtn) {
       validateNewCategory(ctgformInput.value, formhelper.getColor());

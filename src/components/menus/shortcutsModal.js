@@ -11,7 +11,6 @@ export default function handleShortCutsModal(store) {
 
     const shortcutKey = document.createElement("div");
     shortcutKey.classList.add("sm-key");
-    
     const keyone = document.createElement("span")
     if (Array.isArray(key)) {
       const or = document.createElement("span")
@@ -21,14 +20,26 @@ export default function handleShortCutsModal(store) {
       keytwo.textContent = key[1].toUpperCase()
       shortcutKey.append(keyone, or, keytwo)
     } else {
+      if (key == "ENTER" || key == "ESCAPE") {
+        keyone.classList.add("key-full");
+      }
       keyone.textContent = key.toUpperCase();
       shortcutKey.appendChild(keyone);
     }
 
-
     const shortcutDescription = document.createElement("div");
     shortcutDescription.classList.add("sm-description");
-    shortcutDescription.textContent = description;
+    if (Array.isArray(description)) {
+      shortcut.classList.add("sm-item--full");
+      shortcutDescription.classList.add("sm-description--full");
+      const descriptionOne = document.createElement("span");
+      const descriptionTwo = document.createElement("span");
+      descriptionOne.textContent = description[0];
+      descriptionTwo.textContent = description[1];
+      shortcutDescription.append(descriptionOne, descriptionTwo);
+    } else {
+      shortcutDescription.textContent = description;
+    }
     shortcut.append(shortcutKey, shortcutDescription);
     return shortcut;
   }
