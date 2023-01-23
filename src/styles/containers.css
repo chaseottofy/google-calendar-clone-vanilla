@@ -36,6 +36,33 @@
   animation-fill-mode: forwards;
 }
 
+.collapse-view {
+  position: absolute;
+  top: 64px;
+  right: 16px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--black1);
+  box-shadow:
+  rgba(60,64,67,0.3) 0px 1px 2px 0px,
+  rgba(60,64,67,0.15) 0px 1px 3px 1px;
+  cursor:pointer;
+  z-Index: 902;
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  transition: all 200ms ease-in-out;
+}
+
+.collapse-view svg {
+  transform: scale(0.8);
+}
+
+.collapse-view:hover {
+  box-shadow: var(--box-shadow2-hover);
+}
+
 .resize-overlay {
   position: absolute;
   top: 0;
@@ -122,6 +149,10 @@
   .container__calendars {
     width: 100% !important;
   }
+
+  .collapse-view {
+    right: 6px;
+  }
 }
 
 @media screen and (max-width: 580px) {
@@ -134,10 +165,17 @@
   .main {
     height: calc(100% - 54px);
   }
+  .collapse-view {
+    top: 54px;
+  }
 }
 
 @media screen and (max-height:470px) {
   .main {
     height: calc(100% - 54px);
+  }
+
+  .collapse-view {
+    top: 54px;
   }
 }

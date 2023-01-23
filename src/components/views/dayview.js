@@ -59,7 +59,6 @@ import locales from "../../locales/en"
 
 // main app header
 const header = document.querySelector(".header")
-
 // day view header (row 1)
 const dvHeader = document.querySelector(".dayview--header")
 const dvHeaderDayNumber = document.querySelector(".dayview--header-day__title")
@@ -74,6 +73,8 @@ const dvOnTop = document.querySelector('.dayview--ontop-container');
 const dvGrid = document.querySelector(".dayview__grid")
 const dvSideGrid = document.querySelector(".dayview--side-grid")
 const dvMainGrid = document.querySelector(".dayview--main-grid")
+
+const collapsebtn = document.querySelector(".collapse-view")
 
 export default function setDayView(context, store, datepickerContext) {
   let entries = store.getDayEntries(context.getDate())
@@ -750,12 +751,18 @@ export default function setDayView(context, store, datepickerContext) {
     }
   }
 
+  function collapseDayView() {
+    console.log('collapse');
+    dvHeader.classList.toggle("dvh-collapse")
+  }
+
   const initDayView = () => {
     renderBoxesForGrid();
     configHeader();
     store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
     dvOnTop.onmousedown = delegateDayViewOnTop
+    collapsebtn.onclick = collapseDayView;
     handleScrollToOnInit();
   }
   initDayView();

@@ -121,3 +121,4 @@ Starts the webpack development server on `localhost:3000`.
   * [screenshot](https://ibb.co/Ln75k7W)
 * Added switch to turn animations/transitions on and off in settings
 * Added top modal compartment for dayview (events that span longer than the calendar day) [screenshot](https://ibb.co/Byq1vJb)
+* Added floating eye icon to open/close the header for the week and day view (mobile support) [screenshot](https://ibb.co/JrpDj4X)
