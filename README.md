@@ -21,13 +21,20 @@ At the moment it works using local storage but there are options to backup data 
   * keyboard shortcuts are available for most actions but they do differ from the original app. Use "?" or "/" to open the shortcuts menu (23 in total).
   * month date picker
   * year date picker
+  * sidebar converts to fixed positioning under 840px and main content inherits the full page width.
+  * more details provided on when events start/end/ended (see Jan 20th notes)
+  * collision animations in month/week/day views.
   * datepicker highlights current week if in week view
   * datepicker highlights day if it has events
   * download calendar as json file & upload calendar from json file
   * year view days with events are highlighted
   * monthview cells are highlighted when dragged over
+  * resize bar for week & day events
+  * 42 color options for categories
   * move all events from one category to another
-  * entire app is a single page, no page refreshes, no load times.
+  * entire app is a single page. No page refreshes, no load times.
+  * At MAX there will be 4 active event listeners. Practically all memory that can be freed up will be.
+  * Statistics page coming soon.
   * first contentful paint : 200ms
   * time to interactive : 200ms
   * speed index : 200ms
