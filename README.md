@@ -52,8 +52,8 @@ I've implemented several new features to improve the user experience but overall
   * 42 color options for categories.
   * Move all events from one category to another
   * Single page. No page refreshes, no load times.
-  * At MAX there will be 4 active event listeners.
   * Aggressive memory handling.
+    * At MAX there will be 4 active event listeners.
   * Statistics page coming soon.
   
 * **Lighthouse**
