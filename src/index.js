@@ -2,8 +2,6 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
-import generateRandomEvents from "./utilities/testing"
-
 /*!*************************************!*\
 // (CSS) 
 /*!*************************************!*/
@@ -50,20 +48,4 @@ import "./styles/aside/shortcuts.css"
 // * linter
 // * 
 setAppDefaults(context, store);
-/*
-// store.setAllCategoryStatusExcept("default", false)
-store.addNewCtg("seven", "#2C52BA")
-store.addNewCtg("eight", "#2C52BA")
-store.addNewCtg("nine", "#2C52BA")
-store.addNewCtg("ten", "#2C52BA")
-store.addNewCtg("eleven", "#2C52BA")
-store.addNewCtg("twelve", "#2C52BA")
-store.addNewCtg("thirteen", "#2C52BA")
-store.addNewCtg("fourteen", "#2C52BA")
-store.addNewCtg("fifteen", "#2C52BA")
-store.addNewCtg("sixteen", "#2C52BA")
-store.addNewCtg("seventeen", "#2C52BA")
-*/
-
 renderViews(context, datepickerContext, store);
-// addNewCtg

@@ -27,7 +27,7 @@
   height: auto;
   min-height: 200px;
   max-height: 420px;
-  min-width: 256px;
+  min-width: 300px;
   max-width: 500px;
   width: auto;
   overflow: hidden;
@@ -113,6 +113,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-x: hidden;
   overflow-y: scroll;
   padding: 8px 16px 4px 0;
   width: 100%;
@@ -123,9 +124,10 @@
   background: transparent;
 }
 
-.entries__form--body::-webkit-scrollbar {
-  width: 10px;
+.entries__form--body::-webkit-scrollbar-thumb {
+  width: 14px;
 }
+
 
 .form--body__description,
 .form--body__title {

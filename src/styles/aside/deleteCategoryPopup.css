@@ -89,7 +89,7 @@
   padding: 0 8px;
   position: relative;
   width: 100%;
-  transition: all .2s ease-in-out;
+  transition: background 150ms ease-in-out;
 }
 
 input[type=radio] {
@@ -146,7 +146,7 @@ input[type=radio] {
 }
 
 .popup-delete-act svg {
-  fill: var(--red1) !important
+  fill: var(--taskcolor0) !important
 }
 
 .popup-delete-ctg__footer {
@@ -183,12 +183,12 @@ input[type=radio] {
 
 .popup-delete-ctg__btn--proceed {
   background: var(--black3);
-  border: 1px solid transparent
+  border: 1px solid var(--darkgrey1);
 }
 
 .popup-delete-ctg__btn--proceed:hover {
   background: var(--red1);
-  color: var(--white4)
+  color: var(--white4);
 }
 
 @media screen and (max-width:440px) {

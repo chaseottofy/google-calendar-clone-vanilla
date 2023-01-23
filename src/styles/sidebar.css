@@ -303,7 +303,6 @@
   width: 100%;
   display: flex;
   align-items: center;
-  /* background: var(--black1); */
   height: 100%;
   cursor: pointer;
 }
@@ -323,7 +322,6 @@
   align-items: center;
   height: 21px;
   width: 21px;
-  filter: brightness(1.3);
   border-radius: 2px;
 }
 
@@ -349,7 +347,6 @@
   height: 100%;
   width: 60px;
   align-items: center;
-  /* background: var(--black1); */
 }
 
 .sbch-col--actions__edit-icon {
@@ -375,10 +372,6 @@
 .sbch-col--actions__delete-icon:hover,
 .sbch-col--actions__edit-icon:hover {
   background: var(--mediumgrey1);
-}
-
-.sbch-form--item__checkbox--wrapper svg {
-  transform: scale(1.2, 1.3);
 }
 
 .sbch-form--item__checkbox--wrapper,

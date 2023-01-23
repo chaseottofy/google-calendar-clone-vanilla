@@ -14,7 +14,8 @@ import toastCallbackSaving from "../toastPopups/toastCallbacks"
 // helpers
 import {
   getClosest,
-  placePopup
+  placePopup,
+  throttle
 } from "../../utilities/helpers"
 
 // date / time helpers
@@ -33,9 +34,6 @@ import {
   calcNewHourFromCoords, 
   getOriginalBoxObject 
 } from "../../utilities/dragutils"
-
-
-
 
 
 // main app sidebar
@@ -808,14 +806,23 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function dragFormAnywhere(e) {
-    const target = e.target;
-    const wrapper = entriesFormWrapper;
-    if (wrapper.style.margin === "auto") {
-      wrapper.setAttribute("style", `left:${+wrapper.offsetLeft}px;top:${+wrapper.offsetTop}px;margin:0;max-width:450px;height:420px;`)
-    }
+    const closeBtn = document.querySelector(".form--header__icon-close")
+    const rect = entriesFormWrapper.getBoundingClientRect();
+    const [currleft, currtop] = [
+      parseInt(rect.left),
+      parseInt(rect.top),
+    ]; 
 
-    wrapper.style.opacity = "0.8";
-    wrapper.style.userSelect = "none";
+    entriesFormWrapper.style.margin = "0";
+    entriesFormWrapper.style.opacity = "0.8";
+    entriesFormWrapper.style.userSelect = "none";
+    entriesFormWrapper.style.top = currtop + "px";
+    entriesFormWrapper.style.left = currleft + "px";
+    entriesFormWrapper.style.bottom = "0";
+    entriesFormWrapper.style.right = "0";
+    closeBtn.style.pointerEvents = "none";
+    entriesForm.style.pointerEvents = "none";
+    
     let [leftBefore, topBefore] = [e.clientX, e.clientY];
     const [winH, winW] = [window.innerHeight, window.innerWidth];
 
@@ -827,21 +834,39 @@ export default function setEntryForm(context, store, datepickerContext) {
       leftBefore = e.clientX;
       topBefore = e.clientY;
 
-      if ((wrapper.offsetHeight + wrapper.offsetTop) > winH) {
-        wrapper.style.top = winH - wrapper.offsetHeight + "px";
+      if (entriesFormWrapper.offsetTop < 0) {
+        entriesFormWrapper.style.top = "0px";
       }
 
-      wrapper.style.top = wrapper.offsetTop - topAfter + "px";
-      wrapper.style.left = wrapper.offsetLeft - leftAfter + "px";
+      if (entriesFormWrapper.offsetLeft < 0) {
+        entriesFormWrapper.style.left = "0px";
+      }
+
+      if ((entriesFormWrapper.offsetLeft + entriesFormWrapper.offsetWidth) > winW) {
+        entriesFormWrapper.style.left = winW - entriesFormWrapper.offsetWidth + "px";
+      }
+
+      if ((entriesFormWrapper.offsetTop + entriesFormWrapper.offsetHeight) > winH) {
+        entriesFormWrapper.style.top = winH - entriesFormWrapper.offsetHeight + "px";
+      }
+      
+
+      entriesFormWrapper.style.top = entriesFormWrapper.offsetTop - topAfter + "px";
+      entriesFormWrapper.style.left = entriesFormWrapper.offsetLeft - leftAfter + "px";
     }
+    
+    const throttlemove = throttle(mousemove, 15);
 
     function mouseup() {
-      wrapper.style.opacity = "1";
-      wrapper.style.userSelect = "all";
-      document.removeEventListener("mousemove", mousemove);
+      entriesFormWrapper.style.opacity = "1";
+      entriesFormWrapper.style.userSelect = "all";
+      closeBtn.removeAttribute("style")
+      entriesForm.removeAttribute("style")
+      document.removeEventListener("mousemove", throttlemove);
       document.removeEventListener("mouseup", mouseup);
     }
-    document.addEventListener("mousemove", mousemove);
+
+    document.addEventListener("mousemove", throttlemove);
     document.addEventListener("mouseup", mouseup);
   }
 

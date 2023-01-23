@@ -100,6 +100,9 @@
 .rowgroup--cell-active {
   box-shadow: var(--box-shadowbottom);
 }
+.rowgroup--cell-active > * {
+  color: var(--taskcolor0) !important;
+}
 
 .rowgroup-content:last-child {
   margin-bottom: 8px;

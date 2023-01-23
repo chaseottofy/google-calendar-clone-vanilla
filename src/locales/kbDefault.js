@@ -16,26 +16,36 @@ export default {
   14: { shortcut: 'a', action: 'open settings' },
   15: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
   16: { shortcut: "e", action: '(entry options) opens form with entry details' },
-  17: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
-  18: { shortcut: '↑', action: [
-    '(datepicker) set date to next month/week',
-    '(yearpicker) set year to next year'
-  ] },
-  19: { shortcut: '↓', action: [
-    '(datepicker) set date to prev month/week',
-    '(yearpicker) set year to prev year'
-  ] },
-  20: { shortcut: '←', action: [
-    '(datepicker) set date to prev day',
-    '(monthpicker) set month to prev month',
-  ] },
-  21: { shortcut: '→', action: [
-    '(datepicker) set date to next day',
-    '(monthpicker) set month to next month',
-  ] },
-  22: { shortcut: 'ENTER', action: [
-    '(datepicker) set date to selected date',
-    '(form) submit form',
-  ] },
+  17: {
+    shortcut: '↑', action: [
+      '(datepicker) set date to next month/week',
+      '(yearpicker) set year to next year'
+    ]
+  },
+  18: {
+    shortcut: '↓', action: [
+      '(datepicker) set date to prev month/week',
+      '(yearpicker) set year to prev year'
+    ]
+  },
+  19: {
+    shortcut: '←', action: [
+      '(datepicker) set date to prev day',
+      '(monthpicker) set month to prev month',
+    ]
+  },
+  20: {
+    shortcut: '→', action: [
+      '(datepicker) set date to next day',
+      '(monthpicker) set month to next month',
+    ]
+  },
+  21: { shortcut: 'DELETE', action: '(entry options) delete entry' },
+  22: {
+    shortcut: 'ENTER', action: [
+      '(datepicker) set date to selected date',
+      '(form) submit form',
+    ]
+  },
   23: { shortcut: "ESCAPE", action: 'close any active modal/popup/form' },
 }

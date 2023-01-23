@@ -59,3 +59,6 @@ For now, you can view the app through screenshots (link below), or simply downlo
   * form datepicker [screenshot](https://ibb.co/kqTH6rQ)
 * Add date search component [screenshot](https://ibb.co/ZMQbjgG)
 * New category options (turn all others off/on) || edit [screenshot](https://ibb.co/NWrkmww)
+* Add dynamic form drag
+  * shrinks and grows if dragged away/into corners
+  * [screenshot](https://ibb.co/PghdtkS)

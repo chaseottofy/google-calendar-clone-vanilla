@@ -127,9 +127,7 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
          * If the entry has ended yesterday, display "ended yesterday"
          * If the entry starts today, display how long until it is scheduled to end
          * If the entry is yet to start, display how long until it is scheduled to start
-         * 
          */
-
         if (daysSince === 0) {
           let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60))
           let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60))
@@ -187,7 +185,7 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
       openEditForm();
     }
 
-    if (e.key.toLowerCase() === "d" || e.key.toLowerCase() === "delete") {
+    if (e.key === "Delete") {
       openDeleteWarning();
     }
   }

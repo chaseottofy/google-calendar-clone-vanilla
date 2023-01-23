@@ -125,7 +125,7 @@
 .sm-item {
   display: flex;
   align-items: center;
-  height: 42px;
+  height: 52px;
   width: 100%;
   margin-bottom: 8px;
 }
@@ -158,16 +158,16 @@
 
 .sm-key span:first-child,
 .sm-key span:last-child {
-  height: 30px;
+  height: 40px;
   width: 40px;
-  line-height: 30px;
+  line-height: 40px;
   text-align: center;
   background: var(--darkgrey0);
 }
 
 .key-full {
   margin: 0 auto;
-  width: 80% !important;
+  width: 100% !important;
 }
 
 .sm-key span:nth-child(2) {
@@ -176,19 +176,18 @@
   font-weight: 400 !important;
   font-size: 13px;
   letter-spacing: 0.4px;
-  color: var(--white3);
+  color: var(--white2);
 }
 
 .sm-description {
-  height: 30px;
+  height: 40px;
   display:flex;
   flex-direction: column;
   text-align: start;
   justify-content: center;
   align-items: flex-start;
   font-size: 15px;
-  line-height: 15px;
-  /* line-height: 12px; */
+  line-height: 20px;
   width: calc(100% - 12px);
   background: var(--black0);
   color: var(--white2);
@@ -197,8 +196,8 @@
 
 .sm-description--full {
   height: 60px !important;
+  line-height: 20px !important;
 }
-
 
 @media screen and (max-width: 560px) {
   .shortcuts__modal {
@@ -221,6 +220,6 @@
   }
 
   .sm-description {
-    font-size: 11px;
+    font-size: 13px;
   }
 }

@@ -2346,10 +2346,10 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
       if (editing) {
         ctgformInput.value = formhelper.getName();
       } else {
-        ctgformInput.placeholder = "Enter Category Name";
+        ctgformInput.placeholder = "Create new category";
       }
       ctgformInput.focus();
-    }, 10)
+    }, 4)
   }
 
   function gc(e, element) {
@@ -2370,6 +2370,7 @@ function createCategoryForm(store, selectedCategory, editing, resetParent) {
       handleColorSelection(e, formhelper.getColor());
       return;
     }
+
 
     if (submitctgBtn) {
       validateNewCategory(ctgformInput.value, formhelper.getColor());
@@ -2728,7 +2729,6 @@ function handleShortCutsModal(store) {
 
     const shortcutKey = document.createElement("div");
     shortcutKey.classList.add("sm-key");
-    
     const keyone = document.createElement("span")
     if (Array.isArray(key)) {
       const or = document.createElement("span")
@@ -2738,14 +2738,26 @@ function handleShortCutsModal(store) {
       keytwo.textContent = key[1].toUpperCase()
       shortcutKey.append(keyone, or, keytwo)
     } else {
+      if (key == "ENTER" || key == "ESCAPE") {
+        keyone.classList.add("key-full");
+      }
       keyone.textContent = key.toUpperCase();
       shortcutKey.appendChild(keyone);
     }
 
-
     const shortcutDescription = document.createElement("div");
     shortcutDescription.classList.add("sm-description");
-    shortcutDescription.textContent = description;
+    if (Array.isArray(description)) {
+      shortcut.classList.add("sm-item--full");
+      shortcutDescription.classList.add("sm-description--full");
+      const descriptionOne = document.createElement("span");
+      const descriptionTwo = document.createElement("span");
+      descriptionOne.textContent = description[0];
+      descriptionTwo.textContent = description[1];
+      shortcutDescription.append(descriptionOne, descriptionTwo);
+    } else {
+      shortcutDescription.textContent = description;
+    }
     shortcut.append(shortcutKey, shortcutDescription);
     return shortcut;
   }
@@ -2855,6 +2867,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
     ;(0,_config_setViews__WEBPACK_IMPORTED_MODULE_0__["default"])(context.getComponent(), context, store, datepickerContext)
   }
 
+
   function renderSidebarDatepickerCtg() {
     (0,_menus_sidebarDatepicker__WEBPACK_IMPORTED_MODULE_1__["default"])(context, store, datepickerContext)
   }
@@ -2928,7 +2941,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       coltwo.appendChild(deleteicon)
     }
 
-    
+
     editicon.appendChild((0,_utilities_svgs__WEBPACK_IMPORTED_MODULE_3__.createEditIcon)("var(--white2)"))
     coltwo.appendChild(editicon)
     row.append(colone, coltwo)
@@ -3024,7 +3037,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
       }
       optionMove.append(optionMoveTitle, optionMoveSelect);
       optionsWrapperOne.append(optionMoveRadio, optionMove);
-      
+
 
       /* ************ */
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
@@ -3062,7 +3075,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
 
       optionRemove.append(optionRemoveTitle, optionRemoveIcon)
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
-      
+
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
       popupBox.appendChild(popupBody)
       optionsWrapperOne.onclick = handleWrapperClick;
@@ -3146,6 +3159,87 @@ function handleSidebarCategories(context, store, datepickerContext) {
     updateComponent()
   }
 
+  function openCategoryOptionsMenu(e, data) {
+    const [targetCtg, targetElement] = data;
+    let [x, y] = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.placePopup)(
+      192,
+      128,
+      [
+        e.clientX, 
+        parseInt(targetElement.getBoundingClientRect().top) - 8
+      ],
+      [window.innerWidth, window.innerHeight],
+      false,
+      null
+    )
+
+    console.log(targetElement.offsetTop)
+    const popupBox = document.createElement("div");
+    popupBox.classList.add("popup-ctg-options");
+    popupBox.style.top = `${y}px`;
+    popupBox.style.left = `${x}px`;
+    const popupBoxOverlay = document.createElement("div");
+    popupBoxOverlay.classList.add("popup-ctg-options__overlay");
+    store.addActiveOverlay("popup-ctg-options__overlay");
+
+    const optionEdit = document.createElement("div");
+    optionEdit.classList.add("option__open-ctg-edit");
+    optionEdit.textContent = "Edit category (name, color)";
+    const optionTurnOff = document.createElement("div");
+    optionTurnOff.classList.add("option__close-other-ctg");
+    optionTurnOff.textContent = "Display this only";
+    const optionTurnOn = document.createElement("div")
+    optionTurnOn.classList.add("option__open-other-ctg");
+    optionTurnOn.textContent = "Display all but this";
+
+    function closeCategoryOptionsMenu(flag, chckbox) {
+      document.querySelector(".popup-ctg-options").remove()
+      document.querySelector(".popup-ctg-options__overlay").remove()
+      store.removeActiveOverlay("popup-ctg-options__overlay");
+      if (flag) { chckbox.removeAttribute("style") }
+      document.removeEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu)
+    }
+
+    function handleOpenEditCtg() {
+      (0,_editCategory__WEBPACK_IMPORTED_MODULE_5__["default"])(store, targetCtg, true, targetElement);
+      closeCategoryOptionsMenu();
+    }
+
+    function rerender() {
+      renderSidebarDatepickerCtg();
+      updateComponent();
+      renderCategories();
+    }
+
+    function closeAndRemoveStyle() {
+      closeCategoryOptionsMenu(true, targetElement)
+    }
+
+    function turnoff() {
+      store.setAllCategoryStatusExcept(targetCtg.name, false)
+      closeAndRemoveStyle();
+      rerender();
+    }
+
+    function turnon() {
+      store.setAllCategoryStatusExcept(targetCtg.name, true)
+      closeAndRemoveStyle();
+      rerender();
+    }
+
+    function handleCloseOnEscapeCtgOptionsMenu(e) {
+      if (e.key === "Escape") { closeAndRemoveStyle(); }
+    }
+
+    popupBox.append(optionEdit, optionTurnOff, optionTurnOn);
+    document.body.prepend(popupBoxOverlay, popupBox);
+    document.addEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu);
+    optionEdit.onclick = handleOpenEditCtg;
+    popupBoxOverlay.onclick = closeAndRemoveStyle;
+    optionTurnOff.onclick = turnoff;
+    optionTurnOn.onclick = turnon;
+  }
+
   function delegateCategoryEvents(e) {
     const ctgtoggleModal = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".sbch-col__one")
     const editctgBtn = (0,_utilities_helpers__WEBPACK_IMPORTED_MODULE_4__.getClosest)(e, ".sbch-col--actions__edit-icon")
@@ -3165,12 +3259,11 @@ function handleSidebarCategories(context, store, datepickerContext) {
       }
       const targetparent = e.target.parentElement.parentElement
       targetparent.style.borderBottom = `2px solid ${targetcat.color}`
-      ;(0,_editCategory__WEBPACK_IMPORTED_MODULE_5__["default"])(
-        store, 
-        targetcat, 
-        true,
+      const createCategoryFormData = [
+        targetcat,
         e.target.parentElement.parentElement
-      );
+      ];
+      openCategoryOptionsMenu(e, createCategoryFormData)
       return;
     }
 
@@ -3181,6 +3274,7 @@ function handleSidebarCategories(context, store, datepickerContext) {
 
     // toggle category checkbox and display entries
     if (ctgChck) {
+      console.log(true);
       handleCategorySelection(e)
       return;
     }
@@ -6966,8 +7060,17 @@ function setYearView(context, store, datepickerContext) {
     renderMonthCells();
     yearviewGrid.onmousedown = delegateYearEvents;
     store.setResetPreviousViewCallback(resetYearview);
+    const currentmonth = document?.querySelector(".cell-current")
+    // should always be true
+    if (currentmonth) {
+      setTimeout(() => {
+        yearviewGrid.scrollTo({
+          top: parseInt(currentmonth.offsetTop) - 100,
+          behavior: "smooth"
+        });
+      }, 4)
+    }
   }
-
   initYearview();
 }
 
@@ -7594,6 +7697,7 @@ function renderViews(context, datepickerContext, store) {
       // opens search modal
       case "g":
         (0,_components_forms_goto__WEBPACK_IMPORTED_MODULE_9__["default"])(context, store, datepickerContext);
+        // document.querySelector("")
         break;
 
       case "+":
@@ -8523,6 +8627,7 @@ const colors = _locales_en__WEBPACK_IMPORTED_MODULE_3__["default"].colors
   "moveCategoryEntriesToNewCategory",
   "removeCategoryAndEntries",
   "setCategoryStatus",
+  "setAllCategoryStatusExcept",
   "updateCtgColor",
   "updateCtg"
   ***************************************
@@ -9119,6 +9224,17 @@ class Store {
       this.ctg[category].active = status;
       Store.setCtg(this.ctg)
     }
+  }
+
+  setAllCategoryStatusExcept(category, status) {
+    for (let key in this.ctg) {
+      if (key !== category) {
+        this.ctg[key].active = status;
+      } else {
+        this.ctg[key].active = !status;
+      }
+    }
+    Store.setCtg(this.ctg)
   }
 
   /**
@@ -9902,11 +10018,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   0: { shortcut: '0', action: "change app theme" },
-  1: { shortcut: ['d', '1'], action: 'open day view' },
-  2: { shortcut: ['w', '2'], action: 'open week view' },
-  3: { shortcut: ['m', '3'], action: 'open month view' },
-  4: { shortcut: ['y', '4'], action: 'open year view' },
-  5: { shortcut: ['l', '5'], action: 'open list view' },
+  1: { shortcut: ['1', 'D'], action: 'open day view' },
+  2: { shortcut: ['2', 'W'], action: 'open week view' },
+  3: { shortcut: ['3', 'M'], action: 'open month view' },
+  4: { shortcut: ['4', 'Y'], action: 'open year view' },
+  5: { shortcut: ['5', 'L'], action: 'open list view' },
   6: { shortcut: 'v', action: 'toggle view options' },
   7: { shortcut: 't', action: 'set date to today' },
   8: { shortcut: "g", action: 'enter date manually' },
@@ -9917,11 +10033,29 @@ __webpack_require__.r(__webpack_exports__);
   13: { shortcut: '+', action: 'open new category form' },
   14: { shortcut: 'a', action: 'open settings' },
   15: { shortcut: ['/', '?'], action: 'open keyboard shortcuts' },
-  16: { shortcut: "ESC", action: 'return to calendar' },
-  17: { shortcut: "e", action: '(entry options) opens form with entry details' },
-  18: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
-  19: { shortcut: '↑', action: '(datepicker) set date to next month/week' },
-  20: { shortcut: '↓', action: '(datepicker) set date to prev month/week'},
+  16: { shortcut: "e", action: '(entry options) opens form with entry details' },
+  17: { shortcut: ['DEL', 'd'], action: '(entry options) delete entry' },
+  18: { shortcut: '↑', action: [
+    '(datepicker) set date to next month/week',
+    '(yearpicker) set year to next year'
+  ] },
+  19: { shortcut: '↓', action: [
+    '(datepicker) set date to prev month/week',
+    '(yearpicker) set year to prev year'
+  ] },
+  20: { shortcut: '←', action: [
+    '(datepicker) set date to prev day',
+    '(monthpicker) set month to prev month',
+  ] },
+  21: { shortcut: '→', action: [
+    '(datepicker) set date to next day',
+    '(monthpicker) set month to next month',
+  ] },
+  22: { shortcut: 'ENTER', action: [
+    '(datepicker) set date to selected date',
+    '(form) submit form',
+  ] },
+  23: { shortcut: "ESCAPE", action: 'close any active modal/popup/form' },
 });
 
 /***/ }),
@@ -11225,94 +11359,6 @@ const createExpandDownIcon = (fill) => {
 
 /***/ }),
 
-/***/ "./src/utilities/testing.js":
-/*!**********************************!*\
-  !*** ./src/utilities/testing.js ***!
-  \**********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ generateRandomEvents)
-/* harmony export */ });
-/*
-  {
-    "userId": 1,
-    "id": 1,
-    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-  },
-
-*/
-
-const randomTitles = "quaerat velit veniam amet cupiditate aut numquam ut sequi".split(" ")
-
-const categoryNames = [
-  'default',
-  'misc',
-  'school'
-]
-let endYears = [2023, 2023]
-function generateStart() {
-  let year = endYears[Math.floor(Math.random() * 1)];
-  let month = Math.floor(Math.random() * 4);
-  let day = Math.floor(Math.random() * 30);
-  let hour = Math.floor(Math.random() * 4) + 8;
-  let minute = Math.round((Math.floor(Math.random() * 46) / 15)
-  ) * 15;
-
-  return new Date(
-    year, month, day, hour, minute, 0, 0,
-  )
-}
-
-function generateEnd(start) {
-  let endDay = Math.floor(Math.random() * 1)
-  let endHour = Math.floor(Math.random() * 4) + 12
-
-  return new Date(
-    start.getFullYear(), start.getMonth(), start.getDate() + endDay,
-    endHour, start.getMinutes(), 0, 0,
-  )
-}
-
-class FEntry {
-  constructor(category, completed, description, end, start, title) {
-    this.category = category;
-    this.completed = completed;
-    this.description = description;
-    this.end = end;
-    this.id = Date.now().toString(36) + Math.random().toString(36).substring(2);
-    this.start = start;
-    this.title = title;
-  }
-}
-
-// const generateRandomEvents = () => {
-function generateRandomEvents(numberOfEvents) {
-  const events = []
-  if (numberOfEvents === undefined || numberOfEvents === null || numberOfEvents === 0 || numberOfEvents === NaN || numberOfEvents === Infinity || numberOfEvents === -Infinity || numberOfEvents === -0 || numberOfEvents > 1000) {
-    numberOfEvents = 100
-  }
-  for (let i = 0; i < numberOfEvents; i++) {
-    const start = generateStart();
-    const end = generateEnd(start);
-    events.push(
-      new FEntry(
-        categoryNames[Math.floor(Math.random() * categoryNames.length)],
-        true,
-        "random body",
-        end,
-        start,
-        randomTitles[Math.floor(Math.random() * randomTitles.length)]
-      )
-    )    
-  }
-  return events
-}
-
-/***/ }),
-
 /***/ "./src/utilities/timeutils.js":
 /*!************************************!*\
   !*** ./src/utilities/timeutils.js ***!
@@ -11483,32 +11529,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./context/store */ "./src/context/store.js");
 /* harmony import */ var _config_appDefaults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./config/appDefaults */ "./src/config/appDefaults.js");
 /* harmony import */ var _config_renderViews__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./config/renderViews */ "./src/config/renderViews.js");
-/* harmony import */ var _utilities_testing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utilities/testing */ "./src/utilities/testing.js");
-/* harmony import */ var _styles_root_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles/root.css */ "./src/styles/root.css");
-/* harmony import */ var _styles_header_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/header.css */ "./src/styles/header.css");
-/* harmony import */ var _styles_containers_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/containers.css */ "./src/styles/containers.css");
-/* harmony import */ var _styles_yearview_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/yearview.css */ "./src/styles/yearview.css");
-/* harmony import */ var _styles_monthview_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./styles/monthview.css */ "./src/styles/monthview.css");
-/* harmony import */ var _styles_weekview_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/weekview.css */ "./src/styles/weekview.css");
-/* harmony import */ var _styles_dayview_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./styles/dayview.css */ "./src/styles/dayview.css");
-/* harmony import */ var _styles_listview_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./styles/listview.css */ "./src/styles/listview.css");
-/* harmony import */ var _styles_sidebar_css__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./styles/sidebar.css */ "./src/styles/sidebar.css");
-/* harmony import */ var _styles_sbdatepicker_css__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./styles/sbdatepicker.css */ "./src/styles/sbdatepicker.css");
-/* harmony import */ var _styles_aside_datepicker_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./styles/aside/datepicker.css */ "./src/styles/aside/datepicker.css");
-/* harmony import */ var _styles_aside_toast_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./styles/aside/toast.css */ "./src/styles/aside/toast.css");
-/* harmony import */ var _styles_aside_goto_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./styles/aside/goto.css */ "./src/styles/aside/goto.css");
-/* harmony import */ var _styles_aside_toggleForm_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/toggleForm.css */ "./src/styles/aside/toggleForm.css");
-/* harmony import */ var _styles_aside_sidebarSubMenu_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/sidebarSubMenu.css */ "./src/styles/aside/sidebarSubMenu.css");
-/* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
-/* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
-/* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
-/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
-/* harmony import */ var _styles_aside_deleteCategoryPopup_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/deleteCategoryPopup.css */ "./src/styles/aside/deleteCategoryPopup.css");
-/* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
-/* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
-/* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
-
-
+/* harmony import */ var _styles_root_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./styles/root.css */ "./src/styles/root.css");
+/* harmony import */ var _styles_header_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./styles/header.css */ "./src/styles/header.css");
+/* harmony import */ var _styles_containers_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/containers.css */ "./src/styles/containers.css");
+/* harmony import */ var _styles_yearview_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./styles/yearview.css */ "./src/styles/yearview.css");
+/* harmony import */ var _styles_monthview_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./styles/monthview.css */ "./src/styles/monthview.css");
+/* harmony import */ var _styles_weekview_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./styles/weekview.css */ "./src/styles/weekview.css");
+/* harmony import */ var _styles_dayview_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/dayview.css */ "./src/styles/dayview.css");
+/* harmony import */ var _styles_listview_css__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./styles/listview.css */ "./src/styles/listview.css");
+/* harmony import */ var _styles_sidebar_css__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./styles/sidebar.css */ "./src/styles/sidebar.css");
+/* harmony import */ var _styles_sbdatepicker_css__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./styles/sbdatepicker.css */ "./src/styles/sbdatepicker.css");
+/* harmony import */ var _styles_aside_datepicker_css__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./styles/aside/datepicker.css */ "./src/styles/aside/datepicker.css");
+/* harmony import */ var _styles_aside_toast_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./styles/aside/toast.css */ "./src/styles/aside/toast.css");
+/* harmony import */ var _styles_aside_goto_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./styles/aside/goto.css */ "./src/styles/aside/goto.css");
+/* harmony import */ var _styles_aside_toggleForm_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./styles/aside/toggleForm.css */ "./src/styles/aside/toggleForm.css");
+/* harmony import */ var _styles_aside_sidebarSubMenu_css__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./styles/aside/sidebarSubMenu.css */ "./src/styles/aside/sidebarSubMenu.css");
+/* harmony import */ var _styles_aside_changeViewModule_css__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./styles/aside/changeViewModule.css */ "./src/styles/aside/changeViewModule.css");
+/* harmony import */ var _styles_aside_editCategoryForm_css__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./styles/aside/editCategoryForm.css */ "./src/styles/aside/editCategoryForm.css");
+/* harmony import */ var _styles_aside_form_css__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./styles/aside/form.css */ "./src/styles/aside/form.css");
+/* harmony import */ var _styles_aside_timepicker_css__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./styles/aside/timepicker.css */ "./src/styles/aside/timepicker.css");
+/* harmony import */ var _styles_aside_deleteCategoryPopup_css__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./styles/aside/deleteCategoryPopup.css */ "./src/styles/aside/deleteCategoryPopup.css");
+/* harmony import */ var _styles_aside_entryOptions_css__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./styles/aside/entryOptions.css */ "./src/styles/aside/entryOptions.css");
+/* harmony import */ var _styles_aside_info_css__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./styles/aside/info.css */ "./src/styles/aside/info.css");
+/* harmony import */ var _styles_aside_shortcuts_css__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./styles/aside/shortcuts.css */ "./src/styles/aside/shortcuts.css");
 
 
 
@@ -11554,16 +11597,12 @@ __webpack_require__.r(__webpack_exports__);
 // * finish privacy,terms,notes
 
 // FIX;
-// * set onclick to null when not in use
 // * validate .json files
 // * set toast to be removed on window focus
-// * more modal monthview 
 // * linter
 // * 
-// store.setStoreForTesting(generateRandomEvents(1000));
 (0,_config_appDefaults__WEBPACK_IMPORTED_MODULE_2__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
 (0,_config_renderViews__WEBPACK_IMPORTED_MODULE_3__["default"])(_context_appContext__WEBPACK_IMPORTED_MODULE_0__["default"], _context_appContext__WEBPACK_IMPORTED_MODULE_0__.datepickerContext, _context_store__WEBPACK_IMPORTED_MODULE_1__["default"]);
-console.log(_context_store__WEBPACK_IMPORTED_MODULE_1__["default"].getAllCtg())
 })();
 
 /******/ })()

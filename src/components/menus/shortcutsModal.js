@@ -20,7 +20,7 @@ export default function handleShortCutsModal(store) {
       keytwo.textContent = key[1].toUpperCase()
       shortcutKey.append(keyone, or, keytwo)
     } else {
-      if (key == "ENTER" || key == "ESCAPE") {
+      if (key == "ENTER" || key == "ESCAPE" || key == "DELETE") {
         keyone.classList.add("key-full");
       }
       keyone.textContent = key.toUpperCase();

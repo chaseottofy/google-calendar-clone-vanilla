@@ -162,17 +162,22 @@ const createCaretRightIcon = (fill) => {
 }
 
 const createCheckIcon = (fill) => {
+  // <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="#000000"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
   const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  icon.setAttribute("height", "20");
-  icon.setAttribute("width", "20");
+  icon.setAttribute("height", "18px");
+  icon.setAttribute("width", "18px");
+  icon.setAttribute("viewBox", "0 0 24 24")
   if (!fill) {
     icon.setAttribute("fill", "var(--white2)")
   } else {
     icon.setAttribute("fill", fill)
   }
   const pathone = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  pathone.setAttribute("d", "m8.229 14.062-3.521-3.541L5.75 9.479l2.479 2.459 6.021-6L15.292 7Z")
-  icon.appendChild(pathone)
+  pathone.setAttribute("d", "M0 0h24v24H0z")
+  pathone.setAttribute("fill", "none")
+  const pathtwo = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  pathtwo.setAttribute("d", "M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z")
+  icon.append(pathone, pathtwo)
   return icon;
 }
 

@@ -78,7 +78,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       checkIcon = createCheckIcon("none")
     }
 
-    checkbox.style.border = `1px solid ${ctgcolor}`;
+    checkbox.style.border = `2px solid ${ctgcolor}`;
     checkbox.appendChild(checkIcon)
     checkboxWrapper.appendChild(checkbox)
 
@@ -129,7 +129,8 @@ export default function handleSidebarCategories(context, store, datepickerContex
   function createDeleteCategoryPopup(e) {
     const ctgname = e.target.getAttribute("data-sbch-category")
     const ctgcolor = store.getCtgColor(ctgname)
-    const offsetColor = hextorgba(ctgcolor, 0.8)
+    // const offsetColor = hextorgba(ctgcolor, 0.8)
+    const offsetColor = ctgcolor;
     const categoryLength = store.getCtgLength(ctgname)
     let noEntries = false;
 
@@ -312,7 +313,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     if (status === "true") {
       checkbox.setAttribute("data-sbch-checked", "false")
       store.setCategoryStatus(cat, false)
-      checkbox.style.backgroundColor = "var(--black0)"
+      checkbox.style.backgroundColor = "var(--black1)"
       checkbox.firstChild.setAttribute("fill", "none")
     } else {
       checkbox.setAttribute("data-sbch-checked", "true")
@@ -417,6 +418,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       return;
     }
 
+    // open category options menu (edit, turn others off, turn others on)
     if (editctgBtn) {
       const targetcat = {
         name: e.target.getAttribute("data-sbch-category"),
@@ -424,11 +426,9 @@ export default function handleSidebarCategories(context, store, datepickerContex
       }
       const targetparent = e.target.parentElement.parentElement
       targetparent.style.borderBottom = `2px solid ${targetcat.color}`
-      const createCategoryFormData = [
-        targetcat,
-        e.target.parentElement.parentElement
-      ];
-      openCategoryOptionsMenu(e, createCategoryFormData)
+      openCategoryOptionsMenu(
+        e, [targetcat, targetparent]
+      );
       return;
     }
 
