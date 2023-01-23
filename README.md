@@ -1,23 +1,36 @@
 # quick about
 
-* This is a front end recreation of the google calendar app in its entirety (aside from google api / third party resources).
-* At the moment it works using local storage but there are options to backup data and load previous saved data using json.
+## contact: ottofy@zohomail.com
+
+**Project is still in development.**
+I'll be periodically updating this documentation and would like to have it done within three weeks (mid february). Note that what I've provided in ./dist is purely for easy viewing. The production build will be compressed.
+
+**Viewing**
+View the app through screenshots (link below), or simply download the repo and open `./dist/testbundle.html` in your browser (or any live server extension). I will host shortly.
+
+**[SCREENSHOTS](https://ibb.co/album/fQrm1F)**
+
+**This is a front end recreation of the google calendar app in its entirety** (aside from google api / third party resources).
+
+At the moment it works using local storage but there are options to backup data and load previously saved data using json.
+
 * I've included several features that are not in the original app to improve the user experience. These include but are not limited to :
   * header content still visible under 840px (app is viable on mobile)
   * dark theme
-  * high contrast theme
-  * Keyboard shortcuts are available for most actions but they do differ from the original app. Use "?" or "/" to open the shortcuts menu (23 in total).
+  * high contrast
+  * keyboard shortcuts are available for most actions but they do differ from the original app. Use "?" or "/" to open the shortcuts menu (23 in total).
   * month date picker
   * year date picker
   * datepicker highlights current week if in week view
   * datepicker highlights day if it has events
   * download calendar as json file & upload calendar from json file
   * year view days with events are highlighted
+  * monthview cells are highlighted when dragged over
   * move all events from one category to another
   * entire app is a single page, no page refreshes, no load times.
-  * first contentful paint : .2 seconds
-  * time to interactive : .2 seconds
-  * speed index : .2 seconds
+  * first contentful paint : 200ms
+  * time to interactive : 200ms
+  * speed index : 200ms
   * total blocking time : 0 seconds (no database / third party resources)
   * lighthouse : 100% (performance, accessibility, best practices, seo)
 
@@ -36,18 +49,6 @@ Builds the app and **necessary** resources in the `dist` folder.
 ### `npm run dev`
 
 Starts the webpack development server on `localhost:3000`.
-
-## contact: ottofy@zohomail.com
-
-### Jan 15, 2023
-
-**Project is still in development.**
-I'll be periodically updating the documentation and would like to have it done within three weeks. Note that what I've provided in ./dist is purely for development/viewing. The production build will be a fraction of the size.
-
-**Viewing**
-For now, you can view the app through screenshots (link below), or simply download the repo and open `./dist/testbundle.html` in your browser (or any live server extension). I will host on github pages shortly.
-
-**[SCREENSHOTS](https://ibb.co/album/fQrm1F)** (<https://ibb.co/album/fQrm1F>)
 
 ### Jan 16, 2023
 
