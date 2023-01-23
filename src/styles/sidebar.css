@@ -159,11 +159,8 @@
 
 
 
-
-
 /* datepicker, category options, footer */
 .sidebar-content__wrapper {
-  background: var(--black1);
   width: 100%;
   height: calc(100% + 48px);
   margin-top: 4px;
@@ -195,7 +192,7 @@
 .sb__categories {
   display: flex;
   flex-direction: column;
-  background: var(--black1);
+  /* background: var(--black1); */
   height: min-content;
   width: 100%;
   z-index: 1004;
@@ -306,7 +303,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  background: var(--black1);
+  /* background: var(--black1); */
   height: 100%;
   cursor: pointer;
 }
@@ -352,7 +349,7 @@
   height: 100%;
   width: 60px;
   align-items: center;
-  background: var(--black1);
+  /* background: var(--black1); */
 }
 
 .sbch-col--actions__edit-icon {
@@ -373,7 +370,6 @@
   border-radius: 50%;
   width: 26px;
   cursor: pointer;
-  background: var(--black1);
 }
 
 .sbch-col--actions__delete-icon:hover,
@@ -527,7 +523,7 @@
   }
 }
 
-@media screen and (max-height: 470px) and (max-width: 840px) {
+@media screen and (max-height: 470px) {
   .sidebar {
     height: calc(100% - 54px);
   }
