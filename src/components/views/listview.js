@@ -136,8 +136,8 @@ export default function setListView(context, store, datepickerContext) {
     const entry = store.getEntry(id);
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
-    // cell.style.backgroundColor = hextorgba(color, 0.6);
-    cell.style.backgroundColor = color;
+    cell.style.backgroundColor = hextorgba(color, 0.7);
+    // cell.style.backgroundColor = color;
 
     const rect = cell.getBoundingClientRect();
     const height = cell.offsetHeight;

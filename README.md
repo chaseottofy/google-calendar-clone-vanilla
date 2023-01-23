@@ -62,3 +62,7 @@ For now, you can view the app through screenshots (link below), or simply downlo
 * Add dynamic form drag
   * shrinks and grows if dragged away/into corners
   * [screenshot](https://ibb.co/PghdtkS)
+* All modals are now dynamic (mobile support)
+  * Will open to left if no space on right of target & viceversa
+  * Will open above if no space below target & viceversa
+  * [screenshot](https://ibb.co/Ln75k7W)

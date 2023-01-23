@@ -597,7 +597,7 @@
   grid-template-columns: 1fr
 }
 
-@media screen and (max-width:440px) {
+@media screen and (max-width:580px) {
   .entries__form--body {
     padding: 8px 16px
   }

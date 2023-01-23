@@ -139,7 +139,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     if (resetParent !== null) {
       resetParent.removeAttribute("style");
     }
-
     ctgform.classList.add("hide-ctg-form");
     ctgformoverlay.classList.add("hide-ctg-form");
     ctgformInput.value = "";
@@ -200,7 +199,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       handleColorSelection(e, formhelper.getColor());
       return;
     }
-
 
     if (submitctgBtn) {
       validateNewCategory(ctgformInput.value, formhelper.getColor());
