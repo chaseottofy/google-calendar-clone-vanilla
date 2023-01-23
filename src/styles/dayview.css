@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   height: 100%;
   width: calc((100% / 7));
   margin-left: 32px;
@@ -70,7 +70,6 @@
   width: 100%;
 }
 
-
 .dayview--header-day__info {
   font-family: var(--secondaryFont);
   display: flex;
@@ -87,7 +86,7 @@
 .dv-ontop-row2 {
   display: grid;
   grid-template-columns: 36px 1fr;
-  height: 24px;
+  min-height: 48px;
   width: 100%;
 }
 
@@ -101,9 +100,10 @@
 
 .dayview--ontop-container {
   border-left: 1px solid var(--mediumgrey1);
-  border-bottom: 2px solid var(--black000);
-  max-height: 24px;
-  min-height: 24px;
+  border-bottom: 2px solid var(--darkgrey1);
+  height: 100%;
+  /* max-height: 24px; */
+  /* min-height: 24px; */
   overflow-y: scroll;
   width: 100%;
   position: relative;
@@ -335,7 +335,13 @@
   transition-property: left, width;
   transition-duration: 200ms;
   transition-timing-function: ease-in-out;
-  padding: 4px 2px;
+  padding: 0 2px;
+}
+
+.tempbox-tra {
+  transition-property: height, top !important;
+  transition-duration: 500ms;
+  transition-timing-function: ease-in-out;
 }
 
 .dv-box__header {

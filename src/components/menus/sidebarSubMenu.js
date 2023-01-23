@@ -16,11 +16,11 @@ const themeRadioOptions = ["dark", "light", "contrast"];
 
 // keyboard shortcut toggle on/off | open modal
 const shortcutSwitch = document.querySelector(".smia-toggle-shortcuts-checkbox")
+const animationsSwitch = document.querySelector(".smdt-toggle-checkbox")
 const shortcutTitle = document.querySelector(".smia-set-status-title")
 const notifyDisabledShortcutsIcon = document.querySelector(".keyboard-disabled-sm")
 
 export default function getSidebarSubMenu(store, context) {
-
 
   function closeSubOnEscape(e) {
     const popup = document.querySelector(".sb-sub-popup-confirm");
@@ -140,8 +140,9 @@ export default function getSidebarSubMenu(store, context) {
       shortcutSwitch.checked = false;
     }
 
-    store.addActiveOverlay(closemenu)
-    sidebarSubMenu.classList.remove(closemenu)
+    animationsSwitch.checked = store.getAnimationStatus();
+    store.addActiveOverlay(closemenu);
+    sidebarSubMenu.classList.remove(closemenu);
     sidebarSubMenuOverlay.classList.remove(closemenu);
     document.addEventListener("keydown", closeSubOnEscape);
     sidebarSubMenuOverlay.onclick = closeSubMenu;
@@ -274,6 +275,16 @@ export default function getSidebarSubMenu(store, context) {
     shortcutSwitch.checked = status ? true : false;
   }
 
+  function toggleAnimations() {
+    const status = animationsSwitch.checked ? false : true;
+    store.setAnimationStatus(status)
+    if (status) {
+      appBody.classList.remove("disable-transitions")
+    } else {
+      appBody.classList.add("disable-transitions")
+    }
+  }
+
   function delegateSubMenuEvents(e) {
     const downloadjsonBtn = getClosest(e, ".down-json");
     const uploadjsonBtn = getClosest(e, ".upload-json");
@@ -281,6 +292,7 @@ export default function getSidebarSubMenu(store, context) {
     const kbShortcutMenu = getClosest(e, ".toggle-kb-shortcuts-btn__smia")
     const shortcutSwitch = getClosest(e, ".smia-disable-shortcuts__btn")
     const shortcutSwitchNotifyIcon = getClosest(e, ".keyboard-disabled-sm")
+    const animationsSwitch = getClosest(e, ".smdt-toggle")
 
 
     if (downloadjsonBtn) {
@@ -310,6 +322,11 @@ export default function getSidebarSubMenu(store, context) {
 
     if (shortcutSwitchNotifyIcon) {
       toggleShortcutsIcon();
+      return;
+    }
+
+    if (animationsSwitch) {
+      toggleAnimations();
       return;
     }
   }

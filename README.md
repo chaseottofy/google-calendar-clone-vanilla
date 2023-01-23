@@ -36,8 +36,8 @@ I've implemented several new features to improve the user experience but overall
     * days with events are highlighted
     * current week highlighted in weekview
   * Sidebar converts to fixed positioning under 840px and main content inherits the full page width.
+  * Turn animations/transitions on and off.
   * animation times adjusted.
-    * option to turn off animations alltogether coming shortly.
   * More details provided for when events start/end/ended **(see Jan 20th notes).**
   * Sorting animations for month/week/day view events.
   * Dayview header details how many entries are starting/ending on that day and the timeframes of first - last entry.
@@ -53,7 +53,7 @@ I've implemented several new features to improve the user experience but overall
   * Move all events from one category to another
   * Single page. No page refreshes, no load times.
   * Aggressive memory handling.
-    * At MAX there will be 4 active event listeners.
+  * At MAX there will be 4 active event listeners.
   * Statistics page coming soon.
   
 * **Lighthouse**
@@ -110,12 +110,13 @@ Starts the webpack development server on `localhost:3000`.
   * header datepicker [screenshot](https://ibb.co/qNXBXJ2)
   * sidebar datepicker [screenshot](https://ibb.co/nMNpjmf)
   * form datepicker [screenshot](https://ibb.co/kqTH6rQ)
-* Add date search component [screenshot](https://ibb.co/ZMQbjgG)
+* Added date search component [screenshot](https://ibb.co/ZMQbjgG)
 * New category options (turn all others off/on) || edit [screenshot](https://ibb.co/NWrkmww)
-* Add dynamic form drag
+* Added dynamic form drag
   * shrinks and grows if dragged away/into corners
   * [screenshot](https://ibb.co/PghdtkS)
 * All modals are now dynamic (mobile support)
   * Will open to left if no space on right of target & viceversa
   * Will open above if no space below target & viceversa
   * [screenshot](https://ibb.co/Ln75k7W)
+* Added switch to turn animations/transitions on and off in settings

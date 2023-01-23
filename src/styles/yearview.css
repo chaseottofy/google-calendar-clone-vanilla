@@ -176,28 +176,33 @@
 
   .calendar__yearview {
     padding: 16px 2px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-template-rows: repeat(auto-fit, minmax(272px, 1fr));
-  }
-
-  .yv-monthcell {
-    max-width: 290px;
-  }
-
-  .yv-monthcell__header {
-    max-width: 290px;
-  }
-
-  .yv-monthcell__header--rowone {
-    padding-left: 11px;
-  }
-
-  .yv-monthcell__header--weekdays,
-  .yv-monthcell__body {
-    max-width: 278px;
   }
 
   .yv-monthcell__body {
     padding-bottom: 6px;
   }
 }
+
+/*
+  .calendar__yearview {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  }
+  .yv-monthcell {
+    max-width: 290px;
+  }
+  
+  .yv-monthcell__header {
+    max-width: 290px;
+  }
+  
+  .yv-monthcell__header--rowone {
+    padding-left: 11px;
+  }
+  
+  .yv-monthcell__header--weekdays,
+  .yv-monthcell__body {
+    max-width: 278px;
+  }
+*/

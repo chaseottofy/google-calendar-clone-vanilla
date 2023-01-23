@@ -172,30 +172,35 @@ export default function renderViews(context, datepickerContext, store) {
    */
   let tm = 250; // define timeout out of scope so that it can be 
   function handleTransition(view, keyframeDirection, callback) {
-    const removeslide = (dir) => {
-      dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
-    }
-
-    if (!view.classList.contains("weekview--header")) {
-      viewsContainer.style.overflowX = "hidden";
-      setTimeout(() => {
-        viewsContainer.style.overflowX = "auto";
-      }, 200);
-    }
-
-    removeslide(keyframeDirection)
-    const slide = `transition--${keyframeDirection}`
-    if (view.classList.contains(slide)) {
-      // prevent transition from firing too often
+    if (!store.getAnimationStatus()) {
       callback()
-      tm += 250
+      return;
     } else {
-      view.classList.add(slide)
-      setTimeout(() => {
-        view.classList.remove(slide)
-      }, tm)
-      callback()
-      tm = 250;
+      const removeslide = (dir) => {
+        dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
+      }
+
+      if (!view.classList.contains("weekview--header")) {
+        viewsContainer.style.overflowX = "hidden";
+        setTimeout(() => {
+          viewsContainer.style.overflowX = "auto";
+        }, 200);
+      }
+
+      removeslide(keyframeDirection)
+      const slide = `transition--${keyframeDirection}`
+      if (view.classList.contains(slide)) {
+        // prevent transition from firing too often
+        callback()
+        tm += 250
+      } else {
+        view.classList.add(slide)
+        setTimeout(() => {
+          view.classList.remove(slide)
+        }, tm)
+        callback()
+        tm = 250;
+      }
     }
   }
 
@@ -286,17 +291,17 @@ export default function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), 
+          document.querySelector(".dayview--header-day__number"),
           "right",
           getPreviousDay
         );
         break;
       case "week":
         handleTransition(
-          document.querySelector(".weekview--header"), 
-          "right", 
+          document.querySelector(".weekview--header"),
+          "right",
           getPreviousWeek
-          );
+        );
         break;
       case "month":
         handleTransition(monthwrapper, "right", getPreviousMonth)
@@ -313,7 +318,7 @@ export default function renderViews(context, datepickerContext, store) {
     switch (context.getComponent()) {
       case "day":
         handleTransition(
-          document.querySelector(".dayview--header-day__number"), 
+          document.querySelector(".dayview--header-day__number"),
           "left",
           getNextDay
         );
@@ -321,9 +326,9 @@ export default function renderViews(context, datepickerContext, store) {
       case "week":
         handleTransition(
           document.querySelector(".weekview--header"),
-          "left", 
+          "left",
           getNextWeek
-          );
+        );
         break;
       case "month":
         handleTransition(monthwrapper, "left", getNextMonth)
@@ -346,7 +351,7 @@ export default function renderViews(context, datepickerContext, store) {
     const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
     datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
     setDatepicker(context, store, datepickerContext, "header")
-    
+
   }
 
   function setOptionStyle(option) {
@@ -619,6 +624,7 @@ export default function renderViews(context, datepickerContext, store) {
     sbToggleForm.onclick = handleForm;
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
+    store.getAnimationStatus() === true ? appBody.classList.remove("disable-transitions") : appBody.classList.add("disable-transitions");
   }
   appinit();
 }

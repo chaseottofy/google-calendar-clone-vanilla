@@ -60,7 +60,7 @@
   height: 54px;
   justify-content: space-between;
   padding: 0 12px;
-  background: var(--darkgrey4);
+  background: var(--black2);
 }
 
 .sub-menu--icons {
@@ -76,7 +76,7 @@
   width: 36px;
   border-radius: 18px;
   cursor: pointer;
-  background: var(--darkgrey4);
+  background: var(--black2);
 }
 
 .close-sub-menu:hover {
@@ -142,7 +142,8 @@
 
 .sub-menu-content {
   display: flex;
-  height: calc(100% + 80px);
+  height: calc(100% - 56px);
+  background: var(--black000);
   flex-direction: column;
   padding: 8px 8px 0 10px;
   overflow-x: hidden;
@@ -217,6 +218,7 @@
   cursor: pointer;
   justify-content: space-between;
   padding: 0 8px;
+  background: var(--black2);
 }
 
 .sm-json-btn:last-child {
@@ -224,7 +226,7 @@
 }
 
 .sm-json-btn:hover {
-  background: var(--black2);
+  filter: brightness(1.2);
 }
 
 .sm-download-json-icon,
@@ -484,7 +486,8 @@
   padding: 0 18px 0 12px;
 }
 
-.smia-set-status-title {
+.smia-set-status-title,
+.smdt-title {
   line-height: 48px;
   font-size: 15px;
   font-weight: 500;
@@ -493,14 +496,16 @@
   pointer-events:none;
 }
 
-.smia-disable-shortcuts__btn {
+.smia-disable-shortcuts__btn,
+.smdt-toggle {
   position: relative;
   height: 32px;
   width: 64px;
   border-radius: 16px;
 }
 
-.smia-disable-shortcuts__btn label {
+.smia-disable-shortcuts__btn label,
+.smdt-toggle label {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -509,12 +514,14 @@
   cursor: pointer;
 }
 
-.smia-toggle-shortcuts-checkbox {
+.smia-toggle-shortcuts-checkbox,
+.smdt-toggle-checkbox {
   position:absolute;
   display:none;
 }
 
-.smia-slider {
+.smia-slider,
+.smdt-slider {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -522,11 +529,13 @@
   transition: 0.3s;
 }
 
-.smia-toggle-shortcuts-checkbox:checked ~ .smia-slider {
+.smia-toggle-shortcuts-checkbox:checked ~ .smia-slider,
+.smdt-toggle-checkbox:checked ~ .smdt-slider {
   background: var(--primary1);
 }
 
-.smia-slider::before {
+.smia-slider::before,
+.smdt-slider::before {
   content: "";
   position: absolute;
   top: 2px;
@@ -538,8 +547,17 @@
   transition: 0.3s;
 }
 
-.smia-toggle-shortcuts-checkbox:checked ~ .smia-slider::before {
+.smia-toggle-shortcuts-checkbox:checked ~ .smia-slider::before,
+.smdt-toggle-checkbox:checked ~ .smdt-slider::before {
   transform: translateX(28px);
+}
+
+.sbit-last {
+  display:flex;
+  justify-content: center !important;
+  /* margin: 0 auto; */
+  /* align-items: center; */
+  text-align: center !important;
 }
 
 

@@ -149,6 +149,14 @@ html {
   transition: none !important;
 }
 
+.disable-transitions * {
+  -webkit-transition: none !important;
+  transition: none !important;
+  transition-property: none !important;
+  transition-duration: none !important;
+  transition-timing-function: none !important;
+}
+
 .light-mode {
   --primary5: #e9eff6;
   --black000: #E8F0FE;
@@ -220,7 +228,6 @@ html {
   --scrollerThumbBackgroundHover: #505b65;
   --scrollerTrackBackground: var(--black1);
   --box-shadow1:
-    /* rgba(20, 20, 20, 0 .5) 0px 8px 10px 1px; */
     rgba(54, 147, 255, 0.12) 0 10px 14px,
     rgba(0, 0, 0, 0.15) 0 6px 6px;
   --box-shadow3:
@@ -283,7 +290,6 @@ svg {
   user-select: none !important;
   pointer-events: none !important;
 }
-
 
 ::selection {
   background: var(--primary1) !important;

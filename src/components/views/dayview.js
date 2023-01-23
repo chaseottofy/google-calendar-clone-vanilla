@@ -120,8 +120,8 @@ export default function setDayView(context, store, datepickerContext) {
 
       if (start.getDate() === current.getDate()) { startingToday++; }
 
-      if (end.getDate() === current.getDate()) { 
-        endingToday++; 
+      if (end.getDate() === current.getDate()) {
+        endingToday++;
         tempEndCase1 = allboxes[i];
       }
     }
@@ -264,20 +264,24 @@ export default function setDayView(context, store, datepickerContext) {
     document.addEventListener("keydown", closeMpOnEsc)
   }
 
+  function createStackableEntriesOnTop(entr) {
+    
+  }
+
   function createDvTop(entr) {
     const dvtopgrid = document.createElement("div");
     dvtopgrid.classList.add("dv--ontop__grid");
 
-    if (entries.length >= 6) {
+    if (entr.length > 6) {
       const moremessage = document.createElement("div");
       moremessage.classList.add("dv--ontop__more");
       moremessage.textContent = `${entr.length} more...`
       dvOnTop.appendChild(moremessage);
-      // dvtopgrid.appendChild(moremessage);
       const opdm = () => openDvMore(entr)
       moremessage.onclick = opdm
       return;
     } else {
+
     }
 
   }
@@ -484,14 +488,11 @@ export default function setDayView(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup)
   }
 
-
   function handleDayviewClose() {
     document.querySelector(".dayview-temp-box")?.remove()
   }
 
-
   function openDayviewForm(box, coords, category, dates, type) {
-    // store.setFormResetHandle("week", handleWeekviewFormClose);
     store.setFormResetHandle("day", handleDayviewClose);
 
     const openForm = store.getRenderFormCallback();
@@ -523,7 +524,6 @@ export default function setDayView(context, store, datepickerContext) {
     fullFormConfig.getConfig(setup.getSetup());
   }
 
-
   /** CREATE BOX ON DRAG */
   /** Drag down empty column to create box */
   function createBoxOnDragDay(e) {
@@ -536,7 +536,6 @@ export default function setDayView(context, store, datepickerContext) {
 
     // boxheader is static - create from template
     const boxheader = createTempBoxHeader("day")
-
     const boxcontent = document.createElement('div');
     const boxtime = document.createElement('span');
     const boxtimeend = document.createElement('span');
@@ -553,8 +552,11 @@ export default function setDayView(context, store, datepickerContext) {
 
     let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 }
     let [starthour, startmin, endhour, endmin] = startEndDefault(y);
+    let movedY = 0;
 
     function mousemove(e) {
+      // console.log(e)
+      movedY += e.movementY;
       let newHeight = Math.round(((e.pageY + scrolled) - y - headerOffset) / 12.5) * 12.5
       if (newHeight <= 12.5) { newHeight = 12.5; }
       if ((newHeight + y) > 1188) { newHeight = 1187.5 - y; }
@@ -577,6 +579,30 @@ export default function setDayView(context, store, datepickerContext) {
     e.target.appendChild(box)
 
     function mouseup() {
+      if (movedY <= 20) {
+        if (+coords.y >= 92) {
+          coords.y = 92;
+          coords.e = 95;
+          coords.h = 3;
+          box.style.height = "37.5px";
+          box.style.top = "1150px";
+          [starthour, startmin] = [23, 0];
+          [endhour, endmin] = [23, 45];
+          boxtime.textContent = `${formatTime(starthour, startmin)} – `
+          boxtimeend.textContent = `${formatTime(endhour, endmin)}`
+        } else {
+          coords.y = starthour * 4;
+          coords.e = +coords.y + 4;
+          coords.h = 4;
+          box.style.height = "50px";
+          box.style.top = `${+coords.y * 12.5}px`;
+          [starthour, startmin] = [starthour, 0];
+          [endhour, endmin] = [starthour + 1, 0];
+          boxtime.textContent = `${formatTime(starthour, startmin)} – `
+          boxtimeend.textContent = `${formatTime(endhour, endmin)}`
+        }
+      }
+
       const datesData = getTempDates(
         new Date(context.getDate()),
         [starthour, endhour],
@@ -636,7 +662,6 @@ export default function setDayView(context, store, datepickerContext) {
         } else {
           fc = dvMainGrid.children[0];
         }
-
         dvGrid.scrollTo({
           top: parseInt(fc.style.top),
           behavior: "instant",

@@ -67,6 +67,12 @@ const colors = locales.colors
   "getShortcutsStatus",
   ***************************************
 
+  ***************************************
+  // ANIMATION MANAGEMENT
+  "setAnimationStatus",
+  "getAnimationStatus"
+  ***************************************
+
 
   ***************************************
   // POPUP/TOAST/NOTIFICATION MANAGEMENT
@@ -180,6 +186,7 @@ class Store {
 
     this.keyboardShortcuts = defautlKeyboardShortcuts;
     this.keyboardShortcutsStatus = true;
+    this.animationStatus = true;
   }
 
   setStoreForTesting(store) {
@@ -215,6 +222,10 @@ class Store {
     return JSON.parse(localStorage.getItem("keyboardShortcutsStatus"));
   }
 
+  static getAnimationStatus() {
+    return JSON.parse(localStorage.getItem("animationStatus"));
+  }
+
   // *******************
   static setStore(store) {
     localStorage.setItem("store", JSON.stringify(store));
@@ -230,6 +241,10 @@ class Store {
 
   static setShortcutsStatus(status) {
     localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status))
+  }
+
+  static setAnimationStatus(status) {
+    localStorage.setItem("animationStatus", JSON.stringify(status))
   }
   /* ************************* */
 
@@ -759,6 +774,20 @@ class Store {
   getShortcutsStatus() {
     const status = Store.getShortcutsStatus();
     return status !== null ? status : true;
+  }
+  /* ***************************** */
+
+  /* ***************************** */
+  /*  ANIMATION MANAGEMENT */
+
+  getAnimationStatus() {
+    const status = Store.getAnimationStatus();
+    return status !== null ? status : true;
+  }
+
+  setAnimationStatus(status) {
+    this.animationStatus = status;
+    Store.setAnimationStatus(status);
   }
   /* ***************************** */
 
