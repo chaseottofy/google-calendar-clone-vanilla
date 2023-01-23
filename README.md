@@ -35,30 +35,33 @@ I've implemented several new features to improve the user experience but overall
     * yearpicker
     * days with events are highlighted
     * current week highlighted in weekview
-  * sidebar converts to fixed positioning under 840px and main content inherits the full page width.
+  * Sidebar converts to fixed positioning under 840px and main content inherits the full page width.
   * animation times adjusted.
     * option to turn off animations alltogether coming shortly.
-  * more details provided for when events start/end/ended **(see Jan 20th notes).**
+  * More details provided for when events start/end/ended **(see Jan 20th notes).**
   * Sorting animations for month/week/day view events.
   * Dayview header details how many entries are starting/ending on that day and the timeframes of first - last entry.
-  * when yearview is opened page will automatically scroll to current selected month if not in view.
-  * when dayview is opened page will automatically scroll to the top of first task if it is not in view.
-  * throttling optimized to always ensure content is visible during any keydown action.
+  * Yearview will automatically scroll to current selected month if not in view.
+  * Yearview days with events are highlighted.
+  * Dayview will automatically scroll to the top of first event if it is not in view.
+  * Throttling optimized to always ensure content is visible during any keydown action.
   * **Download/Upload:**
     * all calendar events/categories/settings can be downloaded & uploaded.
-  * Year view days with events are highlighted.
-  * monthview cells are highlighted when dragged over.
+  * Monthview cells are highlighted when dragged over.
   * resize bar for week & day events.
   * 42 color options for categories.
   * Move all events from one category to another
   * Single page. No page refreshes, no load times.
-  * At MAX there will be 4 active event listeners. Aggressive memory handling.
+  * At MAX there will be 4 active event listeners.
+  * Aggressive memory handling.
   * Statistics page coming soon.
-  * first contentful paint : 200ms.
-  * time to interactive : 200ms.
-  * speed index : 200ms.
-  * total blocking time : 0 seconds (no database / third party resources).
-  * lighthouse : 100% (performance, accessibility, best practices, seo).
+  
+* **Lighthouse**
+  * First contentful paint : 200ms.
+  * Time to interactive : 200ms.
+  * Speed index : 200ms.
+  * Total blocking time : 0 seconds (no database / third party resources).
+  * Score : 100% (performance, accessibility, best practices, seo).
 
 ## Cloning this repo
 
