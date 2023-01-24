@@ -182,12 +182,12 @@ export default function setYearView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetYearview);
     const currentmonth = document?.querySelector(".cell-current")
     // should always be true
-    const behavior = store.getAnimationStatus() ? "smooth" : "auto"
+    // const behavior = store.getAnimationStatus() ? "smooth" : "auto"
     if (currentmonth) {
       setTimeout(() => {
         yearviewGrid.scrollTo({
           top: parseInt(currentmonth.offsetTop) - 100,
-          behavior: behavior
+          behavior: "instant",
         });
       }, 4)
     }
