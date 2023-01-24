@@ -2,7 +2,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-const BundelAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundelAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// "analyze": "webpack --profile --json > stats.json"
 const TerserPlugin = require("terser-webpack-plugin");
 const path = require('path');
 
@@ -43,7 +44,7 @@ module.exports = {
   },
 
   plugins: [
-    new BundelAnalyzerPlugin(),
+    // new BundelAnalyzerPlugin(),
     new HtmlWebpackPlugin({
       title: "output management",
       template: "./src/index.html",
