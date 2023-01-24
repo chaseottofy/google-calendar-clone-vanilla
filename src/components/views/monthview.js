@@ -740,8 +740,7 @@ export default function setMonthView(context, store, datepickerContext) {
 
     const setup = new FormSetup();
     setup.setSubmission("edit", id, entry.title, entry.description);
-    setup.setCategory(entry.category, color, color);
-    setup.setPosition(x, [x, y], parseInt(monthWrapper.offsetTop) - 16);
+    setup.setCategory(entry.category, color);
     setup.setDates(getFormDateObject(start, entry.end));
 
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
@@ -794,12 +793,12 @@ export default function setMonthView(context, store, datepickerContext) {
 
         // get first active category & create temp box with its color
         const cell = cellWrapper.parentElement;
+        const rect = cell.getBoundingClientRect();
         const [start, end] = generateTempStartEnd(
           getDateFromAttribute(cell, "data-mv-date", "month")
         );
         const [tempctg, color] = store.getFirstActiveCategoryKeyPair();
         const offsetcolor = hextorgba(color, 0.5);
-        const [x, y] = getCoordinatesFromCell(cell);
 
         configNewBoxInsertion(cellWrapper, cell, tempctg, offsetcolor)
         store.setFormResetHandle("month", handleMonthviewFormClose);
@@ -807,13 +806,18 @@ export default function setMonthView(context, store, datepickerContext) {
         const setup = new FormSetup();
 
         setup.setSubmission("create", null, null, null);
-        setup.setCategory(tempctg, color, color);
-        setup.setPosition(x, [x, y], parseInt(monthWrapper.offsetTop) - 16)
+        setup.setCategory(tempctg, color);
         setup.setDates(getFormDateObject(start, end))
 
         openForm()
         fullFormConfig.setFormDatepickerDate(context, datepickerContext, start)
         fullFormConfig.getConfig(setup.getSetup())
+        fullFormConfig.setFormStyle(
+          parseInt(rect.right), 
+          parseInt(rect.top),
+          false,
+          null
+        );
       }
     }
   }

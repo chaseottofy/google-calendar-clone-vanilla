@@ -32,7 +32,6 @@ import handleOverlap, {
   createTempBoxHeader,
   startEndDefault,
   getOriginalBoxObject,
-  resetOriginalBox,
 } from "../../utilities/dragutils"
 
 import { getClosest, placePopup } from "../../utilities/helpers"
@@ -316,23 +315,16 @@ export default function setWeekView(context, store, datepickerContext) {
     setup.setSubmission(submitType, id, title, description);
     if (submitType === "create") { box.style.opacity = 0.9; }
 
-    const [categoryName, color, offsetColor] = category;
+    const [categoryName, color] = category;
     setup.setCategory(
       categoryName,
       color,
-      offsetColor,
-    );
-
-    setup.setPosition(
-      +coords.x,
-      [+coords.x, 3],
-      parseInt((coords.y * 12.5) - weekviewGrid.scrollTop)
     );
 
     const [start, end] = dates
     setup.setDates(getFormDateObject(start, end));
-
     openForm();
+
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
     fullFormConfig.getConfig(setup.getSetup());
   }
@@ -356,8 +348,7 @@ export default function setWeekView(context, store, datepickerContext) {
     store.setFormResetHandle("week", handleCloseCallback);
     const setup = new FormSetup();
     setup.setSubmission("edit", id, entry.title, entry.description);
-    setup.setCategory(entry.category, color, color);
-    setup.setPosition(x, [x, y], y);
+    setup.setCategory(entry.category, color);
     setup.setDates(getFormDateObject(start, entry.end));
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
 
@@ -490,8 +481,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
         const setup = new FormSetup();
         setup.setSubmission("edit", id, entry.title, entry.description);
-        setup.setCategory(entry.category, color, color);
-        setup.setPosition(x, [x, y], y);
+        setup.setCategory(entry.category, color);
         setup.setDates(getFormDateObject(start, entry.end));
         fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
 
@@ -691,7 +681,7 @@ export default function setWeekView(context, store, datepickerContext) {
       openWeekviewForm(
         box,
         coords,
-        [tempcategory, color, color],
+        [tempcategory, color],
         datesData,
         ["create", null, null, null],
       );

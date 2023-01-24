@@ -2,7 +2,6 @@ export default class FormSetup {
   constructor() {
     this.submission;
     this.category;
-    this.position;
     this.dates;
   }
 
@@ -28,25 +27,10 @@ export default class FormSetup {
    * @param {string} color (store category color)
    * @param {string} offsetColor (category color rgba 0.5)
    */
-  setCategory(name, color, offsetColor) {
+  setCategory(name, color) {
     this.category = {
       name: name,
       color: color,
-      offsetColor: offsetColor,
-    }
-  }
-
-  /**
-   * 
-   * @param {number} cell 
-   * @param {[number, number]} coordinates (x, y) of grid
-   * @param {number} offsetTop (e.pageY - scrollTop of grid)
-   */
-  setPosition(cell, coordinates, offsetTop) {
-    this.position = {
-      cell: cell,
-      coordinates: coordinates,
-      offsetTop: offsetTop,
     }
   }
 
@@ -65,7 +49,6 @@ export default class FormSetup {
     return {
       submission: this.submission,
       category: this.category,
-      position: this.position,
       dates: this.dates,
     }
   }

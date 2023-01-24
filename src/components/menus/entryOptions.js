@@ -7,7 +7,6 @@ import { formatStartEndTimes } from "../../utilities/timeutils";
 import {
   formatEntryOptionsDate,
   compareDates,
-  formatDuration
 } from "../../utilities/dateutils";
 
 const entryOptionsOverlay = document.querySelector(".entry__options--overlay");
@@ -73,7 +72,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
       if (resetCurrentView !== null) {
         resetCurrentView()
       }
-
     }
 
     deletepopupCancel.onclick = removeDeletePopup

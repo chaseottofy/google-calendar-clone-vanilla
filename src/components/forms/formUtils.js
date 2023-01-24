@@ -13,29 +13,34 @@ class FormConfig {
     this.formCategorySelect = document.querySelector(".form--body__category-modal--wrapper-selection");
     this.formCategoryWrapperIcon = document.querySelector(".form--body__category-modal--wrapper__color");
     this.formCategoryTitle = document.querySelector(".form--body__category-modal--wrapper__title");
-    // this.formCategoryIcon = form--body__category-icon
     this.formCatgoryIcon = document.querySelector(".form--body__category-icon");
   }
 
-  setFormStyle([...args]) {
-    const [top, left, bottom, right, margin, mWidth] = args;
-    this.form.style.top = `${top}px`;
-    this.form.style.left = `${left}px`;
-    this.form.style.bottom = `${bottom}px`;
-    this.form.style.right = `${right}px`;
-    this.form.style.margin = `${typeof margin === "string" ? margin : margin + "px"}`;
-    this.form.style.maxWidth = `${mWidth}px`;
-
-    if (mWidth < 450) {
-      this.formBody.classList.add("form-body-xs");
-      this.formTitleDescription.forEach((el) => {
-        el.classList.add("form-body-single-xs");
-      });
-      this.formStartEndCtg.forEach((el) => {
-        el.classList.add("form-body-double-xs");
-        el.firstElementChild.classList.add("hide-form-body-icon");
-      });
+  /**
+   * 
+   * @param {number} eX element left
+   * @param {number} eY element top
+   * @param {boolean} shouldCenter (optional) should the form be centered to the element
+   * @param {number} centerOffset (optional) offset from the center of the element
+   */
+  setFormStyle(eX, eY, shouldCenter, centerOffset) {
+    if (!shouldCenter) {
+      shouldCenter = false;
     }
+    if (!centerOffset) {
+      centerOffset = null;
+    }
+    let [x, y] = placePopup(
+      this.form.offsetWidth,
+      this.form.offsetHeight,
+      [eX, eY],
+      [window.innerWidth, window.innerHeight],
+      shouldCenter,
+      centerOffset
+    )
+    this.form.style.left = `${x}px`;
+    this.form.style.top = `${y}px`;
+    this.form.style.margin = "0";
   }
 
   setFormSubmitType(type, id) {
@@ -44,24 +49,6 @@ class FormConfig {
       "data-form-entry-id",
       id === null ? id = "" : id
     );
-  }
-
-  configFormPosition(cell, coordinates, top) {
-    // console.log(coordinates)
-    // console.log(coordinates)
-    // const [x, y] = coordinates;
-    // const cellWidth = cell.offsetWidth;
-    // const cellHeight = cell.offsetHeight;
-    // const cellTop = cell.offsetTop;
-    // const cellLeft = cell.offsetLeft;
-    // const windowWidth = window.innerWidth;
-
-    // let setTop = top + this.headerOffset.offsetHeight;
-    // let setMaxWidth = 380;
-    // let [setLeft, setBottom, setRight, setMargin] = [0, 0, 0, 0];
-    // console.log(cell, coordinates, top)
-
-    // this.setFormStyle([setTop, setLeft, setBottom, setRight, setMargin, setMaxWidth]);
   }
 
   configFormTitleDescriptionInput(title, description) {
@@ -111,7 +98,6 @@ class FormConfig {
     datepickerContext.setDateSelected(start.getDate());
   }
 
-
   /**
    * 
    * @param {object} dates 
@@ -137,7 +123,7 @@ class FormConfig {
   }
 
   configFormCategoryInput(categoryData) {
-    const [title, color, offsetColor] = categoryData;
+    const [title, color] = categoryData;
     this.formCategoryWrapper.setAttribute("data-form-category", title)
     this.formCategorySelect.style.backgroundColor = color;
     this.formCategoryWrapperIcon.style.backgroundColor = color;
@@ -154,14 +140,7 @@ class FormConfig {
     this.configFormCategoryInput([
       data.category.name,
       data.category.color,
-      data.category.offsetColor
     ]);
-
-    this.configFormPosition(
-      data.position.cell,
-      data.position.coordinates,
-      data.position.offsetTop
-    );
 
     this.configFormDateInputs(
       data.dates.object

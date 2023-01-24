@@ -294,8 +294,7 @@ export default function setDayView(context, store, datepickerContext) {
       : store.setFormResetHandle("day", setResetDv);
     const setup = new FormSetup();
     setup.setSubmission("edit", id, entry.title, entry.description);
-    setup.setCategory(entry.category, color, color);
-    setup.setPosition(x, [x, y], y);
+    setup.setCategory(entry.category, color);
     setup.setDates(getFormDateObject(start, entry.end));
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
 
@@ -495,8 +494,7 @@ export default function setDayView(context, store, datepickerContext) {
         store.setFormResetHandle("day", setResetDv);
         const setup = new FormSetup();
         setup.setSubmission("edit", id, entry.title, entry.description);
-        setup.setCategory(entry.category, color, color);
-        setup.setPosition(x, [x, y], y);
+        setup.setCategory(entry.category, color);
         setup.setDates(getFormDateObject(start, entry.end));
         fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
 
@@ -555,7 +553,7 @@ export default function setDayView(context, store, datepickerContext) {
     document.querySelector(".dayview-temp-box")?.remove();
   }
 
-  function openDayviewForm(box, coords, category, dates, type) {
+  function openDayviewForm(box, category, dates, type) {
     store.setFormResetHandle("day", handleDayviewClose);
 
     const openForm = store.getRenderFormCallback();
@@ -567,10 +565,8 @@ export default function setDayView(context, store, datepickerContext) {
       box.style.opacity = 0.9;
     }
 
-    const [categoryName, color, offsetColor] = category;
-    setup.setCategory(categoryName, color, offsetColor);
-
-    setup.setPosition(1, coords, parseInt(box.style.top));
+    const [categoryName, color] = category;
+    setup.setCategory(categoryName, color);
 
     const [start, end] = dates;
     setup.setDates(getFormDateObject(start, end));
@@ -674,8 +670,7 @@ export default function setDayView(context, store, datepickerContext) {
 
       openDayviewForm(
         box,
-        [e.clientX, e.clientY],
-        [tempcategory, color, color],
+        [tempcategory, color],
         datesData,
         ["create", null, null, null]
       );
