@@ -27,7 +27,7 @@
   overflow: hidden;
   position: absolute;
   right: 2%;
-  top: 52px;
+  top: 36px;
   transition: all .2s ease-in-out;
   width: auto;
   z-index: 1041
@@ -480,7 +480,8 @@
   border-radius: 16px;
   height: 32px;
   position: relative;
-  width: 64px
+  width: 64px;
+  transform: scale(0.9);
 }
 
 .smdt-toggle label,
@@ -644,10 +645,6 @@
     padding: 8px 4px 0
   }
 
-  .sidebar-sub-menu {
-    top: 64px
-  }
-
   .sb-sub-popup-subtitle {
     font-size: 14px
   }
@@ -663,11 +660,6 @@
 }
 
 @media screen and (max-width:450px) {
-  /* .sub-menu--item__title {
-    font-size: 14px;
-    line-height: 16px
-  } */
-
   .sub-menu--item__description {
     font-size: 12px;
   }
@@ -689,11 +681,5 @@
 
   .sb-sub-popup-subtitle:nth-child(2) {
     padding-bottom: 12px
-  }
-}
-
-@media screen and (max-height:470px) {
-  .sidebar-sub-menu {
-    top: 64px
   }
 }

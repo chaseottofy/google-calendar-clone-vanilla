@@ -61,6 +61,7 @@ export default function setDayView(context, store, datepickerContext) {
   let entries = store.getDayEntries(context.getDate());
   let boxes = new Day(entries.day, entries.allDay);
   let firstY = null;
+  let lastY = null;
 
   function firstLastDates(bxs) {
     let longest = 0;
@@ -669,6 +670,8 @@ export default function setDayView(context, store, datepickerContext) {
         [startmin, endmin]
       );
 
+      lastY = +coords.y;
+
       openDayviewForm(
         box,
         [e.clientX, e.clientY],
@@ -721,7 +724,7 @@ export default function setDayView(context, store, datepickerContext) {
 
   function handleScrollToOnInit() {
     if (firstY !== null) {
-      const settop = +firstY * 12.5;
+      let settop = +firstY * 12.5;
       setTimeout(()=> {
         dvGrid.scrollTo({
           top: settop,
@@ -736,7 +739,6 @@ export default function setDayView(context, store, datepickerContext) {
           behavior: "instant",
         })
       }, 4)
-      // console.log(hour);
     }
   }
 

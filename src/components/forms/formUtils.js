@@ -13,6 +13,8 @@ class FormConfig {
     this.formCategorySelect = document.querySelector(".form--body__category-modal--wrapper-selection");
     this.formCategoryWrapperIcon = document.querySelector(".form--body__category-modal--wrapper__color");
     this.formCategoryTitle = document.querySelector(".form--body__category-modal--wrapper__title");
+    // this.formCategoryIcon = form--body__category-icon
+    this.formCatgoryIcon = document.querySelector(".form--body__category-icon");
   }
 
   setFormStyle([...args]) {
@@ -137,8 +139,9 @@ class FormConfig {
   configFormCategoryInput(categoryData) {
     const [title, color, offsetColor] = categoryData;
     this.formCategoryWrapper.setAttribute("data-form-category", title)
-    this.formCategorySelect.style.backgroundColor = offsetColor;
+    this.formCategorySelect.style.backgroundColor = color;
     this.formCategoryWrapperIcon.style.backgroundColor = color;
+    this.formCatgoryIcon.firstChild.setAttribute("fill", color)
     this.formCategoryTitle.textContent = title;
   }
 

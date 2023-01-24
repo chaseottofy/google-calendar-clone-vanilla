@@ -96,6 +96,8 @@
 
 .rowgroup--cell-active {
   box-shadow: var(--box-shadowbottom);
+  position: relative;
+  z-index: 981;
 }
 .rowgroup--cell-active > * {
   color: var(--taskcolor0) !important;
@@ -142,6 +144,7 @@
 @media screen and (max-width: 840px) {
   .listview__body {
     margin-left: 62px !important;
+    width: calc(100% - 62px) !important;
   }
 }
 

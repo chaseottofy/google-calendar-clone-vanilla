@@ -115,646 +115,6 @@
     </div>
   </header>
 
-  <!-- overlays / used for popup content -->
-  <!-- see readme @overlays -->
-  <aside style="display:none;" class="change-view--overlay toggle-options"></aside>
-  <aside class="resize-overlay hide-resize-overlay" style="background-color:transparent;"></aside>
-  <aside class="sidebar-sub-menu__overlay hide-sidebar-sub-menu"></aside>
-  <aside class="toast-overlay hide-toast-overlay"></aside>
-  <aside class="category__deletion-overlay hide-category-deletion"></aside>
-  <!-- <aside class="category-options__overlay hide-co"></aside> -->
-  <aside class="form-overlay hide-form-overlay"></aside>
-  <aside class="entry__options--overlay entry__options--hidden"></aside>
-  <aside class="datepicker-overlay hide-datepicker-overlay"></aside>
-  <aside class="sb__info-popup-overlay hide-sb-info-popup"></aside>
-  <aside class="go-to-date-overlay hide-gotodate"></aside>
-  <!-- options for header select element (pick view) -->
-  <aside class="change-view--wrapper toggle-options">
-    <div class="change-view--options">
-      <div class="change-view--option">
-        <div class="view-option" data-view-option="day" data-view-key="D">Day</div>
-        <div class="view-option" data-view-option="week" data-view-key="W">Week</div>
-        <div class="view-option" data-view-option="month" data-view-key="M">Month</div>
-        <div class="view-option" data-view-option="year" data-view-key="Y">Year</div>
-        <div class="view-option" data-view-option="list" data-view-key="L">List</div>
-      </div>
-    </div>
-  </aside>
-  <!-- floating toggle form button visible when sidebar is closed -->
-  <aside class="toggle-form">
-    <span class="toggle-form-btn" role="button" aria-label="open form">
-      <svg width="36" height="36" viewBox="0 0 36 36">
-        <path fill="#34A853" d="M16 16v14h4V20z"></path>
-        <path fill="#4285F4" d="M30 16H20l-4 4h14z"></path>
-        <path fill="#FBBC05" d="M6 16v4h10l4-4z"></path>
-        <path fill="#EA4335" d="M20 16V6h-4v14z"></path>
-        <path fill="none" d="M0 0h36v36H0z"></path>
-      </svg>
-    </span>
-  </aside>
-
-
-  <aside class="category__form-overlay hide-ctg-form"></aside>
-  <aside class="category__form hide-ctg-form">
-    <div class="category__form--body">
-      <div class="ctg-input--err hide-ctg-err"></div>
-
-      <input type="text" class="category__form-input" placeholder="Category Name" maxlength="20" minlength="1" required>
-      <div class="color__picker">
-        <div class="color-picker__header">
-          <div class="color-picker__title">color</div>
-        </div>
-
-        <div class="color-picker__options">
-
-        </div>
-      </div>
-    </div>
-
-    <div class="category__form--footer">
-      <button class="category__form--cancel">Cancel</button>
-      <button class="category__form--submit">Save</button>
-    </div>
-  </aside>
-
-
-  <aside class="collapse-view">
-    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"
-      class="cv-svg-off">
-      <path d="M0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0z" fill="none" />
-      <path
-        d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" />
-    </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"
-      class="cv-svg-on hide-cbt">
-      <path d="M0 0h24v24H0z" fill="none" />
-      <path
-        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
-    </svg>
-  </aside>
-
-  <!-- search for date popup -->
-  <aside class="go-to-date hide-gotodate">
-    <div class="go-to__header">
-      <span class="go-to-title">Go to date</span>
-      <div class="go-to-subtitle">
-        <span class="gts-format">month day year</span>
-        <span class="gts-mid">or</span>
-        <span class="gts-format">MM/DD/YYYY</span>
-      </div>
-    </div>
-    <div class="go-to__body">
-      <input type="text" class="go-to-input" spellcheck="false" required>
-      <div class="go-to-err" style="display:none;">Invalid Date</div>
-    </div>
-    <div class="go-to__footer">
-      <div class="cancel-go-to">Cancel</div>
-      <div class="submit-go-to">Go</div>
-    </div>
-  </aside>
-  <!-- settings -->
-  <aside class="sidebar-sub-menu hide-sidebar-sub-menu">
-    <div class="sub-menu__header">
-
-      <div class="sub-menu--title">
-        Settings & Data
-      </div>
-
-      <div class="sub-menu--icons">
-        <div class="toggle-animations-icon__sm" data-tooltip="Animations Enabled">
-          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
-            width="24px" fill="var(--primary2)" class="tai-on">
-            <rect fill="none" height="24" width="24" />
-            <path
-              d="M2.88,7.88l1.54,1.54C4.15,10.23,4,11.1,4,12c0,4.41,3.59,8,8,8s8-3.59,8-8s-3.59-8-8-8c-0.9,0-1.77,0.15-2.58,0.42 L7.89,2.89C9.15,2.32,10.54,2,12,2c5.52,0,10,4.48,10,10s-4.48,10-10,10S2,17.52,2,12C2,10.53,2.32,9.14,2.88,7.88z M7,5.5 C7,6.33,6.33,7,5.5,7S4,6.33,4,5.5S4.67,4,5.5,4S7,4.67,7,5.5z" />
-          </svg>
-
-          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
-            width="24px" fill="var(--red1)" class="tai-off hide-tai">
-            <g>
-              <rect fill="none" height="24" width="24" />
-              <path
-                d="M22,12c0,5.52-4.48,10-10,10S2,17.52,2,12c0-1.19,0.22-2.32,0.6-3.38L4.48,9.3C4.17,10.14,4,11.05,4,12c0,4.41,3.59,8,8,8 s8-3.59,8-8s-3.59-8-8-8c-0.95,0-1.85,0.17-2.69,0.48L8.63,2.59C9.69,2.22,10.82,2,12,2C17.52,2,22,6.48,22,12z M5.5,4 C4.67,4,4,4.67,4,5.5S4.67,7,5.5,7S7,6.33,7,5.5S6.33,4,5.5,4z M11,16V8H9v8H11z M15,16V8h-2v8H15z" />
-            </g>
-          </svg>
-        </div>
-        <div class="keyboard-disabled-sm" data-tooltip="Keyboard Shortcuts Disabled">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--red1)">
-            <path
-              d="M4 19q-.825 0-1.412-.587Q2 17.825 2 17V7q0-.825.588-1.412Q3.175 5 4 5h16q.825 0 1.413.588Q22 6.175 22 7v10q0 .825-.587 1.413Q20.825 19 20 19Zm0-2h16V7H4v10Zm4-1h8v-2H8Zm-3-3h2v-2H5Zm3 0h2v-2H8Zm3 0h2v-2h-2Zm3 0h2v-2h-2Zm3 0h2v-2h-2ZM5 10h2V8H5Zm3 0h2V8H8Zm3 0h2V8h-2Zm3 0h2V8h-2Zm3 0h2V8h-2ZM4 17V7v10Z" />
-          </svg>
-        </div>
-
-        <div class="close-sub-menu">
-          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white2)">
-            <path
-              d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
-          </svg>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="sub-menu__body">
-
-      <div class="sub-menu-content">
-
-        <!-- row one -->
-        <div class="sub-menu--item">
-          <div class="sub-menu--item__title">
-            Calendar Data (JSON)
-            <!-- <br> -->
-            <!-- <span></span> -->
-            <hr>
-            <strong>
-              (Download & Upload)
-            </strong>
-          </div>
-          <!-- .sub-menu--item__description >strong -->
-          <div class="sub-menu--item__description sbmid-row-one">
-            Uploading data will overwrite existing data!
-            <br>
-            Please ensure you have a backup of your data
-            before uploading.
-            <br>
-            Uploading unsupported data will not cause any overwrites.
-          </div>
-
-          <div class="sub-menu--item__actions">
-            <div class="sm-download-json">
-              <div class="sm-json-btn down-json">
-                <div class="sm-download-json-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)">
-                    <path
-                      d="M6 20q-.825 0-1.412-.587Q4 18.825 4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413Q18.825 20 18 20Zm6-4-5-5 1.4-1.45 2.6 2.6V4h2v8.15l2.6-2.6L17 11Z" />
-                  </svg>
-                </div>
-                <div class="sm-download-json-title">
-                  download.json
-                </div>
-              </div>
-              <div class="sm-json-btn upload-json">
-                <div class="sm-upload-json-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)">
-                    <path
-                      d="M6 20q-.825 0-1.412-.587Q4 18.825 4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413Q18.825 20 18 20Zm5-4V7.85l-2.6 2.6L7 9l5-5 5 5-1.4 1.45-2.6-2.6V16Z" />
-                  </svg>
-                </div>
-                <div class="sm-upload-json-title">
-                  upload.json
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- row two -->
-        <div class="sub-menu--item smi-theme-actions">
-          <div class="sub-menu--item__title">Configure Application Theme</div>
-          <div class="sub-menu--item__description">
-            light, dark, and high contrast themes.
-          </div>
-          <div class="sub-menu--item__actions theme-actions">
-            <div class="theme-option theme-option-dark">
-              <input class="theme-radio__input" name="themeoption" type="radio" value="dark" checked>
-              <span>Dark</span>
-            </div>
-            <div class="theme-option theme-option-light">
-              <input class="theme-radio__input" name="themeoption" type="radio" value="light">
-              <span>Light</span>
-            </div>
-            <div class="theme-option theme-option-contrast">
-              <input class="theme-radio__input" name="themeoption" type="radio" value="contrast">
-              <span>High Contrast</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- row three -->
-        <div class="sub-menu--item smias">
-          <div class="sub-menu--item__title">
-            Keyboard Shortcuts
-          </div>
-          <div class="sub-menu--item__description">
-            <span>
-              30 individual keys in use for 23 different actions.
-            </span>
-            <br>
-            <span>
-              ("Escape" key actions will always be enabled.)
-            </span>
-          </div>
-          <div class="smia-shortcuts">
-
-            <div class="toggle-kb-shortcuts-btn__smia">
-              <span>
-                Open Shortcuts Menu
-              </span>
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white2)">
-                <path
-                  d="M4 19q-.825 0-1.412-.587Q2 17.825 2 17V7q0-.825.588-1.412Q3.175 5 4 5h16q.825 0 1.413.588Q22 6.175 22 7v10q0 .825-.587 1.413Q20.825 19 20 19Zm0-2h16V7H4v10Zm4-1h8v-2H8Zm-3-3h2v-2H5Zm3 0h2v-2H8Zm3 0h2v-2h-2Zm3 0h2v-2h-2Zm3 0h2v-2h-2ZM5 10h2V8H5Zm3 0h2V8H8Zm3 0h2V8h-2Zm3 0h2V8h-2Zm3 0h2V8h-2ZM4 17V7v10Z" />
-              </svg>
-            </div>
-
-            <div class="smia-set-shortcut-status">
-              <span class="smia-set-status-title">toggle on/off</span>
-              <div class="smia-disable-shortcuts__btn">
-                <label>
-                  <input type="checkbox" class="smia-toggle-shortcuts-checkbox" checked>
-                  <span class="smia-slider"></span>
-                </label>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-
-        <!-- row four -->
-        <div class="sub-menu--item">
-          <div class="sub-menu--item__title smias">
-            Transitions/Animations
-          </div>
-          <div class="sub-menu--item__description smi-last">
-            <span>
-              One great feature of this app is the ability to turn off all transitions and animations.
-            </span>
-            <br>
-            <span>
-              This is useful for those who have motion sensitivity or who just prefer a more minimalistic experience.
-            </span>
-            <br>
-            <span>
-              
-            </span>
-          </div>
-          <div class="smia-ani">
-            <span class="smdt-title">
-              toggle on/off
-            </span>
-            <div class="smdt-toggle">
-              <label>
-                <input type="checkbox" class="smdt-toggle-checkbox" checked>
-                <span class="smdt-slider"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    </div>
-  </aside>
-  <!-- MAIN APP FORM ENTITY -->
-  <aside class="entries__form hide-form" style="top:0;left:0;bottom:0;right:0;margin:auto;max-width:450px;">
-    <aside class="form-modal-overlay hide-form-overlay"></aside>
-
-    <div class="entries__form--header">
-      <div class="form-header--dragarea"></div>
-      <div class="form--header__icon-close" data-tooltip="close form">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white2)">
-          <path
-            d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
-        </svg>
-      </div>
-    </div>
-
-    <form class="entry-form">
-      <div class="entries__form--body">
-        <!-- row 1: title -->
-        <div class="form--body__title form-body-single">
-          <input type="text" placeholder="Add title" class="form--body__title-input" maxlength="50" tabindex="0"
-            spellcheck="false" required>
-        </div>
-
-        <div class="form--body__description form-body-single">
-          <textarea placeholder="Add description" class="form--body__description-input" maxLength="200"
-            spellcheck="false"></textarea>
-        </div>
-
-        <!-- row 2: start date & time -->
-        <div class="form--body__start form-body-double">
-          <div class="form--body__start-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)"
-              class="form--body-svg__start">
-              <path
-                d="m15.3 16.7 1.4-1.4-3.7-3.7V7h-2v5.4ZM12 22q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-10Zm0 8q3.325 0 5.663-2.337Q20 15.325 20 12t-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12t2.338 5.663Q8.675 20 12 20Z" />
-            </svg>
-          </div>
-          <div class="form--body__start-inputs">
-            <div class="form--body-start__date" data-form-date-type="start">
-            </div>
-
-            <div class="form-br"></div>
-
-            <div class="form--body-start__time" data-form-time-type="start">
-              1:30am
-            </div>
-          </div>
-        </div>
-
-        <!-- row 3: end date & time -->
-        <div class="form--body__end form-body-double">
-          <div class="form--body__end-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)"
-              class="form--body-svg__end">
-              <path
-                d="m15.3 16.7 1.4-1.4-3.7-3.7V7h-2v5.4ZM12 22q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-10Zm0 8q3.325 0 5.663-2.337Q20 15.325 20 12t-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12t2.338 5.663Q8.675 20 12 20Z" />
-            </svg>
-          </div>
-          <div class="form--body__end-inputs">
-            <div class="form--body-end__date" data-form-date-type="end">
-            </div>
-
-            <div class="form-br"></div>
-
-
-            <div class="form--body-end__time" data-form-time-type="end">
-              3:30am
-            </div>
-
-          </div>
-        </div>
-
-        <!-- row 4: category -->
-        <div class="form--body__category form-body-double">
-          <div class="form--body__category-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)">
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
-            </svg>
-          </div>
-          <div class="form--body__category-inputs">
-            <aside class="close-options-floating__btn"
-              style="z-index:-1;user-select:none;pointer-events:none;opacity:0;box-shadow:none;">
-              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white3)">
-                <path
-                  d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
-              </svg>
-            </aside>
-            <div class="form--body__category-modal--wrapper">
-              <div class="form--body__category-modal--wrapper-selection">
-                <span class="form--body__category-modal--wrapper__color"></span>
-                <span class="form--body__category-modal--wrapper__title">
-                </span>
-              </div>
-              <div class="form--body__category-modal hide-form-category-modal">
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="entries__form--footer">
-        <div class="form--footer__button-cancel">reset</div>
-        <div class="form--footer__button-save">save</div>
-      </div>
-      <!-- footer -->
-    </form>
-  </aside>
-
-
-  <!-- sidebar color picker -->
-  <!-- <aside class="category-options hide-co">
-    <div class="category-options__container">
-      <div class="coc__display--option">
-        <div class="coc__display--option-currentcolor">
-          <span class="coc__display--option-title">
-            set new color
-          </span>
-        </div>
-
-        <div class="coc__close-display--icon">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)"
-            style="user-select:none; pointer-events:none">
-            <path d="M0 0h24v24H0z" fill="none"></path>
-            <path
-              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z">
-            </path>
-          </svg>
-        </div>
-      </div>
-
-
-      <div class="coc__colors">
-      </div>
-    </div>
-
-  </aside> -->
-  <!-- datepicker for header & form -->
-
-  <aside class="datepicker hide-datepicker" style="top:12px;">
-    <div class="datepicker__header">
-      <div class="datepicker-title">October 2022</div>
-      <div class="datepicker-nav">
-        <div class="datepicker-nav--prev">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)"
-            style="user-select:none; pointer-events:none">
-            <path d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
-          </svg>
-        </div>
-        <div class="datepicker-nav--next">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)"
-            style="user-select:none; pointer-events:none">
-            <path d="M0 0h24v24H0z" fill="none"></path>
-            <path d="M8.59 16.59L10 18l6-6-6-6L8.59 7.41 13.17 12z"></path>
-          </svg>
-        </div>
-      </div>
-    </div>
-
-    <div class="datepicker__body">
-      <div class="datepicker__body--header">
-        <div class="datepicker__body--header-cell">S</div>
-        <div class="datepicker__body--header-cell">M</div>
-        <div class="datepicker__body--header-cell">T</div>
-        <div class="datepicker__body--header-cell">W</div>
-        <div class="datepicker__body--header-cell">T</div>
-        <div class="datepicker__body--header-cell">F</div>
-        <div class="datepicker__body--header-cell">S</div>
-      </div>
-      <div class="datepicker__body--dates"></div>
-    </div>
-
-    <aside class="datepicker-change-date hide-dpcd">
-      <aside class="close-change-date">
-        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)">
-          <path d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-        </svg>
-      </aside>
-
-      <div class="yearpicker">
-        <div class="yearpicker-prev">
-          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white4)">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-          </svg>
-        </div>
-        <div class="yearpicker-title">2023</div>
-        <div class="yearpicker-next">
-          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white4)">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-          </svg>
-        </div>
-      </div>
-      <div class="monthpicker">
-        <div class="monthpicker__month" data-dp-month="0">January</div>
-        <div class="monthpicker__month" data-dp-month="1">February</div>
-        <div class="monthpicker__month" data-dp-month="2">March</div>
-        <div class="monthpicker__month" data-dp-month="3">April</div>
-        <div class="monthpicker__month" data-dp-month="4">May</div>
-        <div class="monthpicker__month" data-dp-month="5">June</div>
-        <div class="monthpicker__month" data-dp-month="6">July</div>
-        <div class="monthpicker__month" data-dp-month="7">August</div>
-        <div class="monthpicker__month" data-dp-month="8">September</div>
-        <div class="monthpicker__month" data-dp-month="9">October</div>
-        <div class="monthpicker__month" data-dp-month="10">November</div>
-        <div class="monthpicker__month" data-dp-month="11">December</div>
-      </div>
-    </aside>
-  </aside>
-  <!-- click calendar entry to view details -->
-
-  <aside class="entry__options entry__options--hidden">
-
-    <div class="entry__options--content">
-
-      <div class="entry__options--header">
-
-        <div class="entry__options-datetime">
-
-          <div class="entry__options-date">
-            September 24 – December 8, 2022
-          </div>
-
-          <div class="entry__options-time">
-            12:00 AM – 11:59 PM
-          </div>
-
-        </div>
-
-        <div class="entry__options--header-icons">
-          <div class="entry__options-icon eoi__edit" data-tooltip="edit event (e)">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="var(--white2)">
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path
-                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
-            </svg>
-          </div>
-
-          <div class="entry__options-icon eoi__delete" data-tooltip="delete event">
-            <svg focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="var(--white2)">
-              <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
-              <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
-            </svg>
-          </div>
-
-          <div class="entry__options-icon eoi__close" data-tooltip="close (esc)">
-            <svg focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="var(--white2)">
-              <path
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z">
-              </path>
-            </svg>
-          </div>
-
-        </div>
-      </div>
-      <!-- end header -->
-
-      <div class="entry__options--body">
-        <div class="entry-option-desc">
-          <div class="eob-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white2)">
-              <path
-                d="M6 12v-1.5h8V12Zm0 3v-1.5h6V15Zm-1.5 3q-.625 0-1.062-.448Q3 17.104 3 16.5v-11q0-.604.438-1.052Q3.875 4 4.5 4H6V2h1.5v2h5V2H14v2h1.5q.625 0 1.062.448Q17 4.896 17 5.5v11q0 .604-.438 1.052Q16.125 18 15.5 18Zm0-1.5h11V9h-11v7.5Z" />
-            </svg>
-          </div>
-          <div class="eob-title">
-            Title
-          </div>
-        </div>
-        <div class="entry-option-desc">
-          <div class="eob-icon"></div>
-          <div class="eob-description">
-            Description
-          </div>
-        </div>
-        <div class="entry-option-desc">
-          <div class="eob-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" class="eob-category--icon"
-              fill="var(--primarylight1)">
-              <path
-                d="M10 18q-1.646 0-3.104-.625-1.458-.625-2.552-1.719t-1.719-2.552Q2 11.646 2 10q0-1.667.625-3.115.625-1.447 1.719-2.541Q5.438 3.25 6.896 2.625T10 2q1.667 0 3.115.625 1.447.625 2.541 1.719 1.094 1.094 1.719 2.541Q18 8.333 18 10q0 1.646-.625 3.104-.625 1.458-1.719 2.552t-2.541 1.719Q11.667 18 10 18Z" />
-            </svg>
-          </div>
-          <div class="eob-category">
-            "Category"
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </aside>
-  <!-- privacy, terms, about sections -->
-  <aside class="sb__info-popup hide-sb-info-popup">
-    <div class="sb__info-popup-header">
-      <select name="popup-info" class="select-popup-info">
-        <option value="notes">Project Notes</option>
-        <option value="privacy">Privacy</option>
-        <option value="terms">Terms</option>
-      </select>
-      <div class="close-sb-info">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white2)">
-          <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z" />
-        </svg>
-      </div>
-    </div>
-
-    <div class="sb__info-popup-body">
-      <div class="sb__info-popup-body__content">
-        <div class="sbip-title"></div>
-        <div class="sbip-content">
-        </div>
-      </div>
-    </div>
-  </aside>
-  <!-- modal display keyboard shortcuts -->
-  <div class="shortcuts-modal-overlay hide-shortcuts"></div>
-  <aside class="shortcuts__modal hide-shortcuts">
-    <div class="shortcuts-modal-header">
-      <div class="shortcuts-modal-title">
-        <span>
-          Keyboard shortcuts
-        </span>
-        <div class="keyboard-disabled-sm-two" data-tooltip="Keyboard Shortcuts Disabled">
-          <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--red1)">
-            <path
-              d="M4 19q-.825 0-1.412-.587Q2 17.825 2 17V7q0-.825.588-1.412Q3.175 5 4 5h16q.825 0 1.413.588Q22 6.175 22 7v10q0 .825-.587 1.413Q20.825 19 20 19Zm0-2h16V7H4v10Zm4-1h8v-2H8Zm-3-3h2v-2H5Zm3 0h2v-2H8Zm3 0h2v-2h-2Zm3 0h2v-2h-2Zm3 0h2v-2h-2ZM5 10h2V8H5Zm3 0h2V8H8Zm3 0h2V8h-2Zm3 0h2V8h-2Zm3 0h2V8h-2ZM4 17V7v10Z" />
-          </svg>
-        </div>
-
-
-      </div>
-
-      <div class="close-shortcuts-modal">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white2)">
-          <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z" />
-        </svg>
-      </div>
-    </div>
-
-    <div class="shortcuts-modal__body">
-      <div class="shortcuts-modal-content">
-
-      </div>
-    </div>
-  </aside>
-
-
   <main class="main">
     <!-- hide-sidebar -->
     <aside class="sidebar sidebar-transition hide-sidebar">
@@ -1159,6 +519,621 @@
 
     </div>
   </main>
+
+  <!-- overlays / used for popup content -->
+  <!-- see readme @overlays -->
+  <aside style="display:none;" class="change-view--overlay toggle-options"></aside>
+  <aside class="resize-overlay hide-resize-overlay" style="background-color:transparent;"></aside>
+  <aside class="sidebar-sub-menu__overlay hide-sidebar-sub-menu"></aside>
+  <aside class="toast-overlay hide-toast-overlay"></aside>
+  <aside class="category__deletion-overlay hide-category-deletion"></aside>
+  <aside class="form-overlay hide-form-overlay"></aside>
+  <aside class="entry__options--overlay entry__options--hidden"></aside>
+  <aside class="datepicker-overlay hide-datepicker-overlay"></aside>
+  <aside class="sb__info-popup-overlay hide-sb-info-popup"></aside>
+  <aside class="go-to-date-overlay hide-gotodate"></aside>
+  <aside class="category__form-overlay hide-ctg-form"></aside>
+  <aside class="shortcuts-modal-overlay hide-shortcuts"></aside>
+
+  <!-- options for header select element (pick view) -->
+  <aside class="change-view--wrapper toggle-options">
+    <div class="change-view--options">
+      <div class="change-view--option">
+        <div class="view-option" data-view-option="day" data-view-key="D">Day</div>
+        <div class="view-option" data-view-option="week" data-view-key="W">Week</div>
+        <div class="view-option" data-view-option="month" data-view-key="M">Month</div>
+        <div class="view-option" data-view-option="year" data-view-key="Y">Year</div>
+        <div class="view-option" data-view-option="list" data-view-key="L">List</div>
+      </div>
+    </div>
+  </aside>
+  <!-- floating toggle form button visible when sidebar is closed -->
+  <aside class="toggle-form">
+    <span class="toggle-form-btn" role="button" aria-label="open form">
+      <svg width="36" height="36" viewBox="0 0 36 36">
+        <path fill="#34A853" d="M16 16v14h4V20z"></path>
+        <path fill="#4285F4" d="M30 16H20l-4 4h14z"></path>
+        <path fill="#FBBC05" d="M6 16v4h10l4-4z"></path>
+        <path fill="#EA4335" d="M20 16V6h-4v14z"></path>
+        <path fill="none" d="M0 0h36v36H0z"></path>
+      </svg>
+    </span>
+  </aside>
+
+  <aside class="category__form hide-ctg-form">
+    <div class="category__form--body">
+      <div class="ctg-input--err hide-ctg-err"></div>
+
+      <input type="text" class="category__form-input" placeholder="Category Name" maxlength="20" minlength="1" required>
+      <div class="color__picker">
+        <div class="color-picker__header">
+          <div class="color-picker__title">color</div>
+        </div>
+
+        <div class="color-picker__options">
+
+        </div>
+      </div>
+    </div>
+
+    <div class="category__form--footer">
+      <button class="category__form--cancel">Cancel</button>
+      <button class="category__form--submit">Save</button>
+    </div>
+  </aside>
+
+  <aside class="collapse-view">
+    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"
+      class="cv-svg-off">
+      <path d="M0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0z" fill="none" />
+      <path
+        d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" />
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"
+      class="cv-svg-on hide-cbt">
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path
+        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+    </svg>
+  </aside>
+
+  <!-- search for date popup -->
+  <aside class="go-to-date hide-gotodate">
+    <div class="go-to__header">
+      <span class="go-to-title">Go to date</span>
+      <div class="go-to-subtitle">
+        <span class="gts-format">month day year</span>
+        <span class="gts-mid">or</span>
+        <span class="gts-format">MM/DD/YYYY</span>
+      </div>
+    </div>
+    <div class="go-to__body">
+      <input type="text" class="go-to-input" spellcheck="false" required>
+      <div class="go-to-err" style="display:none;">Invalid Date</div>
+    </div>
+    <div class="go-to__footer">
+      <div class="cancel-go-to">Cancel</div>
+      <div class="submit-go-to">Go</div>
+    </div>
+  </aside>
+
+  <!-- settings -->
+  <aside class="sidebar-sub-menu hide-sidebar-sub-menu">
+    <div class="sub-menu__header">
+
+      <div class="sub-menu--title">
+        Settings & Data
+      </div>
+
+      <div class="sub-menu--icons">
+        <div class="toggle-animations-icon__sm" data-tooltip="Animations Enabled">
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
+            width="24px" fill="var(--primary2)" class="tai-on">
+            <rect fill="none" height="24" width="24" />
+            <path
+              d="M2.88,7.88l1.54,1.54C4.15,10.23,4,11.1,4,12c0,4.41,3.59,8,8,8s8-3.59,8-8s-3.59-8-8-8c-0.9,0-1.77,0.15-2.58,0.42 L7.89,2.89C9.15,2.32,10.54,2,12,2c5.52,0,10,4.48,10,10s-4.48,10-10,10S2,17.52,2,12C2,10.53,2.32,9.14,2.88,7.88z M7,5.5 C7,6.33,6.33,7,5.5,7S4,6.33,4,5.5S4.67,4,5.5,4S7,4.67,7,5.5z" />
+          </svg>
+
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
+            width="24px" fill="var(--red1)" class="tai-off hide-tai">
+            <g>
+              <rect fill="none" height="24" width="24" />
+              <path
+                d="M22,12c0,5.52-4.48,10-10,10S2,17.52,2,12c0-1.19,0.22-2.32,0.6-3.38L4.48,9.3C4.17,10.14,4,11.05,4,12c0,4.41,3.59,8,8,8 s8-3.59,8-8s-3.59-8-8-8c-0.95,0-1.85,0.17-2.69,0.48L8.63,2.59C9.69,2.22,10.82,2,12,2C17.52,2,22,6.48,22,12z M5.5,4 C4.67,4,4,4.67,4,5.5S4.67,7,5.5,7S7,6.33,7,5.5S6.33,4,5.5,4z M11,16V8H9v8H11z M15,16V8h-2v8H15z" />
+            </g>
+          </svg>
+        </div>
+        <div class="keyboard-disabled-sm" data-tooltip="Keyboard Shortcuts Disabled">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--red1)">
+            <path
+              d="M4 19q-.825 0-1.412-.587Q2 17.825 2 17V7q0-.825.588-1.412Q3.175 5 4 5h16q.825 0 1.413.588Q22 6.175 22 7v10q0 .825-.587 1.413Q20.825 19 20 19Zm0-2h16V7H4v10Zm4-1h8v-2H8Zm-3-3h2v-2H5Zm3 0h2v-2H8Zm3 0h2v-2h-2Zm3 0h2v-2h-2Zm3 0h2v-2h-2ZM5 10h2V8H5Zm3 0h2V8H8Zm3 0h2V8h-2Zm3 0h2V8h-2Zm3 0h2V8h-2ZM4 17V7v10Z" />
+          </svg>
+        </div>
+
+        <div class="close-sub-menu">
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white2)">
+            <path
+              d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="sub-menu__body">
+
+      <div class="sub-menu-content">
+
+        <!-- row one -->
+        <div class="sub-menu--item">
+          <div class="sub-menu--item__title">
+            Calendar Data (JSON)
+            <!-- <br> -->
+            <!-- <span></span> -->
+            <hr>
+            <strong>
+              (Download & Upload)
+            </strong>
+          </div>
+          <!-- .sub-menu--item__description >strong -->
+          <div class="sub-menu--item__description sbmid-row-one">
+            Uploading data will overwrite existing data!
+            <br>
+            Please ensure you have a backup of your data
+            before uploading.
+            <br>
+            Uploading unsupported data will not cause any overwrites.
+          </div>
+
+          <div class="sub-menu--item__actions">
+            <div class="sm-download-json">
+              <div class="sm-json-btn down-json">
+                <div class="sm-download-json-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)">
+                    <path
+                      d="M6 20q-.825 0-1.412-.587Q4 18.825 4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413Q18.825 20 18 20Zm6-4-5-5 1.4-1.45 2.6 2.6V4h2v8.15l2.6-2.6L17 11Z" />
+                  </svg>
+                </div>
+                <div class="sm-download-json-title">
+                  download.json
+                </div>
+              </div>
+              <div class="sm-json-btn upload-json">
+                <div class="sm-upload-json-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)">
+                    <path
+                      d="M6 20q-.825 0-1.412-.587Q4 18.825 4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413Q18.825 20 18 20Zm5-4V7.85l-2.6 2.6L7 9l5-5 5 5-1.4 1.45-2.6-2.6V16Z" />
+                  </svg>
+                </div>
+                <div class="sm-upload-json-title">
+                  upload.json
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- row two -->
+        <div class="sub-menu--item smi-theme-actions">
+          <div class="sub-menu--item__title">Configure Application Theme</div>
+          <div class="sub-menu--item__description">
+            light, dark, and high contrast themes.
+          </div>
+          <div class="sub-menu--item__actions theme-actions">
+            <div class="theme-option theme-option-dark">
+              <input class="theme-radio__input" name="themeoption" type="radio" value="dark" checked>
+              <span>Dark</span>
+            </div>
+            <div class="theme-option theme-option-light">
+              <input class="theme-radio__input" name="themeoption" type="radio" value="light">
+              <span>Light</span>
+            </div>
+            <div class="theme-option theme-option-contrast">
+              <input class="theme-radio__input" name="themeoption" type="radio" value="contrast">
+              <span>High Contrast</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- row three -->
+        <div class="sub-menu--item smias">
+          <div class="sub-menu--item__title">
+            Keyboard Shortcuts
+          </div>
+          <div class="sub-menu--item__description">
+            <span>
+              30 individual keys in use for 23 different actions.
+            </span>
+            <br>
+            <span>
+              ("Escape" key actions will always be enabled.)
+            </span>
+          </div>
+          <div class="smia-shortcuts">
+
+            <div class="toggle-kb-shortcuts-btn__smia">
+              <span>
+                Open Shortcuts Menu
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white2)">
+                <path
+                  d="M4 19q-.825 0-1.412-.587Q2 17.825 2 17V7q0-.825.588-1.412Q3.175 5 4 5h16q.825 0 1.413.588Q22 6.175 22 7v10q0 .825-.587 1.413Q20.825 19 20 19Zm0-2h16V7H4v10Zm4-1h8v-2H8Zm-3-3h2v-2H5Zm3 0h2v-2H8Zm3 0h2v-2h-2Zm3 0h2v-2h-2Zm3 0h2v-2h-2ZM5 10h2V8H5Zm3 0h2V8H8Zm3 0h2V8h-2Zm3 0h2V8h-2Zm3 0h2V8h-2ZM4 17V7v10Z" />
+              </svg>
+            </div>
+
+            <div class="smia-set-shortcut-status">
+              <span class="smia-set-status-title">toggle on/off</span>
+              <div class="smia-disable-shortcuts__btn">
+                <label>
+                  <input type="checkbox" class="smia-toggle-shortcuts-checkbox" checked>
+                  <span class="smia-slider"></span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- row four -->
+        <div class="sub-menu--item">
+          <div class="sub-menu--item__title smias">
+            Transitions/Animations
+          </div>
+          <div class="sub-menu--item__description smi-last">
+            <span>
+              One great feature of this app is the ability to turn off all transitions and animations.
+            </span>
+            <br>
+            <span>
+              This is useful for those who have motion sensitivity or who just prefer a more minimalistic experience.
+            </span>
+            <br>
+            <span>
+
+            </span>
+          </div>
+          <div class="smia-ani">
+            <span class="smdt-title">
+              toggle on/off
+            </span>
+            <div class="smdt-toggle">
+              <label>
+                <input type="checkbox" class="smdt-toggle-checkbox" checked>
+                <span class="smdt-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </aside>
+
+  <!-- MAIN APP FORM ENTITY -->
+  <aside class="entries__form hide-form" style="top:0;left:0;bottom:0;right:0;margin:auto;max-width:450px;">
+    <aside class="form-modal-overlay hide-form-overlay"></aside>
+
+    <div class="entries__form--header">
+      <div class="form-header--dragarea"></div>
+      <div class="form--header__icon-close" data-tooltip="close form">
+        <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white2)">
+          <path
+            d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
+        </svg>
+      </div>
+    </div>
+
+    <form class="entry-form">
+      <div class="entries__form--body">
+        <!-- row 1: title -->
+        <div class="form--body__title form-body-single">
+          <input type="text" placeholder="Add title" class="form--body__title-input" maxlength="50" tabindex="0"
+            spellcheck="false" required>
+        </div>
+
+        <div class="form--body__description form-body-single">
+          <textarea placeholder="Add description" class="form--body__description-input" maxLength="200"
+            spellcheck="false"></textarea>
+        </div>
+
+        <!-- row 2: start date & time -->
+        <div class="form--body__start form-body-double">
+          <div class="form--body__start-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)"
+              class="form--body-svg__start">
+              <path
+                d="m15.3 16.7 1.4-1.4-3.7-3.7V7h-2v5.4ZM12 22q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-10Zm0 8q3.325 0 5.663-2.337Q20 15.325 20 12t-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12t2.338 5.663Q8.675 20 12 20Z" />
+            </svg>
+          </div>
+          <div class="form--body__start-inputs">
+            <div class="form--body-start__date" data-form-date-type="start">
+            </div>
+
+            <div class="form-br"></div>
+
+            <div class="form--body-start__time" data-form-time-type="start">
+              1:30am
+            </div>
+          </div>
+        </div>
+
+        <!-- row 3: end date & time -->
+        <div class="form--body__end form-body-double">
+          <div class="form--body__end-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white3)"
+              class="form--body-svg__end">
+              <path
+                d="m15.3 16.7 1.4-1.4-3.7-3.7V7h-2v5.4ZM12 22q-2.075 0-3.9-.788-1.825-.787-3.175-2.137-1.35-1.35-2.137-3.175Q2 14.075 2 12t.788-3.9q.787-1.825 2.137-3.175 1.35-1.35 3.175-2.138Q9.925 2 12 2t3.9.787q1.825.788 3.175 2.138 1.35 1.35 2.137 3.175Q22 9.925 22 12t-.788 3.9q-.787 1.825-2.137 3.175-1.35 1.35-3.175 2.137Q14.075 22 12 22Zm0-10Zm0 8q3.325 0 5.663-2.337Q20 15.325 20 12t-2.337-5.663Q15.325 4 12 4T6.338 6.337Q4 8.675 4 12t2.338 5.663Q8.675 20 12 20Z" />
+            </svg>
+          </div>
+          <div class="form--body__end-inputs">
+            <div class="form--body-end__date" data-form-date-type="end">
+            </div>
+
+            <div class="form-br"></div>
+
+
+            <div class="form--body-end__time" data-form-time-type="end">
+              3:30am
+            </div>
+
+          </div>
+        </div>
+
+        <!-- row 4: category -->
+        <div class="form--body__category form-body-double">
+          <div class="form--body__category-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z" />
+            </svg>
+          </div>
+          <div class="form--body__category-inputs">
+            <aside class="close-options-floating__btn"
+              style="z-index:-1;user-select:none;pointer-events:none;opacity:0;box-shadow:none;">
+              <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white3)">
+                <path
+                  d="M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z" />
+              </svg>
+            </aside>
+            <div class="form--body__category-modal--wrapper">
+              <div class="form--body__category-modal--wrapper-selection">
+                <span class="form--body__category-modal--wrapper__color"></span>
+                <span class="form--body__category-modal--wrapper__title">
+                </span>
+              </div>
+              <div class="form--body__category-modal hide-form-category-modal">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="entries__form--footer">
+        <div class="form--footer__button-cancel">reset</div>
+        <div class="form--footer__button-save">save</div>
+      </div>
+      <!-- footer -->
+    </form>
+  </aside>
+
+  <!-- datepicker for header & form -->
+
+  <aside class="datepicker hide-datepicker" style="top:12px;">
+    <div class="datepicker__header">
+      <div class="datepicker-title">October 2022</div>
+      <div class="datepicker-nav">
+        <div class="datepicker-nav--prev">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)"
+            style="user-select:none; pointer-events:none">
+            <path d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+          </svg>
+        </div>
+        <div class="datepicker-nav--next">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="var(--white3)"
+            style="user-select:none; pointer-events:none">
+            <path d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M8.59 16.59L10 18l6-6-6-6L8.59 7.41 13.17 12z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="datepicker__body">
+      <div class="datepicker__body--header">
+        <div class="datepicker__body--header-cell">S</div>
+        <div class="datepicker__body--header-cell">M</div>
+        <div class="datepicker__body--header-cell">T</div>
+        <div class="datepicker__body--header-cell">W</div>
+        <div class="datepicker__body--header-cell">T</div>
+        <div class="datepicker__body--header-cell">F</div>
+        <div class="datepicker__body--header-cell">S</div>
+      </div>
+      <div class="datepicker__body--dates"></div>
+    </div>
+
+    <aside class="datepicker-change-date hide-dpcd">
+      <aside class="close-change-date">
+        <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+        </svg>
+      </aside>
+
+      <div class="yearpicker">
+        <div class="yearpicker-prev">
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white4)">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+          </svg>
+        </div>
+        <div class="yearpicker-title">2023</div>
+        <div class="yearpicker-next">
+          <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white4)">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+          </svg>
+        </div>
+      </div>
+      <div class="monthpicker">
+        <div class="monthpicker__month" data-dp-month="0">January</div>
+        <div class="monthpicker__month" data-dp-month="1">February</div>
+        <div class="monthpicker__month" data-dp-month="2">March</div>
+        <div class="monthpicker__month" data-dp-month="3">April</div>
+        <div class="monthpicker__month" data-dp-month="4">May</div>
+        <div class="monthpicker__month" data-dp-month="5">June</div>
+        <div class="monthpicker__month" data-dp-month="6">July</div>
+        <div class="monthpicker__month" data-dp-month="7">August</div>
+        <div class="monthpicker__month" data-dp-month="8">September</div>
+        <div class="monthpicker__month" data-dp-month="9">October</div>
+        <div class="monthpicker__month" data-dp-month="10">November</div>
+        <div class="monthpicker__month" data-dp-month="11">December</div>
+      </div>
+    </aside>
+  </aside>
+
+  <!-- click calendar entry to view details -->
+  <aside class="entry__options entry__options--hidden">
+
+    <div class="entry__options--content">
+
+      <div class="entry__options--header">
+
+        <div class="entry__options-datetime">
+
+          <div class="entry__options-date">
+            September 24 – December 8, 2022
+          </div>
+
+          <div class="entry__options-time">
+            12:00 AM – 11:59 PM
+          </div>
+
+        </div>
+
+        <div class="entry__options--header-icons">
+          <div class="entry__options-icon eoi__edit" data-tooltip="edit event (e)">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 0 24 24" width="20px" fill="var(--white2)">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+            </svg>
+          </div>
+
+          <div class="entry__options-icon eoi__delete" data-tooltip="delete event">
+            <svg focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="var(--white2)">
+              <path d="M15 4V3H9v1H4v2h1v13c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V6h1V4h-5zm2 15H7V6h10v13z"></path>
+              <path d="M9 8h2v9H9zm4 0h2v9h-2z"></path>
+            </svg>
+          </div>
+
+          <div class="entry__options-icon eoi__close" data-tooltip="close (esc)">
+            <svg focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="var(--white2)">
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z">
+              </path>
+            </svg>
+          </div>
+
+        </div>
+      </div>
+      <!-- end header -->
+
+      <div class="entry__options--body">
+        <div class="entry-option-desc">
+          <div class="eob-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" fill="var(--white2)">
+              <path
+                d="M6 12v-1.5h8V12Zm0 3v-1.5h6V15Zm-1.5 3q-.625 0-1.062-.448Q3 17.104 3 16.5v-11q0-.604.438-1.052Q3.875 4 4.5 4H6V2h1.5v2h5V2H14v2h1.5q.625 0 1.062.448Q17 4.896 17 5.5v11q0 .604-.438 1.052Q16.125 18 15.5 18Zm0-1.5h11V9h-11v7.5Z" />
+            </svg>
+          </div>
+          <div class="eob-title">
+            Title
+          </div>
+        </div>
+        <div class="entry-option-desc">
+          <div class="eob-icon"></div>
+          <div class="eob-description">
+            Description
+          </div>
+        </div>
+        <div class="entry-option-desc">
+          <div class="eob-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" class="eob-category--icon"
+              fill="var(--primarylight1)">
+              <path
+                d="M10 18q-1.646 0-3.104-.625-1.458-.625-2.552-1.719t-1.719-2.552Q2 11.646 2 10q0-1.667.625-3.115.625-1.447 1.719-2.541Q5.438 3.25 6.896 2.625T10 2q1.667 0 3.115.625 1.447.625 2.541 1.719 1.094 1.094 1.719 2.541Q18 8.333 18 10q0 1.646-.625 3.104-.625 1.458-1.719 2.552t-2.541 1.719Q11.667 18 10 18Z" />
+            </svg>
+          </div>
+          <div class="eob-category">
+            "Category"
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- privacy, terms, about sections -->
+  <aside class="sb__info-popup hide-sb-info-popup">
+    <div class="sb__info-popup-header">
+      <select name="popup-info" class="select-popup-info">
+        <option value="notes">Project Notes</option>
+        <option value="privacy">Privacy</option>
+        <option value="terms">Terms</option>
+      </select>
+      <div class="close-sb-info">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white2)">
+          <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="sb__info-popup-body">
+      <div class="sb__info-popup-body__content">
+        <div class="sbip-title"></div>
+        <div class="sbip-content">
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- modal display keyboard shortcuts -->
+  <aside class="shortcuts__modal hide-shortcuts">
+    <div class="shortcuts-modal-header">
+      <div class="shortcuts-modal-title">
+        <span>
+          Keyboard shortcuts
+        </span>
+        <div class="keyboard-disabled-sm-two" data-tooltip="Keyboard Shortcuts Disabled">
+          <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--red1)">
+            <path
+              d="M4 19q-.825 0-1.412-.587Q2 17.825 2 17V7q0-.825.588-1.412Q3.175 5 4 5h16q.825 0 1.413.588Q22 6.175 22 7v10q0 .825-.587 1.413Q20.825 19 20 19Zm0-2h16V7H4v10Zm4-1h8v-2H8Zm-3-3h2v-2H5Zm3 0h2v-2H8Zm3 0h2v-2h-2Zm3 0h2v-2h-2Zm3 0h2v-2h-2ZM5 10h2V8H5Zm3 0h2V8H8Zm3 0h2V8h-2Zm3 0h2V8h-2Zm3 0h2V8h-2ZM4 17V7v10Z" />
+          </svg>
+        </div>
+
+
+      </div>
+
+      <div class="close-shortcuts-modal">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--white2)">
+          <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="shortcuts-modal__body">
+      <div class="shortcuts-modal-content">
+
+      </div>
+    </div>
+  </aside>
+
+
 
 
 
