@@ -18,6 +18,7 @@ I've implemented several new features to improve the user experience but overall
 
 * These changes include but are not limited to :
   * fully responsive up to 250px.
+  * Gzip: 40kb
   * **THEMES:**
     * Dark
     * High Contrast
@@ -62,7 +63,7 @@ I've implemented several new features to improve the user experience but overall
   * Speed index : 200ms.
   * Total blocking time : 0 seconds (no database / third party resources).
   * Score : 100% (performance, accessibility, best practices, seo).
-
+  
 ## Cloning this repo
 
 ### `git clone`
@@ -122,3 +123,8 @@ Starts the webpack development server on `localhost:3000`.
 * Added switch to turn animations/transitions on and off in settings
 * Added top modal compartment for dayview (events that span longer than the calendar day) [screenshot](https://ibb.co/Byq1vJb)
 * Added floating eye icon to open/close the header for the week and day view (mobile support) [screenshot](https://ibb.co/JrpDj4X)
+
+### Jan 24, 2023
+
+* Prepare Production build & implement linter.
+* Start trimming bundle. [screenshot](https://ibb.co/85fSgN6)

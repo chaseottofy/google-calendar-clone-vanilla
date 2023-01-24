@@ -31,12 +31,12 @@ export default function setListView(context, store, datepickerContext) {
   /*************************************** */
   /* CREATE ROW GROUPS*/
   function createRowGroups(entries) {
+    console.log(entries);
     let count = 0;
     for (let [key, value] of Object.entries(entries)) {
       count++
       const tempdate = new Date(Date.parse(key))
-      const [year, month, day, dow] = [
-        tempdate.getFullYear(),
+      const [month, day, dow] = [
         tempdate.getMonth(),
         tempdate.getDate(),
         tempdate.getDay()
@@ -217,7 +217,6 @@ export default function setListView(context, store, datepickerContext) {
       dateTimeTitle.textContent = "No Entries to Display";
       return;
     } else {
-      // update : 1.02 -- (1/16/23)
       const entries = store.sortBy(activeEnt, "start", "desc");
 
       const groupedEntries = entries.reduce((acc, curr) => {
@@ -274,6 +273,8 @@ export default function setListView(context, store, datepickerContext) {
           true
         );
       }
+
+
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;
     }

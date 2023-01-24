@@ -2,7 +2,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-// const TerserPlugin = require("terser-webpack-plugin");
+const BundelAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const TerserPlugin = require("terser-webpack-plugin");
 const path = require('path');
 
 module.exports = {
@@ -35,13 +36,14 @@ module.exports = {
         type: 'asset/resource',
       },
       {
-        test: /\.(ico|png|svg|webp|jpg|jpeg)$/i,
+        test: /\.(ico|png|svg|webp|)$/i,
         type: 'asset/resource',
       },
     ],
   },
 
   plugins: [
+    new BundelAnalyzerPlugin(),
     new HtmlWebpackPlugin({
       title: "output management",
       template: "./src/index.html",
@@ -67,9 +69,9 @@ module.exports = {
     minimize: true,
     minimizer: [
       // prod.
-      // new TerserPlugin({
-      //   extractComments: true,
-      // }),
+      new TerserPlugin({
+        extractComments: true,
+      }),
       new CssMinimizerPlugin(),
     ],
   },

@@ -13,6 +13,8 @@ export default function setHeader(context, component, store) {
   const datetimeWrapper = document.querySelector(".h-col-2");
   const datetimeContent = document.querySelector(".datetime-content")
   const collapsebtn = document.querySelector(".collapse-view")
+  const prevnext = document.querySelector(".prev-next");
+  // const search = document.querySelector(".h-search");
   component === "week" || component === "day" ? collapsebtn.classList.remove("hide-cbt") : collapsebtn.classList.add("hide-cbt");
 
   const configHeader = (borderstyle, componentTitle) => {
@@ -21,6 +23,7 @@ export default function setHeader(context, component, store) {
     datetimeWrapper.classList.remove("datetime-inactive");
     datetimeWrapper.style.paddingRight = "0";
     datetimeContent.removeAttribute("style")
+      prevnext.removeAttribute("style")
   }
 
   const setHeaderAttributes = (view) => {
@@ -52,6 +55,7 @@ export default function setHeader(context, component, store) {
     case "list":
       setHeaderAttributes("list");
       header.style.borderBottom = "1px solid var(--mediumgrey1)";
+      prevnext.setAttribute("style", "opacity: 0; pointer-events:none;");
       datetimeWrapper.classList.add("datetime-inactive");
       break;
     default:
