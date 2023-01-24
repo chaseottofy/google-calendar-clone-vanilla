@@ -849,13 +849,12 @@ export default function setEntryForm(context, store, datepickerContext) {
       if ((entriesFormWrapper.offsetTop + entriesFormWrapper.offsetHeight) > winH) {
         entriesFormWrapper.style.top = winH - entriesFormWrapper.offsetHeight + "px";
       }
-      
 
       entriesFormWrapper.style.top = entriesFormWrapper.offsetTop - topAfter + "px";
       entriesFormWrapper.style.left = entriesFormWrapper.offsetLeft - leftAfter + "px";
     }
     
-    const throttlemove = throttle(mousemove, 15);
+    const throttlemove = throttle(mousemove, 10);
 
     function mouseup() {
       entriesFormWrapper.style.opacity = "1";

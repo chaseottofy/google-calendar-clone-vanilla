@@ -60,6 +60,14 @@
   transform: scale(0.8);
 }
 
+/* .cv-svg-on {
+
+}
+
+.cv-svg-off {
+
+} */
+
 .collapse-view:hover {
   box-shadow: var(--box-shadow2-hover);
 }
@@ -145,6 +153,8 @@
   overflow-y: hidden;
 }
 
+
+/*  */
 @media screen and (max-width: 840px) {
   .container__calendars {
     width: 100% !important;

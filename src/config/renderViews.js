@@ -620,16 +620,20 @@ export default function renderViews(context, datepickerContext, store) {
         componentBodytoggle: "wvh-body-collapse"
       },
     };
+    const eyeIcons = {
+      on: document.querySelector(".cv-svg-on"),
+      off: document.querySelector(".cv-svg-off")
+    }
 
     if (view === "week" || view === "day") {
+      eyeIcons.on.classList.toggle("hide-cbt");
+      eyeIcons.off.classList.toggle("hide-cbt");
       headers[view].component.classList.toggle(headers[view].collapse);
       if (view === "week") {
         headers[view].componentBody.classList.toggle(headers[view].componentBodytoggle)
       }
     }
   }
-
-
 
   const appinit = () => {
     /*************************/
@@ -653,7 +657,6 @@ export default function renderViews(context, datepickerContext, store) {
 
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
-    store.getAnimationStatus() === true ? appBody.classList.remove("disable-transitions") : appBody.classList.add("disable-transitions");
   }
   appinit();
 }

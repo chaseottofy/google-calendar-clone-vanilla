@@ -249,9 +249,8 @@
 .form--body-start__date {
   cursor: pointer;
   line-height: 40px;
-  min-width: 100px;
-  max-width: 108px;
-  padding: 0 6px;
+  min-width: 94px;
+  width: 94px;
   text-align: center;
   margin-right: 13px;
 }

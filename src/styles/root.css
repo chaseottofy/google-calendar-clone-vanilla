@@ -70,7 +70,7 @@
   --error: #d93025;
   --red1: #B01244;
   --red2: #7b0d25;
-  --red3: rgba(123, 13, 37, 0.1);
+  --red3: #480816;
   --green1: #2FAD76;
   --bordergrey: 1px solid var(--mediumgrey1);
   --borderdarkgrey: 1px solid var(--mediumgrey2);
@@ -208,8 +208,10 @@ html {
   --offwhite1: #BFC0C1;
   --offwhite2: #BFC0C1;
   --black000: #0c0e0e;
-  --black0: #0c0e0e;
-  --black1: #000000;
+  --black0: #000000;
+  --black1: #0c0c0d;
+  /* 181a1b */
+  /* --black1: rgb(6, 6, 7); */
   --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;
@@ -228,10 +230,10 @@ html {
   --scrollerThumbBackgroundHover: #505b65;
   --scrollerTrackBackground: var(--black1);
   --box-shadow1:
-    rgba(54, 147, 255, 0.12) 0 10px 14px,
-    rgba(0, 0, 0, 0.15) 0 6px 6px;
+    rgba(54, 147, 255, 0.1) 0 3px 6px 0,
+    rgba(0, 0, 0, 0.1) 0 6px 6px 0;
   --box-shadow3:
-  rgba(54, 147, 255, 0.2) 0 10px 20px,
+    rgba(54, 147, 255, 0.14) 0 6px 14px,
     rgba(0, 0, 0, 0.23) 0 6px 6px;
   --box-shadow-sbfixed:
     rgba(59, 88, 108, .2) 4px 8px 12px 0;

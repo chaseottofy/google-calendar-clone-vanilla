@@ -179,7 +179,18 @@
 
 
   <aside class="collapse-view">
-    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"><path d="M0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0z" fill="none"/><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"
+      class="cv-svg-off">
+      <path d="M0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0zm0 0h24v24H0z" fill="none" />
+      <path
+        d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z" />
+    </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 0 24 24" width="18px" fill="var(--white3)"
+      class="cv-svg-on hide-cbt">
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path
+        d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+    </svg>
   </aside>
 
   <!-- search for date popup -->
@@ -206,10 +217,27 @@
     <div class="sub-menu__header">
 
       <div class="sub-menu--title">
-        Settings and Data
+        Settings & Data
       </div>
 
       <div class="sub-menu--icons">
+        <div class="toggle-animations-icon__sm" data-tooltip="Animations Enabled">
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
+            width="24px" fill="var(--primary2)" class="tai-on">
+            <rect fill="none" height="24" width="24" />
+            <path
+              d="M2.88,7.88l1.54,1.54C4.15,10.23,4,11.1,4,12c0,4.41,3.59,8,8,8s8-3.59,8-8s-3.59-8-8-8c-0.9,0-1.77,0.15-2.58,0.42 L7.89,2.89C9.15,2.32,10.54,2,12,2c5.52,0,10,4.48,10,10s-4.48,10-10,10S2,17.52,2,12C2,10.53,2.32,9.14,2.88,7.88z M7,5.5 C7,6.33,6.33,7,5.5,7S4,6.33,4,5.5S4.67,4,5.5,4S7,4.67,7,5.5z" />
+          </svg>
+
+          <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24"
+            width="24px" fill="var(--red1)" class="tai-off hide-tai">
+            <g>
+              <rect fill="none" height="24" width="24" />
+              <path
+                d="M22,12c0,5.52-4.48,10-10,10S2,17.52,2,12c0-1.19,0.22-2.32,0.6-3.38L4.48,9.3C4.17,10.14,4,11.05,4,12c0,4.41,3.59,8,8,8 s8-3.59,8-8s-3.59-8-8-8c-0.95,0-1.85,0.17-2.69,0.48L8.63,2.59C9.69,2.22,10.82,2,12,2C17.52,2,22,6.48,22,12z M5.5,4 C4.67,4,4,4.67,4,5.5S4.67,7,5.5,7S7,6.33,7,5.5S6.33,4,5.5,4z M11,16V8H9v8H11z M15,16V8h-2v8H15z" />
+            </g>
+          </svg>
+        </div>
         <div class="keyboard-disabled-sm" data-tooltip="Keyboard Shortcuts Disabled">
           <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="var(--red1)">
             <path
@@ -234,8 +262,15 @@
         <!-- row one -->
         <div class="sub-menu--item">
           <div class="sub-menu--item__title">
-            Download & Upload Calendar Data (JSON)
+            Calendar Data (JSON)
+            <!-- <br> -->
+            <!-- <span></span> -->
+            <hr>
+            <strong>
+              (Download & Upload)
+            </strong>
           </div>
+          <!-- .sub-menu--item__description >strong -->
           <div class="sub-menu--item__description sbmid-row-one">
             Uploading data will overwrite existing data!
             <br>
@@ -300,6 +335,15 @@
           <div class="sub-menu--item__title">
             Keyboard Shortcuts
           </div>
+          <div class="sub-menu--item__description">
+            <span>
+              30 individual keys in use for 23 different actions.
+            </span>
+            <br>
+            <span>
+              ("Escape" key actions will always be enabled.)
+            </span>
+          </div>
           <div class="smia-shortcuts">
 
             <div class="toggle-kb-shortcuts-btn__smia">
@@ -325,12 +369,26 @@
           </div>
         </div>
 
+
         <!-- row four -->
         <div class="sub-menu--item">
-          <div class="sub-menu--item__title sbit-last">
+          <div class="sub-menu--item__title smias">
             Transitions/Animations
           </div>
-          <div class="sub-menu--item__actions">
+          <div class="sub-menu--item__description smi-last">
+            <span>
+              One great feature of this app is the ability to turn off all transitions and animations.
+            </span>
+            <br>
+            <span>
+              This is useful for those who have motion sensitivity or who just prefer a more minimalistic experience.
+            </span>
+            <br>
+            <span>
+              
+            </span>
+          </div>
+          <div class="smia-ani">
             <span class="smdt-title">
               toggle on/off
             </span>

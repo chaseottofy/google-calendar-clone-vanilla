@@ -1,9 +1,9 @@
-import Entry from "../factory/entries"
-import localStoreKeyNames from "./constants"
-import { testDate, compareDates } from '../utilities/dateutils'
-import locales from "../locales/en"
-import defautlKeyboardShortcuts from "../locales/kbDefault"
-const colors = locales.colors
+import Entry from "../factory/entries";
+import localStoreKeyNames from "./constants";
+import { testDate, compareDates } from "../utilities/dateutils";
+import locales from "../locales/en";
+import defautlKeyboardShortcuts from "../locales/kbDefault";
+const colors = locales.colors;
 /*
   this is a temporary list of store methods for development purposes, it is not a complete list of methods
 
@@ -127,21 +127,24 @@ const colors = locales.colors
   ***************************************
 ]
 */
-// Store is passed to all calendar views in the following order : 
+// Store is passed to all calendar views in the following order :
 // ./index > ./renderViews > ./setViews > component
 
 class Store {
   constructor() {
-    this.store = localStorage.getItem("store") 
-    ? JSON.parse(localStorage.getItem("store")) : [];
+    this.store = localStorage.getItem("store")
+      ? JSON.parse(localStorage.getItem("store"))
+      : [];
 
     this.userUpload;
 
-    this.ctg = localStorage.getItem("ctg") ? JSON.parse(localStorage.getItem("ctg")) : {
-      "default": {color: colors.blue[4], active: true},
-      "misc": {color: colors.grey[2], active: true},
-      "school": {color: colors.grey[4], active: true},
-    }
+    this.ctg = localStorage.getItem("ctg")
+      ? JSON.parse(localStorage.getItem("ctg"))
+      : {
+        default: { color: colors.blue[4], active: true },
+        misc: { color: colors.grey[2], active: true },
+        school: { color: colors.grey[4], active: true },
+      };
 
     this.activeCtg = ["default", "misc", "school"];
 
@@ -149,40 +152,40 @@ class Store {
 
     this.handleRenders = {
       sidebar: {
-        callback: null
+        callback: null,
       },
       datepicker: {
-        reset: null
+        reset: null,
       },
       form: {
-        callback: null
+        callback: null,
       },
       reconfig: {
-        callback: null
+        callback: null,
       },
       categories: {
-        callback: null
+        callback: null,
       },
       calendars: {
-        "previous": {
+        previous: {
           reset: null,
         },
-        "month": {
+        month: {
           reset: null,
           resize: null,
         },
-        "week": {
-          reset: null, 
+        week: {
+          reset: null,
           render: null,
         },
-        "day": {
-          reset: null
+        day: {
+          reset: null,
         },
-        "list": {
-          reset: null
-        }
+        list: {
+          reset: null,
+        },
       },
-    }
+    };
 
     this.keyboardShortcuts = defautlKeyboardShortcuts;
     this.keyboardShortcutsStatus = true;
@@ -195,13 +198,15 @@ class Store {
   }
 
   getStoreStats() {
-    return [this.store.length, this.getAllCtgNames().length] 
+    return [this.store.length, this.getAllCtgNames().length];
   }
 
   getAllMethodNames() {
-    return Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter((method) => {
-      return method !== "constructor" && method !== "getStoreStats"
-    })
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(
+      (method) => {
+        return method !== "constructor" && method !== "getStoreStats";
+      }
+    );
   }
 
   /* ************************* */
@@ -209,7 +214,7 @@ class Store {
   static getStore() {
     return JSON.parse(localStorage.getItem("store")) || [];
   }
-  
+
   static getActiveStore() {
     return JSON.parse(localStorage.getItem("activeStore")) || [];
   }
@@ -240,16 +245,13 @@ class Store {
   }
 
   static setShortcutsStatus(status) {
-    localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status))
+    localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status));
   }
 
   static setAnimationStatus(status) {
-    localStorage.setItem("animationStatus", JSON.stringify(status))
+    localStorage.setItem("animationStatus", JSON.stringify(status));
   }
   /* ************************* */
-
-
-
 
   /* ************** */
   /* essential crud (entries) - create, read, update, delete */
@@ -264,21 +266,21 @@ class Store {
   }
 
   deleteEntry(id) {
-    this.store = this.store.filter(entry => entry.id !== id)
+    this.store = this.store.filter((entry) => entry.id !== id);
     Store.setStore(this.store);
   }
 
   getActiveEntries() {
-    const active = this.getActiveCategories()
+    const active = this.getActiveCategories();
     if (!active) return [];
     const activeEntries = this.store.filter((entry) => {
       return active ? active.indexOf(entry.category) > -1 : [];
-    })
-    return activeEntries
+    });
+    return activeEntries;
   }
-  
+
   getEntry(id) {
-    return this.store.find(entry => entry.id === id);
+    return this.store.find((entry) => entry.id === id);
   }
 
   getEntries() {
@@ -288,7 +290,7 @@ class Store {
   getEntriesByCtg(ctg) {
     return this.store.filter((entry) => {
       return entry.category === ctg;
-    })
+    });
   }
 
   removeLastEntry() {
@@ -297,81 +299,83 @@ class Store {
   }
 
   updateEntry(id, data) {
-    let entry = this.getEntry(id)
-    entry = Object.assign(entry, data)
+    let entry = this.getEntry(id);
+    entry = Object.assign(entry, data);
     Store.setStore(this.store);
   }
   /* ************ */
-
-
-
 
   /* **************************** */
   /* (ENTRIES) FILTER/SORT/PARTITION/ */
   searchBy(entries, searchtype, value) {
     if (entries.length === 0) return;
     return entries.filter((entry) => {
-      return entry[searchtype].toLowerCase().slice(0, value.length) === value
-    })
+      return entry[searchtype].toLowerCase().slice(0, value.length) === value;
+    });
   }
-  
+
   sortBy(entries, type, direction) {
     if (entries.length === 0) return;
-  
+
     if (direction === "desc") {
       return entries.sort((a, b) => {
         if (type === "start") {
-          return new Date(a.start) - new Date(b.start)
+          return new Date(a.start) - new Date(b.start);
         } else if (type === "end") {
-          return new Date(a.end) - new Date(b.end)
-        } else if (type === "description" || type === "title" || type === "category") {
-          return a[type].localeCompare(b[type])
+          return new Date(a.end) - new Date(b.end);
+        } else if (
+          type === "description" ||
+          type === "title" ||
+          type === "category"
+        ) {
+          return a[type].localeCompare(b[type]);
         } else {
-          return a[type] - b[type]
+          return a[type] - b[type];
         }
-      })
-  
+      });
     } else {
       return entries.sort((a, b) => {
         if (type === "start") {
-          return new Date(b.start) - new Date(a.start)
+          return new Date(b.start) - new Date(a.start);
         } else if (type === "end") {
-          return new Date(b.end) - new Date(a.end)
-        } else if (type === "description" || type === "title" || type === "category") {
-          return b[type].localeCompare(a[type])
+          return new Date(b.end) - new Date(a.end);
+        } else if (
+          type === "description" ||
+          type === "title" ||
+          type === "category"
+        ) {
+          return b[type].localeCompare(a[type]);
         } else {
-          return b[type] - a[type]
+          return b[type] - a[type];
         }
-      })
+      });
     }
   }
 
   /**
-   * 
+   *
    * @returns {Array} [
    *    start date/time of earliest entry,  {string}
    *    end date/time of last entry         {string}
    * ]
    */
   getFirstAndLastEntry() {
-    let sorted = this.sortBy(this.getActiveEntries(), "start", "desc")
+    let sorted = this.sortBy(this.getActiveEntries(), "start", "desc");
     if (sorted === undefined) {
-      return [0, 0]
+      return [0, 0];
     } else {
-      return [sorted[0].start, sorted[sorted.length - 1].end]
+      return [sorted[0].start, sorted[sorted.length - 1].end];
     }
   }
   /* **************************** */
-
-
 
   /* *************************************** */
   /* SEGMENT ENTRIES FOR SPECIFIC VIEWS (YEAR/MONTH/...ect)*/
 
   // @generateCoordinates -- (only used in week and day view)
   // generates coordinates based on start and end times for a given entry
-  // if an entry spans beyond a day, it will render at the top of the grid in 
-  // a static (immobile) position. 
+  // if an entry spans beyond a day, it will render at the top of the grid in
+  // a static (immobile) position.
   generateCoordinates(start, end) {
     [start, end] = [testDate(start), testDate(end)];
 
@@ -385,15 +389,15 @@ class Store {
         allDay: true,
         x: start.getDay(),
         x2: end.getDay(),
-      }
+      };
     } else {
       return {
         allDay: false,
         x: start.getDay(),
         y: startMin,
         h: height,
-        e: total
-      }
+        e: total,
+      };
     }
   }
 
@@ -401,8 +405,8 @@ class Store {
     let activeEntries = this.getActiveEntries();
     let boxes = {
       allDay: [], // entries that start on one day and end on another
-      day: []     // entries that start and end on same day
-    }
+      day: [], // entries that start and end on same day
+    };
 
     if (activeEntries.length === 0) return boxes;
 
@@ -413,21 +417,24 @@ class Store {
         entryDate.getMonth(),
         entryDate.getDate(),
       ];
-      return y === day.getFullYear() && m === day.getMonth() && d === day.getDate();
-    })
+      return (
+        y === day.getFullYear() && m === day.getMonth() && d === day.getDate()
+      );
+    });
 
     dayEntries.forEach((entry) => {
       entry.coordinates = this.generateCoordinates(
-        new Date(entry.start), new Date(entry.end)
+        new Date(entry.start),
+        new Date(entry.end)
       );
 
       if (entry.coordinates.allDay) {
-        boxes.allDay.push(entry)
+        boxes.allDay.push(entry);
       } else {
-        boxes.day.push(entry)
+        boxes.day.push(entry);
       }
-    })
-    return boxes
+    });
+    return boxes;
   }
 
   getDayEntriesArray(targetDate) {
@@ -439,110 +446,119 @@ class Store {
       const [y, m, d] = [
         entryDate.getFullYear(),
         entryDate.getMonth(),
-        entryDate.getDate()
+        entryDate.getDate(),
       ];
-      return y === targetDate.getFullYear() && m === targetDate.getMonth() && d === targetDate.getDate();
-    })
+      return (
+        y === targetDate.getFullYear() &&
+        m === targetDate.getMonth() &&
+        d === targetDate.getDate()
+      );
+    });
   }
 
   getMonthEntries(montharr) {
-    let activeEntries = this.getActiveEntries()
-    if (activeEntries.length === 0) return []
+    let activeEntries = this.getActiveEntries();
+    if (activeEntries.length === 0) return [];
 
     return activeEntries.filter((entry) => {
-      let entryDate = new Date(entry.start)
-      return entryDate >= montharr[0] && entryDate <= montharr[montharr.length - 1]
-    })
+      let entryDate = new Date(entry.start);
+      return (
+        entryDate >= montharr[0] && entryDate <= montharr[montharr.length - 1]
+      );
+    });
   }
-  
+
   getMonthEntryDates(montharr) {
-    let entries = this.getMonthEntries(montharr)
-    let grouped = {}
+    let entries = this.getMonthEntries(montharr);
+    let grouped = {};
     entries.forEach((entry) => {
-      let entryDate = new Date(entry.start)
-      const [y, m, d] = [entryDate.getFullYear(), entryDate.getMonth(), entryDate.getDate()]
-      let key = `${y}-${m}-${d}`
+      let entryDate = new Date(entry.start);
+      const [y, m, d] = [
+        entryDate.getFullYear(),
+        entryDate.getMonth(),
+        entryDate.getDate(),
+      ];
+      let key = `${y}-${m}-${d}`;
       if (!grouped[key]) {
-        grouped[key] = []
+        grouped[key] = [];
       }
-      grouped[key].push(entry)
-    })
-    return Object.keys(grouped)
+      grouped[key].push(entry);
+    });
+    return Object.keys(grouped);
   }
 
   getGroupedMonthEntries(entries) {
     return entries.reduce((acc, entry) => {
-      let tempDate = new Date(entry.start)
-      let day = tempDate.getDate()
+      let tempDate = new Date(entry.start);
+      let day = tempDate.getDate();
       if (!acc[day]) {
-        acc[day] = []
+        acc[day] = [];
       }
-      acc[day].push(entry)
+      acc[day].push(entry);
       return acc;
-    }, {})
+    }, {});
   }
 
   getWeekEntries(week) {
-    let activeEntries = this.getActiveEntries()
-    let [start, end] = [week[0], week[6]]
+    let activeEntries = this.getActiveEntries();
+    let [start, end] = [week[0], week[6]];
     let boxes = {
       allDay: [], // entries that start on one day and end on another
-      day: []     // entries that start and end on same day
-    }
+      day: [], // entries that start and end on same day
+    };
 
     if (activeEntries.length === 0) return boxes;
     let entries = activeEntries.filter((entry) => {
-      let entryDate = new Date(entry.start)
-      return entryDate >= start && entryDate <= end
-    })
+      let entryDate = new Date(entry.start);
+      return entryDate >= start && entryDate <= end;
+    });
 
     entries.forEach((entry) => {
       entry.coordinates = this.generateCoordinates(
-        new Date(entry.start), 
+        new Date(entry.start),
         new Date(entry.end)
-      )
+      );
 
       if (entry.coordinates.allDay) {
-        boxes.allDay.push(entry)
+        boxes.allDay.push(entry);
       } else {
-        boxes.day.push(entry)
+        boxes.day.push(entry);
       }
-    })
-    
-    return boxes
+    });
+
+    return boxes;
   }
 
   getYearEntries(year) {
-    let activeEntries = this.getActiveEntries()
-    if (activeEntries.length === 0) return []
-    return activeEntries.filter(entry => new Date(entry.start).getFullYear() === year)
+    let activeEntries = this.getActiveEntries();
+    if (activeEntries.length === 0) return [];
+    return activeEntries.filter(
+      (entry) => new Date(entry.start).getFullYear() === year
+    );
   }
 
   getGroupedYearEntries(yearentries) {
-    let grouped = {}
-    yearentries.forEach(entry => {
-      let entryDate = new Date(entry.start)
-      let month = entryDate.getMonth()
-      let day = entryDate.getDate()
+    let grouped = {};
+    yearentries.forEach((entry) => {
+      let entryDate = new Date(entry.start);
+      let month = entryDate.getMonth();
+      let day = entryDate.getDate();
 
       if (!grouped[month]) {
-        grouped[month] = {}
+        grouped[month] = {};
       }
 
       if (!grouped[month][day]) {
-        grouped[month][day] = []
+        grouped[month][day] = [];
       }
 
-      grouped[month][day].push(entry)
-    })
+      grouped[month][day].push(entry);
+    });
 
     return grouped;
   }
 
-  
   /* ************************************* */
-
-
 
   /* ********************* */
   /*  CATEGORY MANAGEMENT */
@@ -551,7 +567,7 @@ class Store {
       this.ctg[categoryName] = {
         color: color,
         active: true,
-      }
+      };
       Store.setCtg(this.ctg);
     }
   }
@@ -582,12 +598,12 @@ class Store {
         return [key, value.color];
       }
     }
-    const backup = this.getDefaultCtg()
-    return [backup[0], backup[1].color]
+    const backup = this.getDefaultCtg();
+    return [backup[0], backup[1].color];
   }
 
   getActiveCategories() {
-    let active = Object.keys(this.ctg).filter(key => this.ctg[key].active);
+    let active = Object.keys(this.ctg).filter((key) => this.ctg[key].active);
     if (active.length > 0) {
       return active;
     } else {
@@ -596,15 +612,15 @@ class Store {
   }
 
   getActiveCategoriesKeyPair() {
-    return Object.entries(this.ctg).filter(key => key[1].active);
+    return Object.entries(this.ctg).filter((key) => key[1].active);
   }
 
   getAllCtg() {
     return this.ctg;
   }
-  
+
   getAllCtgColors() {
-    return Object.values(this.ctg).map(ctg => ctg.color);
+    return Object.values(this.ctg).map((ctg) => ctg.color);
   }
 
   getAllCtgNames() {
@@ -622,7 +638,7 @@ class Store {
   }
 
   getCtgLength(category) {
-    return this.store.filter(entry => entry.category === category).length
+    return this.store.filter((entry) => entry.category === category).length;
   }
 
   hasCtg(categoryName) {
@@ -636,34 +652,34 @@ class Store {
   }
 
   /**
-   * 
-   * @param {string} category 
-   * @param {string} newCategory 
+   *
+   * @param {string} category
+   * @param {string} newCategory
    */
   moveCategoryEntriesToNewCategory(category, newCategory, newName) {
     if (this.hasCtg(category) || newName === true) {
-      this.store.forEach(entry => {
+      this.store.forEach((entry) => {
         if (entry.category === category) {
           entry.category = newCategory;
         }
-      })
-      Store.setStore(this.store)
+      });
+      Store.setStore(this.store);
     }
-    this.deleteCategory(category)
+    this.deleteCategory(category);
   }
-  
+
   removeCategoryAndEntries(category) {
     if (this.hasCtg(category)) {
-      this.store = this.store.filter(entry => entry.category !== category);
-      Store.setStore(this.store)
+      this.store = this.store.filter((entry) => entry.category !== category);
+      Store.setStore(this.store);
     }
-    this.deleteCategory(category)
+    this.deleteCategory(category);
   }
 
   setCategoryStatus(category, status) {
     if (this.hasCtg(category)) {
       this.ctg[category].active = status;
-      Store.setCtg(this.ctg)
+      Store.setCtg(this.ctg);
     }
   }
 
@@ -675,19 +691,19 @@ class Store {
         this.ctg[key].active = !status;
       }
     }
-    Store.setCtg(this.ctg)
+    Store.setCtg(this.ctg);
   }
 
   /**
-   * 
-   * @param {string} categoryName 
-   * @param {string} color 
+   *
+   * @param {string} categoryName
+   * @param {string} color
    * @desc updates the color of a category
    */
   updateCtgColor(categoryName, color) {
     if (this.hasCtg(categoryName)) {
       this.ctg[categoryName].color = color;
-      Store.setCtg(this.ctg)
+      Store.setCtg(this.ctg);
     }
   }
 
@@ -696,10 +712,10 @@ class Store {
   }
 
   /**
-   * 
-   * @param {string} newName 
-   * @param {string} newColor 
-   * @param {string} oldName 
+   *
+   * @param {string} newName
+   * @param {string} newColor
+   * @param {string} oldName
    * @returns new category object
    * @desc note that 'value' of [key, value] is necessary to segment the object, even if it is not directly referenced
    */
@@ -713,15 +729,15 @@ class Store {
     if (isNumeric(newName)) {
       newName = "category " + newName;
     }
-    
+
     for (let [key, value] of entries) {
-      count++
+      count++;
       if (count === 1) {
         // changing the default category;
         if (oldName === key) {
           entries[0][0] = newName;
           if (hasColor) {
-            entries[0][1].color = newColor
+            entries[0][1].color = newColor;
           }
         }
       } else {
@@ -734,21 +750,15 @@ class Store {
       }
     }
     if (entries.length !== length) {
-      console.error("something went wrong with category name/color change")
+      console.error("something went wrong with category name/color change");
       return;
     } else {
       this.ctg = Object.fromEntries(entries);
-      this.moveCategoryEntriesToNewCategory(
-        oldName, 
-        newName, 
-        true
-      );
+      this.moveCategoryEntriesToNewCategory(oldName, newName, true);
       Store.setCtg(this.ctg);
     }
   }
   /* ********************* */
-
-
 
   /* ***************************** */
   /*  KEYBOARD SHORTCUT MANAGEMENT */
@@ -757,12 +767,12 @@ class Store {
   }
 
   setShortCut(shortcut) {
-    const keys = Object.keys(this.getShortcuts())
-    let idx = keys.indexOf(shortcut)
+    const keys = Object.keys(this.getShortcuts());
+    let idx = keys.indexOf(shortcut);
     if (idx > -1) {
-      return `Shortcut (${shortcut}) is already in use`
+      return `Shortcut (${shortcut}) is already in use`;
     } else {
-      return;   
+      return;
     }
   }
 
@@ -791,7 +801,6 @@ class Store {
   }
   /* ***************************** */
 
-
   /* ******************** */
   /*  OVERLAY MANAGEMENT */
   // see readme @ --overlay management-- for more info
@@ -800,14 +809,16 @@ class Store {
   }
 
   removeActiveOverlay(overlay) {
-    const len = this.activeOverlay.size
+    const len = this.activeOverlay.size;
     if (len === 0) {
       return;
     } else if (this.activeOverlay.size === 1) {
       this.activeOverlay = new Set();
       return;
     } else {
-      this.activeOverlay = new Set([...this.activeOverlay].filter((o) => o !== overlay));
+      this.activeOverlay = new Set(
+        [...this.activeOverlay].filter((o) => o !== overlay)
+      );
       return;
     }
   }
@@ -821,22 +832,19 @@ class Store {
   }
   /* ******************** */
 
-
-
-
   /* ************************ */
   /*  JSON UPLOAD & DOWNLOAD */
   validateUserUpload(userUpload) {
     const keys = Object.keys(userUpload);
     let message = {};
     if (keys.length > localStoreKeyNames.length) {
-      message.err1 = "invalid number of keys (too many)"
+      message.err1 = "invalid number of keys (too many)";
     }
-    
+
     for (let i = 0; i < keys.length; i++) {
       if (!localStoreKeyNames.includes(keys[i])) {
         let errname = "err" + Object.keys(message).length;
-        message[errname] = "invalid key: " + keys[i]
+        message[errname] = "invalid key: " + keys[i];
       }
     }
 
@@ -851,10 +859,10 @@ class Store {
     const validation = this.validateUserUpload(userUpload);
     let validated;
     if (validation === true) {
-      localStorage.clear()
+      localStorage.clear();
       validated = true;
       for (const [key, value] of Object.entries(userUpload)) {
-        localStorage.setItem(key, value)
+        localStorage.setItem(key, value);
       }
     } else {
       return validation;
@@ -867,13 +875,11 @@ class Store {
       }
     }
   }
-  
+
   getUserUpload() {
     return this.userUpload;
   }
   /* ************************ */
-
-
 
   /* ******************************************* */
   /*  STATE MANAGEMENT : RENDERING / RESET / RESIZE */
@@ -883,15 +889,15 @@ class Store {
   setFormRenderHandle(type, callback) {
     this.handleRenders.calendars[type].render = callback;
   }
-  
+
   setFormResetHandle(type, callback) {
     this.handleRenders.calendars[type].reset = callback;
   }
-  
+
   setRenderFormCallback(callback) {
     this.handleRenders.form.callback = callback;
   }
-  
+
   setRenderSidebarCallback(callback) {
     this.handleRenders.sidebar.callback = callback;
   }
@@ -909,7 +915,7 @@ class Store {
   }
 
   setResetPreviousViewCallback(callback) {
-    this.handleRenders.calendars['previous'].reset = callback;
+    this.handleRenders.calendars["previous"].reset = callback;
   }
 
   setRenderCategoriesCallback(callback) {
@@ -921,7 +927,7 @@ class Store {
   }
 
   getResetPreviousViewCallback() {
-    return this.handleRenders.calendars['previous'].reset;
+    return this.handleRenders.calendars["previous"].reset;
   }
 
   getResetDatepickerCallback() {
@@ -947,7 +953,7 @@ class Store {
       return this.handleRenders.calendars[type].render;
     }
   }
-  
+
   getFormResetHandle(type) {
     if (this.handleRenders.calendars[type].reset === undefined) {
       return null;
@@ -957,7 +963,7 @@ class Store {
   }
 
   getRenderFormCallback() {
-    const callback = this.handleRenders.form.callback
+    const callback = this.handleRenders.form.callback;
     if (callback !== null) {
       return callback;
     } else {
@@ -977,4 +983,4 @@ class Store {
 }
 
 // single
-export default new Store()
+export default new Store();

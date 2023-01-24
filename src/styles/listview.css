@@ -12,16 +12,13 @@
   transition-duration: 0.3s;
 }
 
-
-
 .listview__rowgroup {
-  border-top: var(--bordergrey);
+  border-bottom: var(--bordergrey);
   display:flex;
   width: 100%;
   height: auto;
   flex-direction: row;
 }
-
 
 .rowgroup-header {
   display:flex;
@@ -108,7 +105,6 @@
   margin-bottom: 8px;
 }
 
-
 .rowgroup--cell__color {
   width: 10px;
   height: 10px;
@@ -142,6 +138,12 @@
 }
 
 /* queries */
+
+@media screen and (max-width: 840px) {
+  .listview__body {
+    margin-left: 62px !important;
+  }
+}
 
 @media screen and (max-width: 720px) {
   .rowgroup-header {

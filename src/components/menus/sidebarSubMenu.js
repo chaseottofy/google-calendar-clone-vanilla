@@ -16,9 +16,11 @@ const themeRadioOptions = ["dark", "light", "contrast"];
 
 // keyboard shortcut toggle on/off | open modal
 const shortcutSwitch = document.querySelector(".smia-toggle-shortcuts-checkbox")
-const animationsSwitch = document.querySelector(".smdt-toggle-checkbox")
+const animationsSwitchBtn = document.querySelector(".smdt-toggle-checkbox")
+// const animationsIcon = document.querySelector(".toggle-animations-icon__sm");
 const shortcutTitle = document.querySelector(".smia-set-status-title")
 const notifyDisabledShortcutsIcon = document.querySelector(".keyboard-disabled-sm")
+
 
 export default function getSidebarSubMenu(store, context) {
 
@@ -132,18 +134,21 @@ export default function getSidebarSubMenu(store, context) {
     const themeIdx = themeRadioOptions.indexOf(context.getColorScheme())
     themeRadioBtns[themeIdx].checked = true;
 
-    const shortcutStatus = store.getShortcutsStatus()
-    setStatusIcon(shortcutStatus)
-    if (shortcutStatus) {
-      shortcutSwitch.checked = true;
-    } else {
-      shortcutSwitch.checked = false;
-    }
 
-    animationsSwitch.checked = store.getAnimationStatus();
+    const shortcutStatus = store.getShortcutsStatus();
+    setStatusIcon(shortcutStatus);
+    shortcutSwitch.checked = shortcutStatus;
+
+
+    const animationStatus = store.getAnimationStatus()
+    setAnimationsIcons(animationStatus);
+    animationsSwitchBtn.checked = animationStatus;
+
+
     store.addActiveOverlay(closemenu);
     sidebarSubMenu.classList.remove(closemenu);
     sidebarSubMenuOverlay.classList.remove(closemenu);
+
     document.addEventListener("keydown", closeSubOnEscape);
     sidebarSubMenuOverlay.onclick = closeSubMenu;
     closeSubMenuBtn.onclick = closeSubMenu;
@@ -275,9 +280,31 @@ export default function getSidebarSubMenu(store, context) {
     shortcutSwitch.checked = status ? true : false;
   }
 
-  function toggleAnimations() {
-    const status = animationsSwitch.checked ? false : true;
+  function setAnimationsIcons(val) {
+    const parenticonwrapper = document.querySelector(".toggle-animations-icon__sm")
+    const icons = {
+      on: document.querySelector(".tai-on"),
+      off: document.querySelector(".tai-off"),
+    }
+
+    if (val) {
+      icons.on.classList.remove("hide-tai")
+      icons.off.classList.add("hide-tai")
+      parenticonwrapper.setAttribute("data-tooltip", "Animations Enabled");
+    } else {
+      icons.on.classList.add("hide-tai")
+      icons.off.classList.remove("hide-tai")
+      parenticonwrapper.setAttribute("data-tooltip", "Animations Disabled");
+    }
+  }
+
+  function toggleAnimations(fromicon) {
+    const status = animationsSwitchBtn.checked ? false : true;
     store.setAnimationStatus(status)
+    setAnimationsIcons(status)
+    if (fromicon) {
+      animationsSwitchBtn.checked = status ? true : false;
+    }
     if (status) {
       appBody.classList.remove("disable-transitions")
     } else {
@@ -293,7 +320,7 @@ export default function getSidebarSubMenu(store, context) {
     const shortcutSwitch = getClosest(e, ".smia-disable-shortcuts__btn")
     const shortcutSwitchNotifyIcon = getClosest(e, ".keyboard-disabled-sm")
     const animationsSwitch = getClosest(e, ".smdt-toggle")
-
+    const animationsIcon = getClosest(e, ".toggle-animations-icon__sm")
 
     if (downloadjsonBtn) {
       handleCalendarJSON("download");
@@ -327,6 +354,11 @@ export default function getSidebarSubMenu(store, context) {
 
     if (animationsSwitch) {
       toggleAnimations();
+      return;
+    }
+
+    if (animationsIcon) {
+      toggleAnimations(true);
       return;
     }
   }

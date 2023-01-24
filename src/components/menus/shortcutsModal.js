@@ -4,7 +4,6 @@ const shortcutsModalContent = document.querySelector(".shortcuts-modal-content")
 const shortcutsModalClose = document.querySelector(".close-shortcuts-modal")
 const notifyShortcutsStatus = document.querySelector(".keyboard-disabled-sm-two")
 export default function handleShortCutsModal(store) {
-
   function createShortcut(key, description) {
     const shortcut = document.createElement("div");
     shortcut.classList.add("sm-item");
@@ -70,7 +69,6 @@ export default function handleShortCutsModal(store) {
       notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--red1)")
     }
   }
-
   
   function handleShortcutsModalOpen() {
     shortcutsModalContent.innerText = "";
@@ -89,7 +87,6 @@ export default function handleShortCutsModal(store) {
         value.action,
       ));
     }
-
 
     function toggleShortcutsStatus() {
       const status = store.getShortcutsStatus() === false ? true : false;

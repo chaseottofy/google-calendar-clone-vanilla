@@ -14,20 +14,13 @@ export default function setHeader(context, component, store) {
   const datetimeContent = document.querySelector(".datetime-content")
   const collapsebtn = document.querySelector(".collapse-view")
   component === "week" || component === "day" ? collapsebtn.classList.remove("hide-cbt") : collapsebtn.classList.add("hide-cbt");
-  // console.log(component)
 
   const configHeader = (borderstyle, componentTitle) => {
+    header.style.borderBottom = borderstyle;
     dateTimeTitle.textContent = componentTitle;
     datetimeWrapper.classList.remove("datetime-inactive");
-    // header.style.borderBottom = borderstyle;
     datetimeWrapper.style.paddingRight = "0";
     datetimeContent.removeAttribute("style")
-  }
-
-  const configListHeader = (componentTitle) => {
-    dateTimeTitle.textContent = componentTitle;
-    // header.style.borderBottom = "1px solid var(--mediumgrey1)"
-    datetimeWrapper.classList.add("datetime-inactive");
   }
 
   const setHeaderAttributes = (view) => {
@@ -49,8 +42,6 @@ export default function setHeader(context, component, store) {
       setHeaderAttributes("week");
       break;
     case "month":
-      // 1px solid transparent
-      // var(--bordergrey)
       configHeader("1px solid transparent", `${context.getMonthName()} ${context.getYear()}`);
       setHeaderAttributes("month");
       break;
@@ -59,9 +50,8 @@ export default function setHeader(context, component, store) {
       setHeaderAttributes("year");
       break;
     case "list":
-      // !Important : text content is set in list.js after data is fetched
       setHeaderAttributes("list");
-      // header.style.borderBottom = "1px solid var(--mediumgrey1)"
+      header.style.borderBottom = "1px solid var(--mediumgrey1)";
       datetimeWrapper.classList.add("datetime-inactive");
       break;
     default:
