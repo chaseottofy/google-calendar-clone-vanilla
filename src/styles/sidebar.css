@@ -521,7 +521,6 @@
 
 @media screen and (max-height: 470px) {
   .sidebar {
-    background: var(--primary1) !important;
     top: 53px;
     height: calc(100% - 53px);
   }

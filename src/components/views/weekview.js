@@ -63,6 +63,7 @@ export default function setWeekView(context, store, datepickerContext) {
   const weekArray = context.getWeekArray()
   let entries = store.getWeekEntries(weekArray)
   let boxes = new Week(entries.day, entries.allDay);
+  let firstY = null;
 
   function setDayView(e) {
     let [yr, mo, da] = getDateFromAttribute(e.target, "data-weekview-date")
@@ -117,8 +118,6 @@ export default function setWeekView(context, store, datepickerContext) {
       weekviewHeaderDayNumber[idx].setAttribute("data-weekview-date", ymd[idx]);
       topCols[idx].setAttribute("data-wvtop-day", num)
     })
-
-    // weekviewHeader.onmousedown = setDayView
   }
 
   function renderSidebarDatepickerWeek() {
@@ -137,6 +136,8 @@ export default function setWeekView(context, store, datepickerContext) {
     resetWeekviewBoxes()
 
     boxes.getBoxes().forEach((entry) => {
+      const y = entry.coordinates.y;
+      firstY == null || y < firstY ? (firstY = y) : null;
       const col = cols[+entry.coordinates.x];
       createBox(col, entry, "week", store.getCtgColor(entry.category))
     })
@@ -200,12 +201,8 @@ export default function setWeekView(context, store, datepickerContext) {
     cellcategoryTitle.textContent = "category: " + entry.category;
 
     const getContextMenuViaMeatball = (e) => {
-      getWeekViewContextMenu(
-        +col.getAttribute("data-allday-column"),
-        entry, 
-        handleCloseCallback, 
-        e
-      );
+      getWeekViewContextMenu(entry, handleCloseCallback, e);
+      cell.style.filter = "brightness(1.1)";
     }
 
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
@@ -221,10 +218,18 @@ export default function setWeekView(context, store, datepickerContext) {
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
     const rect = col.getBoundingClientRect();
+    console.log(rect)
+    // console.log(entries.length)
+    let entriesoffset;
+    if (entries.length < 4) {
+      entriesoffset = parseInt(55 * entries.length) + 60;
+    } else {
+      entriesoffset = parseInt(55 * 4) + 60;
+    }
 
     let [x, y] = placePopup(
-      240 + parseInt(calendarContainer.scrollLeft),
-      320,
+      240,
+      entriesoffset,
       [
         parseInt(rect.left), 
         parseInt(rect.top) + 24
@@ -235,10 +240,11 @@ export default function setWeekView(context, store, datepickerContext) {
     )
 
     if (x + 250 > window.innerWidth) {
-      modal.style.left = window.innerWidth - 240 + "px"
+      modal.style.left = window.innerWidth - 246 + "px"
     } else {
       modal.style.left = x + "px"
     }
+
     modal.style.top = y + "px"
 
     const modalheader = document.createElement("div")
@@ -331,18 +337,16 @@ export default function setWeekView(context, store, datepickerContext) {
 
   // ***********************
   // CONTEXT MENU SETUP
-  function getWeekViewContextMenu(cell, entry, handleCloseCallback, e) {
+  function getWeekViewContextMenu(entry, handleCloseCallback, e) {
     const id = entry.id;
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
-    const rect = cols[+cell].getBoundingClientRect()
+    const targetrect = e.target.getBoundingClientRect();
     let [x, y] = placePopup(
       400,
       165,
-      [parseInt(rect.left), e.clientY],
+      [parseInt(targetrect.right), (e.clientY) + 28],
       [window.innerWidth, window.innerHeight],
-      true,
-      240
     )
 
     store.setFormResetHandle("week", handleCloseCallback);
@@ -739,6 +743,12 @@ export default function setWeekView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetWeekviewBoxes)
     main.onmousedown = delegateGridEvents;
     alldaymodule.onmousedown = delegateGridTop;
+    console.log(firstY)
+    if (firstY !== null) {
+      setTimeout(() => {
+        weekviewGrid.scrollTo({top:Math.abs((+firstY * 12.5) - 25), behavior: "instant"})
+      }, 4)
+    }
   }
   initWeek();
 

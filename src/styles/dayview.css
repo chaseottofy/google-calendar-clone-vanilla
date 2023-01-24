@@ -15,7 +15,7 @@
   width: 100%;
   min-height: 54px;
   margin-left: 4px;
-  
+
   transition: margin-left 150ms ease-in-out;
 }
 
@@ -172,31 +172,33 @@
   max-width: 540px;
   max-height: 400px;
   border-radius: 6px;
-  padding: 6px 16px 8px 16px;
+  padding: 0 2px 8px 6px;
   overflow:hidden;
   z-index: 980;
 }
 
 .dv--morepopup__header {
-  display:flex;
-  height: 24px;
+  height: 48px;
   width: 100%;
+  display:flex;
   justify-content: space-between;
   align-items: center;
+  padding-right: 12px;
 }
+
 .dv--morepopup__title {
   color: var(--white2);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  line-height: 24px;
+  line-height: 16px;
   text-align: left;
   padding-left: 4px;
   width: 100%;
 }
 .dv--morepopup__close {
   cursor: pointer;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -212,7 +214,7 @@
   column-gap: 4px;
   row-gap: 2px;
   height: auto;
-  overflow-y:auto;
+  overflow-y:scroll;
   overflow-x:hidden;
   width: 100%;
 }
@@ -230,7 +232,8 @@
 
 .dv--morepopup__entry-title {
   color: var(--taskcolor0);
-  font-size: 11px;
+  font-size: 12px;
+  line-height: 18px;
   font-weight: 500;
   padding: 0 4px;
   pointer-events: none;
@@ -239,12 +242,16 @@
 .dv--morepopup__entry-category,
 .dv--morepopup__entry-time {
   color: var(--taskcolor);
-  font-size: 10px;
-  line-height: 10px;
+  font-size: 11px;
+  line-height: 8px;
   font-weight: 400;
-  margin-top: 4px;
+  margin-top: 5px;
   padding: 0 4px;
   pointer-events: none;
+}
+
+.dv--morepopup__entry:hover {
+  filter: brightness(1.1);
 }
 
 
