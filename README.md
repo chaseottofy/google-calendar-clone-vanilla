@@ -68,6 +68,8 @@ I've implemented several new features to improve the user experience but overall
 
 ### `git clone`
 
+### `cd google-calendar-clone-vanilla`
+
 ### `npm install`
 
 ## Available Scripts
