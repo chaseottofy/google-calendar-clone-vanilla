@@ -849,21 +849,25 @@ document.querySelector(`[data-mv-coordinates="${newX},${newY}"]`).classList.add(
 
 ### monthview mouseup
 
-1. Find the "current-drop-zone" cell.
-2. Get coordinates of new cell.
-3. Get the content of the new cell.
-4. Get array of boxes in the new cell if any.
+1.) Find the "current-drop-zone" cell.
+2.) Get coordinates of new cell.
+3.) Get the content of the new cell.
+4.) Get array of boxes in the new cell if any.
 
-5. Determine if the box moved or not during the drag process. If not, open the context menu and remove the clone.
+5.) Determine if the box moved or not during the drag process. If not, open the context menu and remove the clone.
 
-6. Box moved, one of the following will occur:
-  i. cell had 6 or more elements, remove the clone and update the data attribute inidicating the number of events in the cell (only if the box was moved to a different cell).
-  ii. cell now has 5 elements, remove the clone and all of the boxes in the cell and replace them with a data attribute indicating the number of events in the cell. (i.e cell is now a grouped cell).
-  iii. cell has less than 5 elements, remove the clone and append the box to the cell. Re-calculated the top values of the boxes in the cell.
-  iv. cell is empty, remove the clone and append the box to the cell.
+6.) Box moved, one of the following will occur:
 
-7. Remove the current-drop-zone class from the cell.
-8. Remove mousemove, mouseup events and reset the cursor.
+  **i. cell had 6 or more elements, remove the clone and update the data attribute inidicating the number of events in the cell (only if the box was moved to a different cell).**
+
+  **ii. cell now has 5 elements, remove the clone and all of the boxes in the cell and replace them with a data attribute indicating the number of events in the cell. (i.e cell is now a grouped cell).**
+
+  **iii. cell has less than 5 elements, remove the clone and append the box to the cell. Re-calculated the top values of the boxes in the cell.**
+
+  **iv. cell is empty, remove the clone and append the box to the cell.**
+
+7.) Remove the current-drop-zone class from the cell.
+8.) Remove mousemove, mouseup events and reset the cursor.
 
 ## MV-grouping
 
