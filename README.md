@@ -160,13 +160,13 @@ There exist four total drag systems throughout the app, three of which are compl
 
 Setting up this particular Drag System is really the trickiest part of the process.
 Steps (i - iii) will cover most of the setup procedure.
-Steps (iv - v) will cover the actual drag and drop system.
+Steps (iv) will cover the actual drag and drop system.
 
-### I) [Generating-Coordinates](#generating-coordinates)
+### I) [WD-Generating-Coordinates](#wd-generating-coordinates)
 
-### II) [Setup-Positioning](#setup-positioning)
+### II) [WD-Setup-Positioning](#wd-setup-positioning)
 
-### III) [Administer-Positioning](#administer-positioning)
+### III) [WD-Administer-Positioning](#wd-administer-positioning)
 
 ### IV) [WD-DragEngine](#wd-dragengine)
 
@@ -194,7 +194,7 @@ The parent container is also given a fixed height of 1200px, and each column wit
 
 The fixed height is necessary to ensure that the background-image linear gradient always coincides with the correct calculated row height. Screen width luckily does not affect the background-image gradient, so it only needs to be calculated once.
 
-## Generating-Coordinates
+## WD-Generating-Coordinates
 
 The coordinates for each entry are generated based on the start/end time of each entry.
 
@@ -225,7 +225,7 @@ const total = startMinutes + height
   * h: height,          (total number of rows)
   * e: total,           (last row of entry)
 
-## Setup-Positioning
+## WD-Setup-Positioning
 
 **Take note of the following:**
 Each entry is positioned absolutely within its column. The top & height properties are calculated based on the coordinates calculated in step 2.
@@ -323,7 +323,7 @@ Currently, there are 15 different pairs of left & width properties that a box ca
 
 The section below will explain how these values are assigned.
 
-## **Administer-Positioning:**
+## **WD-Administer-Positioning**
 
 ### **a) Determine whether or not a collision has occurred**
 
@@ -590,11 +590,68 @@ if (tempbox === null) {
 
 ## Month-Drag
 
+The Month Drag/Grid system follows a fairly similar procedure to the Week/Day drag system but is just different enough to warrant its own section entirely.
+
+Some of the functions are re-used I will not be going into too much detail on them.
+
+This particular view is very easy to underestimate. No it is not overly difficult to conceptualize, and getting a basic version running is relatively easy.
+
+The money here is 100% in the details.
+The details are what make this view so difficult to implement.
+The details are what make this view so difficult to maintain.
+The details are what make this view so difficult to scale.
+
+Yes, I am aware I missed a few details myself, namely the ability to resize boxes horizontally across cells / have the length of boxes be represented across multiple days.
+
+Until about a month ago, believe it or not, I did have this kind of feature implemented and quickly garnered an irrational hatred for it. Perhaps I will revisit it in the future but I'm just not completely sold on the idea. I digress.
+
+Now, before going further, I advise you to ask yourself how you would solve/implement the following features. If I had taken the time to really ask myself how I would implement these features, I wouldn't have had to completely re-write the entire system twice:
+
+* A dynamic grid with 35-42 cells depending on the month.
+* Cells can hold up to 6 boxes at a time.
+* If more than 6 boxes are in a cell, remove all boxes from the cell and populate the cell with div indicating the number of events on that day.
+  * Clicking on the div will open a modal with all of the boxes in that cell.
+  * The modal should essentially be a larger cloned version of its respective cell.
+  * Boxes in the modal should be able to be dragged out of the modal and into the calendar.
+  * They should also be able to be dragged back into the modal.
+* Drag boxes to any cell, if the cell is full, group all boxes in that cell and create the modal described above.
+* Boxes must be clickable AND draggable.
+* Click on empty cell to open form on that day.
+* Responsive design : boxes have inline styles, they must rely on some resize event for recalculation. System should only ever fire once per designated change and should be garbage collected if month is not in view.
+* No more than 4 active listeners at any given time.
+* Be able to handle 1000+ boxes at a time without any noticeable performance issues.
+
+If you've gotten this far, I will tell you now that this system is much easier to implement and conceptualize than the week/day view, I just find it particularly sneaky/annoying.
+
+### I) [MV-Setup-Positioning](#mv-setup-positioning)
+
+### II) [MV-Administer-Positioning](#mv-administer-positioning)
+
+### III) [MV-DragEngine](#mv-dragengine)
+
+### IV) [MV-Grouping](#mv-grouping)
+
+## MV-Setup-Positioning
+
+Unlike the day & week view, the monthview grid does not have a fixed height, nor does it have a fixed number of rows. To accommodate this, this grid system uses a combination of flexbox, absolute positioned elements, and a query system attached to window resize events that will help recalculate the inline styles of boxes.
+
+## MV-Administer-Positioning
+
+Work in progress.
+
+## MV-DragEngine
+
+Work in progress.
+
+## MV-Grouping
+
 Work in progress.
 
 ## Form-Drag
 
-The Form Drag system follows a fairly simple procedure.
+The Form Drag system follows a fairly simple procedure. (Nothing like the month/week/day views).
+
+If you weren't aware that the form even had drag capabilities, try it out for yourself by grabbing on to the form's header (space adjacent to close form button).
 
 ## Resize_Systems
 
