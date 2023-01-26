@@ -850,8 +850,11 @@ document.querySelector(`[data-mv-coordinates="${newX},${newY}"]`).classList.add(
 ### monthview mouseup
 
 1.) Find the "current-drop-zone" cell.
+
 2.) Get coordinates of new cell.
+
 3.) Get the content of the new cell.
+
 4.) Get array of boxes in the new cell if any.
 
 5.) Determine if the box moved or not during the drag process. If not, open the context menu and remove the clone.
@@ -867,6 +870,7 @@ document.querySelector(`[data-mv-coordinates="${newX},${newY}"]`).classList.add(
   **iv. cell is empty, remove the clone and append the box to the cell.**
 
 7.) Remove the current-drop-zone class from the cell.
+
 8.) Remove mousemove, mouseup events and reset the cursor.
 
 ## MV-grouping
