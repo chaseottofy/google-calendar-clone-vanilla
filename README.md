@@ -36,33 +36,27 @@ Thank you for taking the time to check out this project!
 
 11. [Journal](#journal)
 
-## Cloning_This_Repo
+### Cloning_This_Repo
 
-### `git clone`
+#### `git clone`
 
-### `cd google-calendar-clone-vanilla`
+#### `cd google-calendar-clone-vanilla`
 
-### `npm install`
+#### `npm install`
 
-## Available_Scripts
+### Available_Scripts
 
-### `npm run build`
+#### `npm run build`
 
 Builds the app and **necessary** resources in the `dist` folder.
 
-### `npm run dev`
+#### `npm run dev`
 
 Starts the webpack development server on `localhost:3000`.
 
 ## Drag_Systems
 
 ### 1. [Week-Day-Drag](#week-day-drag)
-
-#### 1.a [Generate-Coordinates](#generate-coordinates)
-
-#### 1.b [Positioning-Setup](#positioning-setup)
-
-#### 1.c [Administer-Positioning](#administer-positioning)
 
 ### 2. [Month-Drag](#month-drag)
 
@@ -71,6 +65,12 @@ Starts the webpack development server on `localhost:3000`.
 There exist four total drag systems throughout the app, three of which are completely different from one another.
 
 ## Week-Day-Drag
+
+### i) [Generate-Coordinates](#generate-coordinates)
+
+#### ii) [Positioning-Setup](#positioning-setup)
+
+#### iii) [Administer-Positioning](#administer-positioning)
 
 This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.
 
