@@ -66,43 +66,43 @@ There exist four total drag systems throughout the app, three of which are compl
 
 ## Week-Day-Drag
 
-### i) [Generate-Coordinates](#generate-coordinates)
+### i) [Generating-Coordinates](#generating-coordinates)
 
-#### ii) [Positioning-Setup](#positioning-setup)
+### ii) [Setup-Positioning](#setup-positioning)
 
-#### iii) [Administer-Positioning](#administer-positioning)
+### iii) [Administer-Positioning](#administer-positioning)
 
-This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.
+**This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.**
 
 Each column has relative positioning and a fixed height of 1200px.
 
-What makes this grid system particularly unique is the fact that each column does not have any rows. Instead, each column is a container for a series of divs (entries) that are positioned absolutely.
+What makes this grid system particularly unique is the fact that columns do not technically have rows. Instead, each column is a container for a series of divs (entries) that are positioned absolutely.
 
-The visual representation of rows is created by the background image of each colunmn, in which a linear gradient is calculated as follows:
+The visual representation of rows is created by a background image (linear-gradient) defined in the parent containers css.
 
-* Weekview:
+* Weekview Grid Container:
   * background-size: calc(100% / 7) 4%;
     * (7 days in a week, 4% of the height of each column).
   * background-image: linear-gradient(to bottom, var(--mediumgrey1) 1%,transparent 0);
     * (1% of the height of each column).
 
-* Dayview:
+* Dayview Grid Container:
   * background-size: 100% 4%
     * (1 day, 4% of the height of each column).
   * background-image: linear-gradient(to bottom,var(--mediumgrey1) 1%,transparent 0)
     * (1% of the height of each column).
 
-The parent container of the columns is given a fixed height of 1200px, and each column within the container is given relative positioning and a min-height of 100%. The fixed height is necessary to ensure that the background-image linear gradient always coincides with the correct calculated row height. Screen width luckily does not affect the background-image gradient, so it only needs to be calculated once.
+The parent container is also given a fixed height of 1200px, and each column within the container is given relative positioning / min-height of 100%.
 
-### Generate-Coordinates
+The fixed height is necessary to ensure that the background-image linear gradient always coincides with the correct calculated row height. Screen width luckily does not affect the background-image gradient, so it only needs to be calculated once.
+
+## Generating-Coordinates
 
 The coordinates for each entry are generated based on the start/end time of each entry.
 
-**Steps:**
+### **a) : convert the start/end time of each entry into minutes.**
 
-**a.)**: convert the start/end time of each entry into minutes.
-
-**b.)**: convert minutes into 15 minute intervals. For example, if an entry starts at 9:30, it will be converted to 38, since 38 represents the number of 15 minute intervals from 12:00AM.
+For example, if an entry starts at 9:30, it will be converted to 38, since 38 represents the number of 15 minute intervals from 12:00AM
 
 ```javascript
 const startMinutes = start.getHours() * 4 + Math.floor(start.getMinutes() / 15)
@@ -111,7 +111,7 @@ const height = endMinutes - startMinutes
 const total = startMinutes + height
 ```
 
-**c.)**: determine whether an entry extends beyond a day by comparing the start/end day/week/year of entry.
+### **b) : determine whether an entry extends beyond a day by comparing the start/end day/week/year of entry**
 
 **Coordinates:**
 
@@ -127,25 +127,19 @@ const total = startMinutes + height
   * h: height,          (total number of rows)
   * e: total,           (last row of entry)
 
-### Positioning-Setup
-
-**Steps**
-a.) Calculate top & height properties for boxes inline-syling.
-b.) Provide the entry with a slew of data attributes that will be used for repositioning/collision handling after drag/resize events.
-c.) Define system to calculate the left & width properties of each box.
-d.) Basic Example
+## Setup-Positioning
 
 **Take note of the following:**
 Each entry is positioned absolutely within its column. The top & height properties are calculated based on the coordinates calculated in step 2.
 
-**a.):**
+### **a) Calculate top & height properties for boxes inline-syling.**
 
 ```javascript
 const top = (y * 12.5) + 'px'
 const height = (h * 12.5) + 'px'
 ```
 
-**b.):**
+### **b) Provide the entry with a slew of data attributes that will be used for repositioning/collision handling after drag/resize events.**
 
 **Important! From this point on I will be referring to entries as boxes.**
 
@@ -167,7 +161,7 @@ const height = (h * 12.5) + 'px'
   * data-end: x2 (day of week event ends).
   * data-box-category: same as above.
 
-**c.):**
+### **c) Define system to calculate the left & width properties of each box.**
 
 This process is relatively simple for entries that start and end on different days since their position is static.
 
@@ -204,7 +198,8 @@ left: calc((100% - 4px) * 0 + 0px);
 width: calc((100% - 4px) * 1 - 0px);
 ```
 
-**d.):**
+### **d) Basic Example**
+
 **Now lets take a look at a basic collision and how to handle it:**
 
 Box 1: 9:00AM - 10:00AM
@@ -230,19 +225,12 @@ Currently, there are 15 different pairs of left & width properties that a box ca
 
 The section below will explain how these values are assigned.
 
-### **Administer-Positioning:**
+## **Administer-Positioning:**
 
-**Steps:**
-
-a.) determine whether or not a collision has occurred.
-b.) assign the left & width properties of each box.
-
-**a.):**
+### **a) Determine whether or not a collision has occurred**
 
 Note that this is not necessary if only one box is present in the column.
-
 Collision detection will only occur if there are two or more boxes in the column.
-
 ./src/factory/entries.js (@function checkForCollision())
 
 ```javascript
@@ -277,7 +265,7 @@ return [...collisions].sort((a, b) => {
 })
 ```
 
-**b.):**
+### b.) assign the left & width properties of each box
 
 ./src/utilities/dragutils.js (@function handleOverlap())
 
