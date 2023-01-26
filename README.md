@@ -28,7 +28,7 @@ Thank you for taking the time to check out this project!
 
 7. [Time_Handling](#time_handling)
 
-8. [Overlay_System](#overlay_system)
+8. [Form_Handling](#form_handling)
 
 9. [Views](#views)
 
@@ -417,7 +417,176 @@ function setBoxWidthDay(box, prepend, dataidx) {
 
 ## **WD-DragEngine**
 
-### a) Drag-Start
+The biggest detail to note about the drag engine is that it does not use javascripts drag & drop API. Another key detail: the drag engine will treat the event as a click until 3px of movement is detected. Only until 3px of movement occurs will the actual drag process begin.
+
+### a) Setup for a potential drag event
+
+**Setup process:**
+
+1.) The user clicks and holds down on a box.
+2.) Listeners are added to the document to listen for mousemove and mouseup events.
+3.) Starting positions of the box are created to handle instances where the box is moved around the grid and then returned to its original position.
+
+```javascript
+const startTop = +box.style.top.split("px")[0]
+const boxHeight = +box.style.height.split("px")[0]
+```
+
+4.) Variables that contain the original mouse positions are set (x & y), these are not subject to change. originalColumn will also not change, currentColumn will change if the box moves to a new column. movedY & movedX will track the mouse movements for the below flag.
+
+```javascript
+let startCursorY = e.pageY - grid.offsetTop;
+let startCursorX = e.pageX
+const originalColumn = col.getAttribute("data-column-index");
+let currentColumn = col.getAttribute("data-column-index");
+let [movedY, movedX] = [null, null]
+```
+
+5.) A flag called "hasStyles" is created and set to false. If the below variables track movement beyond 3px either vertically or horizontally at any point, the flag will be set to true and a clone of the box will be appended to the DOM. The original box is then given .5 opacity and the document body's cursor is set to "move". The cloned box will now follow the mouse movements in intervals of 12.5px vertically, and between columns if in week view.
+
+```javascript
+// determine if dragging should begin.
+sX = Math.abs(e.clientX - startCursorX);
+sY = Math.abs(e.clientY - tempstartY);
+if (!hasStyles) {
+  if (sX > 3 || sY > 3) {
+    hasStyles = true;
+    document.body.style.cursor = "move";
+    if (box.classList.contains("box-ontop")) {
+      boxhasOnTop = true;
+      resetStyleOnClick("week", box);
+    }
+    box.classList.add("box-dragging")
+    createTemporaryBox(box, col, boxhasOnTop, "week")
+    sX = 0;
+    sY = 0;
+  }
+}
+```
+
+6.) If dragging is not registered and the user has already released the mouse, the mouseup function will be called. Otherwise, horizontal / vertical tracking will begin below.
+
+**Vertical Movement:**
+
+```javascript
+// Tracking vertical movement
+// get header offset (offset between the fixed app header and the top of the grid wrapper)
+const headerOffset = grid.offsetTop;
+
+// track the offset between the header and the mouse
+const currentCursorY = e.pageY - headerOffset;
+
+// calculate the difference between the original mouse position and the current mouse position
+let newOffsetY = currentCursorY - startCursorY;
+
+// calculate the new top position of the cloned box
+// ensure that the new top position is an increment of 12.5px (15 minutes)
+let newTop = Math.round((newOffsetY + startTop) / 12.5) * 12.5;
+
+// ensure that the new top position does not exceed the top or bottom of column
+if (newTop < 0 || currentCursorY < 0) {
+  newTop = 0
+  return;
+} else if (newTop + boxHeight > 1188) {
+  return;
+}
+
+// set the cloned box's top position
+box.style.top = `${newTop}px`;
+```
+
+**Horizontal Movement, Week view only:**
+
+The following is a bit more involved than the vertical movement because the user can move a box to a different column.
+
+```javascript
+// create variables to hold the following:
+// 1.) track the offset between original mouse position and current mouse 
+//     position to determine whether the user is moving left or right/
+// 2.) current e.pageX
+// 3.) offset between startCursorX and currentCursorX
+// 4.) the previous column's left position (or null if there is no prev column)
+// 5.) the next column's left position (or null if there is no next column)
+
+const direction = e.pageX - startCursorX > 0 ? "right" : "left"
+const currentCursorX = e.pageX
+let newOffsetX = startCursorX - currentCursorX
+
+// @function getcol() returns the column dom element at given index
+let leftColX = currentColumn - 1 >= 0 ? parseInt(getCol(currentColumn - 1).getBoundingClientRect().right) : null;
+let rightColX = currentColumn - 1 >= 0 ? parseInt(getCol(currentColumn + 1).getBoundingClientRect().left) : null;
+
+// if the direction is right and the next column is not null, append the cloned box to the next column and update the current column variable
+if (direction === "right" && rightColX !== null) {
+  if (e.pageX >= rightColX) {
+    getcol(+currentColumn + 1).appendChild(box)
+    startCursorX = e.pageX
+    currentColumn = +currentColumn + 1
+    box.setAttribute("data-box-col", +currentColumn)
+  }
+}
+
+// left movement follows the same process as the right movement, but using subtracting instead of adding
+```
+
+7.) User releases mouse, Mouseup function is called where two distinct actions can occur depending on whether the user has initiated dragging or not.
+
+```javascript
+// query select the cloned box and define it as a temporary box
+const tempbox = document.querySelector(".temporary-box")
+
+// if there is no temporary box, the user never initiated dragging, treat as click event and open the box's context menu where the user can choose to open the box's edit form or delete the box.
+// This process is detailed in the @Form_Handling Section
+
+if (tempbox === null) {
+  // check @Form_Handling for more details
+} else {
+
+  // remove cloned box
+  tempbox.remove();
+
+  // function to format the box's time attribute
+  setBoxTimeAttributes(box, "day or week");
+
+  // use formatted time attribute to calc the new start/end times
+  const time = calcTime(
+    +box.getAttribute("data-start-time"),
+    +box.getAttribute("data-time-intervals")
+  );
+
+  // update the start/end times useing calculation above
+  box.setAttribute("data-time", time);
+  box.children[1].children[0].textContent = time;
+
+  // update the store with the new coordinates
+  updateBoxCoordinates(box, "week", boxes);
+  boxes.updateStore(
+    store,
+    box.getAttribute("data-box-id"),
+    weekArray
+  );
+
+  // if box is moved to a new column, update sidebar datepicker 
+  if (currentColumn !== +originalColumn) {
+    renderSidebarDatepickerWeek()
+  };
+
+  // This is where the overlap handling comes into play detailed in the @Administer-Positioning section
+  let droppedCol = +box.getAttribute("data-box-col");
+  if (boxes.getBoxesByColumn(droppedCol).length > 1) {
+    handleOverlap(droppedCol, "week", boxes)
+  } else {
+    box.setAttribute("box-idx", "box-one")
+  }
+
+  // set documents cursor to normal and tells the store that other events can now be registered
+  setStylingForEvent("dragend", main, store)
+
+  // remove event listeners
+  document.removeEventListener("mousemove", mousemove)
+  document.removeEventListener("mouseup", mouseup)
+}
+```
 
 ## Month-Drag
 
@@ -439,7 +608,7 @@ Work in progress.
 
 Work in progress.
 
-## Overlay_System
+## Form_Handling
 
 Work in progress.
 
