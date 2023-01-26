@@ -42,7 +42,7 @@ Thank you for taking the time to check out this project!
 
 ## About
 
-I hope to deliver the following information with as clear of a transcription as possilbe. In doing so, many small details will be skipped over. If you have any questions please refer to the email above and I will get back to you as soon as I see your message.
+I hope to deliver the following information as clearly as possible. If you have any questions please refer to the email above and I will get back to you as soon as I see your message.
 
 ### Cloning_This_Repo
 
@@ -125,8 +125,7 @@ In short, this garbage collection process works as follows:
 5. Callback provided in step 3 is executed.
 6. 1-5 are repeated for each view.
 
-rant:
-Perhaps the most misunderstood aspect of javascript is garbage collection. I hope this explanation helps shed some light on how I handle it, but do not take my word for gospel. I am constantly re-evaluating my approach to this problem. If you are under the impression that I am doing something wrong in this approach, please e-mail me and I will be in your debt until the AI uprising.
+I hope this explanation helps shed some light on how I handle garbage collection however, do not take my word for gospel. I am constantly re-evaluating my approach to this problem. If you are under the impression that I am doing something wrong in this approach, please e-mail me and I will be in your debt.
 
 ## Modal-Form-Events
 
