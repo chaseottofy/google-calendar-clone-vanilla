@@ -17,12 +17,11 @@ export default function setYearView(context, store, datepickerContext) {
 
   function resetYearview() {
     yearviewGrid.innerText = "";
-    // renderYearview();
+    yearviewGrid.onmousedown = null;
   }
 
   function renderMonthCells() {
-    // yearviewGrid.innerText = ""
-    resetYearview()
+    yearviewGrid.innerText = ""
     for (let i = 0; i < 12; i++) {
       if (entries[i]) {
         yearviewGrid.appendChild(createMonthCell(i, entries[i]));
@@ -181,8 +180,6 @@ export default function setYearView(context, store, datepickerContext) {
     yearviewGrid.onmousedown = delegateYearEvents;
     store.setResetPreviousViewCallback(resetYearview);
     const currentmonth = document?.querySelector(".cell-current")
-    // should always be true
-    // const behavior = store.getAnimationStatus() ? "smooth" : "auto"
     if (currentmonth) {
       setTimeout(() => {
         yearviewGrid.scrollTo({

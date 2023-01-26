@@ -14,27 +14,35 @@ Thank you for taking the time to check out this project!
 
 ## Glossary
 
-1. [Cloning](#cloning_this_repo)
+1. [About](#about)
 
-2. [Drag_Systems](#drag_systems)
+2. [Cloning](#cloning_this_repo)
+
+3. [Events](#events)
+
+4. [Drag_Systems](#drag_systems)
   
-3. [Resize_Systems](#resize_systems)
+5. [Resize_Systems](#resize_systems)
 
-4. [Date_Handling](#date_handling)
+6. [Date_Handling](#date_handling)
 
-5. [Time_Handling](#time_handling)
+7. [Time_Handling](#time_handling)
 
-6. [Overlay_System](#overlay_system)
+8. [Overlay_System](#overlay_system)
 
-7. [Views](#views)
+9. [Views](#views)
 
-8. [Rendering](#rendering)
+10. [Rendering](#rendering)
 
-9. [Storage](#storage)
+11. [Storage](#storage)
 
-10. [Project_Goals](#project_goals)
+12. [Project_Goals](#project_goals)
 
-11. [Journal](#journal)
+13. [Journal](#journal)
+
+## About
+
+I hope to deliver the following information with as clear of a transcription as possilbe. In doing so, many small details will be skipped over. If you have any questions please refer to the email above and I will get back to you as soon as I see your message.
 
 ### Cloning_This_Repo
 
@@ -54,6 +62,90 @@ Builds the app and **necessary** resources in the `dist` folder.
 
 Starts the webpack development server on `localhost:3000`.
 
+## Events
+
+### 1. [Active-Events](#active-events)
+
+### 2. [Delegation-Example](#delegation-example)
+
+### 3. [Garbage-Collection](#garbage-collection)
+
+### 4. [Modal-Form-Events](#modal-form-events)
+
+This application relies heavily on Event Delegation, the idea of administering events through a common parent element. The main benefit to this is the lack of actual listeners registered to the DOM.
+
+## Active-Events
+
+**At most, 5 of the following 7 delegators will be in the DOM at the same time.**
+
+1. `window: resize` - for resizing the window (only in monthview).
+2. `document: keydown` - for handling keyboard events.
+3. `document: onclick` - for handling clicks on the overlay.
+4. `document: onmousemove` - for handling drag / resize.
+5. `document: onmouseup` - for handling drag / resize.
+6. `modal/form: onmousedown` - for handling clicks on one of the several modals or two forms.
+7. `dayview/weekview/monthview/yearview/listview: onmousedown` - calendar events are delegated from their respective views. Only one of these listeners will be active at a time.
+
+## Delegation-Example
+
+```javascript
+function getClosest(e, element) {
+  return e.target.closest(element);
+}
+
+function delegateEvent(e) {
+  const targetElement = getClosest(e, ".target-class");
+  const targetElement2 = getClosest(e, ".target-class2");
+
+  if (targetElement) {
+    // do something
+    return;
+  }
+
+  if (targetElement2) {
+    // do something else
+    return;
+  }
+}
+
+parentElement.onmousedown = delegateEvent;
+```
+
+## Garbage-Collection
+
+Each time a new calendar view is rendered, the parent element listener from the previous view is removed from the DOM, as well as the elements that were delegated to it. The current view's parent element listener is then added to the DOM and delegation is re-established.
+
+In short, this garbage collection process works as follows:
+(In this example, the user is switching from monthview to dayview)
+
+1. Monthview content is rendered.
+2. Monthview parent container establishes delegation to its children through the `onmousedown` listener.
+3. The global store that is passed through each component is updated with a callback function with instructions to set the `onmousedown` listener to null, and remove all delegated elements.
+4. User switches to dayview.
+5. Callback provided in step 3 is executed.
+6. 1-5 are repeated for each view.
+
+rant:
+Perhaps the most misunderstood aspect of javascript is garbage collection. I hope this explanation helps shed some light on how I handle it, but do not take my word for gospel. I am constantly re-evaluating my approach to this problem. If you are under the impression that I am doing something wrong in this approach, please e-mail me and I will be in your debt until the AI uprising.
+
+## Modal-Form-Events
+
+Each modal and form has its own "overlay" DOM element, a transparent `<aside>` element that is positioned absolutely and covers the entire screen just behind the modal / form.
+
+Upon opening, the following happens:
+
+1. The overlay is added to the DOM.
+2. The global store is notified of the overlay's existence. This in turn tells the global keydown listener to
+temporarily ignore keyboard events.
+3. Once the global keydown listener is notified, a new keydown listener is registered to the overlay that will in turn handle "Escape" events and close the modal / form.
+4. The modal / form is added to the DOM.
+5. The overlay is given an `onclick` listener that will close the modal / form.
+
+Upon closing, the following happens:
+
+1. The overlay and modal / form listeners are removed from the DOM.
+2. The global store is notified of the overlay's removal. Global keydown listener is re-registered to the document.
+
 ## Drag_Systems
 
 ### 1. [Week-Day-Drag](#week-day-drag)
@@ -66,11 +158,17 @@ There exist four total drag systems throughout the app, three of which are compl
 
 ## Week-Day-Drag
 
-### i) [Generating-Coordinates](#generating-coordinates)
+Setting up this particular Drag System is really the trickiest part of the process.
+Steps (i - iii) will cover most of the setup procedure.
+Steps (iv - v) will cover the actual drag and drop system.
 
-### ii) [Setup-Positioning](#setup-positioning)
+### I) [Generating-Coordinates](#generating-coordinates)
 
-### iii) [Administer-Positioning](#administer-positioning)
+### II) [Setup-Positioning](#setup-positioning)
+
+### III) [Administer-Positioning](#administer-positioning)
+
+### IV) [WD-DragEngine](#wd-dragengine)
 
 **This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.**
 
@@ -317,9 +415,17 @@ function setBoxWidthDay(box, prepend, dataidx) {
 }
 ```
 
+## **WD-DragEngine**
+
+### a) Drag-Start
+
 ## Month-Drag
 
+Work in progress.
+
 ## Form-Drag
+
+The Form Drag system follows a fairly simple procedure.
 
 ## Resize_Systems
 

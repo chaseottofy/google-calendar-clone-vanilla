@@ -130,10 +130,13 @@ export default function setWeekView(context, store, datepickerContext) {
   function resetWeekviewBoxes() {
     cols.forEach(col => { col.innerText = "" })
     topCols.forEach(col => { col.innerText = "" })
+    main.onmousedown = null;
+    alldaymodule.onmousedown = null;
   }
-
+  
   function renderBoxes() {
-    resetWeekviewBoxes()
+    cols.forEach(col => { col.innerText = "" })
+    topCols.forEach(col => { col.innerText = "" })
 
     boxes.getBoxes().forEach((entry) => {
       const y = entry.coordinates.y;
@@ -738,9 +741,9 @@ export default function setWeekView(context, store, datepickerContext) {
   const initWeek = () => {
     configureDaysOfWeek();
     renderDataForGrid();
-    store.setResetPreviousViewCallback(resetWeekviewBoxes)
     main.onmousedown = delegateGridEvents;
     alldaymodule.onmousedown = delegateGridTop;
+    store.setResetPreviousViewCallback(resetWeekviewBoxes)
     if (firstY !== null) {
       setTimeout(() => {
         weekviewGrid.scrollTo({top:Math.abs((+firstY * 12.5) - 25), behavior: "instant"})
@@ -748,6 +751,4 @@ export default function setWeekView(context, store, datepickerContext) {
     }
   }
   initWeek();
-
-
 }

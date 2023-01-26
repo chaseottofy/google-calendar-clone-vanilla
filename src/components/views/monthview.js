@@ -206,11 +206,13 @@ export default function setMonthView(context, store, datepickerContext) {
   }
 
   function resetMonthview() {
-    monthWrapper.innerText = "";
+    monthWrapper.onmousedown = null
+    monthWrapper.onclick = null
   }
 
   function populateCells() {
-    resetMonthview()
+    // resetMonthview()
+    monthWrapper.innerText = "";
     montharray.length < 42
       ? monthWrapper.classList.add("five-weeks")
       : monthWrapper.classList.remove("five-weeks");
@@ -608,10 +610,6 @@ export default function setMonthView(context, store, datepickerContext) {
       parseInt(rect.width)
     );
 
-    // console.log(y)
-    // console.log(window.innerHeight)
-    // console.log(maxH)
-    
     let maxH = +window.innerHeight - +y - 24;
     modal.setAttribute("style", `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px; max-height: ${maxH}px;`);
 

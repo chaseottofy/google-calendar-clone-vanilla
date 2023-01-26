@@ -183,6 +183,8 @@ export default function setDayView(context, store, datepickerContext) {
   function resetDayview() {
     dvMainGrid.innerText = "";
     dvOnTop.innerText = "";
+    dvGrid.onmousedown = null;
+    dvOnTop.onmousedown = null;
   }
 
   function openDvMore(entr) {
@@ -338,7 +340,8 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   function renderBoxes() {
-    resetDayview();
+    dvMainGrid.innerText = "";
+    dvOnTop.innerText = "";
     createDvTop(boxes.getBoxesTop());
     boxes.getBoxes().forEach((entry) => {
       const y = entry.coordinates.y;
@@ -740,9 +743,9 @@ export default function setDayView(context, store, datepickerContext) {
   const initDayView = () => {
     renderBoxesForGrid();
     configHeader();
-    store.setResetPreviousViewCallback(resetDayview);
     dvGrid.onmousedown = delegateDayView;
     dvOnTop.onmousedown = delegateDayViewOnTop;
+    store.setResetPreviousViewCallback(resetDayview);
     handleScrollToOnInit();
   };
   initDayView();
