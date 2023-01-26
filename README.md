@@ -687,6 +687,7 @@ The cells are as bare bones as I could make them. Each cell has a clickable head
 The monthview grid will either have 35 or 42 cells depending on the month. This is mainly determined by whether or not the month spans 5-6 weeks (most span 4 weeks). The only edge case is Febraury which occasionally only spans 4 weeks.
 
 One interesting aspect of the monthview cells is the coordinate system used.
+
 Cells are given a data attribute essentially describes their respective x, y positions in the grid. (i.e. data-coord="0,0" would be the top left cell, data-coord="6,0" would be the top right cell, data-coord="0,5" would be the bottom left cell, and data-coord="6,5" would be the bottom right cell). More on this @MV-DragEngine.
 
 Boxes in month cells, as described above, are positioned absolutely. The top value is calculated by multiplying the index of the box by the height of the box + the top margin of the box.
@@ -703,8 +704,10 @@ Note that boxes do not show movement until the cursor is moved beyond the border
 
 The drag engine is initiated through a delegated mousedown event regisetered on a box. Once the event registered, and while the mouse is still down, a number of things happen:
 
-1.) Create variables to account for the cell the box is in, the box itself, and the target modal if it exists (see @mv-grouping).
+1.) Create variables to account for the cell the box is in, the box itself, and the target modal if it exists (see  @mv-grouping).
+
 2.) add class to cell signifying that is is being dragged over.
+
 3.) get coordinates of the cell (x, y values) @see mv-administer-positioning.
 
 ```javascript
@@ -719,7 +722,9 @@ const [cellX, cellY] = getCoordinatesFromCell(cell);
 ```
 
 4.) create a clone of the box.
+
 5.) append clone it to the grid body (above the cells).
+
 6.) convert inline styles of cloned box to reflect the relative positioning of the grid body rather than the cell.
 
 ```javascript
@@ -744,17 +749,23 @@ clone.style.display = "none"
 ```
 
 7.) create several variables to test for the following:
-  i. if container currently has five-weeks.
-  ii. startX, startY,
-  iii. if drag or click.
+
+  **i. if container currently has five-weeks.**
+
+  **ii. startX, startY,**
+
+  **iii. if drag or click.**
 
 8.) instantiate mousemove and mouseup events.
 
 ### monthview mousemove
 
-**simulating_click**
+Simulating click:
+
 No, it is not an actual click event, but there are some ways to make it appear as such.
+
 First, and most importantly, do not allow any styles indicative of a drag event to show until mouse moves at least a few pixels.
+
 Second, supply some sort of flag to indicate that this distance has been met, if not, do not apply any syles and proceed to mouseup event.
 
 The following is a more fleshed out example of the above.
