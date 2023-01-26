@@ -676,22 +676,238 @@ class MonthBoxQuery {
 }
 ```
 
-**Cells & Boxes**
-With that out of the way, lets talk about the cells and boxes themselves.
+### Cells_Boxes
 
-The cells are as bare bones as I could make them. Each cell has a header with a day that when clicked will switch to the day view of that particular day. The rest of the cell is a container with relative positioning. The container is where all of the boxes will be placed.
+Much of this will be covered  in the MV-Administer-Positioning section.
 
-The reasoning behind the relative positioning is to easily allow for boxes to be thrown from one cell to another (drag & drop). Upon the initiation of drag, a clone of the box is created and appended to the actual grid container itself. The box then simply follows the mouse cursor (more on this in MV-DragEngine).
+The cells are as bare bones as I could make them. Each cell has a clickable header that will navigate users to the dayview, and the cell content which holds either the grouped box or boxes. Note that the cell content is positioned relatively, and the boxes are positioned absolutely. This is important because of the the inline styles applied to boxes. Positioning them absolutely, even though they are not dragging, makes it easier to apply query styles and have them scale to specific top and height values.
 
 ## MV-Administer-Positioning
 
+The monthview grid will either have 35 or 42 cells depending on the month. This is mainly determined by whether or not the month spans 5-6 weeks (most span 4 weeks). The only edge case is Febraury which occasionally only spans 4 weeks.
+
+One interesting aspect of the monthview cells is the coordinate system used.
+Cells are given a data attribute essentially describes their respective x, y positions in the grid. (i.e. data-coord="0,0" would be the top left cell, data-coord="6,0" would be the top right cell, data-coord="0,5" would be the bottom left cell, and data-coord="6,5" would be the bottom right cell). More on this @MV-DragEngine.
+
+Boxes in month cells, as described above, are positioned absolutely. The top value is calculated by multiplying the index of the box by the height of the box + the top margin of the box.
+
+Only one data attribute is given to each box - the id of the event it represents.
+
 ## MV-DragEngine
 
-The process looks exaclty like the day/weekview in the very beginning.
+### Setting up the drag engine (onmousedown)
+
+The process looks exaclty like the day/weekview in the very beginning but is actually much more involved.
+
+Note that boxes do not show movement until the cursor is moved beyond the border of the cell.
+
+The drag engine is initiated through a delegated mousedown event regisetered on a box. Once the event registered, and while the mouse is still down, a number of things happen:
+
+1.) Create variables to account for the cell the box is in, the box itself, and the target modal if it exists (see @mv-grouping).
+2.) add class to cell signifying that is is being dragged over.
+3.) get coordinates of the cell (x, y values) @see mv-administer-positioning.
+
+```javascript
+const startDragTime = Date.now()
+const parent = box.parentElement;
+const cell = parent.parentElement;
+cell.classList.add("current-drop-zone");
+const targetModal = document?.querySelector(".more-modal");
+
+const originalCellLength = parent.childElementCount;
+const [cellX, cellY] = getCoordinatesFromCell(cell);
+```
+
+4.) create a clone of the box.
+5.) append clone it to the grid body (above the cells).
+6.) convert inline styles of cloned box to reflect the relative positioning of the grid body rather than the cell.
+
+```javascript
+createTemporaryBox(box);
+const clone = document?.querySelector(".box-mv-dragactive");
+clone.setAttribute("data-box-mvx", cellX);
+clone.setAttribute("data-box-mvy", cellY);
+
+const cellRect = cell.getBoundingClientRect();
+const cellWidth = parseFloat(cellRect.width.toFixed(2))
+const cellHeight = parseFloat(cellRect.height.toFixed(2));
+const wrapperLeft = parseInt(monthWrapper.offsetLeft)
+const boxRect = box.getBoundingClientRect();
+const boxWidth = parseFloat(boxRect.width);
+const boxHeight = boxquery.getHeight()
+
+clone.style.top = `${parent.offsetTop}px`;
+clone.style.width = `${boxWidth}px`;
+clone.style.height = `${boxHeight}px`;
+clone.style.left = `${parent.offsetLeft}px`
+clone.style.display = "none"
+```
+
+7.) create several variables to test for the following:
+  i. if container currently has five-weeks.
+  ii. startX, startY,
+  iii. if drag or click.
+
+8.) instantiate mousemove and mouseup events.
+
+### monthview mousemove
+
+**simulating_click**
+No, it is not an actual click event, but there are some ways to make it appear as such.
+First, and most importantly, do not allow any styles indicative of a drag event to show until mouse moves at least a few pixels.
+Second, supply some sort of flag to indicate that this distance has been met, if not, do not apply any syles and proceed to mouseup event.
+
+The following is a more fleshed out example of the above.
+
+```javascript
+movedX = Math.abs(e.clientX - startcursorx);
+movedY = Math.abs(e.clientY - startcursory);
+// Do not apply styles until user has moved the box at least 5px from starting position.
+if (movedX > 1 || movedY > 1) {
+  if (!changeCursor) {
+    if (targetModal) {
+      targetModal.remove();
+    }
+    document.body.style.cursor = "move";
+    changeCursor = true;
+  }
+}
+if (movedX > 3 || movedY > 3) {
+  if (!gaveStyles) {
+    box.style.opacity = "0.5";
+    clone.style.display = "block"
+  }
+  gaveStyles = true;
+}
+```
+
+**Calculating_East/West_movement**
+x = `Floor((current client x position - grid.offsetLeft) / width of cell)`
+
+```javascript
+let newX = Math.floor((e.clientX - monthWrapper.offsetLeft) / cellWidth);
+
+// ensure that the newX is not less than 0 or greater than 6
+if (newX < 0) {
+  newX = 0;
+  return;
+}
+
+if (newX > 6) {
+  newX = 6;
+  return;
+}
+
+// update new left position once
+if (lastX !== newX) {
+  let multX = (newX * cellWidth) + wrapperLeft
+  clone.style.left = `${parseFloat(multX.toFixed(2))}px`;
+  lastX = newX;
+}
+```
+
+**Calculating North/South movement**
+y = `Floor((current client y position - grid.offsetTop) / height of cell)`
+
+```javascript
+let newY = Math.floor((e.clientY - monthWrapper.offsetTop) / cellHeight);
+
+// ensure that the newY is not less than 0 or greater than 5-6
+if (newY < 0) {
+  newY = 0;
+  return;
+}
+// max : last row (5 weeks)
+if (hasFiveWeeks && newY > 4) {
+  newY = 4;
+  return;
+}
+// max : last row (6 weeks)
+if (!hasFiveWeeks && newY > 5) {
+  newY = 5;
+  return;
+}
+
+// ensure new top position is only calculated if the cursor has moved
+// vertically across a cell border
+if (lastY !== newY) {
+  let multY = (newY * cellHeight) + monthWrapper.offsetTop + 16
+  clone.style.top = `${parseFloat(multY.toFixed(2))}px`;
+  lastY = newY;
+}
+```
+
+**give the current cell identifiable class**
+This class will be used on mouse up to determine if the box should be removed from the cell or not.
+
+It will also be highlighted during the drag process
+
+```javascript
+document.querySelector(".current-drop-zone")?.classList.remove("current-drop-zone");
+document.querySelector(`[data-mv-coordinates="${newX},${newY}"]`).classList.add("current-drop-zone");
+```
+
+### monthview mouseup
+
+1. Find the "current-drop-zone" cell.
+2. Get coordinates of new cell.
+3. Get the content of the new cell.
+4. Get array of boxes in the new cell if any.
+
+5. Determine if the box moved or not during the drag process. If not, open the context menu and remove the clone.
+
+6. Box moved, one of the following will occur:
+  i. cell had 6 or more elements, remove the clone and update the data attribute inidicating the number of events in the cell (only if the box was moved to a different cell).
+  ii. cell now has 5 elements, remove the clone and all of the boxes in the cell and replace them with a data attribute indicating the number of events in the cell. (i.e cell is now a grouped cell).
+  iii. cell has less than 5 elements, remove the clone and append the box to the cell. Re-calculated the top values of the boxes in the cell.
+  iv. cell is empty, remove the clone and append the box to the cell.
+
+7. Remove the current-drop-zone class from the cell.
+8. Remove mousemove, mouseup events and reset the cursor.
 
 ## MV-grouping
 
-Work in progress.
+Grouping is an automatic process that will occur either on load, or when a box is dragged into a cell that has 5 elements.
+
+After a drag, the cell will check for 6 elements, and if true, will proceed to remove all the elements from the cell and replace them with a data-attribte indicating the number of events in that cell. (i.e. data-group="6").
+
+If the grouped cell is clicked, a modal will open with all the boxes in that cell. The boxes will look and act exactly as they would in a normal cell. They can be dragged out of the modal and into the calendar and a context menu will be registered to them as well.
+This is achieved by initiating
+
+This modals positiong is calculated using the placePopup function, the same function used to position the context menu and top modals for the day/week views.
+
+```javascript
+@param {number} popupWidth 
+@param {number} popupHeight 
+@param {array} coords - [x: e.clientX, y: e.clientY]
+@param {array} windowCoords - [x: window.innerWidth, y: window.innerHeight]
+@param {boolean} center - should popup be centered ?
+@param {number} targetWidth - if center is true, targetWidth required to center
+@returns {array} [x, y] top/left values for popup
+
+function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
+  const [popupW, popupH] = [popupWidth, popupHeight];
+  const [x, y] = coords;
+  const [winW, winH] = windowCoords;
+
+  let popupX;
+  if (center) {
+    // align to center of target element (targetWidth)
+    popupX = x - (popupW / 2) + (targetWidth / 2);
+    if (targetWidth + x + 4 >= winW) {
+      popupX = winW - popupW - 4;
+    }
+  } else {
+    popupX = x + popupW > winW ? x - popupW - 6 : x;
+  }
+
+  let popupY = y + popupH > winH ? winH - popupH - 6 : y;
+
+  if (popupX < 0) popupX = Math.abs(popupX);
+  if (popupY < 0) popupY = 56;
+  return [popupX, popupY];
+}
+```
 
 ## Form-Drag
 
