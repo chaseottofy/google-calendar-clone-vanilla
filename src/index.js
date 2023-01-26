@@ -48,4 +48,14 @@ import "./styles/aside/shortcuts.css"
 // * 
 // localStorage.clear();
 setAppDefaults(context, store);
+const deleteAfter = document.createElement("div");
+deleteAfter.setAttribute("style", "position:absolute;top:0;left:0;right:0;bottom:0;margin:auto;width:300px;height:80px;z-Index:4000;background:rgba(0,0,0,.6);text-align: center;line-height: 80px; color: white; font-size: 25px;")
+deleteAfter.textContent = "sorted by h (height)"
+// deleteAfter.innerHTML = `
+//   <div style="position:absolute;top:0;left:0;right:0;bottom:0;margin:auto;width:300px;height:240px;z-Index:4000;background:var(--black1);>asdf</div>
+// `
+document.body.prepend(deleteAfter)
 renderViews(context, datepickerContext, store);
+
+
+// console.log(store.getEntries())

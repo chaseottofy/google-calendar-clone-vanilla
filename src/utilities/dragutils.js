@@ -46,7 +46,6 @@ const identifiers = {
       active: "box-mv-dragactive",
       temporary: "temporary-box",
       prepend: "box-",
-
     },
     day: {
       base: "dv-box",

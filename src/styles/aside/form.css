@@ -597,6 +597,14 @@
 }
 
 @media screen and (max-width:580px) {
+  .entries__form {
+    left: 2% !important;
+    right: 2% !important;
+    top: 2% !important;
+    bottom: 2% !important;
+    min-width: 180px !important;
+  }
+
   .entries__form--body {
     padding: 8px 16px
   }

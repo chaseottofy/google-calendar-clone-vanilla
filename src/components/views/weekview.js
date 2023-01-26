@@ -218,8 +218,6 @@ export default function setWeekView(context, store, datepickerContext) {
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
     const rect = col.getBoundingClientRect();
-    console.log(rect)
-    // console.log(entries.length)
     let entriesoffset;
     if (entries.length < 4) {
       entriesoffset = parseInt(55 * entries.length) + 60;
@@ -743,7 +741,6 @@ export default function setWeekView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetWeekviewBoxes)
     main.onmousedown = delegateGridEvents;
     alldaymodule.onmousedown = delegateGridTop;
-    console.log(firstY)
     if (firstY !== null) {
       setTimeout(() => {
         weekviewGrid.scrollTo({top:Math.abs((+firstY * 12.5) - 25), behavior: "instant"})

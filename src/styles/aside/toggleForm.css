@@ -3,7 +3,7 @@
   position: fixed;
   display:flex;
   left: 9px;
-  top: 66px;
+  top: 68px;
   width: 44px;
   height: 44px;
   background: transparent;
@@ -73,6 +73,6 @@
 
 @media screen and (max-height: 470px) {
   .toggle-form {
-    top: 56px;
+    top: 58px;
   }
 }

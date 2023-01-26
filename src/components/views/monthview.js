@@ -41,8 +41,6 @@ import { setStylingForEvent } from "../../utilities/dragutils"
 // naming
 import locales from "../../locales/en"
 const monthNames = locales.labels.monthsShort
-// placePopup(popupWidth, popupHeight, coords, windowCoords)
-
 
 const resizeoverlay = document.querySelector(".resize-overlay")
 const sidebar = document.querySelector(".sidebar")
@@ -635,7 +633,6 @@ export default function setMonthView(context, store, datepickerContext) {
     const modalHeaderClose = document.createElement("div");
     modalHeaderClose.classList.add("more-modal-header-close");
     modalHeaderClose.appendChild(createCloseIcon("var(--white3)"))
-    // modalHeaderClose.textContent = "X";
     modalHeaderClose.setAttribute("data-tooltip", "Close");
 
     modalHeaderTitle.append(modalHeaderClose, dowspan, daynspan);

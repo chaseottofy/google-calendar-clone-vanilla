@@ -1,14 +1,342 @@
-# About
+# Google Calendar Clone
 
 ## contact: ottofy@zohomail.com
 
-**Project is still in development.**
-I'll be periodically updating this documentation and would like to have it done within three weeks (mid february). Note that what I've provided in ./dist is purely for easy viewing. The production build will be compressed.
-
-**Viewing**
-View the app through screenshots (link below), or simply download the repo and open `./dist/testbundle.html` in your browser (or any live server extension). I will host shortly.
+**[LIVE PROJECT LINK](https://chaseottofy.github.io/google-calendar-clone-vanilla/)**
 
 **[SCREENSHOTS](https://ibb.co/album/fQrm1F)**
+
+## Documentation
+
+Thank you for taking the time to check out this project!
+
+**This Documentation is a work in progress.**
+
+## Glossary
+
+1. [Cloning](#cloning_this_repo)
+
+2. [Drag_Systems](#drag_systems)
+  
+3. [Resize_Systems](#resize_systems)
+
+4. [Date_Handling](#date_handling)
+
+5. [Time_Handling](#time_handling)
+
+6. [Overlay_System](#overlay_system)
+
+7. [Views](#views)
+
+8. [Rendering](#rendering)
+
+9. [Storage](#storage)
+
+10. [Project_Goals](#project_goals)
+
+11. [Journal](#journal)
+
+## Cloning_This_Repo
+
+### `git clone`
+
+### `cd google-calendar-clone-vanilla`
+
+### `npm install`
+
+## Available_Scripts
+
+### `npm run build`
+
+Builds the app and **necessary** resources in the `dist` folder.
+
+### `npm run dev`
+
+Starts the webpack development server on `localhost:3000`.
+
+## Drag_Systems
+
+There exist four total drag systems throughout the app, three of which are completely different from one another.
+
+**Week and Day view:**
+
+This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.
+
+Each column has relative positioning and a fixed height of 1200px.
+
+What makes this grid system particularly unique is the fact that each column does not have any rows. Instead, each column is a container for a series of divs (entries) that are positioned absolutely.
+
+The visual representation of rows is created by the background image of each colunmn, in which a linear gradient is calculated as follows:
+
+* Weekview:
+  * background-size: calc(100% / 7) 4%;
+    * (7 days in a week, 4% of the height of each column).
+  * background-image: linear-gradient(to bottom, var(--mediumgrey1) 1%,transparent 0);
+    * (1% of the height of each column).
+
+* Dayview:
+  * background-size: 100% 4%
+    * (1 day, 4% of the height of each column).
+  * background-image: linear-gradient(to bottom,var(--mediumgrey1) 1%,transparent 0)
+    * (1% of the height of each column).
+
+The parent container of the columns is given a fixed height of 1200px, and each column within the container is given relative positioning and a min-height of 100%. The fixed height is necessary to ensure that the background-image linear gradient always coincides with the correct calculated row height. Screen width luckily does not affect the background-image gradient, so it only needs to be calculated once.
+
+### Step 2: Generating coordinates for each entry
+
+The coordinates for each entry are generated based on the start/end time of each entry.
+
+**a.)**: convert the start/end time of each entry into minutes.
+
+**b.)**: convert minutes into 15 minute intervals. For example, if an entry starts at 9:30, it will be converted to 38, since 38 represents the number of 15 minute intervals from 12:00AM.
+
+```javascript
+const startMinutes = start.getHours() * 4 + Math.floor(start.getMinutes() / 15)
+const endMinutes = end.getHours() * 4 + Math.floor(end.getMinutes() / 15)
+const height = endMinutes - startMinutes
+const total = startMinutes + height
+```
+
+**c.)**: determine whether an entry extends beyond a day by comparing the start/end day/week/year of entry.
+
+**Coordinates:**
+
+* Entry extends beyond a day:
+  * allDay: true,
+  * x: start.getDay() (day of the week),
+  * x2: end.getDay() (day of the week),
+
+* Entry does not extend beyond a day:
+  * allDay: false,
+  * x: start.getDay(),  (column of the day)
+  * y: startMinutes,    (first row of entry)
+  * h: height,          (total number of rows)
+  * e: total,           (last row of entry)
+
+### Step 3: Positioning entries
+
+Each entry is positioned absolutely within its column. The top & height properties are calculated based on the coordinates calculated in step 2.
+
+**a.)**: calculate top & height properties
+
+```javascript
+const top = (y * 12.5) + 'px'
+const height = (h * 12.5) + 'px'
+```
+
+**b.)**: provide the entry with a slew of data attributes that will be used for repositioning/collision handling after drag/resize events.
+
+**Important: From this point on I will be referring to entries as boxes.**
+
+**Data Attributes**:
+
+* Entries that start and end on the same day:
+  * dataIdx: boxes are sorted by their y coordinates (start hour/min) before they are assigned for DOM placement. This attribute is necessary for collision handling.
+  * dataId: the id of the entry that the box represents.
+  * dataCol: the column that the box is placed in. (day of week)
+  * data-start-time: starting row of the box (y).
+  * data-time-intervalas: height of the box (h).
+  * data-end-time: ending row of the box (e).
+  * data-box-category: the category of the entry that the box represents. (used for color coding).
+
+* Entries that start and end on different days (allDay):
+  * dataIdx: same as above.
+  * dataId: same as above.
+  * data-start: x (day of week event starts).
+  * data-end: x2 (day of week event ends).
+  * data-box-category: same as above.
+
+**c.)**: define system to calculate the left & width properties of each box
+
+This process is relatively simple for entries that start and end on different days since their position is static.
+
+For entries that are not allDay, things begin to get a little more complicated at this very point.
+
+Calculating collisions is a crucial part of this process and the whole reason why I had to create this custom grid system in the first place.
+
+When it comes to collision handling, with a drag system that allows for essentially inifinte entries, four things become very important:
+
+a.) The order in which the boxes are placed in the DOM.
+
+b.) The z-index of each box.
+
+c.) The left positional property of each box.
+
+d.) the width positional property of each box.
+
+"a.)" and "b.)" are both relatively simple to solve. The boxes are sorted by their y coordinates (start hour/min) before they are even given data attributes or classes for that matter. To understand why this is important, check out the screenshots below for an example of what not sorting by start time can lead to.
+
+[sorted by start time (y)](https://ibb.co/gjm5fN9)
+
+[not sorted](https://ibb.co/sjhGnHQ)
+
+Once the boxes are sorted by their y coordinates, they are given a z-index value based on their index in the sorted array to further ensure that the boxes are placed in the correct order in the DOM.
+
+**"c.)" and "d.)" are a little more complicated.**
+
+By default, the left and width properties are as follows:
+
+* (width of column - small offset) * (percentage amount to offset from column +/- small offset)
+
+```css
+left: calc((100% - 4px) * 0 + 0px);
+width: calc((100% - 4px) * 1 - 0px);
+```
+
+**Now lets take a look at a basic collision and how to handle it:**
+
+Box 1: 9:00AM - 10:00AM
+
+Box 2: 9:30AM - 10:30AM
+
+The first box, Box 1, will keep its default left & width properties in which it inherits the full width of the column and has zero left offset.
+
+The second box, Box 2, will need to be offset from the left by a percentage value of  lets say 0.25 (25%).
+
+In order to prevent the second box from overlapping with adjacent columns or from going off the screen, it's width will need to be reduced by a percentage value as well.
+
+Normally, the width of the second box will be reduced by (100 - left offset) or 75% in this case.
+
+```css
+left: calc((100% - 4px) * 0.25);
+width: calc((100% - 4px) * 0.75);
+```
+
+This works fine for most cases, but when boxes really begin to stack up, it helps to reduce the width of boxes so that there is some horizontal space between them. This allows boxes behind other boxes to be selected in between the crevices of the boxes that are on top of them.
+
+Currently, there are 15 different pairs of left & width properties that a box can inherit. To see the full list of potential property values, check out the @dragutils.js file @function setBoxWidthWeek.
+
+The section below will explain how these values are assigned.
+
+**Positioning procedure:**
+
+**a.)**: determine whether or not a collision has occurred.
+
+Note that this is not necessary if only one box is present in the column.
+
+Collision detection will only occur if there are two or more boxes in the column.
+
+./src/factory/entries.js (@function checkForCollision())
+
+```javascript
+
+const arr = [];
+let collisions = new Set();
+
+// push the y & e coordinates of each box into an array
+for (const box of bxs) {
+  arr.push([box.coordinates.y, box.coordinates.e]);
+}
+
+// populate the collisions set with boxes that interset with each other either at their start (y) or end (e) coordinates
+for (let i = 0; i < arr.length; i++) {
+  for (let j = i + 1; j < arr.length; j++) {
+    if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
+      collisions.add(bxs[i]);
+      collisions.add(bxs[j]);
+    }
+  }
+}
+
+// sort the collisions set by their y coordinates (start hour/min)
+// the reasoning for this is explained in the "a.)" section above
+return [...collisions].sort((a, b) => {
+  let diff = +a.coordinates.y - +b.coordinates.y;
+  if (diff === 0) {
+    return +a.coordinates.e - +b.coordinates.e;
+  } else {
+    return diff;
+  }
+})
+```
+
+**b.)**: assign the left & width properties of each box.
+
+./src/utilities/dragutils.js (@function handleOverlap())
+
+```javascript
+
+// The handleOverlap function is the function that calls the above checkForCollision function and assigns identifiers to each box that act as a reference for what left & width properties they should inherit.
+
+const collisions = checkForCollision(bxs);
+
+for (let i = 0; i < collisions.length; i++) {
+  const box = document.querySelector(`[data-id="${collisions[i].id}"]`);
+  let idx = i;
+  // handle instance where there are more than 15 boxes in a column.
+  if (i >= 15) { i -= 14; } 
+
+  // assign identifier
+  box.setAttribute("class", `box box-${i + 1}])
+  // call @setBoxWidthDay() or @setBoxWidthWeek() to assign the left & width properties based on the identifiers that were just assigned.
+  view === "day" ? setBoxWidthDay(box, idx) : setBoxWidthWeek(box, idx);
+}
+```
+
+./src/utilities/dragutils.js (@function setBoxWidthDay/Week())
+
+setBoxWidthDay() && setBoxWidthWeek() assign the left & width properties of each box.
+
+They are separated because the left & width properties are different for the day/week view.
+
+I've also opted to hard code the left & width properties because there really isn't a discernable pattern to getting them right... at least not one that I could figure out.
+
+```javascript
+function setBoxWidthDay(box, prepend, dataidx) {
+  const attr = box.getAttribute(dataidx);
+  switch (attr) {
+    case `${prepend}one`:
+      box.style.left = 'calc((100% - 0px) * 0 + 0px)';
+      box.style.width = "calc((100% - 4px) * 1)"
+      break;
+    case `${prepend}two`:
+      box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.85)";
+      break;
+    case `${prepend}three`:
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.width = "calc((100% - 4px) * 0.70)";
+      break;
+    // etc...
+    default:
+      break;
+  }
+}
+```
+
+* **Drag System: Month view**
+
+* **Drag System: Form**
+
+## Resize_Systems
+
+Work in progress.
+
+## Date_Handling
+
+Work in progress.
+
+## Time_Handling
+
+Work in progress.
+
+## Overlay_System
+
+Work in progress.
+
+## Views
+
+Work in progress.
+
+## Rendering
+
+Work in progress.
+
+## Storage
+
+Work in progress.
+
+## Project_Goals
 
 **This is a front end recreation of the google calendar app in its entirety** (aside from google api / third party resources).
 
@@ -64,23 +392,7 @@ I've implemented several new features to improve the user experience but overall
   * Total blocking time : 0 seconds (no database / third party resources).
   * Score : 100% (performance, accessibility, best practices, seo).
   
-## Cloning this repo
-
-### `git clone`
-
-### `cd google-calendar-clone-vanilla`
-
-### `npm install`
-
-## Available Scripts
-
-### `npm run build`
-
-Builds the app and **necessary** resources in the `dist` folder.
-
-### `npm run dev`
-
-Starts the webpack development server on `localhost:3000`.
+## Journal
 
 ### Jan 16, 2023
 
