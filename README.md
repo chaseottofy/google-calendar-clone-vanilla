@@ -589,6 +589,14 @@ if (tempbox === null) {
 
 ## Month-Drag
 
+### I) [MV-Setup-Positioning](#mv-setup-positioning)
+
+### II) [MV-Administer-Positioning](#mv-administer-positioning)
+
+### III) [MV-DragEngine](#mv-dragengine)
+
+### IV) [MV-Grouping](#mv-grouping)
+
 The Month Drag/Grid system follows a fairly similar procedure to the Week/Day drag system but is just different enough to warrant its own section entirely.
 
 Some of the functions are re-used I will not be going into too much detail on them.
@@ -602,9 +610,9 @@ The details are what make this view so difficult to scale.
 
 Yes, I am aware I missed a few details myself, namely the ability to resize boxes horizontally across cells / have the length of boxes be represented across multiple days.
 
-Until about a month ago, believe it or not, I did have this kind of feature implemented and quickly garnered an irrational hatred for it. Perhaps I will revisit it in the future but I'm just not completely sold on the idea. I digress.
+Until about a month ago, believe it or not, I did have this kind of feature implemented for a few days before removing it.Perhaps I will revisit it in the future but I'm really not sold on the idea... I digress.
 
-Now, before going further, I advise you to ask yourself how you would solve/implement the following features. If I had taken the time to really ask myself how I would implement these features, I wouldn't have had to completely re-write the entire system twice:
+I will cover how I solved the problems below but I advise you to self council before going further. (How you would solve/implement the features listed below? Do you immediately see the issue?)
 
 * A dynamic grid with 35-42 cells depending on the month.
 * Cells can hold up to 6 boxes at a time.
@@ -618,31 +626,70 @@ Now, before going further, I advise you to ask yourself how you would solve/impl
 * Click on empty cell to open form on that day.
 * Responsive design : boxes have inline styles, they must rely on some resize event for recalculation. System should only ever fire once per designated change and should be garbage collected if month is not in view.
 * No more than 4 active listeners at any given time.
-* Be able to handle 1000+ boxes at a time without any noticeable performance issues.
-
-If you've gotten this far, I will tell you now that this system is much easier to implement and conceptualize than the week/day view, I just find it particularly sneaky/annoying.
-
-### I) [MV-Setup-Positioning](#mv-setup-positioning)
-
-### II) [MV-Administer-Positioning](#mv-administer-positioning)
-
-### III) [MV-DragEngine](#mv-dragengine)
-
-### IV) [MV-Grouping](#mv-grouping)
 
 ## MV-Setup-Positioning
 
 Unlike the day & week view, the monthview grid does not have a fixed height, nor does it have a fixed number of rows. To accommodate this, this grid system uses a combination of flexbox, absolute positioned elements, and a query system attached to window resize events that will help recalculate the inline styles of boxes.
 
-## MV-Administer-Positioning
+Lets get the elephant in the room out of the way first. (the query system?)
 
-Work in progress.
+One thing that my grid systems all have in common is an abundance of inline styles. These are great for handling elements with positions that are always changing, and changing in large amounts (i.e. dragging an element from the first of the month to the 31st).
+Unfortunately, they pose a real problem for responsive design. The reason for a query system in this view and not the others is because the month view has zero fixed positioning.
+
+**Query System**
+The idea is simple. Create a class that sets a flag to true if a certain width/height threshold limit has been hit, and return an array of height/width values based on the value of the flag.
+
+Anytime the window is resized, the query system will be notified. If the previous flag value is different from the current flag value, the query system will proceed to update the inline styles of all boxes in each cell. (more on this later).
+
+Note that the callback to run the query is attached to the window which is delegated through a debounce (100ms). Also, the window does not actually inherit the query system from the monthview function itself. Instead, the query system is passed to the global store and is attached to the window from @setViews() where it is also removed when the monthview is no longer in view.
+
+```javascript
+class MonthBoxQuery {
+  constructor(flag) {
+    this.flag = flag;
+    this.tops = [16, 20];
+    this.heights = [14, 18];
+  }
+
+  updateFlag() {
+    this.flag = window.innerWidth <= 530 || window.innerHeight <= 470;
+  }
+
+  getFlag() {
+    return this.flag;
+  }
+
+  getTop() {
+    const [a, b] = this.tops;
+    return this.flag ? a : b;
+  }
+
+  getHeight() {
+    const [a, b] = this.heights;
+    return this.flag ? a : b;
+  }
+
+  getPrevTop(top) {
+    const [a, b] = this.tops;
+    return top === a ? b : a;
+  }
+}
+```
+
+**Cells & Boxes**
+With that out of the way, lets talk about the cells and boxes themselves.
+
+The cells are as bare bones as I could make them. Each cell has a header with a day that when clicked will switch to the day view of that particular day. The rest of the cell is a container with relative positioning. The container is where all of the boxes will be placed.
+
+The reasoning behind the relative positioning is to easily allow for boxes to be thrown from one cell to another (drag & drop). Upon the initiation of drag, a clone of the box is created and appended to the actual grid container itself. The box then simply follows the mouse cursor (more on this in MV-DragEngine).
+
+## MV-Administer-Positioning
 
 ## MV-DragEngine
 
-Work in progress.
+The process looks exaclty like the day/weekview in the very beginning.
 
-## MV-Grouping
+## MV-grouping
 
 Work in progress.
 
