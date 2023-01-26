@@ -70,7 +70,7 @@ Starts the webpack development server on `localhost:3000`.
 
 There exist four total drag systems throughout the app, three of which are completely different from one another.
 
-### Week-Day-Drag
+## Week-Day-Drag
 
 This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.
 
@@ -94,7 +94,7 @@ The visual representation of rows is created by the background image of each col
 
 The parent container of the columns is given a fixed height of 1200px, and each column within the container is given relative positioning and a min-height of 100%. The fixed height is necessary to ensure that the background-image linear gradient always coincides with the correct calculated row height. Screen width luckily does not affect the background-image gradient, so it only needs to be calculated once.
 
-#### Generate-Coordinates
+### Generate-Coordinates
 
 The coordinates for each entry are generated based on the start/end time of each entry.
 
@@ -127,7 +127,7 @@ const total = startMinutes + height
   * h: height,          (total number of rows)
   * e: total,           (last row of entry)
 
-#### Positioning-Setup
+### Positioning-Setup
 
 **Steps**
 a.) Calculate top & height properties for boxes inline-syling.
@@ -230,7 +230,7 @@ Currently, there are 15 different pairs of left & width properties that a box ca
 
 The section below will explain how these values are assigned.
 
-#### **Administer-Positioning:**
+### **Administer-Positioning:**
 
 **Steps:**
 
@@ -329,9 +329,9 @@ function setBoxWidthDay(box, prepend, dataidx) {
 }
 ```
 
-### Month-Drag
+## Month-Drag
 
-### Form-Drag
+## Form-Drag
 
 ## Resize_Systems
 
