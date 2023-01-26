@@ -56,17 +56,17 @@ Starts the webpack development server on `localhost:3000`.
 
 ## Drag_Systems
 
-1. [Week-Day-Drag](#week-day-drag)
+### 1. [Week-Day-Drag](#week-day-drag)
 
-  a.) [Generate-Coordinates](#generate-coordinates)
+#### 1.a [Generate-Coordinates](#generate-coordinates)
 
-  b.) [Positioning-Setup](#positioning-setup)
-  
-  c.) [Administer-Positioning](#administer-positioning)
+#### 1.b [Positioning-Setup](#positioning-setup)
 
-1. [Month-Drag](#month-drag)
+#### 1.c [Administer-Positioning](#administer-positioning)
 
-2. [Form-Drag](#form-drag)
+### 2. [Month-Drag](#month-drag)
+
+### 3. [Form-Drag](#form-drag)
 
 There exist four total drag systems throughout the app, three of which are completely different from one another.
 
