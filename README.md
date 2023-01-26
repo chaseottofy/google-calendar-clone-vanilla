@@ -56,9 +56,18 @@ Starts the webpack development server on `localhost:3000`.
 
 ## Drag_Systems
 
+1. [Week-Day-Drag](#week-day-drag)
+  a.) [Generate-Coordinates](#generate-coordinates)
+  b.) [Positioning-Setup](#positioning-setup)
+  c.) [Administer-Positioning](#administer-positioning)
+
+2. [Month-Drag](#month-drag)
+
+3. [Form-Drag](#form-drag)
+
 There exist four total drag systems throughout the app, three of which are completely different from one another.
 
-**Week and Day view:**
+### Week-Day-Drag
 
 This particular grid system operates as a 24 hour clock, with each hour being divided into 4 15 minute intervals.
 
@@ -82,9 +91,11 @@ The visual representation of rows is created by the background image of each col
 
 The parent container of the columns is given a fixed height of 1200px, and each column within the container is given relative positioning and a min-height of 100%. The fixed height is necessary to ensure that the background-image linear gradient always coincides with the correct calculated row height. Screen width luckily does not affect the background-image gradient, so it only needs to be calculated once.
 
-### Step 2: Generating coordinates for each entry
+#### Generate-Coordinates
 
 The coordinates for each entry are generated based on the start/end time of each entry.
+
+**Steps:**
 
 **a.)**: convert the start/end time of each entry into minutes.
 
@@ -113,20 +124,27 @@ const total = startMinutes + height
   * h: height,          (total number of rows)
   * e: total,           (last row of entry)
 
-### Step 3: Positioning entries
+#### Positioning-Setup
 
+**Steps**
+a.) Calculate top & height properties for boxes inline-syling.
+b.) Provide the entry with a slew of data attributes that will be used for repositioning/collision handling after drag/resize events.
+c.) Define system to calculate the left & width properties of each box.
+d.) Basic Example
+
+**Take note of the following:**
 Each entry is positioned absolutely within its column. The top & height properties are calculated based on the coordinates calculated in step 2.
 
-**a.)**: calculate top & height properties
+**a.):**
 
 ```javascript
 const top = (y * 12.5) + 'px'
 const height = (h * 12.5) + 'px'
 ```
 
-**b.)**: provide the entry with a slew of data attributes that will be used for repositioning/collision handling after drag/resize events.
+**b.):**
 
-**Important: From this point on I will be referring to entries as boxes.**
+**Important! From this point on I will be referring to entries as boxes.**
 
 **Data Attributes**:
 
@@ -146,7 +164,7 @@ const height = (h * 12.5) + 'px'
   * data-end: x2 (day of week event ends).
   * data-box-category: same as above.
 
-**c.)**: define system to calculate the left & width properties of each box
+**c.):**
 
 This process is relatively simple for entries that start and end on different days since their position is static.
 
@@ -156,15 +174,15 @@ Calculating collisions is a crucial part of this process and the whole reason wh
 
 When it comes to collision handling, with a drag system that allows for essentially inifinte entries, four things become very important:
 
-a.) The order in which the boxes are placed in the DOM.
+i.) The order in which the boxes are placed in the DOM.
 
-b.) The z-index of each box.
+ii.) The z-index of each box.
 
-c.) The left positional property of each box.
+iii.) The left positional property of each box.
 
-d.) the width positional property of each box.
+IV.) the width positional property of each box.
 
-"a.)" and "b.)" are both relatively simple to solve. The boxes are sorted by their y coordinates (start hour/min) before they are even given data attributes or classes for that matter. To understand why this is important, check out the screenshots below for an example of what not sorting by start time can lead to.
+"i.)" and "ii.)" are both relatively simple to solve. The boxes are sorted by their y coordinates (start hour/min) before they are even given data attributes or classes for that matter. To understand why this is important, check out the screenshots below for an example of what not sorting by start time can lead to.
 
 [sorted by start time (y)](https://ibb.co/gjm5fN9)
 
@@ -172,7 +190,7 @@ d.) the width positional property of each box.
 
 Once the boxes are sorted by their y coordinates, they are given a z-index value based on their index in the sorted array to further ensure that the boxes are placed in the correct order in the DOM.
 
-**"c.)" and "d.)" are a little more complicated.**
+**"iii.)" and "IV.)" are a little more complicated.**
 
 By default, the left and width properties are as follows:
 
@@ -183,6 +201,7 @@ left: calc((100% - 4px) * 0 + 0px);
 width: calc((100% - 4px) * 1 - 0px);
 ```
 
+**d.):**
 **Now lets take a look at a basic collision and how to handle it:**
 
 Box 1: 9:00AM - 10:00AM
@@ -208,9 +227,14 @@ Currently, there are 15 different pairs of left & width properties that a box ca
 
 The section below will explain how these values are assigned.
 
-**Positioning procedure:**
+#### **Administer-Positioning:**
 
-**a.)**: determine whether or not a collision has occurred.
+**Steps:**
+
+a.) determine whether or not a collision has occurred.
+b.) assign the left & width properties of each box.
+
+**a.):**
 
 Note that this is not necessary if only one box is present in the column.
 
@@ -250,14 +274,11 @@ return [...collisions].sort((a, b) => {
 })
 ```
 
-**b.)**: assign the left & width properties of each box.
+**b.):**
 
 ./src/utilities/dragutils.js (@function handleOverlap())
 
 ```javascript
-
-// The handleOverlap function is the function that calls the above checkForCollision function and assigns identifiers to each box that act as a reference for what left & width properties they should inherit.
-
 const collisions = checkForCollision(bxs);
 
 for (let i = 0; i < collisions.length; i++) {
@@ -267,8 +288,9 @@ for (let i = 0; i < collisions.length; i++) {
   if (i >= 15) { i -= 14; } 
 
   // assign identifier
-  box.setAttribute("class", `box box-${i + 1}])
-  // call @setBoxWidthDay() or @setBoxWidthWeek() to assign the left & width properties based on the identifiers that were just assigned.
+  box.setAttribute("class", `box box-${i + 1}`)
+  // call @setBoxWidthDay() or @setBoxWidthWeek() 
+  // this assigns the left & width properties based on given identifier
   view === "day" ? setBoxWidthDay(box, idx) : setBoxWidthWeek(box, idx);
 }
 ```
@@ -304,9 +326,9 @@ function setBoxWidthDay(box, prepend, dataidx) {
 }
 ```
 
-* **Drag System: Month view**
+### Month-Drag
 
-* **Drag System: Form**
+### Form-Drag
 
 ## Resize_Systems
 
