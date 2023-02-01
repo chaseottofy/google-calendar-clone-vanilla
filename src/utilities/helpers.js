@@ -149,9 +149,8 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 
   let popupX;
   if (center) {
-    // align to center of target element (targetWidth)
     popupX = x - (popupW / 2) + (targetWidth / 2);
-    if (targetWidth + x + 4 >= winW) {
+    if (popupWidth + x + 4 >= winW) {
       popupX = winW - popupW - 4;
     }
   } else {

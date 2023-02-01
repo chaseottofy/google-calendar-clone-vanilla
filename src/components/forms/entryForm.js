@@ -170,8 +170,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepicker.style.top = `${coords.y}px`
     timepicker.style.left = `${coords.x}px`
 
-
-
     const timepickerOverlay = document.createElement("div")
     timepickerOverlay.classList.add("timepicker-overlay")
 
@@ -185,14 +183,15 @@ export default function setEntryForm(context, store, datepickerContext) {
     let md = [
       'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am',
       'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm',
-    ]
+    ];
+
     let minutes = ["00", "15", "30", "45"];
 
     let [currenthour, currentmin] = currentTime.split(":").map((x) => {
-      return parseInt(x)
+      return parseInt(x);
     })
 
-    let currentmd = currenthour > 12 ? "pm" : "am"
+    let currentmd = currenthour > 12 ? "pm" : "am";
 
     let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
     let shouldTestReset = false;
@@ -201,8 +200,7 @@ export default function setEntryForm(context, store, datepickerContext) {
       shouldTestReset = true;
     }
 
-    currenthour > 12 ? currenthour -= 12 : currenthour
-
+    currenthour > 12 ? currenthour -= 12 : currenthour;
 
     if (endLimit !== null && isSameDay) {
       let [h, m] = endLimit.split(":").map(x => parseInt(x))
@@ -218,89 +216,88 @@ export default function setEntryForm(context, store, datepickerContext) {
         if (m === 45) {
           setEndDateToNextDay();
         } else {
-          hours = [12]
-          md = ['pm']
-          m = m.slice(-1)
+          hours = [12];
+          md = ['pm'];
+          m = m.slice(-1);
         }
       } else {
-        hours = hours.slice(+h + 1, hours.length)
-        md = md.slice(+h + 1, md.length)
+        hours = hours.slice(+h + 1, hours.length);
+        md = md.slice(+h + 1, md.length);
       }
     }
 
-    let count = 0
+    let count = 0;
     let si;
     hours.forEach((hour, houridx) => {
       minutes.forEach(min => {
-        const timepickerTime = document.createElement("div")
-        timepickerTime.classList.add("timepicker-time")
+        const timepickerTime = document.createElement("div");
+        timepickerTime.classList.add("timepicker-time");
         let attr;
         if (md[houridx] === "am") {
           if (+hour === 12) {
-            attr = `00:${min}`
-
+            attr = `00:${min}`;
           } else {
-            attr = `${hour}:${min}`
+            attr = `${hour}:${min}`;
           }
         } else if (md[houridx] === "pm") {
           if (hour === 12) {
-            attr = `12:${min}`
+            attr = `12:${min}`;
           } else {
-            attr = `${hour + 12}:${min}`
+            attr = `${hour + 12}:${min}`;
           }
         }
 
-        timepickerTime.setAttribute("data-tp-time", attr)
-        timepickerTime.textContent = `${hour}:${min}${md[houridx]}`
-        count++
+        timepickerTime.setAttribute("data-tp-time", attr);
+        timepickerTime.textContent = `${hour}:${min}${md[houridx]}`;
+        count++;
 
         if (!end) {
           if (+hour == +currenthour && +min == +currentmin) {
             if (currentmd === "pm" && md[houridx] === "pm") {
-              timepickerTime.classList.add("timepicker-time--selected")
+              timepickerTime.classList.add("timepicker-time--selected");
               si = count;
             } else if (currentmd === "am" && md[houridx] === "am") {
-              timepickerTime.classList.add("timepicker-time--selected")
+              timepickerTime.classList.add("timepicker-time--selected");
               si = count;
             }
           }
         }
 
-        timepickerTimesContainer.appendChild(timepickerTime)
+        timepickerTimesContainer.appendChild(timepickerTime);
       })
     })
 
 
     function setnewtime(e) {
-      const time = e.target.textContent
-      let attr = e.target.getAttribute("data-tp-time")
+      const time = e.target.textContent;
+      let attr = e.target.getAttribute("data-tp-time");
 
       if (!end) {
-        startTimeInput.textContent = time
-        startTimeInput.setAttribute("data-form-time", attr)
+        startTimeInput.textContent = time;
+        startTimeInput.setAttribute("data-form-time", attr);
 
-        let [testhour, testminute] = attr.split(":").map(x => +x)
-        let [endTestHour, endTestMinute] = endTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x))
+        let [testhour, testminute] = attr.split(":").map(x => +x);
+        let [endTestHour, endTestMinute] = endTimeInput.getAttribute("data-form-time").split(":").map(x => parseInt(x));
 
         if (isSameDay) {
           if (testhour === 23 && testminute === 45) {
-            setEndDateToNextDay()
+            setEndDateToNextDay();
           } else {
             if (testhour > endTestHour || (testhour === endTestHour && testminute >= endTestMinute)) {
-              setEndDateToNextHour()
+              setEndDateToNextHour();
             }
           }
         }
       } else {
         endTimeInput.textContent = time;
-        endTimeInput.setAttribute("data-form-time", attr)
+        endTimeInput.setAttribute("data-form-time", attr);
       }
       closetimepicker();
     }
 
     const delegateNewTime = (e) => {
       if (getClosest(e, ".timepicker-time")) {
-        setnewtime(e)
+        setnewtime(e);
         return;
       }
     }
@@ -308,13 +305,12 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepicker.appendChild(timepickerTimesContainer)
     const [x, y] = coords
     timepicker.setAttribute("style", `top:${y}px; left:${x}px;`)
-    document.body.prepend(timepickerOverlay);
-    document.body.prepend(timepicker)
+    document.body.prepend(timepickerOverlay, timepicker);
     timepickerOverlay.onclick = closetimepicker;
     timepickerTimesContainer.onclick = delegateNewTime;
     if (!end) {
       if (si > 0) {
-        timepicker.scrollTo(0, parseInt(si * 40) - 40)
+        timepicker.scrollTo(0, parseInt(si * 40) - 40);
       } else {
         timepicker.scrollTo(0, 0);
       }
@@ -325,7 +321,6 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function renderSidebarDatepickerForm() {
     if (!sidebar.classList.contains("hide-sidebar")) {
-      // datepickerContext.setDate(year, month, day)
       context.setDateSelected(day)
       setSidebarDatepicker(context, store, datepickerContext)
     }
@@ -333,9 +328,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function getDefaultCategory() {
     if (activeCategories.length === 0) {
-      return [categories[0][0], categories[0][1].color]
+      return [categories[0][0], categories[0][1].color];
     } else {
-      return [activeCategories[0][0], activeCategories[0][1].color]
+      return [activeCategories[0][0], activeCategories[0][1].color];
     }
   }
 
@@ -412,6 +407,8 @@ export default function setEntryForm(context, store, datepickerContext) {
     store.addActiveOverlay("hide-datepicker-overlay")
     datepickerContext.setDate(year, month, day)
     datepickerContext.setDateSelected(day)
+    // console.log(datepickerContext.getDateSelected());
+    console.log(datepickerContext.getDate());
     setDatepicker(context, store, datepickerContext, "form")
   }
 
@@ -445,7 +442,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`)
-    getDatePicker(y, m, d)
+    getDatePicker(y, m, d);
   }
 
   function getDateFormatViaAttr(dateAttr) {

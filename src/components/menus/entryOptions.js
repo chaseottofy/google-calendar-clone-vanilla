@@ -92,7 +92,7 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     // Only ever called directly if the form is toggled open
     entryOptionsWrapper.classList.add("entry__options--hidden");
     entryOptionsOverlay.classList.add("entry__options--hidden");
-    store.removeActiveOverlay("entry__options--hidden")
+    store.removeActiveOverlay("entry__options--hidden");
     entryOptionDescription.parentElement.removeAttribute("style");
 
     document.removeEventListener("keydown", handleEntryOptionKD);

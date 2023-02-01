@@ -25,7 +25,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   let montharray = datepickerContext.getMonthArray();
   let count = 0;
   let hasweek;
-  // let currentdate = [];
+  let testDateSelected = type === "form" ? datepickerContext.getDateSelected() : context.getDateSelected();
   let [checkmonth, checkyear] = [null, null];
   const datepickerKeypressThrottle = throttle(handleKeydownNav, 100);
 
@@ -38,6 +38,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   function createCells(montharray) {
     let groupedEntries = store.getMonthEntryDates(montharray)
     let currentWeekStart = context.getWeek();
+    let isDaySelected = false;
 
     datepickerBody.innerText = "";
     for (let i = 0; i < montharray.length; i++) {
@@ -63,7 +64,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
         cell.classList.remove("datepicker__body--dates-week")
       }
 
-      if (montharray[i].getDate() === context.getDateSelected() && montharray[i].getMonth() === datepickerContext.getMonth()) {
+      if (montharray[i].getDate() === testDateSelected && montharray[i].getMonth() === datepickerContext.getMonth()) {
         if (!datename.classList.contains("datepicker__body--datename-today")) {
           datename.setAttribute("class", "datepicker__body--datename")
           datename.classList.add("datepicker__body--datename-selected");
@@ -229,7 +230,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
       curr = document.querySelector(".datepicker__body--datename-selected")
       curr.classList.remove("datepicker__body--datename-selected")
       let last = document.querySelectorAll(".datepicker__body--datename");
-      last[last.length - 1].classList.add ("datepicker__body--datename-selected");
+      last[last.length - 1].classList.add("datepicker__body--datename-selected");
       return;
     } else {
       curr.classList.remove("datepicker__body--datename-selected");
@@ -383,7 +384,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
         break;
       case "Tab":
         flag ? closeChangeDateModal() : openChangeDateModal();
-        
+
         break;
       case "Escape":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
@@ -398,7 +399,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   const initDatepicker = () => {
-    // closeChangeDateModal();
     setDatepickerHeader();
     createCells(montharray);
     store.setResetDatepickerCallback(closeDatepicker)

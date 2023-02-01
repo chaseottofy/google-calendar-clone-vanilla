@@ -12,8 +12,10 @@ const randomTitles = "quaerat velit veniam amet cupiditate aut numquam ut sequi"
 
 const categoryNames = [
   'default',
-  'misc',
-  'school'
+  'default',
+  'default',
+  // 'misc',
+  // 'school'
 ]
 let endYears = [2023, 2023]
 function generateStart() {

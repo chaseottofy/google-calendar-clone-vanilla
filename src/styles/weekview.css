@@ -16,7 +16,6 @@
   grid-template-rows: 1fr 1fr;
   align-items: center;
   overflow: hidden;
-  /* overflow-x: hidden; */
   max-width: 100%;
   position: relative;
   height: 54px;
@@ -368,9 +367,8 @@
   background: var(--black1);
   grid-template-columns: repeat(7, 1fr);
   background-size: calc(100% / 7) 4%;
-  /* background-image: linear-gradient(to bottom,var0(--mediumgrey1) 1px, transparent 0px); */
   background-image:
-    linear-gradient(to bottom, var(--mediumgrey1) 1%, transparent 1%);
+    linear-gradient(to bottom, var(--mediumgrey1) 1px, transparent 1px);
 }
 
 .week--col {

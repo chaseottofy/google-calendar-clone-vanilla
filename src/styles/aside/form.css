@@ -600,8 +600,8 @@
   .entries__form {
     left: 2% !important;
     right: 2% !important;
-    top: 2% !important;
-    bottom: 2% !important;
+    top: 5% !important;
+    bottom: 5% !important;
     min-width: 180px !important;
   }
 

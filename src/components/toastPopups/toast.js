@@ -61,12 +61,14 @@ export default function createToast(message, timeout, callback, callbackTwo, rem
   }
 
   initToast()
-  toastoverlay.onclick = closetoast
+  toastoverlay.onclick = closetoast;
+  // window.onfocus = closetoast;
 
-  if (!timeout) {
-    timeout = 1000
-  } 
-  setTimeout(() => {
-    closetoast()
-  }, timeout)
+  // console.log(window)
+  // if (!timeout) {
+  //   timeout = 1000
+  // } 
+  // setTimeout(() => {
+  //   closetoast()
+  // }, timeout)
 }

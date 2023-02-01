@@ -63,7 +63,6 @@ class Context {
     this.monthSelected = this.date.getMonth();
     this.yearSelected = this.date.getFullYear();
 
-
     this.month = this.getMonth();
     this.monthArray = this.getMonthArray();
     this.week = this.getWeek();

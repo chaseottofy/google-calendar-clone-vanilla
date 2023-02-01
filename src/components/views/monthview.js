@@ -597,17 +597,23 @@ export default function setMonthView(context, store, datepickerContext) {
     modal.setAttribute("data-mv-modal", parent.getAttribute("data-mv-idx"));
 
     let modalHeight = (moreModalEntries.length * 28) + 64;
+
     if (modalHeight > 400) {
       modalHeight = 400;
     }
+
     const rect = parent.getBoundingClientRect();
+    let newleft = parseInt(rect.left)
+    let rectWidth = parseInt(rect.width);
+    
     let [x, y] = placePopup(
       216,
       modalHeight,
       [parseInt(rect.left), parseInt(rect.top)],
       [window.innerWidth, window.innerHeight],
       true,
-      parseInt(rect.width)
+      rectWidth
+      // parseInt(rect.width)
     );
 
     let maxH = +window.innerHeight - +y - 24;

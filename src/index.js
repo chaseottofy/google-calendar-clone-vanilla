@@ -2,12 +2,21 @@ import context, { datepickerContext } from "./context/appContext"
 import store from "./context/store"
 import setAppDefaults from "./config/appDefaults"
 import renderViews from "./config/renderViews"
+
+// import generateRandomEvents from "./utilities/testing"
+// store.setStoreForTesting(generateRandomEvents(1000));
+
 /*!*************************************!*\
 // (CSS) 
 /*!*************************************!*/
-// css variables and reset
+
+// <html>
 import "./styles/root.css";
+// </html>
+
+// <header>
 import "./styles/header.css"
+// </header>
 
 // <main>
 import "./styles/containers.css"
@@ -20,7 +29,6 @@ import "./styles/sidebar.css"
 import "./styles/sbdatepicker.css"
 // </main>
 
-// popup / modals
 // <aside>
 import "./styles/aside/datepicker.css"
 import "./styles/aside/toast.css"
@@ -36,64 +44,13 @@ import "./styles/aside/entryOptions.css"
 import "./styles/aside/info.css"
 import "./styles/aside/shortcuts.css"
 // </aside>
-/*!*************************************!*/
-// NOTES;
-// * finish settings
-// * finish privacy,terms,notes
 
+/*!*************************************!*/
 // FIX;
 // * validate .json files
 // * set toast to be removed on window focus
 // * linter
-// * 
-/*
-[
-  "setDateDefaults",
-  "setSchemaDefaults",
-  "setDefaults",
-  "getAllMethodNames",
-  "getColorScheme",
-  "setColorScheme",
-  "setSidebarState",
-  "toggleSidebarState",
-  "getComponent",
-  "setComponent",
-  "getSidebarState",
-  "setDay",
-  "setMonth",
-  "setYear",
-  "setDate",
-  "setDateSelected",
-  "setPrevDay",
-  "setPrevWeek",
-  "setPrevMonth",
-  "setPrevYear",
-  "setNextDay",
-  "setNextWeek",
-  "setNextMonth",
-  "setNextYear",
-  "getGmt",
-  "getDateSelected",
-  "getDay",
-  "getMonth",
-  "getYear",
-  "getDate",
-  "getToday",
-  "getWeek",
-  "getWeekday",
-  "getWeekArray",
-  "getWeekRange",
-  "getWeekNumber",
-  "getMonthName",
-  "getDaysInMonth",
-  "getMonthArrayStartDay",
-  "getMonthArrayStart",
-  "getMonthArrayEndDay",
-  "getMonthArrayEnd",
-  "getMonthArray",
-  "isToday"
-]
-*/
-// localStorage.clear()
+// * timepicker
+
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
