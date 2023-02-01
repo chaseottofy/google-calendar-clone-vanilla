@@ -94,6 +94,6 @@ import "./styles/aside/shortcuts.css"
   "isToday"
 ]
 */
-
+// localStorage.clear()
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);

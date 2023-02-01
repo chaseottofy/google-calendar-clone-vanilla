@@ -339,7 +339,6 @@ export default function handleSidebarCategories(context, store, datepickerContex
       null
     )
 
-    console.log(targetElement.offsetTop)
     const popupBox = document.createElement("div");
     popupBox.classList.add("popup-ctg-options");
     popupBox.style.top = `${y}px`;
@@ -439,7 +438,6 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
     // toggle category checkbox and display entries
     if (ctgChck) {
-      console.log(true);
       handleCategorySelection(e)
       return;
     }

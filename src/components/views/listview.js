@@ -31,7 +31,7 @@ export default function setListView(context, store, datepickerContext) {
   /*************************************** */
   /* CREATE ROW GROUPS*/
   function createRowGroups(entries) {
-    console.log(entries);
+    // console.log(entries);
     let count = 0;
     for (let [key, value] of Object.entries(entries)) {
       count++

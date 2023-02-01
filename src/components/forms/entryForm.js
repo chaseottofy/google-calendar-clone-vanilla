@@ -220,7 +220,6 @@ export default function setEntryForm(context, store, datepickerContext) {
         } else {
           hours = [12]
           md = ['pm']
-          console.log(m)
           m = m.slice(-1)
         }
       } else {

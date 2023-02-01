@@ -656,7 +656,6 @@ export default function setMonthView(context, store, datepickerContext) {
     const targetCellIdx = parseInt(targetModal.getAttribute("data-mv-modal"));
     const targetCell = document.querySelector(`[data-mv-idx="${targetCellIdx}"]`);
 
-    console.log(targetCell)
     const cloned = e.target.cloneNode(true);
     cloned.setAttribute("class", "monthview--box");
     cloned.firstChild.setAttribute("class", "monthview--title");

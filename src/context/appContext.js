@@ -243,7 +243,6 @@ class Context {
   }
 
   setMonth(month) {
-    // console.log(month);
     this.monthSelected = month;
     Context.setLocalMonth(month);
   }
@@ -294,7 +293,6 @@ class Context {
     this.setDate(
       prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate()
     );
-    console.log(this.getMonth());
   }
 
   setPrevYear() {
@@ -575,7 +573,7 @@ class DatepickerContext {
   static setLocalPickerDateSelected(date) {
     localStorage.setItem("pickerDateSelected", date);
   }
-  
+
   /* **************************************** */
   /* DAY, MONTH, YEAR, DATE, DAY_SELECTED */
   setDay(day) {

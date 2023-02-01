@@ -841,8 +841,6 @@ class Store {
       message.err1 = "invalid number of keys (too many)";
     }
 
-    console.log(keys)
-
     for (let i = 0; i < keys.length; i++) {
       if (!localStoreKeyNames.includes(keys[i])) {
         let errname = "err" + Object.keys(message).length;

@@ -248,7 +248,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   function closeChangeDateModal() {
     // check if date has changed;
     if (!getMonthYearCheck()) {
-      console.log(true);
       montharray = datepickerContext.getMonthArray();
       createCells(montharray);
       setDatepickerHeader();
@@ -343,7 +342,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
 
     if (mpMonth) {
       const newmonth = parseInt(e.target.getAttribute("data-dp-month"))
-      console.log(newmonth)
       monthpickerSetMonth(newmonth, false);
       return;
     }
