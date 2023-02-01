@@ -596,7 +596,7 @@
   grid-template-columns: 1fr
 }
 
-@media screen and (max-width:580px) {
+@media screen and (max-width:640px) {
   .entries__form {
     left: 2% !important;
     right: 2% !important;

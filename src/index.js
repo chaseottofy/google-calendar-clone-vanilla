@@ -46,6 +46,54 @@ import "./styles/aside/shortcuts.css"
 // * set toast to be removed on window focus
 // * linter
 // * 
-// localStorage.clear();
+/*
+[
+  "setDateDefaults",
+  "setSchemaDefaults",
+  "setDefaults",
+  "getAllMethodNames",
+  "getColorScheme",
+  "setColorScheme",
+  "setSidebarState",
+  "toggleSidebarState",
+  "getComponent",
+  "setComponent",
+  "getSidebarState",
+  "setDay",
+  "setMonth",
+  "setYear",
+  "setDate",
+  "setDateSelected",
+  "setPrevDay",
+  "setPrevWeek",
+  "setPrevMonth",
+  "setPrevYear",
+  "setNextDay",
+  "setNextWeek",
+  "setNextMonth",
+  "setNextYear",
+  "getGmt",
+  "getDateSelected",
+  "getDay",
+  "getMonth",
+  "getYear",
+  "getDate",
+  "getToday",
+  "getWeek",
+  "getWeekday",
+  "getWeekArray",
+  "getWeekRange",
+  "getWeekNumber",
+  "getMonthName",
+  "getDaysInMonth",
+  "getMonthArrayStartDay",
+  "getMonthArrayStart",
+  "getMonthArrayEndDay",
+  "getMonthArrayEnd",
+  "getMonthArray",
+  "isToday"
+]
+*/
+
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);

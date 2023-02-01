@@ -14,7 +14,7 @@ export default function setHeader(context, component, store) {
   const datetimeContent = document.querySelector(".datetime-content")
   const collapsebtn = document.querySelector(".collapse-view")
   const prevnext = document.querySelector(".prev-next");
-  // const search = document.querySelector(".h-search");
+  
   component === "week" || component === "day" ? collapsebtn.classList.remove("hide-cbt") : collapsebtn.classList.add("hide-cbt");
 
   const configHeader = (borderstyle, componentTitle) => {

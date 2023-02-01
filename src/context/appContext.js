@@ -2,6 +2,54 @@ import { compareDates } from "../utilities/dateutils"
 import locales from "../locales/en"
 const labels = locales.labels;
 
+
+/*
+"setDateDefaults",
+"setSchemaDefaults",
+"setDefaults",
+"getAllMethodNames",
+"getColorScheme",
+"setColorScheme",
+"setSidebarState",
+"toggleSidebarState",
+"getComponent",
+"setComponent",
+"getSidebarState",
+"setDay",
+"setMonth",
+"setYear",
+"setDate",
+"setDateSelected",
+"setPrevDay",
+"setPrevWeek",
+"setPrevMonth",
+"setPrevYear",
+"setNextDay",
+"setNextWeek",
+"setNextMonth",
+"setNextYear",
+
+"getGmt",
+"getDateSelected",
+"getDay",
+"getMonth",
+"getYear",
+"getDate",
+"getToday",
+"getWeek",
+"getWeekday",
+"getWeekArray",
+"getWeekRange",
+"getWeekNumber",
+"getMonthName",
+"getDaysInMonth",
+"getMonthArrayStartDay",
+"getMonthArrayStart",
+"getMonthArrayEndDay",
+"getMonthArrayEnd",
+"getMonthArray",
+"isToday"
+*/
 class Context {
   constructor() {
     this.colorScheme = "dark";
@@ -140,6 +188,16 @@ class Context {
 
 
   /* **************************************** */
+  /* TESTING -- DEV ONLY */
+  getAllMethodNames() {
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(
+      (method) => {
+        return method !== "constructor" && method !== "getStoreStats";
+      }
+    );
+  }
+
+  /* **************************************** */
   /* APPLICATION THEME (DARK/LIGHT) */
   getColorScheme() {
     return Context.getLocalColorScheme();
@@ -185,6 +243,7 @@ class Context {
   }
 
   setMonth(month) {
+    // console.log(month);
     this.monthSelected = month;
     Context.setLocalMonth(month);
   }
@@ -208,18 +267,34 @@ class Context {
   // Take current date and set it to previous day/week/month/year
   /* PREVIOUS : DAY, WEEK, MONTH, YEAR */
   setPrevDay() {
-    const prevDay = new Date(this.getYear(), this.getMonth(), this.getDay() - 1);
-    this.setDate(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate());
+    const prevDay = new Date(
+      this.getYear(), this.getMonth(), this.getDay() - 1
+    );
+
+    this.setDate(
+      prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate()
+    );
   }
 
   setPrevWeek() {
-    const prevWeek = new Date(this.getYear(), this.getMonth(), this.getDay() - 7);
-    this.setDate(prevWeek.getFullYear(), prevWeek.getMonth(), prevWeek.getDate());
+    const prevWeek = new Date(
+      this.getYear(), this.getMonth(), this.getDay() - 7
+    );
+
+    this.setDate(
+      prevWeek.getFullYear(), prevWeek.getMonth(), prevWeek.getDate()
+    );
   }
 
   setPrevMonth() {
-    const prevMonth = new Date(this.getYear(), this.getMonth() - 1, this.getDay());
-    this.setDate(prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate());
+    const prevMonth = new Date(
+      this.getYear(), +this.getMonth() - 1, this.getDay()
+    );
+
+    this.setDate(
+      prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate()
+    );
+    console.log(this.getMonth());
   }
 
   setPrevYear() {
@@ -257,23 +332,25 @@ class Context {
   }
 
   getDateSelected() {
-    return +Context.getLocalDateSelected() || this.date.getDate();
-    // return this.dateSelected;
+
+    return +Context.getLocalDateSelected();
+    // return +this.dateSelected;
   }
 
   getDay() {
-    return +Context.getLocalDay() || this.date.getDate();
+    return +Context.getLocalDay();
     // return +this.daySelected;
   }
 
   getMonth() {
-    return +Context.getLocalMonth() || this.date.getMonth();
-    // return this.monthSelected;
+    // const month = Context.getLocalMonth();
+    return +Context.getLocalMonth();
+    // return +this.monthSelected;
   }
 
   getYear() {
     return +Context.getLocalYear() || this.date.getFullYear();
-    // return this.yearSelected;
+    // return +this.yearSelected;
   }
 
   getDate() {
@@ -384,6 +461,7 @@ class Context {
     for (let i = 1; i <= daysInMonth; i++) {
       monthArray.push(new Date(year, month, i));
     }
+
     monthArray[monthArray.length - 1].setHours(23, 59, 59, 999);
 
     if (monthArray.length === 28 && end.length < 7) {
@@ -497,6 +575,7 @@ class DatepickerContext {
   static setLocalPickerDateSelected(date) {
     localStorage.setItem("pickerDateSelected", date);
   }
+  
   /* **************************************** */
   /* DAY, MONTH, YEAR, DATE, DAY_SELECTED */
   setDay(day) {
@@ -524,31 +603,42 @@ class DatepickerContext {
     this.setMonth(month);
     this.setDay(day);
   }
+
   /* ************** */
   setPrevMonth() {
-    const prevMonth = new Date(this.getYear(), this.getMonth() - 1, this.getDay());
-    this.setDate(prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate());
+    const prevMonth = new Date(
+      this.getYear(), this.getMonth() - 1, this.getDay()
+    );
+
+    this.setDate(
+      prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate()
+    );
   }
 
   setNextMonth() {
-    const nextMonth = new Date(this.getYear(), this.getMonth() + 1, this.getDay());
-    this.setDate(nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate());
+    const nextMonth = new Date(
+      this.getYear(), this.getMonth() + 1, this.getDay()
+    );
+
+    this.setDate(
+      nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate()
+    );
   }
   /* ************** */
   getDateSelected() {
-    return DatepickerContext.getLocalPickerDateSelected() || this.date.getDate();
+    return +DatepickerContext.getLocalPickerDateSelected();
   }
 
   getDay() {
-    return DatepickerContext.getLocalPickerDay() || this.date.getDate();
+    return +DatepickerContext.getLocalPickerDay();
   }
 
   getMonth() {
-    return DatepickerContext.getLocalPickerMonth() || this.date.getMonth();
+    return +DatepickerContext.getLocalPickerMonth();
   }
 
   getYear() {
-    return DatepickerContext.getLocalPickerYear() || this.date.getFullYear();
+    return +DatepickerContext.getLocalPickerYear();
   }
 
   getDate() {
@@ -618,9 +708,8 @@ class DatepickerContext {
 }
 
 const context = new Context();
-context.setDefaults();
-export default context;
-
 const datepickerContext = new DatepickerContext();
+context.setDefaults();
 datepickerContext.setDefaults();
+export default context;
 export { datepickerContext }
