@@ -303,10 +303,18 @@ class Store {
   }
 
   compareEntries(entry1, entry2) {
+    console.log(entry1, entry2)
     for (let key in entry1) {
-      console.log(entry1[key])
-      // console.log(key)
+      if (key === "id" || key === "coordinates") continue;
+      if (key === "end" || key === "start") {
+        if (new Date(entry1[key]).getTime() - new Date(entry2[key]).getTime() !== 0)  {
+          return false;
+        }
+      } else if (entry1[key] !== entry2[key]) {
+        return false;
+      } 
     }
+    return true;
   }
 
   updateEntry(id, data) {

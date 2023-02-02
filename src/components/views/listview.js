@@ -52,7 +52,7 @@ export default function setListView(context, store, datepickerContext) {
         return new Date(a.end) - new Date(b.end)
       })
 
-      value.forEach((entry, idx) => {
+      value.forEach((entry) => {
         rgContent.append(createRowGroupCell(entry))
       })
 
@@ -273,7 +273,6 @@ export default function setListView(context, store, datepickerContext) {
           true
         );
       }
-
 
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;

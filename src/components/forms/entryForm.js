@@ -629,11 +629,23 @@ export default function setEntryForm(context, store, datepickerContext) {
     setViews(currentComponent, context, store, datepickerContext);
   }
 
+  function clearAllErrors() {
+    const inputErrElements = document?.querySelectorAll(".form-input-error");
+    if (inputErrElements) {
+      inputErrElements.forEach((el) => {
+        el.classList.remove("form-input-error")
+        el.removeAttribute("data-form-error-message")
+      })
+    }
+  }
+
   function handleFormClose(e) {
     if (!datepicker.classList.contains("hide-datepicker")) {
       datepicker.classList.add("hide-datepicker")
       datepickeroverlay.classList.add("hide-datepicker-overlay")
     }
+
+    clearAllErrors();
 
     entriesFormWrapper.classList.add("hide-form");
     formOverlay.classList.add("hide-form-overlay");
@@ -667,7 +679,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     handleFormClose();
-
     
     // if the submission type is create, pass a callback function to allow user to remove the last entry if they wish
     if (type === "create") {
@@ -678,13 +689,19 @@ export default function setEntryForm(context, store, datepickerContext) {
     // if the submission type is edit, pass a callback function to allow user to undo the last edit if they wish
 
     // determine whether the entry was edited or not
-      const handleUndoLastEdit = () => {
-        undoLastFormEdit(id, entryBefore);
+    const shouldCreateToast = store.compareEntries(
+      entryBefore,
+      store.getEntry(id)
+      );
+      
+      if (!shouldCreateToast) {
+        const handleUndoLastEdit = () => {
+          undoLastFormEdit(id, entryBefore);
+        }
+        setTimeout(() => {
+          createToast("Event updated", handleUndoLastEdit);
+        }, 4);
       }
-      setTimeout(() => {
-        console.log('ran')
-        createToast("Event updated", handleUndoLastEdit);
-      }, 4)
     }
   }
 
@@ -947,7 +964,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     const customInputError = getClosest(e, ".form-input-error__custom-input");
 
     // form footer buttons
-    const clearbtn = getClosest(e, ".form--footer__button-cancel");
+    const resetbtn = getClosest(e, ".form--footer__button-cancel");
     const submitbtn = getClosest(e, ".form--footer__button-save");
 
     if (dragHeader) {
@@ -1010,8 +1027,9 @@ export default function setEntryForm(context, store, datepickerContext) {
       return;
     }
 
-    if (clearbtn) {
+    if (resetbtn) {
       entriesForm.reset();
+      clearAllErrors();
       setFormInitialValues();
       closeCategoryModal();
       return;
