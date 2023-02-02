@@ -1,70 +1,201 @@
 # Google Calendar Clone
 
-## contact: ottofy@zohomail.com
+Contact: ottofy@zohomail.com
 
-**[LIVE PROJECT LINK](https://chaseottofy.github.io/google-calendar-clone-vanilla/)**
+[Live project link](https://chaseottofy.github.io/google-calendar-clone-vanilla/)
 
-**[SCREENSHOTS](https://ibb.co/album/fQrm1F)**
+[App Screenshots](https://ibb.co/album/fQrm1F)
 
 ## Documentation
 
 Thank you for taking the time to check out this project!
 
 **This Documentation is a work in progress.**
+I am currently working on a dev.to writeup that will follow more as a tutorial. If the feedback is positive, I will consider making a step by step tutorial in video format but it could potentially be around 10 hours long so I'm still gauging interest. Please let me know if you would be interested in this by contacting me directly via email (ottofy@zohomail.com).
+
+____________
 
 ## Glossary
 
 1. [About](#about)
 
-2. [Cloning](#cloning_this_repo)
+2. [Cloning](#cloning)
 
-3. [Events](#events)
+3. [Journal](#journal)
 
-4. [Drag_Systems](#drag_systems)
+4. [Cloning](#cloning)
+
+5. [Events](#events)
+
+6. [Drag_Systems](#drag_systems)
   
-5. [Resize_Systems](#resize_systems)
+7. [Resize_Systems](#resize_systems)
 
-6. [Date_Handling](#date_handling)
+8. [Date_Handling](#date_handling)
 
-7. [Time_Handling](#time_handling)
+9. [Time_Handling](#time_handling)
 
-8. [Form_Handling](#form_handling)
+10. [Form_Handling](#form_handling)
 
-9. [Views](#views)
+11. [Views](#views)
 
-10. [Rendering](#rendering)
+12. [Rendering](#rendering)
 
-11. [Storage](#storage)
+13. [Storage](#storage)
 
-12. [Project_Goals](#project_goals)
-
-13. [Journal](#journal)
+____________
 
 ## About
 
-I hope to deliver the following information as clearly as possible. If you have any questions please refer to the email above and I will get back to you as soon as I see your message.
+* Recreation of the google calendar app in its entirety (aside from components that utilize google apis).
+* Zero third party resources used (aside from webpack & google-svgs)
+* All code is written in vanilla javascript, html, and css.
 
-### Cloning_This_Repo
+At the moment, the application works using local storage but there are options to backup data and load previously saved data using json.
 
-#### `git clone`
+### Benchmarks & Features that differ from the original Google Calendar
 
-#### `cd google-calendar-clone-vanilla`
+* **Performance:**
+  * Transfer size:
+    * Google: 3MB.
+    * Clone: 100kb.
+  * Bundle Size (JS):
+    * Google: 2.7MB.
+    * Clone: 40kb.
+  * Lighthouse:
+    * Google: [77, 98, 92, 70].
+    * Clone: [100, 100, 100, 100].
+  * Responsive down to:
+    * Google: 860px.
+    * Clone: 280px.
 
-#### `npm install`
+* **Three themes:**
+  * Dark.
+  * High Contrast.
+  * Light (same as google).
 
-### Available_Scripts
+* **Keyboard Shortcuts:**
+  * **Differ slightly from the original app.**
+  * 29 in total.
+  * New Shortcuts:
+    * Toggle sidebar open/closed.
+    * Open event and category forms.
+    * Datepicker: set date to next&prev month/week.
+    * Datepicker: set date to next&prev days.
 
-#### `npm run build`
+* **Datepicker now has:**
+  * Monthpicker.
+  * Yearpicker.
+  * Days with events are highlighted.
+  * Current week highlighted when in weekview.
+
+* **Download/Upload:**
+  * All calendar events/categories/settings can be downloaded & uploaded.
+    * Uploading data will overwrite existing data.
+
+* **Other:**
+  * Monthview cells are highlighted when dragged over.
+  * Resize bar for week & day events.
+  * 42 color options for categories.
+  * Move all events from one category to another.
+  * Single page. No page refreshes, no load times.
+  * Aggressive memory handling.
+  * At MAX there will be 5 active event listeners.
+  * Sidebar converts to fixed positioning under 840px and main content inherits the full page width.
+  * Turn animations/transitions on and off.
+  * animation times adjusted.
+  * More details provided for when events start/end/ended **(see Jan 20th journal).**
+  * Sorting animations for month/week/day view events.
+  * Dayview header details how many entries are starting/ending on that day and the timeframes of first - last entry.
+  * Yearview will automatically scroll to current selected month if not in view.
+  * Yearview days with events are highlighted.
+  * Dayview will automatically scroll to the top of first event if it is not in view.
+  * Throttling optimized to always ensure content is visible during any keydown action.
+
+____________
+
+## Cloning
+
+### `git clone`
+
+### `cd google-calendar-clone-vanilla`
+
+### `npm install`
+
+## Available_Scripts
+
+### `npm run build`
 
 Builds the app and **necessary** resources in the `dist` folder.
 
-#### `npm run dev`
+### `npm run dev`
 
-Starts the webpack development server on `localhost:3000`.
+Webpack: Starts development server on `localhost:3000`.
+
+____________
+
+## Journal
+
+### Jan 16, 2023
+
+* **build list/agenda view prototype -- [screenshot](https://ibb.co/dPkFs8m)**.
+* Category change name bug fix.
+* Mobile query clean up.
+
+### Jan 17, 2023
+
+* Weekview now has max-width and horizontal scroll below 560px.
+* improve list/agenda view.
+* timepicker staging (form).
+* improved context menus.
+* links now crawable.
+* improved keyframes.
+
+### Jan 20, 2023
+
+* Entry popup modlas will now provide the following details :
+  * If the entry has ended, display the time since it ended.
+  * If the entry ends today and has started, display a countdown until complete.
+  * If the entry ends today and hasn't started, display the length in hours/minutes.
+  * If the entry ended yesterday, display "ended yesterday".
+  * If the entry is yet to start and is not in the past, display how long until it is scheduled to start.
+* Improve collisions [screenshot](https://ibb.co/CwN951Z)
+
+### Jan 23, 2023
+
+* Click on datepicker title to open a month/year picker.
+  * header datepicker [screenshot](https://ibb.co/qNXBXJ2)
+  * sidebar datepicker [screenshot](https://ibb.co/nMNpjmf)
+  * form datepicker [screenshot](https://ibb.co/kqTH6rQ)
+* Added date search component [screenshot](https://ibb.co/ZMQbjgG)
+* New category options (turn all others off/on) || edit [screenshot](https://ibb.co/NWrkmww)
+* Added dynamic form drag
+  * shrinks and grows if dragged away/into corners
+  * [screenshot](https://ibb.co/PghdtkS)
+* All modals are now dynamic (mobile support)
+  * Will open to left if no space on right of target & viceversa
+  * Will open above if no space below target & viceversa
+  * [screenshot](https://ibb.co/Ln75k7W)
+* Added switch to turn animations/transitions on and off in settings
+* Added top modal compartment for dayview (events that span longer than the calendar day) [screenshot](https://ibb.co/Byq1vJb)
+* Added floating eye icon to open/close the header for the week and day view (mobile support) [screenshot](https://ibb.co/JrpDj4X)
+
+### Jan 24, 2023
+
+* Prepare Production build & implement linter.
+* Start trimming bundle. [screenshot](https://ibb.co/85fSgN6)
+
+### Feb 1, 2023
+
+* Toast popups:
+  * Allow user to "undo" any edits to events.
+  * Allow user to remove new events.
+
+____________
 
 ## Events
 
-### 1. [Active-Events](#active-events)
+### 1. [Lifecycle](#lifecycle)
 
 ### 2. [Delegation-Example](#delegation-example)
 
@@ -74,7 +205,7 @@ Starts the webpack development server on `localhost:3000`.
 
 This application relies heavily on Event Delegation, the idea of administering events through a common parent element. The main benefit to this is the lack of actual listeners registered to the DOM.
 
-## Active-Events
+## Lifecycle
 
 **At most, 5 of the following 7 delegators will be in the DOM at the same time.**
 
@@ -144,6 +275,8 @@ Upon closing, the following happens:
 
 1. The overlay and modal / form listeners are removed from the DOM.
 2. The global store is notified of the overlay's removal. Global keydown listener is re-registered to the document.
+
+____________
 
 ## Drag_Systems
 
@@ -340,7 +473,9 @@ for (const box of bxs) {
   arr.push([box.coordinates.y, box.coordinates.e]);
 }
 
-// populate the collisions set with boxes that interset with each other either at their start (y) or end (e) coordinates
+// populate the collisions set with boxes that 
+// interset with each other either at 
+// their start (y) or end (e) coordinates
 for (let i = 0; i < arr.length; i++) {
   for (let j = i + 1; j < arr.length; j++) {
     if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
@@ -512,10 +647,17 @@ const currentCursorX = e.pageX
 let newOffsetX = startCursorX - currentCursorX
 
 // @function getcol() returns the column dom element at given index
-let leftColX = currentColumn - 1 >= 0 ? parseInt(getCol(currentColumn - 1).getBoundingClientRect().right) : null;
-let rightColX = currentColumn - 1 >= 0 ? parseInt(getCol(currentColumn + 1).getBoundingClientRect().left) : null;
+let leftColX = currentColumn - 1 >= 0 
+  ? parseInt(getCol(currentColumn - 1).getBoundingClientRect().right) 
+  : null;
 
-// if the direction is right and the next column is not null, append the cloned box to the next column and update the current column variable
+let rightColX = currentColumn - 1 >= 0 
+  ? parseInt(getCol(currentColumn + 1).getBoundingClientRect().left) 
+  : null;
+
+// if the direction is right and the next column is not null, 
+// append the cloned box to the next column and 
+// update the current column variable
 if (direction === "right" && rightColX !== null) {
   if (e.pageX >= rightColX) {
     getcol(+currentColumn + 1).appendChild(box)
@@ -525,7 +667,8 @@ if (direction === "right" && rightColX !== null) {
   }
 }
 
-// left movement follows the same process as the right movement, but using subtracting instead of adding
+// left movement follows the same process as the 
+// right movement, but using subtracting instead of adding
 ```
 
 7.) User releases mouse, Mouseup function is called where two distinct actions can occur depending on whether the user has initiated dragging or not.
@@ -534,7 +677,9 @@ if (direction === "right" && rightColX !== null) {
 // query select the cloned box and define it as a temporary box
 const tempbox = document.querySelector(".temporary-box")
 
-// if there is no temporary box, the user never initiated dragging, treat as click event and open the box's context menu where the user can choose to open the box's edit form or delete the box.
+// if there is no temporary box, the user never initiated dragging,
+// treat as click event and open the box's context menu where 
+// the user can choose to open the box's edit form or delete the box.
 // This process is detailed in the @Form_Handling Section
 
 if (tempbox === null) {
@@ -570,7 +715,8 @@ if (tempbox === null) {
     renderSidebarDatepickerWeek()
   };
 
-  // This is where the overlap handling comes into play detailed in the @Administer-Positioning section
+  // This is where the overlap handling comes 
+  // into play detailed in the @Administer-Positioning section
   let droppedCol = +box.getAttribute("data-box-col");
   if (boxes.getBoxesByColumn(droppedCol).length > 1) {
     handleOverlap(droppedCol, "week", boxes)
@@ -578,7 +724,8 @@ if (tempbox === null) {
     box.setAttribute("box-idx", "box-one")
   }
 
-  // set documents cursor to normal and tells the store that other events can now be registered
+  // set documents cursor to normal and tells the 
+  // store that other events can now be registered
   setStylingForEvent("dragend", main, store)
 
   // remove event listeners
@@ -904,23 +1051,26 @@ This modals positiong is calculated using the placePopup function, the same func
 @param {number} targetWidth - if center is true, targetWidth required to center
 @returns {array} [x, y] top/left values for popup
 
-function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
-  const [popupW, popupH] = [popupWidth, popupHeight];
-  const [x, y] = coords;
-  const [winW, winH] = windowCoords;
-
+function placePopup(popupCoord, boxCoord, windowCoord, center, targetWidth) {
+  const [popupWidth, popupHeight] = popupCoord;
+  const [boxLeft, boxTop] = boxCoord;
+  const [windowWidth, windowHeight] = windowCoords;
   let popupX;
+
   if (center) {
-    // align to center of target element (targetWidth)
-    popupX = x - (popupW / 2) + (targetWidth / 2);
-    if (targetWidth + x + 4 >= winW) {
-      popupX = winW - popupW - 4;
+    popupX = boxLeft - (popupWidth / 2) + (targetWidth / 2);
+    if (targetWidth + boxLeft + 4 >= windowWidth) {
+      popupX = windowWidth - popupWidth - 4;
     }
   } else {
-    popupX = x + popupW > winW ? x - popupW - 6 : x;
+    popupX = boxLeft + popupW > winW 
+      ? boxLeft - popupWidth - 6 
+      : boxLeft;
   }
 
-  let popupY = y + popupH > winH ? winH - popupH - 6 : y;
+  let popupY = boxTop + popupHeight > windowHeight
+    ? windowHeight - popupHeight - 6 
+    : boxTop;
 
   if (popupX < 0) popupX = Math.abs(popupX);
   if (popupY < 0) popupY = 56;
@@ -933,6 +1083,8 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 The Form Drag system follows a fairly simple procedure. (Nothing like the month/week/day views).
 
 If you weren't aware that the form even had drag capabilities, try it out for yourself by grabbing on to the form's header (space adjacent to close form button).
+
+____________
 
 ## Resize_Systems
 
@@ -962,115 +1114,4 @@ Work in progress.
 
 Work in progress.
 
-## Project_Goals
-
-**This is a front end recreation of the google calendar app in its entirety** (aside from google api / third party resources).
-
-At the moment it works using local storage but there are options to backup data and load previously saved data using json.
-
-I've implemented several new features to improve the user experience but overall tried to stay as true as possible to the original application.
-
-* These changes include but are not limited to :
-  * fully responsive up to 250px.
-  * Gzip: 40kb
-  * **THEMES:**
-    * Dark
-    * High Contrast
-    * Light
-    * (coming soon) color blind options
-    * some colors are changed here and there to accommodate any accessibility concerns.
-  * Keyboard Shortcuts differ slightly from the original app. Use "?" or "/" to open the shortcuts menu when in app (23 in total).
-  * **New Keyboard Shortcuts:**
-    * toggle sidebar open/closed.
-    * open event and category forms.
-    * Datepicker: set date to next&prev month/week.
-    * Datepicker: set date to next&prev days.
-  * **Datepicker now has:**
-    * monthpicker
-    * yearpicker
-    * days with events are highlighted
-    * current week highlighted in weekview
-  * Sidebar converts to fixed positioning under 840px and main content inherits the full page width.
-  * Turn animations/transitions on and off.
-  * animation times adjusted.
-  * More details provided for when events start/end/ended **(see Jan 20th notes).**
-  * Sorting animations for month/week/day view events.
-  * Dayview header details how many entries are starting/ending on that day and the timeframes of first - last entry.
-  * Yearview will automatically scroll to current selected month if not in view.
-  * Yearview days with events are highlighted.
-  * Dayview will automatically scroll to the top of first event if it is not in view.
-  * Throttling optimized to always ensure content is visible during any keydown action.
-  * **Download/Upload:**
-    * all calendar events/categories/settings can be downloaded & uploaded.
-  * Monthview cells are highlighted when dragged over.
-  * resize bar for week & day events.
-  * 42 color options for categories.
-  * Move all events from one category to another
-  * Single page. No page refreshes, no load times.
-  * Aggressive memory handling.
-  * At MAX there will be 4 active event listeners.
-  * Statistics page coming soon.
-  
-* **Lighthouse**
-  * First contentful paint : 200ms.
-  * Time to interactive : 200ms.
-  * Speed index : 200ms.
-  * Total blocking time : 0 seconds (no database / third party resources).
-  * Score : 100% (performance, accessibility, best practices, seo).
-  
-## Journal
-
-### Jan 16, 2023
-
-* **build list/agenda view prototype -- [screenshot](https://ibb.co/dPkFs8m)**.
-* Category change name bug fix.
-* Mobile query clean up.
-
-### Jan 17, 2023
-
-* Weekview now has max-width and horizontal scroll below 560px.
-* improve list/agenda view.
-* timepicker staging (form).
-* improved context menus.
-* links now crawable.
-* improved keyframes.
-
-### Jan 20, 2023
-
-* Entry popup modlas will now provide the following details :
-  * If the entry has ended, display the time since it ended.
-  * If the entry ends today and has started, display a countdown until complete.
-  * If the entry ends today and hasn't started, display the length in hours/minutes.
-  * If the entry ended yesterday, display "ended yesterday".
-  * If the entry is yet to start and is not in the past, display how long until it is scheduled to start.
-* Improve collisions [screenshot](https://ibb.co/CwN951Z)
-
-### Jan 23, 2023
-
-* Click on datepicker title to open a month/year picker.
-  * header datepicker [screenshot](https://ibb.co/qNXBXJ2)
-  * sidebar datepicker [screenshot](https://ibb.co/nMNpjmf)
-  * form datepicker [screenshot](https://ibb.co/kqTH6rQ)
-* Added date search component [screenshot](https://ibb.co/ZMQbjgG)
-* New category options (turn all others off/on) || edit [screenshot](https://ibb.co/NWrkmww)
-* Added dynamic form drag
-  * shrinks and grows if dragged away/into corners
-  * [screenshot](https://ibb.co/PghdtkS)
-* All modals are now dynamic (mobile support)
-  * Will open to left if no space on right of target & viceversa
-  * Will open above if no space below target & viceversa
-  * [screenshot](https://ibb.co/Ln75k7W)
-* Added switch to turn animations/transitions on and off in settings
-* Added top modal compartment for dayview (events that span longer than the calendar day) [screenshot](https://ibb.co/Byq1vJb)
-* Added floating eye icon to open/close the header for the week and day view (mobile support) [screenshot](https://ibb.co/JrpDj4X)
-
-### Jan 24, 2023
-
-* Prepare Production build & implement linter.
-* Start trimming bundle. [screenshot](https://ibb.co/85fSgN6)
-
-### Feb 1, 2023
-
-* Toast popups:
-  * Allow user to "undo" any edits to events.
-  * Allow user to remove new events.
+____________
