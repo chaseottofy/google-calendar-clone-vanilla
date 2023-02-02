@@ -649,12 +649,12 @@ export default function renderViews(context, datepickerContext, store) {
       handleBtnMainMenu();
     }
     store.setRenderSidebarCallback(ensureSidebarIsOpen);
+
     /*************************/
     // establish delegation
     toggleForm.onclick = handleForm;
     sbToggleForm.onclick = handleForm;
     collapsebtn.onclick = handleCollapse;
-
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
   }

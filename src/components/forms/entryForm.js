@@ -5,13 +5,13 @@ import setSidebarDatepicker from "../menus/sidebarDatepicker"
 import locales from "../../locales/en"
 
 // svgs
-import { createCheckIcon, createCloseIcon } from "../../utilities/svgs"
+import { createCheckIcon } from "../../utilities/svgs"
 
-// popups
+// popups confirmation
 import createToast from "../toastPopups/toast"
 import toastCallbackSaving from "../toastPopups/toastCallbacks"
 
-// helpers
+// event helpers
 import {
   getClosest,
   placePopup,
@@ -24,17 +24,7 @@ import {
   isBeforeDate,
   isDate,
   getDateFromAttribute,
-  formatDateForDisplay
 } from "../../utilities/dateutils"
-
-import {
-  compareTimes,
-} from "../../utilities/timeutils"
-import { 
-  calcNewHourFromCoords, 
-  getOriginalBoxObject 
-} from "../../utilities/dragutils"
-
 
 // main app sidebar
 const sidebar = document.querySelector(".sidebar")
@@ -119,12 +109,16 @@ export default function setEntryForm(context, store, datepickerContext) {
   function closetimepicker() {
     const timep = document?.querySelector(".timepicker")
     const timepoverlay = document?.querySelector(".timepicker-overlay")
+    const timepcontainer = document?.querySelector(".timepicker-times__container")
     const activeTimeElement = document?.querySelector(".active-form-time")
     if (timep) {
       timep.scrollTo(0, 0)
       timep.remove();
       timepoverlay.remove();
+      timepoverlay.onclick = null;
+      timepcontainer.onclick = null;
     }
+
     if (activeTimeElement) {
       activeTimeElement.classList.remove("active-form-time")
     }
@@ -545,7 +539,6 @@ export default function setEntryForm(context, store, datepickerContext) {
       }
     }
 
-
     if (hasErrors) {
       return errors;
     } else {
@@ -617,6 +610,26 @@ export default function setEntryForm(context, store, datepickerContext) {
     setViews(currentComponent, context, store, datepickerContext);
   }
 
+  function undoLastFormEdit(id, entryBefore) {
+    const start = new Date(entryBefore.start)
+    store.updateEntry(
+      id,
+      {
+        category: entryBefore.category,
+        completed: entryBefore.completed,
+        description: entryBefore.description,
+        end: new Date(entryBefore.end),
+        id: id,
+        start: start,
+        title: entryBefore.title,
+      }
+    );
+
+    context.setDate(start.getFullYear(), start.getMonth(), start.getDate());
+    context.setDateSelected(start.getDate());
+    setViews(currentComponent, context, store, datepickerContext);
+  }
+
   function handleFormClose(e) {
     if (!datepicker.classList.contains("hide-datepicker")) {
       datepicker.classList.add("hide-datepicker")
@@ -631,30 +644,45 @@ export default function setEntryForm(context, store, datepickerContext) {
     descriptionInput.value = "";
     titleInput.value = "";
     if (categoryModalWrapper.classList.contains("category-modal-open")) {
-      closeCategoryModal()
+      closeCategoryModal();
     }
-    document.removeEventListener("keydown", delegateFormKeyDown)
+
+    document.removeEventListener("keydown", delegateFormKeyDown);
 
     const resetCurrentView = store.getFormResetHandle(currentComponent)
     if (resetCurrentView !== null) {
-      resetCurrentView()
-      store.setFormResetHandle(currentComponent, null)
+      resetCurrentView();
+      store.setFormResetHandle(currentComponent, null);
     } else {
       return;
     }
   }
 
-  function handleSubmissionRender(start) {
-    context.setDate(start.getFullYear(), start.getMonth(), start.getDate())
-    context.setDateSelected(start.getDate())
-
+  function handleSubmissionRender(start, type, id, entryBefore) {
+    context.setDate(start.getFullYear(), start.getMonth(), start.getDate());
+    context.setDateSelected(start.getDate());
     setViews(currentComponent, context, store, datepickerContext);
 
     if (store.getDayEntriesArray(context.getDate()).length <= 1) {
-      renderSidebarDatepickerForm()
+      renderSidebarDatepickerForm();
     }
-    handleFormClose()
-    createToast("Saving", 1000, null, null, null, removeLastFormEntry)
+
+    handleFormClose();
+
+    
+    // if the submission type is create, pass a callback function to allow user to remove the last entry if they wish
+    if (type === "create") {
+      createToast("Event created", null, null, null, removeLastFormEntry);
+    } else {
+    // if the submission type is edit, pass a callback function to allow user to undo the last edit if they wish
+
+    // determine whether the entry was edited or not
+    
+      const handleUndoLastEdit = () => {
+        undoLastFormEdit(id, entryBefore);
+      }
+      createToast("Event updated", null, null, null, handleUndoLastEdit);
+    }
   }
 
   function handleFormSubmission(e) {
@@ -676,26 +704,34 @@ export default function setEntryForm(context, store, datepickerContext) {
     } else {
       // submission : edit
       if (formSubmitButton.getAttribute("data-form-action") === "edit") {
+        const id = formSubmitButton.getAttribute("data-form-entry-id")
+        const entryBefore = JSON.parse(JSON.stringify(store.getEntry(id)));
+
         store.updateEntry(
-          formSubmitButton.getAttribute("data-form-entry-id"),
+          id,
           {
             category: category,
             completed: false,
             description: description,
             end: endDate,
-            id: formSubmitButton.getAttribute("data-form-entry-id"),
+            id: id,
             start: startDate,
             title: title,
           }
-        )
-        handleSubmissionRender(startDate)
+        );
+
+        handleSubmissionRender(
+          startDate, 'edit', id, entryBefore
+        );
         return;
       } else {
         // submission : create
         store.createEntry(
           category, false, description, endDate, startDate, title
-        )
-        handleSubmissionRender(startDate)
+        );
+        handleSubmissionRender(
+          startDate, 'create', store.getLastEntryId(), null
+        );
       }
     }
   }
@@ -719,6 +755,8 @@ export default function setEntryForm(context, store, datepickerContext) {
     selectedCategoryWrapper.classList.remove("hide-form-category-selection")
     formModalOverlay.classList.add("hide-form-overlay")
     categoryModalWrapper.removeAttribute("style")
+    formModalOverlay.onclick = null;
+    closeCategoryModalBtn.onclick = null;
   }
 
   function createCategoryOptions(parent, categories) {
@@ -796,6 +834,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     if (categoryModal.childElementCount > 0) {
       categoryModal.onclick = delegateCategorySelection;
     }
+
     formModalOverlay.classList.remove("hide-form-overlay");
     formModalOverlay.onclick = closeCategoryModal;
     closeCategoryModalBtn.onclick = closeCategoryModal;
@@ -804,10 +843,13 @@ export default function setEntryForm(context, store, datepickerContext) {
   function dragFormAnywhere(e) {
     const closeBtn = document.querySelector(".form--header__icon-close")
     const rect = entriesFormWrapper.getBoundingClientRect();
+
+    // get current left / top form position
     const [currleft, currtop] = [
       parseInt(rect.left),
       parseInt(rect.top),
     ]; 
+
 
     entriesFormWrapper.style.margin = "0";
     entriesFormWrapper.style.opacity = "0.8";

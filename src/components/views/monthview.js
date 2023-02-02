@@ -782,7 +782,6 @@ export default function setMonthView(context, store, datepickerContext) {
         categoryBox.classList.remove("toggle-category--modal")
         createToast(
           "No categories selected",
-          3000,
           sidebar.classList.contains("hide-sidebar") ? store.getRenderSidebarCallback() : null,
           toastNoCategorySelected,
           removeToastNoCategorySelected,

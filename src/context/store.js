@@ -298,6 +298,17 @@ class Store {
     Store.setStore(this.store);
   }
 
+  getLastEntryId() {
+    return this.store[this.store.length - 1].id;
+  }
+
+  compareEntries(entry1, entry2) {
+    for (let key in entry1) {
+      console.log(entry1[key])
+      // console.log(key)
+    }
+  }
+
   updateEntry(id, data) {
     let entry = this.getEntry(id);
     entry = Object.assign(entry, data);

@@ -12,13 +12,12 @@
   position: absolute;
   top: auto;
   left: 236px;
-  bottom: 2%;
-  margin: auto 0;
+  bottom: 5%;
   display: flex;
   flex-direction: column;
   width: 280px;
   height: auto;
-  max-height: 340px;
+  max-height: 352px;
   z-index: 903;
   background: var(--black1);
   box-shadow: var(--box-shadow1);
@@ -36,8 +35,9 @@
   width: 100%;
   height: auto;
   position: relative;
-  padding: 20px 12px 4px 12px;
-  overflow: hidden;
+  padding: 20px 12px 20px 12px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .category__form-input {
@@ -108,7 +108,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 224px;
+  height: 242px;
 }
 
 .color-picker__header {
@@ -133,6 +133,7 @@
 
 .color-picker__options {
   display: grid;
+  height: 170px;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
   grid-gap: 8px;

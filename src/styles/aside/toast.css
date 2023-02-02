@@ -24,7 +24,8 @@
   right: 0;
   margin: 0 auto;
   width: 284px;
-  background: var(--black0);
+  /* background: var(--black0); */
+  background: #181a1b;
   display: flex;
   align-items: center;
   z-index: 2000;
@@ -37,18 +38,19 @@
 .toast svg {
   user-select: none;
   pointer-events: none;
+  fill: #fcfbf9 !important;
 }
 
 .toast-message {
-  color: var(--white4);
+  /* color: var(--white4); */
+  color: #fcfbf9;
   font-size: 14px;
   font-weight: 400;
   height: 100%;
-  padding: 0 4px;
+  padding: 0 4px 0 16px;
   letter-spacing: 0.3px;
   display: flex;
   align-items: center;
-  justify-content:center;
   width: 176px;
 }
 

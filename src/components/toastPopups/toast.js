@@ -5,14 +5,30 @@ import {
 const body = document.querySelector(".body");
 const toastoverlay = document.querySelector(".toast-overlay")
 
-export default function createToast(message, timeout, callback, callbackTwo, removeCallback, undoCallback) {
+/**
+ * 
+ * @param {string} message 
+ * @param {function} callback 
+ * @param {function} callbackTwo 
+ * @param {function} removeCallback 
+ * @param {function} undoCallback 
+ */
+export default function createToast(message, callback, callbackTwo, removeCallback, undoCallback) {
   function closetoast() {
+    const closetoastbtn = document?.querySelector(".close-toast-icon-wrapper")
     toastoverlay.classList.add("hide-toast-overlay")
-    document.querySelector(".toast")?.remove()
+    document.querySelector(".toast").remove()
+
     if (removeCallback) {
       removeCallback()
     }
+
+    if (closetoastbtn) {
+      closetoastbtn.onclick = null;
+    }
+    toastoverlay.onclick = null;
   }
+  
   function undo() {
     undoCallback()
     closetoast()
@@ -62,6 +78,9 @@ export default function createToast(message, timeout, callback, callbackTwo, rem
 
   initToast()
   toastoverlay.onclick = closetoast;
+  // setTimeout(() => {
+  //   closetoast()
+  // }, 5000)
   // window.onfocus = closetoast;
 
   // console.log(window)

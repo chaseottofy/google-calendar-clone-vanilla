@@ -46,14 +46,11 @@ import {
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
 // calendar overlay
-const calendarContainer = document.querySelector(".container__calendars")
 const resizeoverlay = document.querySelector(".resize-overlay")
 // weekview main grid wrapper & children
 const main = document.querySelector(".weekview")
 const container = document.querySelector(".weekview--calendar")
-const weekviewHeader = document.querySelector(".weekview--header")
 const weekviewHeaderDayNumber = document.querySelectorAll(".weekview--header-day__number")
-const weekviewHeaderDay = document.querySelectorAll(".weekview--header-day")
 const weekviewGrid = document.querySelector(".weekview__grid")
 const cols = document.querySelectorAll(".week--col")
 // weekview top grid & children

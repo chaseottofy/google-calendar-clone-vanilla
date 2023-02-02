@@ -503,7 +503,7 @@
   min-height: 52px;
   justify-content: flex-end;
   margin-left: auto;
-  padding: 8px 16px 8px 0;
+  padding: 8px 16px 12px 0;
   width: 100%;
   user-select: none;
   z-index: 1200;
@@ -511,14 +511,18 @@
 
 .form--footer__button-cancel,
 .form--footer__button-save {
+  font-family: var(--primaryFont) !important;
+  font-weight: 500;
   align-items: center;
+  text-transform: capitalize;
   border-radius: var(--borderradius);
   cursor: pointer;
   display: flex;
-  height: 30px;
+  height: 36px;
   justify-content: center;
   transition: background .2s ease-in-out;
-  width: 72px
+  width: 80px;
+  font-size: 14px;
 }
 
 .form--footer__button-cancel {

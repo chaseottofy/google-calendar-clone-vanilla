@@ -13,16 +13,16 @@ class CatFormHelper {
     this.originalName = catname;
     this.originalColor = catcolor;
   }
-  setName(name) {this.catname = name;}
-  setColor(color) {this.catcolor = color;}
-  setPrevColor(color) {this.prevColorIdx = color;}
-  getName() {return this.catname;}
-  getColor() {return this.catcolor;}
-  prevColor() {return this.prevColorIdx;}
-  setErrMsg(msg) {this.errMsg = msg;}
-  getErrMsg() {return this.errMsg;}
-  getOriginalName() {return this.originalName;}
-  getOriginalColor() {return this.originalColor;}
+  setName(name) { this.catname = name; }
+  setColor(color) { this.catcolor = color; }
+  setPrevColor(color) { this.prevColorIdx = color; }
+  getName() { return this.catname; }
+  getColor() { return this.catcolor; }
+  prevColor() { return this.prevColorIdx; }
+  setErrMsg(msg) { this.errMsg = msg; }
+  getErrMsg() { return this.errMsg; }
+  getOriginalName() { return this.originalName; }
+  getOriginalColor() { return this.originalColor; }
 }
 
 const ctgform = document.querySelector(".category__form")
@@ -95,7 +95,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     if (isNumeric(trimName)) {
       trimName = `category ${trimName}`;
     }
-    
+
     const origName = formhelper.getOriginalName();
 
     let errormsg = false;
@@ -119,7 +119,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
           closeCategoryForm();
           return;
         } else {
-          if (origName !== trimName){
+          if (origName !== trimName) {
             store.updateCtg(trimName, color, formhelper.getName());
           } else {
             store.updateCtgColor(origName, color);
@@ -169,6 +169,25 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     store.addActiveOverlay("hide-ctg-form");
     ctgformoverlay.classList.remove("hide-ctg-form");
     ctgform.classList.remove("hide-ctg-form");
+    ctgform.removeAttribute("style");
+
+    if (resetParent !== null) {
+      const rect = resetParent.getBoundingClientRect();
+      const getright = parseInt(rect.right);
+      const gettop = parseInt(rect.top);
+      const [x, y] = placePopup(
+        280,
+        352,
+        [getright - 20, gettop - 28],
+        [window.innerWidth, window.innerHeight],
+        false,
+        null
+      );
+      ctgform.setAttribute("style", `left:${x}px;top:${y}px;`);
+    } else {
+      ctgform.setAttribute("style", "left:5%;top:5%;right:5%;margin:auto;");
+    }
+
     ctgErrMsg.classList.add("hide-ctg-err");
     colorPickerTitle.style.backgroundColor = formhelper.getColor();
     setTimeout(() => {

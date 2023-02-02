@@ -94,6 +94,10 @@
   border-radius: 32px;
 }
 
+.rowgroup--cell:hover {
+  background: var(--black2);
+}
+
 .rowgroup--cell-active {
   box-shadow: var(--box-shadowbottom);
   position: relative;

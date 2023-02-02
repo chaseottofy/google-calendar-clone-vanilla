@@ -137,9 +137,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  row-gap: 12px;
+  row-gap: 8px;
   column-gap: 4px;
-  padding: 6px 2px;
+  padding: 6px 2px 12px 2px;
   user-select:none;
 }
 
@@ -151,7 +151,7 @@
   font-weight: 400;
   color: var(--offwhite2);
   cursor: pointer;
-  transition: all 150ms ease-in-out;
+  transition: all 100ms ease-in-out;
   cursor: pointer;
   border-radius: 4px;
 }

@@ -175,9 +175,11 @@ input[type=radio] {
   cursor: pointer;
   display: flex;
   font-size: 15px;
-  height: 40px;
+  font-weight: 500;
+  text-transform: capitalize;
+  height: 44px;
   justify-content: center;
-  margin: 0 4px;
+  margin: 0 8px;
   width: 100%
 }
 

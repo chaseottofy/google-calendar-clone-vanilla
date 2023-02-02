@@ -1,6 +1,5 @@
 import setViews from "../../config/setViews"
 import setSidebarDatepicker from "../menus/sidebarDatepicker"
-import locales from "../../locales/en"
 
 import {
   createCheckIcon,
@@ -9,22 +8,20 @@ import {
   createTrashIcon,
 } from "../../utilities/svgs"
 
-import debounce, {
+import {
   getClosest,
-  hextorgba,
   placePopup
 } from "../../utilities/helpers"
 
 import createCategoryForm from "./editCategory"
 
-const sidebar = document.querySelector(".sidebar")
 const sidebarColTwo = document.querySelector(".sb__categories")
 const cWrapper = document.querySelector(".sb__categories--body")
 const categoriesContainer = document.querySelector(".sb__categories--body-form")
-const sidebarScrollContainer = document.querySelector(".sidebar-content__wrapper")
 const categoriesHeader = document.querySelector(".sb__categories--header")
 const categoryHeaderCaret = document.querySelector(".sbch-caret")
 // renders via menu click -- see ./renderViews.js
+
 export default function handleSidebarCategories(context, store, datepickerContext) {
   const defaultCtg = store.getDefaultCtg()[0]
 
@@ -365,7 +362,8 @@ export default function handleSidebarCategories(context, store, datepickerContex
       document.removeEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu)
     }
 
-    function handleOpenEditCtg() {
+    function handleOpenEditCtg(e) {
+      // console.log(e.target)
       createCategoryForm(store, targetCtg, true, targetElement);
       closeCategoryOptionsMenu();
     }
@@ -448,7 +446,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
         name: "new category",
         color: "#2C52BA",
       }
-      createCategoryForm(store, targetcat, false, null);
+      createCategoryForm(store, targetcat, false, e.target);
       return;
     }
   }
