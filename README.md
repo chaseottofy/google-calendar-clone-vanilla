@@ -1068,3 +1068,9 @@ I've implemented several new features to improve the user experience but overall
 
 * Prepare Production build & implement linter.
 * Start trimming bundle. [screenshot](https://ibb.co/85fSgN6)
+
+### Feb 1, 2023
+
+* Toast popups:
+  * Allow user to "undo" any edits to events.
+  * Allow user to remove new events.
