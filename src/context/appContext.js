@@ -1,5 +1,5 @@
-import { compareDates } from "../utilities/dateutils"
-import locales from "../locales/en"
+import { compareDates } from "../utilities/dateutils";
+import locales from "../locales/en";
 const labels = locales.labels;
 
 
@@ -51,7 +51,7 @@ const labels = locales.labels;
 "isToday"
 */
 class Context {
-  constructor() {
+  constructor () {
     this.colorScheme = "dark";
     this.component = "month";
     this.sidebarState = "hide";
@@ -375,7 +375,7 @@ class Context {
       if (i < 6) {
         weekArray.push(new Date(week.getFullYear(), week.getMonth(), week.getDate() + i));
       } else {
-        weekArray.push(new Date(week.getFullYear(), week.getMonth(), week.getDate() + i, 23, 59, 59, 999))
+        weekArray.push(new Date(week.getFullYear(), week.getMonth(), week.getDate() + i, 23, 59, 59, 999));
       }
     }
     return weekArray;
@@ -383,8 +383,8 @@ class Context {
 
   getWeekRange() {
     let weekArray = this.getWeekArray();
-    let [m1, m2] = [weekArray[0].getMonth(), weekArray[6].getMonth()]
-    let [d1, d2] = [weekArray[0].getDate(), weekArray[6].getDate()]
+    let [m1, m2] = [weekArray[0].getMonth(), weekArray[6].getMonth()];
+    let [d1, d2] = [weekArray[0].getDate(), weekArray[6].getDate()];
 
     if (m1 === m2) {
       return `${labels.monthsShort[m1]} ${d1} – ${d2}, ${weekArray[0].getFullYear()}`;
@@ -416,7 +416,7 @@ class Context {
 
   getMonthArrayStart() {
     let monthArrayStart = [];
-    let [year, month] = [this.getYear(), this.getMonth()]
+    let [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
       monthArrayStart.push(new Date(year, month, 0 - i));
     }
@@ -429,7 +429,7 @@ class Context {
 
   getMonthArrayEnd(handleFourWeeks) {
     let monthArrayEnd = [];
-    let [year, month] = [this.getYear(), this.getMonth()]
+    let [year, month] = [this.getYear(), this.getMonth()];
 
     if (handleFourWeeks) {
       for (let i = 1; i < 8; i++) {
@@ -471,7 +471,7 @@ class Context {
       }
       monthArray.push(end[i]);
     }
-    
+
     return monthArray;
   }
 
@@ -499,7 +499,7 @@ class Context {
   * 
  */
 class DatepickerContext {
-  constructor() {
+  constructor () {
     this.date = new Date();
     this.dateSelected = this.date.getDate();
     this.daySelected = this.date.getDate();
@@ -660,7 +660,7 @@ class DatepickerContext {
 
   getMonthArrayStart() {
     let monthArrayStart = [];
-    let [year, month] = [this.getYear(), this.getMonth()]
+    let [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
       monthArrayStart.push(new Date(year, month, 0 - i));
     }
@@ -673,7 +673,7 @@ class DatepickerContext {
 
   getMonthArrayEnd() {
     let monthArrayEnd = [];
-    let [year, month] = [this.getYear(), this.getMonth()]
+    let [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 1; i < 7 - this.getMonthArrayEndDay(); i++) {
       monthArrayEnd.push(new Date(year, +month + 1, i));
     }
@@ -709,4 +709,4 @@ const datepickerContext = new DatepickerContext();
 context.setDefaults();
 datepickerContext.setDefaults();
 export default context;
-export { datepickerContext }
+export { datepickerContext };

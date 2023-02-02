@@ -1,5 +1,5 @@
 export default class FormSetup {
-  constructor() {
+  constructor () {
     this.submission;
     this.category;
     this.dates;
@@ -18,7 +18,7 @@ export default class FormSetup {
       id: id || null,
       title: title || null,
       description: description || null,
-    }
+    };
   }
 
   /**
@@ -31,7 +31,7 @@ export default class FormSetup {
     this.category = {
       name: name,
       color: color,
-    }
+    };
   }
 
   /**
@@ -42,7 +42,7 @@ export default class FormSetup {
    * : {Minutes: [number, number]}
    */
   setDates(object) {
-    this.dates = { object: object }
+    this.dates = { object: object };
   }
 
   getSetup() {
@@ -50,6 +50,6 @@ export default class FormSetup {
       submission: this.submission,
       category: this.category,
       dates: this.dates,
-    }
+    };
   }
 }

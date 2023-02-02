@@ -6,12 +6,12 @@ export default function setAppDefaults(context, store) {
   const disableTransitionsOnLoad = () => {
     setTimeout(() => {
       appBody.classList.remove("preload");
-    }, 4)
-  }
+    }, 4);
+  };
 
   const setDefaultAnimationStatus = () => {
     animationStatus ? appBody.classList.remove("disable-transitions") : appBody.classList.add("disable-transitions");
-  }
+  };
 
   disableTransitionsOnLoad();
   setTheme(context);
@@ -30,4 +30,4 @@ function checkLocalStorageAllowed() {
 
 export {
   checkLocalStorageAllowed
-}
+};

@@ -15,11 +15,11 @@ const themeRadioBtns = document.querySelectorAll(".theme-radio__input");
 const themeRadioOptions = ["dark", "light", "contrast"];
 
 // keyboard shortcut toggle on/off | open modal
-const shortcutSwitch = document.querySelector(".smia-toggle-shortcuts-checkbox")
-const animationsSwitchBtn = document.querySelector(".smdt-toggle-checkbox")
+const shortcutSwitch = document.querySelector(".smia-toggle-shortcuts-checkbox");
+const animationsSwitchBtn = document.querySelector(".smdt-toggle-checkbox");
 // const animationsIcon = document.querySelector(".toggle-animations-icon__sm");
-const shortcutTitle = document.querySelector(".smia-set-status-title")
-const notifyDisabledShortcutsIcon = document.querySelector(".keyboard-disabled-sm")
+const shortcutTitle = document.querySelector(".smia-set-status-title");
+const notifyDisabledShortcutsIcon = document.querySelector(".keyboard-disabled-sm");
 
 
 export default function getSidebarSubMenu(store, context) {
@@ -28,19 +28,19 @@ export default function getSidebarSubMenu(store, context) {
     const popup = document.querySelector(".sb-sub-popup-confirm");
     if (e.key === "Escape") {
       if (popup) {
-        popup.remove()
-        sidebarSubMenuOverlay.classList.remove("sub-overlay-vis")
+        popup.remove();
+        sidebarSubMenuOverlay.classList.remove("sub-overlay-vis");
         return;
       } else {
-        closeSubMenu()
-        sidebarSubMenuOverlay.classList.remove("sub-overlay-vis")
+        closeSubMenu();
+        sidebarSubMenuOverlay.classList.remove("sub-overlay-vis");
       }
     }
     if (e.key.toLowerCase() === "a") {
       if (popup) {
         return;
       } else {
-        closeSubMenu()
+        closeSubMenu();
       }
     }
   }
@@ -48,72 +48,72 @@ export default function getSidebarSubMenu(store, context) {
   function createUploadConfirmationPopup() {
     const popup = document.createElement("div");
     popup.classList.add("sb-sub-popup-confirm");
-    const [totalEntries, totalCategories] = store.getStoreStats()
-    
+    const [totalEntries, totalCategories] = store.getStoreStats();
+
 
     // let totals;
-    let [hasEntries, hasCategories] = [false, false]
+    let [hasEntries, hasCategories] = [false, false];
     let titleEntries;
     if (totalEntries > 0) {
       hasEntries = `Overwriting ${totalEntries} entries`;
     }
     if (totalCategories > 1) {
       if (totalCategories === 2) {
-        hasCategories = "1 category."
+        hasCategories = "1 category.";
       } else {
         hasCategories = `${+totalCategories - 1} categories.`;
       }
     }
 
     if (hasEntries && hasCategories) {
-      titleEntries = `${hasEntries} and ${hasCategories}`
+      titleEntries = `${hasEntries} and ${hasCategories}`;
     } else if (hasEntries && !hasCategories) {
-      titleEntries = `${hasEntries}.`
+      titleEntries = `${hasEntries}.`;
     } else if (!hasEntries && hasCategories) {
-      titleEntries = `No entries. Overwriting ${hasCategories}`
+      titleEntries = `No entries. Overwriting ${hasCategories}`;
     } else {
-      titleEntries = "Current calendar has no entries or categories."
+      titleEntries = "Current calendar has no entries or categories.";
     }
 
 
-    const subtitle = document.createElement("div")
-    subtitle.classList.add("sb-sub-popup-subtitle")
+    const subtitle = document.createElement("div");
+    subtitle.classList.add("sb-sub-popup-subtitle");
     subtitle.textContent = titleEntries;
-    const subtitle2 = document.createElement("div")
-    subtitle2.classList.add("sb-sub-popup-subtitle")
-    subtitle2.textContent = 'This action is irreversible.'
-    const subtitle3 = document.createElement("div")
-    subtitle3.classList.add("sb-sub-popup-title")
-    subtitle3.textContent = 'Please ensure you have a valid backup before proceeding. Use the "validate .json" button next to "upload .json" to check that everything is in order.'
-    
+    const subtitle2 = document.createElement("div");
+    subtitle2.classList.add("sb-sub-popup-subtitle");
+    subtitle2.textContent = 'This action is irreversible.';
+    const subtitle3 = document.createElement("div");
+    subtitle3.classList.add("sb-sub-popup-title");
+    subtitle3.textContent = 'Please ensure you have a valid backup before proceeding. Use the "validate .json" button next to "upload .json" to check that everything is in order.';
+
     const btns = document.createElement("div");
     btns.classList.add("sb-sub-popup-btns");
     const cancelBtn = document.createElement("button");
     cancelBtn.classList.add("sb-sub-popup-btn--cancel");
     cancelBtn.textContent = "Cancel";
     const proceedBtn = document.createElement("button");
-    proceedBtn.classList.add("sb-sub-popup-btn--proceed")
+    proceedBtn.classList.add("sb-sub-popup-btn--proceed");
     proceedBtn.textContent = "Proceed";
 
     btns.append(cancelBtn, proceedBtn);
     popup.append(
-      subtitle, 
-      subtitle2, 
-      subtitle3, 
+      subtitle,
+      subtitle2,
+      subtitle3,
       btns
     );
-    return popup
+    return popup;
   }
 
   function closeSubMenu() {
     const popup = document.querySelector(".sb-sub-popup-confirm");
     if (popup) {
-      popup.remove()
-      sidebarSubMenuOverlay.classList.remove("sub-overlay-vis")
+      popup.remove();
+      sidebarSubMenuOverlay.classList.remove("sub-overlay-vis");
       return;
     } else {
-      store.removeActiveOverlay(closemenu)
-      sidebarSubMenu.classList.add(closemenu)
+      store.removeActiveOverlay(closemenu);
+      sidebarSubMenu.classList.add(closemenu);
       sidebarSubMenuOverlay.classList.add(closemenu);
       document.removeEventListener("keydown", closeSubOnEscape);
     }
@@ -121,17 +121,17 @@ export default function getSidebarSubMenu(store, context) {
 
   function setStatusIcon(status) {
     if (status) {
-      notifyDisabledShortcutsIcon.setAttribute("data-tooltip", "Keyboard shortcuts enabled")
-      notifyDisabledShortcutsIcon.firstElementChild.setAttribute("fill", "var(--primary1)")
+      notifyDisabledShortcutsIcon.setAttribute("data-tooltip", "Keyboard shortcuts enabled");
+      notifyDisabledShortcutsIcon.firstElementChild.setAttribute("fill", "var(--primary1)");
     } else {
-      notifyDisabledShortcutsIcon.setAttribute("data-tooltip", "Keyboard shortcuts disabled")
-      notifyDisabledShortcutsIcon.firstElementChild.setAttribute("fill", "var(--red1)")
+      notifyDisabledShortcutsIcon.setAttribute("data-tooltip", "Keyboard shortcuts disabled");
+      notifyDisabledShortcutsIcon.firstElementChild.setAttribute("fill", "var(--red1)");
     }
   }
 
   function openSubMenu() {
     // configure current active status of theme radio btns
-    const themeIdx = themeRadioOptions.indexOf(context.getColorScheme())
+    const themeIdx = themeRadioOptions.indexOf(context.getColorScheme());
     themeRadioBtns[themeIdx].checked = true;
 
 
@@ -140,7 +140,7 @@ export default function getSidebarSubMenu(store, context) {
     shortcutSwitch.checked = shortcutStatus;
 
 
-    const animationStatus = store.getAnimationStatus()
+    const animationStatus = store.getAnimationStatus();
     setAnimationsIcons(animationStatus);
     animationsSwitchBtn.checked = animationStatus;
 
@@ -163,7 +163,7 @@ export default function getSidebarSubMenu(store, context) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const json = JSON.parse(e.target.result);
-        store.setUserUpload(json)
+        store.setUserUpload(json);
         closeSubMenu();
       };
       reader.readAsText(file);
@@ -176,8 +176,8 @@ export default function getSidebarSubMenu(store, context) {
   }
 
   function getJSONDownload() {
-    const json = JSON.stringify(localStorage)
-    const [totalEntries, totalCategories] = store.getStoreStats()
+    const json = JSON.stringify(localStorage);
+    const [totalEntries, totalCategories] = store.getStoreStats();
     const filename = `ENT_${totalEntries}_CAT_${totalCategories}_${createTimestamp()}`;
     const blob = new Blob([json], { type: "application/json" });
     const href = URL.createObjectURL(blob);
@@ -190,16 +190,16 @@ export default function getSidebarSubMenu(store, context) {
   }
 
   function removePopup() {
-    sidebarSubMenuOverlay.classList.remove("sub-overlay-vis")
+    sidebarSubMenuOverlay.classList.remove("sub-overlay-vis");
     const popup = document.querySelector(".sb-sub-popup-confirm");
     if (popup) {
-      popup.remove()
+      popup.remove();
     }
   }
 
   function handleCalendarJSON(action) {
     if (action === "download") {
-      getJSONDownload()
+      getJSONDownload();
       return;
     }
 
@@ -250,9 +250,9 @@ export default function getSidebarSubMenu(store, context) {
   function handleThemeChange(e) {
     const target = e.target;
     const targetinput = target.firstElementChild;
-    const value = targetinput.value
+    const value = targetinput.value;
     targetinput.checked = true;
-    const currentTheme = context.getColorScheme()
+    const currentTheme = context.getColorScheme();
     if (value === currentTheme) {
       return;
     }
@@ -261,54 +261,54 @@ export default function getSidebarSubMenu(store, context) {
   }
 
   function openKbShortcutMenu() {
-    closeSubMenu()
-    handleShortCutsModal(store)
+    closeSubMenu();
+    handleShortCutsModal(store);
   }
 
   function toggleShortcuts() {
     const status = shortcutSwitch.checked ? false : true;
-    store.setShortcutsStatus(status)
-    setStatusIcon(status)
+    store.setShortcutsStatus(status);
+    setStatusIcon(status);
   }
 
   function toggleShortcutsIcon() {
-    let status = store.getShortcutsStatus()
+    let status = store.getShortcutsStatus();
 
-    status = !status
-    store.setShortcutsStatus(status)
-    setStatusIcon(status)
+    status = !status;
+    store.setShortcutsStatus(status);
+    setStatusIcon(status);
     shortcutSwitch.checked = status ? true : false;
   }
 
   function setAnimationsIcons(val) {
-    const parenticonwrapper = document.querySelector(".toggle-animations-icon__sm")
+    const parenticonwrapper = document.querySelector(".toggle-animations-icon__sm");
     const icons = {
       on: document.querySelector(".tai-on"),
       off: document.querySelector(".tai-off"),
-    }
+    };
 
     if (val) {
-      icons.on.classList.remove("hide-tai")
-      icons.off.classList.add("hide-tai")
+      icons.on.classList.remove("hide-tai");
+      icons.off.classList.add("hide-tai");
       parenticonwrapper.setAttribute("data-tooltip", "Animations Enabled");
     } else {
-      icons.on.classList.add("hide-tai")
-      icons.off.classList.remove("hide-tai")
+      icons.on.classList.add("hide-tai");
+      icons.off.classList.remove("hide-tai");
       parenticonwrapper.setAttribute("data-tooltip", "Animations Disabled");
     }
   }
 
   function toggleAnimations(fromicon) {
     const status = animationsSwitchBtn.checked ? false : true;
-    store.setAnimationStatus(status)
-    setAnimationsIcons(status)
+    store.setAnimationStatus(status);
+    setAnimationsIcons(status);
     if (fromicon) {
       animationsSwitchBtn.checked = status ? true : false;
     }
     if (status) {
-      appBody.classList.remove("disable-transitions")
+      appBody.classList.remove("disable-transitions");
     } else {
-      appBody.classList.add("disable-transitions")
+      appBody.classList.add("disable-transitions");
     }
   }
 
@@ -316,11 +316,11 @@ export default function getSidebarSubMenu(store, context) {
     const downloadjsonBtn = getClosest(e, ".down-json");
     const uploadjsonBtn = getClosest(e, ".upload-json");
     const themebtn = getClosest(e, ".theme-option");
-    const kbShortcutMenu = getClosest(e, ".toggle-kb-shortcuts-btn__smia")
-    const shortcutSwitch = getClosest(e, ".smia-disable-shortcuts__btn")
-    const shortcutSwitchNotifyIcon = getClosest(e, ".keyboard-disabled-sm")
-    const animationsSwitch = getClosest(e, ".smdt-toggle")
-    const animationsIcon = getClosest(e, ".toggle-animations-icon__sm")
+    const kbShortcutMenu = getClosest(e, ".toggle-kb-shortcuts-btn__smia");
+    const shortcutSwitch = getClosest(e, ".smia-disable-shortcuts__btn");
+    const shortcutSwitchNotifyIcon = getClosest(e, ".keyboard-disabled-sm");
+    const animationsSwitch = getClosest(e, ".smdt-toggle");
+    const animationsIcon = getClosest(e, ".toggle-animations-icon__sm");
 
     if (downloadjsonBtn) {
       handleCalendarJSON("download");
@@ -367,5 +367,5 @@ export default function getSidebarSubMenu(store, context) {
     openSubMenu();
     sidebarSubMenu.onmousedown = delegateSubMenuEvents;
   }
-  setSidebarSubMenu()
+  setSidebarSubMenu();
 }

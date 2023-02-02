@@ -1,11 +1,11 @@
-import locales from "../../locales/en"
+import locales from "../../locales/en";
 import { createCheckIcon } from "../../utilities/svgs";
 import { isNumeric, placePopup } from "../../utilities/helpers";
 const checkIcon = createCheckIcon('var(--taskcolor');
-const colors = Object.values(locales.colors)
+const colors = Object.values(locales.colors);
 
 class CatFormHelper {
-  constructor(catname, catcolor) {
+  constructor (catname, catcolor) {
     this.catname = catname;
     this.catcolor = catcolor;
     this.errMsg = '';
@@ -25,13 +25,13 @@ class CatFormHelper {
   getOriginalColor() { return this.originalColor; }
 }
 
-const ctgform = document.querySelector(".category__form")
-const ctgformoverlay = document.querySelector(".category__form-overlay")
-const ctgformBody = document.querySelector(".category__form--body")
-const ctgformInput = document.querySelector(".category__form-input")
-const colorPickerTitle = document.querySelector(".color-picker__title")
+const ctgform = document.querySelector(".category__form");
+const ctgformoverlay = document.querySelector(".category__form-overlay");
+const ctgformBody = document.querySelector(".category__form--body");
+const ctgformInput = document.querySelector(".category__form-input");
+const colorPickerTitle = document.querySelector(".color-picker__title");
 const colorPickerOptions = document.querySelector(".color-picker__options");
-const ctgErrMsg = document.querySelector(".ctg-input--err")
+const ctgErrMsg = document.querySelector(".ctg-input--err");
 
 export default function createCategoryForm(store, selectedCategory, editing, resetParent) {
 
@@ -44,7 +44,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     const colorOption = document.createElement("div");
     colorOption.classList.add("color-picker--option");
     colorOption.style.backgroundColor = color;
-    colorOption.setAttribute("data-color-hex", color)
+    colorOption.setAttribute("data-color-hex", color);
 
     if (color === selected) {
       colorOption.append(checkIcon);
@@ -60,9 +60,9 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       for (let i = 1; i < 8; i++) {
         colorPickerOptions.append(
           createColorOption(color[i], currentColor)
-        )
+        );
       }
-    })
+    });
   }
 
   function handleColorSelection(e, current) {
@@ -74,7 +74,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     const colorOptions = document.querySelectorAll(".color-picker--option");
     colorOptions.forEach((option) => {
       option.innerText = "";
-    })
+    });
     target.appendChild(checkIcon);
     colorPickerTitle.style.background = color;
     formhelper.setColor(color);
@@ -84,7 +84,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     const removeInputErr = () => {
       ctgErrMsg.classList.add("hide-ctg-err");
       ctgformInput.focus();
-    }
+    };
     ctgErrMsg.textContent = formhelper.getErrMsg();
     ctgErrMsg.onclick = removeInputErr;
   }
@@ -150,7 +150,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function closeCategoryFormOnEsc(e) {
-    const val = e.key.toLowerCase()
+    const val = e.key.toLowerCase();
     if (val === "escape") {
       if (!ctgErrMsg.classList.contains("hide-ctg-err")) {
         ctgErrMsg.classList.add("hide-ctg-err");
@@ -199,11 +199,11 @@ export default function createCategoryForm(store, selectedCategory, editing, res
         ctgformInput.placeholder = "Create new category";
       }
       ctgformInput.focus();
-    }, 4)
+    }, 4);
   }
 
   function gc(e, element) {
-    return e.target.closest(element)
+    return e.target.closest(element);
   }
 
   function delegateCtgForm(e) {
@@ -233,7 +233,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     ctgform.onmousedown = delegateCtgForm;
     ctgformoverlay.onclick = closeCategoryForm;
     document.addEventListener("keydown", closeCategoryFormOnEsc);
-  }
+  };
 
   initCtgForm();
 }

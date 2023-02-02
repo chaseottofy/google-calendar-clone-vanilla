@@ -1,4 +1,4 @@
-import calcTime from "./timeutils"
+import calcTime from "./timeutils";
 
 /**
  * For a full explanation see readme @grid-engines
@@ -86,7 +86,7 @@ const identifiers = {
       width: "calc((100% - 4px) * 1)",
     }
   }
-}
+};
 
 function calcNewLeft(index) {
   let base = 0.1;
@@ -108,63 +108,63 @@ function setBoxWidthWeek(box, prepend, dataidx) {
   switch (attr) {
     case `${prepend}one`:
       box.style.left = 'calc((100% - 0px) * 0 + 0px)';
-      box.style.width = "calc((100% - 4px) * 1)"
+      box.style.width = "calc((100% - 4px) * 1)";
       break;
     case `${prepend}two`:
-      box.style.left = "calc((100% - 0px) * 0.2 + 0px)"
+      box.style.left = "calc((100% - 0px) * 0.2 + 0px)";
       box.style.width = "calc((100% - 4px) * 0.80)";
       break;
     case `${prepend}three`:
-      box.style.left = "calc((100% - 0px) * 0.45 + 0px)"
+      box.style.left = "calc((100% - 0px) * 0.45 + 0px)";
       box.style.width = "calc((100% - 4px) * 0.55)";
       break;
     case `${prepend}four`:
-      box.style.left = "calc((100% - 0px) * 0.0 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.44)"
+      box.style.left = "calc((100% - 0px) * 0.0 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.44)";
       break;
     case `${prepend}five`:
-      box.style.left = "calc((100% - 0px) * .5 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.35)"
+      box.style.left = "calc((100% - 0px) * .5 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.35)";
       break;
     case `${prepend}six`:
-      box.style.left = "calc((100% - 0px) * 0.1 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.4)"
+      box.style.left = "calc((100% - 0px) * 0.1 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.4)";
       break;
     case `${prepend}seven`:
-      box.style.left = "calc((100% - 0px) * 0.5 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.5)"
+      box.style.left = "calc((100% - 0px) * 0.5 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.5)";
       break;
     case `${prepend}eight`:
-      box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.25 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.25)";
       break;
     case `${prepend}nine`:
-      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.35)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.35)";
       break;
     case `${prepend}ten`:
-      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}eleven`:
-      box.style.left = "calc((100% - 0px) * 0.70 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.70 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}twelve`:
-      box.style.left = "calc((100% - 0px) * 0.85 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.85 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}thirteen`:
-      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.05 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.25)";
       break;
     case `${prepend}fourteen`:
-      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.25)";
       break;
     case `${prepend}fifteen`:
-      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.25)";
       break;
     default:
       break;
@@ -176,63 +176,63 @@ function setBoxWidthDay(box, prepend, dataidx) {
   switch (attr) {
     case `${prepend}one`:
       box.style.left = 'calc((100% - 0px) * 0 + 0px)';
-      box.style.width = "calc((100% - 4px) * 1)"
+      box.style.width = "calc((100% - 4px) * 1)";
       break;
     case `${prepend}two`:
-      box.style.left = "calc((100% - 0px) * 0.15 + 0px)"
+      box.style.left = "calc((100% - 0px) * 0.15 + 0px)";
       box.style.width = "calc((100% - 4px) * 0.85)";
       break;
     case `${prepend}three`:
-      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)";
       box.style.width = "calc((100% - 4px) * 0.70)";
       break;
     case `${prepend}four`:
-      box.style.left = "calc((100% - 0px) * 0.45 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.55)"
+      box.style.left = "calc((100% - 0px) * 0.45 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.55)";
       break;
     case `${prepend}five`:
-      box.style.left = "calc((100% - 0px) * 0.60 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.40)"
+      box.style.left = "calc((100% - 0px) * 0.60 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.40)";
       break;
     case `${prepend}six`:
-      box.style.left = "calc((100% - 0px) * 0.75 + 0px)"
-      box.style.width = "calc((100% - 4px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.75 + 0px)";
+      box.style.width = "calc((100% - 4px) * 0.25)";
       break;
     case `${prepend}seven`:
-      box.style.left = "calc((100% - 0px) * 0.10 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.10 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}eight`:
-      box.style.left = "calc((100% - 0px) * 0.25 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.25 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}nine`:
-      box.style.left = "calc((100% - 0px) * 0.4 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.4 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}ten`:
-      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}eleven`:
-      box.style.left = "calc((100% - 0px) * 0.70 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.70 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}twelve`:
-      box.style.left = "calc((100% - 0px) * 0.85 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.15)"
+      box.style.left = "calc((100% - 0px) * 0.85 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.15)";
       break;
     case `${prepend}thirteen`:
-      box.style.left = "calc((100% - 0px) * 0.05 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.05 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.25)";
       break;
     case `${prepend}fourteen`:
-      box.style.left = "calc((100% - 0px) * 0.30 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.30 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.25)";
       break;
     case `${prepend}fifteen`:
-      box.style.left = "calc((100% - 0px) * 0.55 + 0px)"
-      box.style.width = "calc((100% - 16px) * 0.25)"
+      box.style.left = "calc((100% - 0px) * 0.55 + 0px)";
+      box.style.width = "calc((100% - 16px) * 0.25)";
       break;
     default:
       break;
@@ -242,57 +242,57 @@ function handleOverlap(col, view, boxes) {
 
   const collisions = view === "day" ? boxes.checkForCollision() : boxes.checkForCollision(col);
 
-  const identifyBox = identifiers.boxnumarr[view]
+  const identifyBox = identifiers.boxnumarr[view];
 
   const [baseClass, classPrepend] = [
     identifiers.boxClasses[view],
     identifiers.boxClasses[view].prepend,
-  ]
+  ];
 
   const [boxIdxAttr, boxIdAttr] = [
     identifiers.boxAttributes[view].dataIdx,
     identifiers.boxAttributes[view].dataId,
-  ]
+  ];
 
   for (let i = 0; i < collisions.length; i++) {
-    const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`)
+    const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`);
     let idx = i;
     if (i >= 15) {
       idx -= 12;
     }
     if (i === 0) {
-      box.setAttribute("class", `${baseClass.base} ${identifyBox[idx]}`)
-      box.setAttribute(boxIdxAttr, identifyBox[idx])
+      box.setAttribute("class", `${baseClass.base} ${identifyBox[idx]}`);
+      box.setAttribute(boxIdxAttr, identifyBox[idx]);
     } else {
-      box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`)
-      box.setAttribute(boxIdxAttr, identifyBox[idx])
+      box.setAttribute("class", `${baseClass.base} ${baseClass.ontop} ${identifyBox[idx]}`);
+      box.setAttribute(boxIdxAttr, identifyBox[idx]);
     }
     view === "day"
       ? setBoxWidthDay(box, classPrepend, boxIdxAttr)
-      : setBoxWidthWeek(box, classPrepend, boxIdxAttr)
+      : setBoxWidthWeek(box, classPrepend, boxIdxAttr);
   }
 }
 
 function setStylingForEvent(clause, wrapper, store) {
-  const sidebar = document.querySelector(".sidebar")
-  const resizeoverlay = document.querySelector(".resize-overlay")
+  const sidebar = document.querySelector(".sidebar");
+  const resizeoverlay = document.querySelector(".resize-overlay");
 
   switch (clause) {
     case "dragstart":
       // make sidebar slightly see through if it is open and the user is dragging or resizing (screens smaller than 840px);
       if (!sidebar.classList.contains("hide-sidebar")) {
         if (wrapper.offsetLeft === 0) {
-          sidebar.classList.add("sidebar--dragged-over")
+          sidebar.classList.add("sidebar--dragged-over");
         }
       }
       store.addActiveOverlay("hide-resize-overlay");
       resizeoverlay.classList.remove("hide-resize-overlay");
       break;
     case "dragend":
-      store.removeActiveOverlay("hide-resize-overlay")
-      sidebar.classList.remove("sidebar--dragged-over")
-      resizeoverlay.classList.add("hide-resize-overlay")
-      document.body.style.cursor = "default"
+      store.removeActiveOverlay("hide-resize-overlay");
+      sidebar.classList.remove("sidebar--dragged-over");
+      resizeoverlay.classList.add("hide-resize-overlay");
+      document.body.style.cursor = "default";
       break;
     default:
       break;
@@ -301,33 +301,33 @@ function setStylingForEvent(clause, wrapper, store) {
 
 function updateBoxCoordinates(box, view, boxes) {
   let [id, y, h] = identifiers.boxAttributes[view].updatecoord.map((x) => {
-    return box.getAttribute(x)
-  })
+    return box.getAttribute(x);
+  });
   let x = view === "week" ? box.getAttribute("data-box-col") : 1;
   boxes.updateCoordinates(id, {
     x: parseInt(x),
     y: parseInt(y),
     h: parseInt(h),
     e: parseInt(y) + parseInt(h),
-  })
+  });
 }
 
 function setBoxTimeAttributes(box, view) {
-  let start = +box.style.top.split("px")[0]
-  start = start >= 0 ? start / 12.5 : 0
-  let length = +box.style.height.split("px")[0] / 12.5
-  let end = start + length
-  let prepend = identifiers.boxAttributes[view].prepend
-  box.setAttribute(`${prepend}start-time`, start)
-  box.setAttribute(`${prepend}time-intervals`, length)
-  box.setAttribute(`${prepend}end-time`, end)
+  let start = +box.style.top.split("px")[0];
+  start = start >= 0 ? start / 12.5 : 0;
+  let length = +box.style.height.split("px")[0] / 12.5;
+  let end = start + length;
+  let prepend = identifiers.boxAttributes[view].prepend;
+  box.setAttribute(`${prepend}start-time`, start);
+  box.setAttribute(`${prepend}time-intervals`, length);
+  box.setAttribute(`${prepend}end-time`, end);
 }
 
 function createBox(col, entry, view, color) {
   const baseClass = identifiers.boxClasses[view].base;
   const attrPrepend = identifiers.boxAttributes[view].prepend;
   const attrPrependTwo = identifiers.boxAttributes[view].prependtwo;
-  const coord = entry.coordinates
+  const coord = entry.coordinates;
 
   const box = document.createElement('div');
   box.classList.add(baseClass);
@@ -335,7 +335,7 @@ function createBox(col, entry, view, color) {
   box.style.top = `${+coord.y * 12.5}px`;
   box.style.height = `${+coord.h * 12.5}px`;
   box.style.left = 'calc((100% - 0px) * 0 + 0px)';
-  box.style.width = "calc((100% - 4px) * 1)"
+  box.style.width = "calc((100% - 4px) * 1)";
 
   const boxheader = document.createElement('div');
   boxheader.classList.add(`${baseClass}__header`);
@@ -347,46 +347,46 @@ function createBox(col, entry, view, color) {
   const boxcontent = document.createElement('div');
   boxcontent.classList.add(`${baseClass}__content`);
   const entryTime = document.createElement('span');
-  entryTime.classList.add(`${baseClass}-time`)
+  entryTime.classList.add(`${baseClass}-time`);
   boxcontent.appendChild(entryTime);
 
   const resizehandleS = document.createElement('div');
-  resizehandleS.classList.add(`${baseClass}-resize-s`)
+  resizehandleS.classList.add(`${baseClass}-resize-s`);
 
   if (col.getAttribute(`${attrPrependTwo}top`) === "true") {
-    box.setAttribute(`${attrPrependTwo}start`, coord.x)
-    box.setAttribute(`${attrPrependTwo}end`, coord.x2)
+    box.setAttribute(`${attrPrependTwo}start`, coord.x);
+    box.setAttribute(`${attrPrependTwo}end`, coord.x2);
   } else {
-    box.setAttribute(`${attrPrepend}start-time`, coord.y)
-    box.setAttribute(`${attrPrepend}time-intervals`, coord.h)
-    box.setAttribute(`${attrPrepend}end-time`, +coord.y + +coord.h)
+    box.setAttribute(`${attrPrepend}start-time`, coord.y);
+    box.setAttribute(`${attrPrepend}time-intervals`, coord.h);
+    box.setAttribute(`${attrPrepend}end-time`, +coord.y + +coord.h);
     if (view === "week") {
-      box.setAttribute("data-box-col", coord.x)
-      box.setAttribute("box-idx", 1)
+      box.setAttribute("data-box-col", coord.x);
+      box.setAttribute("box-idx", 1);
     } else {
-      box.setAttribute("data-dv-box-index", 1)
+      box.setAttribute("data-dv-box-index", 1);
     }
-    entryTime.textContent = calcTime(coord.y, +coord.h)
+    entryTime.textContent = calcTime(coord.y, +coord.h);
   }
 
-  box.setAttribute(`${attrPrepend}box-id`, entry.id)
-  box.setAttribute(`${attrPrepend}box-category`, entry.category)
-  box.append(boxheader, boxcontent, resizehandleS)
+  box.setAttribute(`${attrPrepend}box-id`, entry.id);
+  box.setAttribute(`${attrPrepend}box-category`, entry.category);
+  box.append(boxheader, boxcontent, resizehandleS);
   col.appendChild(box);
 }
 
 function createTemporaryBox(box, col, hasSibling, view) {
-  const clone = box.cloneNode(true)
-  clone.classList.add(`${identifiers.boxClasses[view].temporary}`)
+  const clone = box.cloneNode(true);
+  clone.classList.add(`${identifiers.boxClasses[view].temporary}`);
   if (hasSibling) {
-    col.insertBefore(clone, box.nextElementSibling)
+    col.insertBefore(clone, box.nextElementSibling);
   } else {
-    col.appendChild(clone)
+    col.appendChild(clone);
   }
 }
 
 function getBoxDefaultStyle(y, backgroundColor) {
-  const style = identifiers.styles.newBox
+  const style = identifiers.styles.newBox;
   return `top:${y}px; left:${style.left}; height:${style.height}; width:${style.width}; background-color:${backgroundColor};`;
 }
 
@@ -441,16 +441,16 @@ function getOriginalBoxObject(box) {
     left: box.style.left,
     width: box.style.width,
     class: box.getAttribute("class"),
-  }
+  };
 }
 
 function resetOriginalBox(box, boxorig) {
-  box.setAttribute("class", boxorig.class)
+  box.setAttribute("class", boxorig.class);
   box.style.left = boxorig.left;
   box.style.width = boxorig.width;
 }
 
-export default handleOverlap
+export default handleOverlap;
 export {
   setStylingForEvent,
   updateBoxCoordinates,
@@ -466,4 +466,4 @@ export {
   calcDateOnClick,
   getOriginalBoxObject,
   resetOriginalBox
-}
+};

@@ -1,14 +1,14 @@
-import {getClosest} from "../../utilities/helpers"
+import { getClosest } from "../../utilities/helpers";
 
-const sidebarFooter = document.querySelector(".sb__info")
+const sidebarFooter = document.querySelector(".sb__info");
 
 // popup containing : project notes, privacy policy, & terms of use
-const sbInfoPopup = document.querySelector(".sb__info-popup")
-const sbInfoPopupOverlay = document.querySelector(".sb__info-popup-overlay")
-const selectInfo = document.querySelector(".select-popup-info")
-const closePopupButton = document.querySelector(".close-sb-info")
-const infopopupTitle = document.querySelector(".sbip-title")
-const infopopupBody = document.querySelector(".sbip-content")
+const sbInfoPopup = document.querySelector(".sb__info-popup");
+const sbInfoPopupOverlay = document.querySelector(".sb__info-popup-overlay");
+const selectInfo = document.querySelector(".select-popup-info");
+const closePopupButton = document.querySelector(".close-sb-info");
+const infopopupTitle = document.querySelector(".sbip-title");
+const infopopupBody = document.querySelector(".sbip-content");
 
 
 export default function handleSidebarFooter(store) {
@@ -26,13 +26,13 @@ export default function handleSidebarFooter(store) {
       title: "Code license and terms of use",
       content: "All data is stored locally meaning no data is sent to a server."
     },
-  }
+  };
 
   function closeInfoPopup() {
-    store.removeActiveOverlay("hide-sb-info-popup")
-    sbInfoPopup.classList.add("hide-sb-info-popup")
-    sbInfoPopupOverlay.classList.add("hide-sb-info-popup")
-    document.removeEventListener("keydown", closeInfoPopupOnEscape)
+    store.removeActiveOverlay("hide-sb-info-popup");
+    sbInfoPopup.classList.add("hide-sb-info-popup");
+    sbInfoPopupOverlay.classList.add("hide-sb-info-popup");
+    document.removeEventListener("keydown", closeInfoPopupOnEscape);
     sbInfoPopupOverlay.onclick = null;
     closePopupButton.onclick = null;
   }
@@ -44,7 +44,7 @@ export default function handleSidebarFooter(store) {
 
   function handleSelectInfoChange(e) {
     const selection = e.target.value;
-    setInfoContent(selection)
+    setInfoContent(selection);
   }
 
   function closeInfoPopupOnEscape(e) {
@@ -54,11 +54,11 @@ export default function handleSidebarFooter(store) {
   }
 
   function setUpInfoPopup() {
-    setInfoContent(selectInfo.value)
-    selectInfo.onchange = handleSelectInfoChange
-    sbInfoPopupOverlay.onclick = closeInfoPopup
-    closePopupButton.onclick = closeInfoPopup
-    document.addEventListener("keydown", closeInfoPopupOnEscape)
+    setInfoContent(selectInfo.value);
+    selectInfo.onchange = handleSelectInfoChange;
+    sbInfoPopupOverlay.onclick = closeInfoPopup;
+    closePopupButton.onclick = closeInfoPopup;
+    document.addEventListener("keydown", closeInfoPopupOnEscape);
   }
 
   function openInfoPopup(selection) {
@@ -78,17 +78,17 @@ export default function handleSidebarFooter(store) {
     const terms = getClosest(e, ".sb__terms");
 
     if (projectNotes) {
-      openInfoPopup("notes")
+      openInfoPopup("notes");
       return;
     }
 
     if (privacy) {
-      openInfoPopup("privacy")
+      openInfoPopup("privacy");
       return;
     }
 
     if (terms) {
-      openInfoPopup("terms")
+      openInfoPopup("terms");
       return;
     }
   }

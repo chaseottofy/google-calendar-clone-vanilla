@@ -10,9 +10,9 @@ const entryOptionsOverlay = document.querySelector(".entry__options--overlay");
 const entryOptionsWrapper = document.querySelector('.entry__options');
 const entryOptionsDateHeader = document.querySelector('.entry__options-date');
 const entryOptionsTimeHeader = document.querySelector('.entry__options-time');
-const entryOptionTitle = document.querySelector(".eob-title")
+const entryOptionTitle = document.querySelector(".eob-title");
 const entryOptionDescription = document.querySelector('.eob-description');
-const entryOptionCategoryIcon = document.querySelector(".eob-category--icon")
+const entryOptionCategoryIcon = document.querySelector(".eob-category--icon");
 const entryOptionCategory = document.querySelector('.eob-category');
 
 const reset = [
@@ -21,12 +21,12 @@ const reset = [
   entryOptionTitle,
   entryOptionDescription,
   entryOptionCategory,
-]
+];
 
 export default function getEntryOptionModal(context, store, entry, datepickerContext, finishSetup) {
 
   function openEditForm() {
-    const openForm = store.getRenderFormCallback()
+    const openForm = store.getRenderFormCallback();
     openForm();
     finishSetup();
     closeEntryOptions();
@@ -57,30 +57,30 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     deletepopupText.classList.add("delete-popup__text");
     deletepopupText.textContent = "Are you sure you want to delete this entry?";
 
-    deletebtns.append(deletepopupCancel, deletepopupConfirm)
+    deletebtns.append(deletepopupCancel, deletepopupConfirm);
     deletepopup.append(deletepopupText, deletebtns);
     entryOptionsWrapper.append(deletepopup);
 
-    const removeDeletePopup = () => { deletepopup.remove(); }
+    const removeDeletePopup = () => { deletepopup.remove(); };
     const submitDelete = () => {
       proceedDelete(entry);
       removeDeletePopup();
-      const resetCurrentView = store.getFormResetHandle(context.getComponent())
+      const resetCurrentView = store.getFormResetHandle(context.getComponent());
       if (resetCurrentView !== null) {
-        resetCurrentView()
+        resetCurrentView();
       }
-    }
+    };
 
-    deletepopupCancel.onclick = removeDeletePopup
-    deletepopupConfirm.onclick = submitDelete
+    deletepopupCancel.onclick = removeDeletePopup;
+    deletepopupConfirm.onclick = submitDelete;
   }
 
   function formNegated() {
     // The form is responsible for resetting the current view
     // If the form is not toggled open from this modal,
     // reset it manually on close
-    const resetCurrentView = store.getFormResetHandle(context.getComponent())
-    closeEntryOptions()
+    const resetCurrentView = store.getFormResetHandle(context.getComponent());
+    closeEntryOptions();
     resetCurrentView();
   }
 
@@ -97,12 +97,12 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
   }
 
   function setEntryDefaults() {
-    reset.forEach(el => el.textContent = "")
+    reset.forEach(el => el.textContent = "");
     entryOptionsWrapper.classList.remove("entry__options--hidden");
     entryOptionsOverlay.classList.remove("entry__options--hidden");
-    store.addActiveOverlay("entry__options--hidden")
+    store.addActiveOverlay("entry__options--hidden");
 
-    const [start, end] = [new Date(entry.start), new Date(entry.end)]
+    const [start, end] = [new Date(entry.start), new Date(entry.end)];
     let istoday = false;
     if (compareDates(start, new Date())) {
       istoday = true;
@@ -112,9 +112,9 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     entryOptionsDateHeader.textContent = getDateTime.date;
     if (getDateTime.time !== null) {
       if (getDateTime.time === undefined) {
-        let tempdate = new Date()
-        let secondsDiff = tempdate.getTime() - end.getTime()
-        let daysSince = Math.floor(secondsDiff / (1000 * 60 * 60 * 24))
+        let tempdate = new Date();
+        let secondsDiff = tempdate.getTime() - end.getTime();
+        let daysSince = Math.floor(secondsDiff / (1000 * 60 * 60 * 24));
         let timeheadertitle;
 
         /**
@@ -125,23 +125,23 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
          * If the entry is yet to start, display how long until it is scheduled to start
          */
         if (daysSince === 0) {
-          let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60))
-          let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60))
+          let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60));
+          let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60));
           if (hourSince === 0) {
             if (minSince === 1) {
-              timeheadertitle = `ended ${minSince} minute ago`
+              timeheadertitle = `ended ${minSince} minute ago`;
             } else {
-              timeheadertitle = `ended ${minSince} minutes ago`
+              timeheadertitle = `ended ${minSince} minutes ago`;
             }
           } else if (hourSince === 1) {
-            timeheadertitle = `ended ${hourSince} hour ago`
+            timeheadertitle = `ended ${hourSince} hour ago`;
           } else if (hourSince > 1) {
-            timeheadertitle = `ended ${hourSince} hours ago`
-          } 
+            timeheadertitle = `ended ${hourSince} hours ago`;
+          }
         } else if (daysSince === 1) {
-          timeheadertitle = "ended yesterday"
+          timeheadertitle = "ended yesterday";
         } else {
-          timeheadertitle = `ended ${daysSince} days ago`
+          timeheadertitle = `ended ${daysSince} days ago`;
         }
         entryOptionsTimeHeader.textContent = timeheadertitle;
       } else {
@@ -158,16 +158,16 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
 
     entry.description.length === 0 ? entryOptionDescription.parentElement.style.display = "none" : entryOptionDescription.textContent = entry.description;
 
-    entryOptionCategoryIcon.setAttribute("fill", store.getCtgColor(entry.category))
+    entryOptionCategoryIcon.setAttribute("fill", store.getCtgColor(entry.category));
     entryOptionCategory.textContent = entry.category;
 
     entryOptionsWrapper.onmousedown = delegateEntryOptions;
-    entryOptionsOverlay.onmousedown = formNegated
-    document.addEventListener("keydown", handleEntryOptionKD)
+    entryOptionsOverlay.onmousedown = formNegated;
+    document.addEventListener("keydown", handleEntryOptionKD);
   }
 
   function handleEntryOptionKD(e) {
-    const deletepopup = document?.querySelector(".delete-popup")
+    const deletepopup = document?.querySelector(".delete-popup");
 
     if (e.key === "Escape") {
       if (deletepopup) {
@@ -208,5 +208,5 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     }
   }
 
-  setEntryDefaults()
+  setEntryDefaults();
 }

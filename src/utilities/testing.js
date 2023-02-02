@@ -8,7 +8,7 @@
 
 */
 
-const randomTitles = "quaerat velit veniam amet cupiditate aut numquam ut sequi".split(" ")
+const randomTitles = "quaerat velit veniam amet cupiditate aut numquam ut sequi".split(" ");
 
 const categoryNames = [
   'default',
@@ -16,8 +16,8 @@ const categoryNames = [
   'default',
   // 'misc',
   // 'school'
-]
-let endYears = [2023, 2023]
+];
+let endYears = [2023, 2023];
 function generateStart() {
   let year = endYears[Math.floor(Math.random() * 1)];
   let month = Math.floor(Math.random() * 4);
@@ -28,21 +28,21 @@ function generateStart() {
 
   return new Date(
     year, month, day, hour, minute, 0, 0,
-  )
+  );
 }
 
 function generateEnd(start) {
-  let endDay = Math.floor(Math.random() * 1)
-  let endHour = Math.floor(Math.random() * 4) + 12
+  let endDay = Math.floor(Math.random() * 1);
+  let endHour = Math.floor(Math.random() * 4) + 12;
 
   return new Date(
     start.getFullYear(), start.getMonth(), start.getDate() + endDay,
     endHour, start.getMinutes(), 0, 0,
-  )
+  );
 }
 
 class FEntry {
-  constructor(category, completed, description, end, start, title) {
+  constructor (category, completed, description, end, start, title) {
     this.category = category;
     this.completed = completed;
     this.description = description;
@@ -55,9 +55,9 @@ class FEntry {
 
 // const generateRandomEvents = () => {
 export default function generateRandomEvents(numberOfEvents) {
-  const events = []
+  const events = [];
   if (numberOfEvents === undefined || numberOfEvents === null || numberOfEvents === 0 || numberOfEvents === NaN || numberOfEvents === Infinity || numberOfEvents === -Infinity || numberOfEvents === -0 || numberOfEvents > 1000) {
-    numberOfEvents = 100
+    numberOfEvents = 100;
   }
   for (let i = 0; i < numberOfEvents; i++) {
     const start = generateStart();
@@ -71,7 +71,7 @@ export default function generateRandomEvents(numberOfEvents) {
         start,
         randomTitles[Math.floor(Math.random() * randomTitles.length)]
       )
-    )    
+    );
   }
-  return events
+  return events;
 }

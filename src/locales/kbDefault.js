@@ -48,4 +48,4 @@ export default {
     ]
   },
   23: { shortcut: "ESCAPE", action: 'close any active modal/popup/form' },
-}
+};

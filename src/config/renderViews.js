@@ -14,25 +14,26 @@ const appBody = document.querySelector(".body");
 const colorSchemeMeta = document.getElementsByName("color-scheme")[0];
 
 const header = document.querySelector(".h__container");
-const headerLogo = document.querySelector(".logo")
+const headerLogo = document.querySelector(".logo");
 
-const toggleForm = document.querySelector(".toggle-form")
-const sbToggleForm = document.querySelector(".sb-toggle-form-btn")
-const sbToggleSubBtn = document.querySelector(".sb-data-btn")
-const formOverlay = document.querySelector(".form-overlay")
-const form = document.querySelector(".entries__form")
+const toggleForm = document.querySelector(".toggle-form");
+const sbToggleForm = document.querySelector(".sb-toggle-form-btn");
+const sbToggleSubBtn = document.querySelector(".sb-data-btn");
+const formOverlay = document.querySelector(".form-overlay");
+const form = document.querySelector(".entries__form");
 
-const datepicker = document.querySelector(".datepicker")
-const datepickeroverlay = document.querySelector(".datepicker-overlay")
-const dateTimeWrapper = document.querySelector(".datetime-wrapper")
+const datepicker = document.querySelector(".datepicker");
+const datepickeroverlay = document.querySelector(".datepicker-overlay");
+const dateTimeWrapper = document.querySelector(".datetime-wrapper");
 
-const selectElement = document.querySelector(".select__modal")
+const selectElement = document.querySelector(".select__modal");
 const selectOverlay = document.querySelector(".change-view--overlay");
 const optionswrapper = document.querySelector(".change-view--wrapper");
 const options = document.querySelectorAll(".view-option");
 
 const sidebar = document.querySelector(".sidebar");
-const sbFooter = document.querySelector(".sb__info")
+const sbFooter = document.querySelector(".sb__info");
+const sbCategories = document.querySelector(".sb__categories");
 
 const viewsContainer = document.querySelector(".container__calendars");
 const yearwrapper = document.querySelector(".yearview");
@@ -43,47 +44,47 @@ const collapsebtn = document.querySelector(".collapse-view");
 
 export default function renderViews(context, datepickerContext, store) {
   function setColorScheme() {
-    const darkicon = document.querySelector(".sbti-one")
-    const lighticon = document.querySelector(".sbti-two")
-    const contrasticon = document.querySelector(".sbti-three")
+    const darkicon = document.querySelector(".sbti-one");
+    const lighticon = document.querySelector(".sbti-two");
+    const contrasticon = document.querySelector(".sbti-three");
 
     const setlight = () => {
-      context.setColorScheme("light")
+      context.setColorScheme("light");
       colorSchemeMeta.setAttribute("content", "light");
       appBody.classList.add("light-mode");
-      appBody.classList.remove("contrast-mode")
-      darkicon.classList.add("sb-theme-icon-hide")
-      contrasticon.classList.add("sb-theme-icon-hide")
-      lighticon.classList.remove("sb-theme-icon-hide")
-    }
+      appBody.classList.remove("contrast-mode");
+      darkicon.classList.add("sb-theme-icon-hide");
+      contrasticon.classList.add("sb-theme-icon-hide");
+      lighticon.classList.remove("sb-theme-icon-hide");
+    };
 
     const setdark = () => {
-      context.setColorScheme("dark")
+      context.setColorScheme("dark");
       colorSchemeMeta.setAttribute("content", "dark light");
       appBody.classList.remove("light-mode");
-      appBody.classList.remove("contrast-mode")
-      darkicon.classList.remove("sb-theme-icon-hide")
-      contrasticon.classList.add("sb-theme-icon-hide")
-      lighticon.classList.add("sb-theme-icon-hide")
-    }
+      appBody.classList.remove("contrast-mode");
+      darkicon.classList.remove("sb-theme-icon-hide");
+      contrasticon.classList.add("sb-theme-icon-hide");
+      lighticon.classList.add("sb-theme-icon-hide");
+    };
 
     const setcontrast = () => {
-      context.setColorScheme("contrast")
+      context.setColorScheme("contrast");
       colorSchemeMeta.setAttribute("content", "dark");
       appBody.classList.remove("light-mode");
-      appBody.classList.add("contrast-mode")
-      contrasticon.classList.remove("sb-theme-icon-hide")
-      darkicon.classList.add("sb-theme-icon-hide")
-      lighticon.classList.add("sb-theme-icon-hide")
-    }
+      appBody.classList.add("contrast-mode");
+      contrasticon.classList.remove("sb-theme-icon-hide");
+      darkicon.classList.add("sb-theme-icon-hide");
+      lighticon.classList.add("sb-theme-icon-hide");
+    };
 
-    const currentScheme = context.getColorScheme()
+    const currentScheme = context.getColorScheme();
     if (currentScheme === "light") {
-      setdark()
+      setdark();
     } else if (currentScheme === "dark") {
-      setcontrast()
+      setcontrast();
     } else {
-      setlight()
+      setlight();
     }
   }
 
@@ -92,74 +93,74 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   function setInitialAttributes() {
-    selectElement.setAttribute("data-value", `${context.getComponent().slice(0, 1).toUpperCase()}`)
+    selectElement.setAttribute("data-value", `${context.getComponent().slice(0, 1).toUpperCase()}`);
 
-    headerLogo.setAttribute("data-current-day-of-month", new Date().getDate())
+    headerLogo.setAttribute("data-current-day-of-month", new Date().getDate());
   }
 
   function renderSidebarDatepicker() {
     if (!sidebar.classList.contains("hide-sidebar")) {
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay())
-      setSidebarDatepicker(context, store, datepickerContext)
+      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+      setSidebarDatepicker(context, store, datepickerContext);
     }
   }
 
   function renderSidebarCategories() {
     if (!sidebar.classList.contains("hide-sidebar")) {
-      handleSidebarCategories(context, store, datepickerContext)
-      handleSidebarFooter(store)
+      handleSidebarCategories(context, store, datepickerContext);
+      handleSidebarFooter(store);
     }
   }
 
   function getPreviousDay() {
-    context.setPrevDay()
-    fullRender("day")
-    context.setDateSelected(context.getDay())
-    renderSidebarDatepicker()
+    context.setPrevDay();
+    fullRender("day");
+    context.setDateSelected(context.getDay());
+    renderSidebarDatepicker();
   }
 
   function getNextDay() {
-    context.setNextDay()
-    fullRender("day")
-    context.setDateSelected(context.getDay())
-    renderSidebarDatepicker()
+    context.setNextDay();
+    fullRender("day");
+    context.setDateSelected(context.getDay());
+    renderSidebarDatepicker();
   }
 
   function getPreviousWeek() {
-    context.setPrevWeek()
-    fullRender("week")
-    renderSidebarDatepicker()
+    context.setPrevWeek();
+    fullRender("week");
+    renderSidebarDatepicker();
   }
 
   function getNextWeek() {
-    context.setNextWeek()
-    fullRender("week")
-    renderSidebarDatepicker()
+    context.setNextWeek();
+    fullRender("week");
+    renderSidebarDatepicker();
   }
 
   function getPreviousMonth() {
-    context.setPrevMonth()
-    fullRender("month")
-    renderSidebarDatepicker()
+    context.setPrevMonth();
+    fullRender("month");
+    renderSidebarDatepicker();
   }
 
   function getNextMonth() {
-    context.setNextMonth()
-    fullRender("month")
-    renderSidebarDatepicker()
+    context.setNextMonth();
+    fullRender("month");
+    renderSidebarDatepicker();
   }
 
   function getPreviousYear() {
-    context.setPrevYear()
-    fullRender("year")
-    renderSidebarDatepicker()
+    context.setPrevYear();
+    fullRender("year");
+    renderSidebarDatepicker();
     return;
   }
 
   function getNextYear() {
-    context.setNextYear()
-    fullRender("year")
-    renderSidebarDatepicker()
+    context.setNextYear();
+    fullRender("year");
+    renderSidebarDatepicker();
     return;
   }
 
@@ -175,12 +176,12 @@ export default function renderViews(context, datepickerContext, store) {
   let tm = 250; // define timeout out of scope so that it can be 
   function handleTransition(view, keyframeDirection, callback) {
     if (!store.getAnimationStatus()) {
-      callback()
+      callback();
       return;
     } else {
       const removeslide = (dir) => {
         dir === "left" ? view.classList.remove("transition--right") : view.classList.remove("transition--left");
-      }
+      };
 
       if (!view.classList.contains("weekview--header")) {
         viewsContainer.style.overflowX = "hidden";
@@ -189,18 +190,18 @@ export default function renderViews(context, datepickerContext, store) {
         }, 200);
       }
 
-      removeslide(keyframeDirection)
-      const slide = `transition--${keyframeDirection}`
+      removeslide(keyframeDirection);
+      const slide = `transition--${keyframeDirection}`;
       if (view.classList.contains(slide)) {
         // prevent transition from firing too often
-        callback()
-        tm += 250
+        callback();
+        tm += 250;
       } else {
-        view.classList.add(slide)
+        view.classList.add(slide);
         setTimeout(() => {
-          view.classList.remove(slide)
-        }, tm)
-        callback()
+          view.classList.remove(slide);
+        }, tm);
+        callback();
         tm = 250;
       }
     }
@@ -208,12 +209,12 @@ export default function renderViews(context, datepickerContext, store) {
 
   // define a means for opening the form then provide it to the store so that it can be accessed by other components
   function handleForm() {
-    setEntryForm(context, store, datepickerContext)
+    setEntryForm(context, store, datepickerContext);
 
-    form.setAttribute("style", "top:5%;left:5%;right:5%;bottom:5%;margin:auto;")
-    form.classList.remove("hide-form")
-    formOverlay.classList.remove("hide-form-overlay")
-    store.addActiveOverlay("hide-form-overlay")
+    form.setAttribute("style", "top:5%;left:5%;right:5%;bottom:5%;margin:auto;");
+    form.classList.remove("hide-form");
+    formOverlay.classList.remove("hide-form-overlay");
+    store.addActiveOverlay("hide-form-overlay");
 
     function closeform(e) {
       if (e.target === formOverlay) {
@@ -224,52 +225,52 @@ export default function renderViews(context, datepickerContext, store) {
         // formOverlay.removeEventListener("click", closeform)
       }
     }
-    formOverlay.onclick = closeform
+    formOverlay.onclick = closeform;
     // formOverlay.addEventListener("click", closeform)
   }
 
   // the submenu (meatball? menu) adjacent to "create" button in sidebar
   // opens instance of settings menu
   function handleToggleSubmenu() {
-    getSidebarSubMenu(store, context)
+    getSidebarSubMenu(store, context);
   }
 
   // open / close sidebar
   // triggers via "s" keypress or by clicking on the hamburger menu icon
   // will also trigger in instances where the user tries to create a new entry on a blank day but no categories are selected.
   function handleBtnMainMenu() {
-    const currentSidebarState = context.getSidebarState()
+    const currentSidebarState = context.getSidebarState();
     if (currentSidebarState === "hide") {
       toggleForm.onclick = handleForm;
       sbToggleForm.onclick = null;
       sbToggleSubBtn.onclick = null;
       sbFooter.onmousedown = null;
+      sbCategories.onmousedown = null;
 
-      toggleForm.classList.remove("hide-toggle--form")
-      viewsContainer.classList.remove("container__calendars-sb-active")
+      toggleForm.classList.remove("hide-toggle--form");
+      viewsContainer.classList.remove("container__calendars-sb-active");
       sidebar.classList.add("hide-sidebar");
       dateTimeWrapper.classList.remove("datetime-inactive");
       listviewBody.removeAttribute("style");
     } else {
-      
+
       toggleForm.onclick = null;
       sbToggleForm.onclick = handleForm;
       sbToggleSubBtn.onclick = handleToggleSubmenu;
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
 
-
-      const resetdatepicker = store.getResetDatepickerCallback()
+      const resetdatepicker = store.getResetDatepickerCallback();
       if (resetdatepicker !== null) {
-        resetdatepicker()
-        store.setResetDatepickerCallback(null)
+        resetdatepicker();
+        store.setResetDatepickerCallback(null);
       }
 
       listviewBody.style.width = "100%";
       listviewBody.style.marginLeft = "0";
 
-      toggleForm.classList.add("hide-toggle--form")
-      viewsContainer.classList.add("container__calendars-sb-active")
+      toggleForm.classList.add("hide-toggle--form");
+      viewsContainer.classList.add("container__calendars-sb-active");
       dateTimeWrapper.classList.add("datetime-inactive");
       sidebar.classList.remove("hide-sidebar");
 
@@ -291,10 +292,10 @@ export default function renderViews(context, datepickerContext, store) {
         tempdate.getFullYear(),
         tempdate.getMonth(),
         tempdate.getDate(),
-      )
+      );
 
-      fullRender(context.getComponent())
-      renderSidebarDatepicker()
+      fullRender(context.getComponent());
+      renderSidebarDatepicker();
     }
   }
 
@@ -315,10 +316,10 @@ export default function renderViews(context, datepickerContext, store) {
         );
         break;
       case "month":
-        handleTransition(monthwrapper, "right", getPreviousMonth)
+        handleTransition(monthwrapper, "right", getPreviousMonth);
         break;
       case "year":
-        handleTransition(yearwrapper, "right", getPreviousYear)
+        handleTransition(yearwrapper, "right", getPreviousYear);
         break;
       default:
         break;
@@ -342,10 +343,10 @@ export default function renderViews(context, datepickerContext, store) {
         );
         break;
       case "month":
-        handleTransition(monthwrapper, "left", getNextMonth)
+        handleTransition(monthwrapper, "left", getNextMonth);
         break;
       case "year":
-        handleTransition(yearwrapper, "left", getNextYear)
+        handleTransition(yearwrapper, "left", getNextYear);
         break;
       default:
         break;
@@ -353,73 +354,73 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   function handleDatePickerBtn(e) {
-    datepicker.classList.remove("hide-datepicker")
-    datepickeroverlay.classList.remove("hide-datepicker-overlay")
-    datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay())
-    const rect = e.target.getBoundingClientRect()
-    const newDatepickerLeft = parseInt(rect.left)
+    datepicker.classList.remove("hide-datepicker");
+    datepickeroverlay.classList.remove("hide-datepicker-overlay");
+    datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+    const rect = e.target.getBoundingClientRect();
+    const newDatepickerLeft = parseInt(rect.left);
     // convert rect left into a percentage so that it scales with window resize
-    const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100)
-    datepicker.setAttribute("style", `left:${perc}%;top:12px;`)
-    setDatepicker(context, store, datepickerContext, "header")
+    const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100);
+    datepicker.setAttribute("style", `left:${perc}%;top:12px;`);
+    setDatepicker(context, store, datepickerContext, "header");
 
   }
 
   function setOptionStyle(option) {
-    const views = ['day', 'week', 'month', 'year', 'list']
-    const activeIndex = views.indexOf(option)
+    const views = ['day', 'week', 'month', 'year', 'list'];
+    const activeIndex = views.indexOf(option);
     for (let i = 0; i < options.length; i++) {
       if (i === activeIndex) {
-        options[i].classList.add("change-view--option__active")
+        options[i].classList.add("change-view--option__active");
       } else {
-        options[i].classList.remove("change-view--option__active")
+        options[i].classList.remove("change-view--option__active");
       }
     }
   }
 
   function closeOptionsModal() {
-    selectElement.classList.remove("selection--active")
+    selectElement.classList.remove("selection--active");
     selectOverlay.style.display = "none";
-    selectOverlay.classList.add("toggle-options")
-    optionswrapper.classList.add("toggle-options")
-    optionswrapper.classList.remove("toggle-animate")
+    selectOverlay.classList.add("toggle-options");
+    optionswrapper.classList.add("toggle-options");
+    optionswrapper.classList.remove("toggle-animate");
   }
 
   function renderOption(option, initialRender) {
-    const comp = context.getComponent()
+    const comp = context.getComponent();
     // console.log(comp, option)
     if (option === "week" || option === "day") {
       collapsebtn.onclick = handleCollapse;
-      collapsebtn.classList.remove("hide-cbt")
+      collapsebtn.classList.remove("hide-cbt");
     } else {
       collapsebtn.onclick = null;
-      collapsebtn.classList.add("hide-cbt")
+      collapsebtn.classList.add("hide-cbt");
     }
 
     if (option === comp && !initialRender) return;
-    closeOptionsModal()
-    context.setComponent(option)
-    fullRender(option)
-    setOptionStyle(option)
+    closeOptionsModal();
+    context.setComponent(option);
+    fullRender(option);
+    setOptionStyle(option);
     // week datepicker is the only one that has any stylistic difference
     if (comp || option === "week") {
-      renderSidebarDatepicker()
+      renderSidebarDatepicker();
     }
-    document.activeElement.blur()
+    document.activeElement.blur();
   }
 
   function handleSelect(e) {
-    selectElement.classList.add("selection--active")
-    selectOverlay.classList.remove("toggle-options")
+    selectElement.classList.add("selection--active");
+    selectOverlay.classList.remove("toggle-options");
     selectOverlay.style.display = "block";
-    optionswrapper.classList.remove("toggle-options")
-    optionswrapper.classList.add("toggle-animate")
+    optionswrapper.classList.remove("toggle-options");
+    optionswrapper.classList.add("toggle-animate");
     const setOption = (e) => {
       const option = e.target.getAttribute("data-view-option");
       renderOption(option);
-    }
-    optionswrapper.onclick = setOption
-    selectOverlay.onclick = closeOptionsModal
+    };
+    optionswrapper.onclick = setOption;
+    selectOverlay.onclick = closeOptionsModal;
   }
 
   // EVENT DELEGATION : HEADER ELEMENTS
@@ -486,12 +487,12 @@ export default function renderViews(context, datepickerContext, store) {
     const toggleChangeview = (e) => {
       if (selectElement.classList.contains("selection--active")) {
         if (e.key.toLowerCase() === "v") {
-          closeOptionsModal()
+          closeOptionsModal();
         }
       } else {
         handleSelect();
       }
-    }
+    };
 
     // if (toastpopup.classList.contains("show-toast")) {
     //   toastpopup.innerText = "";
@@ -586,7 +587,7 @@ export default function renderViews(context, datepickerContext, store) {
 
       // toggle between light/dark mode
       case "0":
-        setColorScheme()
+        setColorScheme();
         break;
 
       // opens search modal
@@ -601,7 +602,7 @@ export default function renderViews(context, datepickerContext, store) {
         const targetcat = {
           name: "new category",
           color: "#2C52BA",
-        }
+        };
         createCategoryForm(store, targetcat, false, null);
 
       default:
@@ -609,7 +610,7 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
-  const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 150)
+  const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 150);
   // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
 
   // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
@@ -652,14 +653,14 @@ export default function renderViews(context, datepickerContext, store) {
     const eyeIcons = {
       on: document.querySelector(".cv-svg-on"),
       off: document.querySelector(".cv-svg-off")
-    }
+    };
 
     if (view === "week" || view === "day") {
       eyeIcons.on.classList.toggle("hide-cbt");
       eyeIcons.off.classList.toggle("hide-cbt");
       headers[view].component.classList.toggle(headers[view].collapse);
       if (view === "week") {
-        headers[view].componentBody.classList.toggle(headers[view].componentBodytoggle)
+        headers[view].componentBody.classList.toggle(headers[view].componentBodytoggle);
       }
     }
   }
@@ -676,13 +677,13 @@ export default function renderViews(context, datepickerContext, store) {
     const ensureSidebarIsOpen = () => {
       context.setSidebarState("open");
       handleBtnMainMenu();
-    }
+    };
     store.setRenderSidebarCallback(ensureSidebarIsOpen);
     /*************************/
     // establish global event listeners
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
-  }
+  };
 
   appinit();
 }

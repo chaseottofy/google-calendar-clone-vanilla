@@ -1,8 +1,8 @@
-const shortcutsModalOverlay = document.querySelector(".shortcuts-modal-overlay")
-const shortcutsModal = document.querySelector(".shortcuts__modal")
-const shortcutsModalContent = document.querySelector(".shortcuts-modal-content")
-const shortcutsModalClose = document.querySelector(".close-shortcuts-modal")
-const notifyShortcutsStatus = document.querySelector(".keyboard-disabled-sm-two")
+const shortcutsModalOverlay = document.querySelector(".shortcuts-modal-overlay");
+const shortcutsModal = document.querySelector(".shortcuts__modal");
+const shortcutsModalContent = document.querySelector(".shortcuts-modal-content");
+const shortcutsModalClose = document.querySelector(".close-shortcuts-modal");
+const notifyShortcutsStatus = document.querySelector(".keyboard-disabled-sm-two");
 export default function handleShortCutsModal(store) {
   function createShortcut(key, description) {
     const shortcut = document.createElement("div");
@@ -10,14 +10,14 @@ export default function handleShortCutsModal(store) {
 
     const shortcutKey = document.createElement("div");
     shortcutKey.classList.add("sm-key");
-    const keyone = document.createElement("span")
+    const keyone = document.createElement("span");
     if (Array.isArray(key)) {
-      const or = document.createElement("span")
-      or.textContent = " or "
-      const keytwo = document.createElement("span")
-      keyone.textContent = key[0].toUpperCase()
-      keytwo.textContent = key[1].toUpperCase()
-      shortcutKey.append(keyone, or, keytwo)
+      const or = document.createElement("span");
+      or.textContent = " or ";
+      const keytwo = document.createElement("span");
+      keyone.textContent = key[0].toUpperCase();
+      keytwo.textContent = key[1].toUpperCase();
+      shortcutKey.append(keyone, or, keytwo);
     } else {
       if (key == "ENTER" || key == "ESCAPE" || key == "DELETE") {
         keyone.classList.add("key-full");
@@ -45,10 +45,10 @@ export default function handleShortCutsModal(store) {
 
   // close the modal and remove the event listener
   function handleShortcutsModalClose() {
-    shortcutsModalOverlay.classList.add("hide-shortcuts")
-    shortcutsModal.classList.add("hide-shortcuts")
-    store.removeActiveOverlay("hide-shortcuts")
-    document.removeEventListener("keydown", closeShortcutsOnKeydown)
+    shortcutsModalOverlay.classList.add("hide-shortcuts");
+    shortcutsModal.classList.add("hide-shortcuts");
+    store.removeActiveOverlay("hide-shortcuts");
+    document.removeEventListener("keydown", closeShortcutsOnKeydown);
   }
 
   // provide the ability to close the shortcuts modal with "escape" or with the keys that open it
@@ -61,27 +61,27 @@ export default function handleShortCutsModal(store) {
 
   function setStatusIcon(status) {
     if (status) {
-      notifyShortcutsStatus.setAttribute("data-tooltip", "Keyboard shortcuts enabled")
-      notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--primary1)")
-  
+      notifyShortcutsStatus.setAttribute("data-tooltip", "Keyboard shortcuts enabled");
+      notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--primary1)");
+
     } else {
-      notifyShortcutsStatus.setAttribute("data-tooltip", "Keyboard shortcuts disabled")
-      notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--red1)")
+      notifyShortcutsStatus.setAttribute("data-tooltip", "Keyboard shortcuts disabled");
+      notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--red1)");
     }
   }
-  
+
   function handleShortcutsModalOpen() {
     shortcutsModalContent.innerText = "";
-    shortcutsModalOverlay.classList.remove("hide-shortcuts")
-    shortcutsModal.classList.remove("hide-shortcuts")
-    store.addActiveOverlay("hide-shortcuts")
-    
-    const status = store.getShortcutsStatus()
-    setStatusIcon(status)
+    shortcutsModalOverlay.classList.remove("hide-shortcuts");
+    shortcutsModal.classList.remove("hide-shortcuts");
+    store.addActiveOverlay("hide-shortcuts");
+
+    const status = store.getShortcutsStatus();
+    setStatusIcon(status);
 
     const shortcuts = store.getShortcuts();
     for (let i = 0; i < Object.values(shortcuts).length; i++) {
-      const value = Object.values(shortcuts)[i]
+      const value = Object.values(shortcuts)[i];
       shortcutsModalContent.appendChild(createShortcut(
         value.shortcut,
         value.action,
@@ -100,5 +100,5 @@ export default function handleShortCutsModal(store) {
     document.addEventListener("keydown", closeShortcutsOnKeydown);
   }
 
-  handleShortcutsModalOpen()
+  handleShortcutsModalOpen();
 }

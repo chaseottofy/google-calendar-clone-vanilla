@@ -1,14 +1,14 @@
-import locales from "../../locales/en"
-import setViews from "../../config/setViews"
+import locales from "../../locales/en";
+import setViews from "../../config/setViews";
 import setSidebarDatepicker from "../menus/sidebarDatepicker";
 const monthsArray = locales.labels.monthsShortLower;
 const monthsArrayLong = locales.labels.monthsLongLower;
 const gotoOverlay = document.querySelector(".go-to-date-overlay");
-const goto = document.querySelector(".go-to-date")
-const gotoInput = document.querySelector(".go-to-input")
+const goto = document.querySelector(".go-to-date");
+const gotoInput = document.querySelector(".go-to-input");
 const inputErrMessage = document.querySelector(".go-to-err");
-const cancelGoto = document.querySelector(".cancel-go-to")
-const submitGoto = document.querySelector(".submit-go-to")
+const cancelGoto = document.querySelector(".cancel-go-to");
+const submitGoto = document.querySelector(".submit-go-to");
 export default function createGoTo(context, store, datepickerContext) {
   function validateDate(date) {
     let arr;
@@ -23,7 +23,7 @@ export default function createGoTo(context, store, datepickerContext) {
 
     if (arr.length !== 3) {
       haserr = true;
-    } 
+    }
 
     // convert string year/month/day to int
     // convert 'jan' to 0 || 'january' to 0
@@ -62,10 +62,10 @@ export default function createGoTo(context, store, datepickerContext) {
         } else if (dateInt > 100 && dateInt < 1901) {
           haserr = true;
         }
-      } 
+      }
 
       return tempMonth === null ? dateInt : tempMonth;
-    })
+    });
 
 
     // form date object and check if valid
@@ -94,18 +94,18 @@ export default function createGoTo(context, store, datepickerContext) {
         newdate.getFullYear(),
         newdate.getMonth(),
         newdate.getDate()
-      )
+      );
 
-      context.setDateSelected(newdate.getDate())
+      context.setDateSelected(newdate.getDate());
       if (context.getSidebarState() !== "hide") {
-        setSidebarDatepicker(context, store, datepickerContext)
+        setSidebarDatepicker(context, store, datepickerContext);
       }
-      
+
       let component = context.getComponent();
       if (component === 'list') {
         component = 'day';
       }
-      
+
       closeGoTo();
       setViews(component, context, store, datepickerContext);
     } else {
@@ -151,11 +151,11 @@ export default function createGoTo(context, store, datepickerContext) {
 
   function openGoTo() {
     // prevent keyboard shortcut from being registering in input field onload
-    removeError()
+    removeError();
     setTimeout(() => {
-      gotoInput.focus()
-      gotoInput.value = formatStart()
-    }, 10) // 10ms is within browser threshold
+      gotoInput.focus();
+      gotoInput.value = formatStart();
+    }, 10); // 10ms is within browser threshold
     gotoOverlay.classList.remove("hide-gotodate");
     goto.classList.remove("hide-gotodate");
     store.addActiveOverlay("hide-gotodate");
@@ -164,5 +164,5 @@ export default function createGoTo(context, store, datepickerContext) {
     submitGoto.onclick = handleGoTo;
   }
 
-  openGoTo()
+  openGoTo();
 }

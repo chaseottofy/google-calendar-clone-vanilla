@@ -1,7 +1,7 @@
-import locales from "../../locales/en"
-import { placePopup } from "../../utilities/helpers"
+import locales from "../../locales/en";
+import { placePopup } from "../../utilities/helpers";
 class FormConfig {
-  constructor() {
+  constructor () {
     this.monthNames = locales.labels.monthsShort;
     this.headerOffset = document.querySelector(".header");
     this.form = document.querySelector(".entries__form");
@@ -37,7 +37,7 @@ class FormConfig {
       [window.innerWidth, window.innerHeight],
       shouldCenter,
       centerOffset
-    )
+    );
     this.form.style.left = `${x}px`;
     this.form.style.top = `${y}px`;
     this.form.style.margin = "0";
@@ -53,8 +53,8 @@ class FormConfig {
 
   configFormTitleDescriptionInput(title, description) {
     this.formTitleDescription.forEach((input, idx) => {
-      input.firstElementChild.value = [title, description][idx]
-    })
+      input.firstElementChild.value = [title, description][idx];
+    });
   }
 
   /**
@@ -72,9 +72,9 @@ class FormConfig {
     const [dateinput, timeinput] = [
       input.firstElementChild,
       input.lastElementChild
-    ]
+    ];
 
-    const timeformatted = `${date.getHours()}:${minutes}`
+    const timeformatted = `${date.getHours()}:${minutes}`;
     timeinput.setAttribute(
       "data-form-time",
       timeformatted
@@ -83,8 +83,8 @@ class FormConfig {
     // darn yankee time
     timeinput.textContent = `${+date.getHours() === 0 || +date.getHours() === 12 ? 12 : date.getHours() % 12}:${minutes}${date.getHours() < 12 ? "am" : "pm"}`;
 
-    dateinput.setAttribute("data-form-date", dateFormatted)
-    dateinput.textContent = `${this.monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+    dateinput.setAttribute("data-form-date", dateFormatted);
+    dateinput.textContent = `${this.monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
   }
 
   setFormDatepickerDate(context, datepickerContext, start) {
@@ -124,10 +124,10 @@ class FormConfig {
 
   configFormCategoryInput(categoryData) {
     const [title, color] = categoryData;
-    this.formCategoryWrapper.setAttribute("data-form-category", title)
+    this.formCategoryWrapper.setAttribute("data-form-category", title);
     this.formCategorySelect.style.backgroundColor = color;
     this.formCategoryWrapperIcon.style.backgroundColor = color;
-    this.formCatgoryIcon.firstChild.setAttribute("fill", color)
+    this.formCatgoryIcon.firstChild.setAttribute("fill", color);
     this.formCategoryTitle.textContent = title;
   }
 
@@ -150,10 +150,10 @@ class FormConfig {
       this.configFormTitleDescriptionInput(
         data.submission.title,
         data.submission.description
-      )
+      );
     }
   }
 }
 
-const fullFormConfig = new FormConfig()
-export default fullFormConfig
+const fullFormConfig = new FormConfig();
+export default fullFormConfig;

@@ -15,7 +15,7 @@ const localStoreKeyNames = [
   "sidebarState",
   "store",
   "yearSelected"
-]
+];
 
 // [
 //   "activeCtg",
@@ -37,4 +37,4 @@ const localStoreKeyNames = [
 //   "keyboardShortcutsStatus"
 // ]
 
-export default localStoreKeyNames
+export default localStoreKeyNames;

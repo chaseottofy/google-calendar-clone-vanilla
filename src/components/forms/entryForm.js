@@ -1,21 +1,21 @@
 // render methods
-import setViews from "../../config/setViews"
-import setDatepicker from "../menus/datepicker"
-import setSidebarDatepicker from "../menus/sidebarDatepicker"
-import locales from "../../locales/en"
+import setViews from "../../config/setViews";
+import setDatepicker from "../menus/datepicker";
+import setSidebarDatepicker from "../menus/sidebarDatepicker";
+import locales from "../../locales/en";
 
 // svgs
-import { createCheckIcon } from "../../utilities/svgs"
+import { createCheckIcon } from "../../utilities/svgs";
 
 // popups confirmation
-import createToast from "../toastPopups/toast"
+import createToast from "../toastPopups/toast";
 
 // event helpers
 import {
   getClosest,
   placePopup,
   throttle
-} from "../../utilities/helpers"
+} from "../../utilities/helpers";
 
 // date / time helpers
 import {
@@ -23,41 +23,41 @@ import {
   isBeforeDate,
   isDate,
   getDateFromAttribute,
-} from "../../utilities/dateutils"
+} from "../../utilities/dateutils";
 
 // main app sidebar
-const sidebar = document.querySelector(".sidebar")
+const sidebar = document.querySelector(".sidebar");
 // main app datepicker / overlay
-const datepicker = document.querySelector(".datepicker")
-const datepickeroverlay = document.querySelector(".datepicker-overlay")
+const datepicker = document.querySelector(".datepicker");
+const datepickeroverlay = document.querySelector(".datepicker-overlay");
 
 // form wrappers / overlay
-const formOverlay = document.querySelector(".form-overlay")
-const formModalOverlay = document.querySelector(".form-modal-overlay")
-const entriesFormWrapper = document.querySelector(".entries__form")
-const entriesForm = document.querySelector(".entry-form")
-const entriesFormBody = document.querySelector(".entries__form--body")
+const formOverlay = document.querySelector(".form-overlay");
+const formModalOverlay = document.querySelector(".form-modal-overlay");
+const entriesFormWrapper = document.querySelector(".entries__form");
+const entriesForm = document.querySelector(".entry-form");
+const entriesFormBody = document.querySelector(".entries__form--body");
 
 // title / description inputs
-const titleInput = document.querySelector(".form--body__title-input")
-const descriptionInput = document.querySelector(".form--body__description-input")
+const titleInput = document.querySelector(".form--body__title-input");
+const descriptionInput = document.querySelector(".form--body__description-input");
 
 // start date / time
 // end date / time
-const startDateInput = document.querySelector(".form--body-start__date")
-const endDateInput = document.querySelector(".form--body-end__date")
+const startDateInput = document.querySelector(".form--body-start__date");
+const endDateInput = document.querySelector(".form--body-end__date");
 
-const startTimeInput = document.querySelector(".form--body-start__time")
-const endTimeInput = document.querySelector(".form--body-end__time")
+const startTimeInput = document.querySelector(".form--body-start__time");
+const endTimeInput = document.querySelector(".form--body-end__time");
 
 // category modal
-const categoryModal = document.querySelector(".form--body__category-modal")
-const closeCategoryModalBtn = document.querySelector(".close-options-floating__btn")
-const categoryModalIcon = document.querySelector(".form--body__category-icon")
-const categoryModalWrapper = document.querySelector(".form--body__category-modal--wrapper")
-const selectedCategoryWrapper = document.querySelector(".form--body__category-modal--wrapper-selection")
-const selectedCategoryColor = document.querySelector(".form--body__category-modal--wrapper__color")
-const selectedCategoryTitle = document.querySelector(".form--body__category-modal--wrapper__title")
+const categoryModal = document.querySelector(".form--body__category-modal");
+const closeCategoryModalBtn = document.querySelector(".close-options-floating__btn");
+const categoryModalIcon = document.querySelector(".form--body__category-icon");
+const categoryModalWrapper = document.querySelector(".form--body__category-modal--wrapper");
+const selectedCategoryWrapper = document.querySelector(".form--body__category-modal--wrapper-selection");
+const selectedCategoryColor = document.querySelector(".form--body__category-modal--wrapper__color");
+const selectedCategoryTitle = document.querySelector(".form--body__category-modal--wrapper__title");
 
 // reset / save btns
 const formSubmitButton = document.querySelector(".form--footer__button-save");
@@ -103,15 +103,92 @@ export default function setEntryForm(context, store, datepickerContext) {
   let categories;
   let activeCategories;
   let currentComponent;
-  let [year, month, day] = [null, null, null]
+  let [year, month, day] = [null, null, null];
+
+  function setFormInitialValues() {
+    // variable setup
+    categories = Object.entries(store.getAllCtg());
+    activeCategories = store.getActiveCategoriesKeyPair();
+    currentComponent = context.getComponent();
+    year = context.getYear();
+    month = context.getMonth();
+    day = context.getDay();
+
+    // ****************************************** //
+    // title / description
+    descriptionInput.value = "";
+    titleInput.blur();
+    titleInput.value = "";
+    setTimeout(() => {
+      titleInput.focus();
+    }, 10);
+
+    // ****************************************** //
+    // category setup 
+    setInitialFormCategory();
+
+    // ****************************************** // 
+    // date picker setup
+    datepickerContext.setDate(year, month, day);
+    context.setDateSelected(day);
+
+    // ****************************************** // 
+    // date inputs setup
+    const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`;
+    // DATES : START/END
+    startDateInput.textContent = dateSelected;
+    startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
+    endDateInput.textContent = dateSelected;
+    endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
+
+    // TIME : START/END 
+    const temphours = new Date().getHours();
+    startTimeInput.setAttribute("data-form-time", `${temphours}:00`);
+    endTimeInput.setAttribute("data-form-time", `${temphours}:30`);
+    const getTimeAndMd = (hour, min) => {
+      return `${+hour === 0 || +hour === 12 ? 12 : hour % 12}:${min}${hour < 12 ? "am" : "pm"}`;
+    };
+    startTimeInput.textContent = getTimeAndMd(temphours, "00");
+    endTimeInput.textContent = getTimeAndMd(temphours, "30");
+
+    // ****************************************** // 
+    // submit button setup 
+    formSubmitButton.setAttribute("data-form-action", "create");
+    formSubmitButton.setAttribute("data-form-id", "");
+
+    // ****************************************** // 
+    // approve form event delegation
+    entriesFormWrapper.onmousedown = delegateEntryFormEvents;
+    formOverlay.onmousedown = handleOverlayClose;
+    document.addEventListener("keydown", delegateFormKeyDown);
+    // ****************************************** // 
+  }
+
+  function getDefaultCategory() {
+    if (activeCategories.length === 0) {
+      return [categories[0][0], categories[0][1].color];
+    } else {
+      return [activeCategories[0][0], activeCategories[0][1].color];
+    }
+  }
+
+  function setInitialFormCategory() {
+    let [categoryTitle, categoryColor] = getDefaultCategory();
+    categoryModalWrapper.setAttribute("data-form-category", categoryTitle);
+
+    selectedCategoryWrapper.style.backgroundColor = categoryColor;
+    selectedCategoryTitle.textContent = categoryTitle;
+    selectedCategoryColor.style.backgroundColor = categoryColor;
+    categoryModalIcon.firstElementChild.setAttribute("fill", categoryColor);
+  }
 
   function closetimepicker() {
-    const timep = document?.querySelector(".timepicker")
-    const timepoverlay = document?.querySelector(".timepicker-overlay")
-    const timepcontainer = document?.querySelector(".timepicker-times__container")
-    const activeTimeElement = document?.querySelector(".active-form-time")
+    const timep = document?.querySelector(".timepicker");
+    const timepoverlay = document?.querySelector(".timepicker-overlay");
+    const timepcontainer = document?.querySelector(".timepicker-times__container");
+    const activeTimeElement = document?.querySelector(".active-form-time");
     if (timep) {
-      timep.scrollTo(0, 0)
+      timep.scrollTo(0, 0);
       timep.remove();
       timepoverlay.remove();
       timepoverlay.onclick = null;
@@ -119,23 +196,23 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     if (activeTimeElement) {
-      activeTimeElement.classList.remove("active-form-time")
+      activeTimeElement.classList.remove("active-form-time");
     }
   }
 
   function setEndDateToNextDay() {
-    const startCurrentDate = startDateInput.getAttribute("data-form-date").split("-").map(x => parseInt(x))
+    const startCurrentDate = startDateInput.getAttribute("data-form-date").split("-").map(x => parseInt(x));
     let nextDay = new Date(
       startCurrentDate[0],
       startCurrentDate[1],
       startCurrentDate[2] + 1
-    )
-    let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`
+    );
+    let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`;
     let nextDayTitle = locales.labels.monthsShort[nextDay.getMonth()] + " " + nextDay.getDate() + ", " + nextDay.getFullYear();
 
     endDateInput.setAttribute("data-form-date", nextDayString);
     endDateInput.textContent = nextDayTitle;
-    endTimeInput.setAttribute("data-form-time", "00:30")
+    endTimeInput.setAttribute("data-form-time", "00:30");
     endTimeInput.textContent = "12:30am";
   }
 
@@ -145,28 +222,28 @@ export default function setEntryForm(context, store, datepickerContext) {
     let [newh, newm] = [
       startCurrentTime[0] < 23 ? startCurrentTime[0] + 1 : 23,
       startCurrentTime[0] < 23 ? startCurrentTime[1] : 45
-    ]
+    ];
 
-    let nextHour = new Date(0, 0, 0, newh, newm)
-    let md = nextHour.getHours() > 12 ? "pm" : "am"
+    let nextHour = new Date(0, 0, 0, newh, newm);
+    let md = nextHour.getHours() > 12 ? "pm" : "am";
 
-    let nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`
-    let nextHourTitle = `${+nextHour.getHours() % 12}:${+nextHour.getMinutes() == 0 ? "00" : nextHour.getMinutes()}${md}`
+    let nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`;
+    let nextHourTitle = `${+nextHour.getHours() % 12}:${+nextHour.getMinutes() == 0 ? "00" : nextHour.getMinutes()}${md}`;
 
     endTimeInput.setAttribute("data-form-time", nextHourString);
     endTimeInput.textContent = nextHourTitle;
   }
 
   function createTimepicker(coords, currentTime, end, endLimit) {
-    const timepicker = document.createElement("div")
-    timepicker.classList.add("timepicker")
-    timepicker.style.top = `${coords.y}px`
-    timepicker.style.left = `${coords.x}px`
+    const timepicker = document.createElement("div");
+    timepicker.classList.add("timepicker");
+    timepicker.style.top = `${coords.y}px`;
+    timepicker.style.left = `${coords.x}px`;
 
-    const timepickerOverlay = document.createElement("div")
-    timepickerOverlay.classList.add("timepicker-overlay")
+    const timepickerOverlay = document.createElement("div");
+    timepickerOverlay.classList.add("timepicker-overlay");
 
-    const timepickerTimesContainer = document.createElement("div")
+    const timepickerTimesContainer = document.createElement("div");
     timepickerTimesContainer.classList.add("timepicker-times__container");
 
     let hours = [
@@ -182,11 +259,11 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     let [currenthour, currentmin] = currentTime.split(":").map((x) => {
       return parseInt(x);
-    })
+    });
 
     let currentmd = currenthour > 12 ? "pm" : "am";
 
-    let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date")
+    let isSameDay = startDateInput.getAttribute("data-form-date") === endDateInput.getAttribute("data-form-date");
     let shouldTestReset = false;
 
     if (end && currenthour === 23 && currentmin === 45) {
@@ -196,11 +273,11 @@ export default function setEntryForm(context, store, datepickerContext) {
     currenthour > 12 ? currenthour -= 12 : currenthour;
 
     if (endLimit !== null && isSameDay) {
-      let [h, m] = endLimit.split(":").map(x => parseInt(x))
+      let [h, m] = endLimit.split(":").map(x => parseInt(x));
       if (shouldTestReset) {
         if (h === 23 && m >= 15) {
           setEndDateToNextDay();
-          closetimepicker()
+          closetimepicker();
           return;
         }
       }
@@ -257,8 +334,8 @@ export default function setEntryForm(context, store, datepickerContext) {
         }
 
         timepickerTimesContainer.appendChild(timepickerTime);
-      })
-    })
+      });
+    });
 
 
     function setnewtime(e) {
@@ -293,11 +370,11 @@ export default function setEntryForm(context, store, datepickerContext) {
         setnewtime(e);
         return;
       }
-    }
+    };
 
-    timepicker.appendChild(timepickerTimesContainer)
-    const [x, y] = coords
-    timepicker.setAttribute("style", `top:${y}px; left:${x}px;`)
+    timepicker.appendChild(timepickerTimesContainer);
+    const [x, y] = coords;
+    timepicker.setAttribute("style", `top:${y}px; left:${x}px;`);
     document.body.prepend(timepickerOverlay, timepicker);
     timepickerOverlay.onclick = closetimepicker;
     timepickerTimesContainer.onclick = delegateNewTime;
@@ -314,98 +391,23 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function renderSidebarDatepickerForm() {
     if (!sidebar.classList.contains("hide-sidebar")) {
-      context.setDateSelected(day)
-      setSidebarDatepicker(context, store, datepickerContext)
+      context.setDateSelected(day);
+      setSidebarDatepicker(context, store, datepickerContext);
     }
-  }
-
-  function getDefaultCategory() {
-    if (activeCategories.length === 0) {
-      return [categories[0][0], categories[0][1].color];
-    } else {
-      return [activeCategories[0][0], activeCategories[0][1].color];
-    }
-  }
-
-  function setInitialFormCategory() {
-    let [categoryTitle, categoryColor] = getDefaultCategory();
-    categoryModalWrapper.setAttribute("data-form-category", categoryTitle)
-
-    selectedCategoryWrapper.style.backgroundColor = categoryColor
-    selectedCategoryTitle.textContent = categoryTitle
-    selectedCategoryColor.style.backgroundColor = categoryColor
-    categoryModalIcon.firstElementChild.setAttribute("fill", categoryColor)
-  }
-
-  function setFormInitialValues() {
-    // variable setup
-    categories = Object.entries(store.getAllCtg())
-    activeCategories = store.getActiveCategoriesKeyPair()
-    currentComponent = context.getComponent()
-    year = context.getYear()
-    month = context.getMonth()
-    day = context.getDay()
-    // ****************************************** //
-    // title / description
-    descriptionInput.value = "";
-    titleInput.blur();
-    titleInput.value = "";
-    setTimeout(() => {
-      titleInput.focus();
-    }, 10)
-    // ****************************************** //
-    // category setup 
-    setInitialFormCategory()
-
-    // ****************************************** // 
-    // date picker setup
-    datepickerContext.setDate(year, month, day)
-    context.setDateSelected(day)
-    // ****************************************** // 
-
-    // date inputs setup
-    const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`
-    // DATES : START/END
-    startDateInput.textContent = dateSelected
-    startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-    endDateInput.textContent = dateSelected
-    endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()))
-
-    // TIME : START/END 
-    const temphours = new Date().getHours()
-    startTimeInput.setAttribute("data-form-time", `${temphours}:00`)
-    endTimeInput.setAttribute("data-form-time", `${temphours}:30`)
-    const getTimeAndMd = (hour, min) => {
-      return `${+hour === 0 || +hour === 12 ? 12 : hour % 12}:${min}${hour < 12 ? "am" : "pm"}`;
-    }
-    startTimeInput.textContent = getTimeAndMd(temphours, "00")
-    endTimeInput.textContent = getTimeAndMd(temphours, "30")
-
-    // ****************************************** // 
-    // submit button setup 
-    formSubmitButton.setAttribute("data-form-action", "create")
-    formSubmitButton.setAttribute("data-form-id", "")
-    // ****************************************** // 
-
-    // approve form event delegation
-    entriesFormWrapper.onmousedown = delegateEntryFormEvents
-    formOverlay.onmousedown = handleOverlayClose
-    document.addEventListener("keydown", delegateFormKeyDown)
-    // ****************************************** // 
   }
 
   function getDatePicker(year, month, day) {
-    datepickeroverlay.classList.remove("hide-datepicker-overlay")
-    datepicker.classList.remove("hide-datepicker")
-    store.addActiveOverlay("hide-datepicker-overlay")
-    datepickerContext.setDate(year, month, day)
-    datepickerContext.setDateSelected(day)
-    setDatepicker(context, store, datepickerContext, "form")
+    datepickeroverlay.classList.remove("hide-datepicker-overlay");
+    datepicker.classList.remove("hide-datepicker");
+    store.addActiveOverlay("hide-datepicker-overlay");
+    datepickerContext.setDate(year, month, day);
+    datepickerContext.setDateSelected(day);
+    setDatepicker(context, store, datepickerContext, "form");
   }
 
   function handleOverlayClose(e) {
     if (e.target.classList.contains("form-overlay")) {
-      handleFormClose(e)
+      handleFormClose(e);
     }
   }
 
@@ -432,41 +434,41 @@ export default function setEntryForm(context, store, datepickerContext) {
       datepickerTop = window.innerHeight - 242;
     }
 
-    datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`)
+    datepicker.setAttribute("style", `top:${datepickerTop}px;left:${datepickerLeft}px;`);
     getDatePicker(y, m, d);
   }
 
   function getDateFormatViaAttr(dateAttr) {
-    const [year, month, day] = dateAttr.split("-").map(x => parseInt(x))
-    return new Date(year, month, day)
+    const [year, month, day] = dateAttr.split("-").map(x => parseInt(x));
+    return new Date(year, month, day);
   }
 
   function getTimeFormatViaAttr(timeAttr) {
-    return timeAttr.split(":").map(x => parseInt(x))
+    return timeAttr.split(":").map(x => parseInt(x));
   }
 
   function getDateTimeFormatted(dateAttr, timeAttr) {
-    dateAttr.setHours(timeAttr[0])
-    dateAttr.setMinutes(timeAttr[1])
-    dateAttr.setSeconds(0)
-    return dateAttr
+    dateAttr.setHours(timeAttr[0]);
+    dateAttr.setMinutes(timeAttr[1]);
+    dateAttr.setSeconds(0);
+    return dateAttr;
   }
 
   function configDatesForStore() {
-    let startDateAttr = startDateInput.getAttribute("data-form-date")
-    let startDate = getDateFormatViaAttr(startDateAttr)
-    let startTimeAttr = startTimeInput.getAttribute("data-form-time")
-    let [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr)
+    let startDateAttr = startDateInput.getAttribute("data-form-date");
+    let startDate = getDateFormatViaAttr(startDateAttr);
+    let startTimeAttr = startTimeInput.getAttribute("data-form-time");
+    let [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr);
 
-    let endDateAttr = endDateInput.getAttribute("data-form-date")
-    let endDate = getDateFormatViaAttr(endDateAttr)
-    let endTimeAttr = endTimeInput.getAttribute("data-form-time")
-    let [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr)
+    let endDateAttr = endDateInput.getAttribute("data-form-date");
+    let endDate = getDateFormatViaAttr(endDateAttr);
+    let endTimeAttr = endTimeInput.getAttribute("data-form-time");
+    let [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr);
 
     return [
       getDateTimeFormatted(startDate, [starthour, startminute]),
       getDateTimeFormatted(endDate, [endhour, endminute])
-    ]
+    ];
   }
 
   function checkFormValidity(title, description, category, startDate, endDate) {
@@ -478,7 +480,7 @@ export default function setEntryForm(context, store, datepickerContext) {
       startDate: true,
       endDate: true,
       valid: true,
-    }
+    };
     /* ************************ */
     /*  TITLE VALIDATION CHECK */
     if (typeof title === "string") {
@@ -545,14 +547,14 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function removeErrorMessages(e) {
     if (e.target.classList.contains("form-input-error")) {
-      e.preventDefault()
-      e.target.classList.remove("form-input-error")
-      e.target.removeAttribute("data-form-error-message")
-      e.target.firstElementChild.focus()
+      e.preventDefault();
+      e.target.classList.remove("form-input-error");
+      e.target.removeAttribute("data-form-error-message");
+      e.target.firstElementChild.focus();
     } else if (e.target.classList.contains("form-input-error__custom-input")) {
-      e.target.classList.remove("form-input-error__custom-input")
-      e.target.removeAttribute("data-form-error-message")
-      e.target.focus()
+      e.target.classList.remove("form-input-error__custom-input");
+      e.target.removeAttribute("data-form-error-message");
+      e.target.focus();
     } else {
       return;
     }
@@ -568,47 +570,47 @@ export default function setEntryForm(context, store, datepickerContext) {
    * 
    */
   function handleFormErrors(errorMessages) {
-    titleInput.blur()
+    titleInput.blur();
 
     const components = {
       title: titleInput,
       description: descriptionInput,
       startDate: startDateInput,
       endDate: endDateInput,
-    }
+    };
     const err = {
       inputAttr: "data-form-error-message",
       inputClass: "form-input-error",
       svgClass: "form-input-error__custom-input",
       submitbtn: "form-error__submit-btn"
-    }
+    };
 
     for (let key in errorMessages) {
       if (components[key]) {
         if (key === "title" || key === "description") {
           components[key].parentElement.setAttribute(err.inputAttr, errorMessages[key]);
-          components[key].parentElement.classList.add(err.inputClass)
+          components[key].parentElement.classList.add(err.inputClass);
         } else {
-          components[key].setAttribute(err.inputAttr, errorMessages[key])
-          components[key].classList.add(err.svgClass)
-          const svg = components[key].parentElement.parentElement.firstElementChild.firstElementChild
+          components[key].setAttribute(err.inputAttr, errorMessages[key]);
+          components[key].classList.add(err.svgClass);
+          const svg = components[key].parentElement.parentElement.firstElementChild.firstElementChild;
           svg.style.fill = "var(--red2)";
-          setTimeout(() => { svg.style.fill = "var(--white3)" }, 1000)
+          setTimeout(() => { svg.style.fill = "var(--white3)"; }, 1000);
         }
       }
     }
 
-    formSubmitButton.classList.add(err.submitbtn)
-    setTimeout(() => { formSubmitButton.classList.remove(err.submitbtn) }, 1000)
+    formSubmitButton.classList.add(err.submitbtn);
+    setTimeout(() => { formSubmitButton.classList.remove(err.submitbtn); }, 1000);
   }
 
   function removeLastFormEntry() {
-    store.removeLastEntry()
+    store.removeLastEntry();
     setViews(currentComponent, context, store, datepickerContext);
   }
 
   function undoLastFormEdit(id, entryBefore) {
-    const start = new Date(entryBefore.start)
+    const start = new Date(entryBefore.start);
     store.updateEntry(
       id,
       {
@@ -631,24 +633,24 @@ export default function setEntryForm(context, store, datepickerContext) {
     const inputErrElements = document?.querySelectorAll(".form-input-error");
     if (inputErrElements) {
       inputErrElements.forEach((el) => {
-        el.classList.remove("form-input-error")
-        el.removeAttribute("data-form-error-message")
-      })
+        el.classList.remove("form-input-error");
+        el.removeAttribute("data-form-error-message");
+      });
     }
   }
 
   function handleFormClose(e) {
     if (!datepicker.classList.contains("hide-datepicker")) {
-      datepicker.classList.add("hide-datepicker")
-      datepickeroverlay.classList.add("hide-datepicker-overlay")
+      datepicker.classList.add("hide-datepicker");
+      datepickeroverlay.classList.add("hide-datepicker-overlay");
     }
 
     clearAllErrors();
 
     entriesFormWrapper.classList.add("hide-form");
     formOverlay.classList.add("hide-form-overlay");
-    store.removeActiveOverlay("hide-datepicker-overlay")
-    store.removeActiveOverlay("hide-form-overlay")
+    store.removeActiveOverlay("hide-datepicker-overlay");
+    store.removeActiveOverlay("hide-form-overlay");
     entriesForm.reset();
     descriptionInput.value = "";
     titleInput.value = "";
@@ -661,7 +663,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     entriesFormWrapper.onmousedown = null;
     formOverlay.onmousedown = null;
 
-    const resetCurrentView = store.getFormResetHandle(currentComponent)
+    const resetCurrentView = store.getFormResetHandle(currentComponent);
     if (resetCurrentView !== null) {
       resetCurrentView();
       store.setFormResetHandle(currentComponent, null);
@@ -680,25 +682,25 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     handleFormClose();
-    
+
     // if the submission type is create, pass a callback function to allow user to remove the last entry if they wish
     if (type === "create") {
       setTimeout(() => {
         createToast("Event created", removeLastFormEntry);
-      }, 4)
+      }, 4);
     } else {
-    // if the submission type is edit, pass a callback function to allow user to undo the last edit if they wish
+      // if the submission type is edit, pass a callback function to allow user to undo the last edit if they wish
 
-    // determine whether the entry was edited or not
-    const shouldCreateToast = store.compareEntries(
-      entryBefore,
-      store.getEntry(id)
+      // determine whether the entry was edited or not
+      const shouldCreateToast = store.compareEntries(
+        entryBefore,
+        store.getEntry(id)
       );
-      
+
       if (!shouldCreateToast) {
         const handleUndoLastEdit = () => {
           undoLastFormEdit(id, entryBefore);
-        }
+        };
         setTimeout(() => {
           createToast("Event updated", handleUndoLastEdit);
         }, 4);
@@ -707,25 +709,25 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function handleFormSubmission(e) {
-    e.preventDefault()
-    const title = titleInput.value
+    e.preventDefault();
+    const title = titleInput.value;
     const description = descriptionInput.value;
-    const [startDate, endDate] = configDatesForStore()
-    const category = categoryModalWrapper.getAttribute("data-form-category")
+    const [startDate, endDate] = configDatesForStore();
+    const category = categoryModalWrapper.getAttribute("data-form-category");
 
     // if errors exist, validityStatus will represent an object with keys that match the input names, and values that represent the error messages as strings;
     // note that two types of submissions are possible: edit and create
     const validityStatus = checkFormValidity(
       title, description, category, startDate, endDate,
-    )
+    );
 
     if (validityStatus !== true) {
-      handleFormErrors(validityStatus)
+      handleFormErrors(validityStatus);
       return;
     } else {
       // submission : edit
       if (formSubmitButton.getAttribute("data-form-action") === "edit") {
-        const id = formSubmitButton.getAttribute("data-form-entry-id")
+        const id = formSubmitButton.getAttribute("data-form-entry-id");
         const entryBefore = JSON.parse(JSON.stringify(store.getEntry(id)));
 
         store.updateEntry(
@@ -758,45 +760,41 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function handleCategorySelection(e) {
-    const title = e.target.getAttribute("data-form-category-title")
-    const color = e.target.getAttribute("data-form-category-color")
-    categoryModalWrapper.setAttribute("data-form-category", title)
-    categoryModalIcon.firstElementChild.setAttribute("fill", color)
+    const title = e.target.getAttribute("data-form-category-title");
+    const color = e.target.getAttribute("data-form-category-color");
+    categoryModalWrapper.setAttribute("data-form-category", title);
+    categoryModalIcon.firstElementChild.setAttribute("fill", color);
 
-    selectedCategoryWrapper.style.backgroundColor = color
-    selectedCategoryColor.style.backgroundColor = color
-    selectedCategoryTitle.textContent = title
-    closeCategoryModal()
+    selectedCategoryWrapper.style.backgroundColor = color;
+    selectedCategoryColor.style.backgroundColor = color;
+    selectedCategoryTitle.textContent = title;
+    closeCategoryModal();
   }
 
   function closeCategoryModal() {
     closeCategoryModalBtn.style.display = "none";
-    categoryModalWrapper.classList.remove("category-modal-open")
-    categoryModal.classList.add("hide-form-category-modal")
-    selectedCategoryWrapper.classList.remove("hide-form-category-selection")
-    formModalOverlay.classList.add("hide-form-overlay")
-    categoryModalWrapper.removeAttribute("style")
-    formModalOverlay.onclick = null;
-    closeCategoryModalBtn.onclick = null;
-    categoryModal.onclick = null;
+    categoryModalWrapper.classList.remove("category-modal-open");
+    categoryModal.classList.add("hide-form-category-modal");
+    selectedCategoryWrapper.classList.remove("hide-form-category-selection");
+    formModalOverlay.classList.add("hide-form-overlay");
+    categoryModalWrapper.removeAttribute("style");
   }
 
   function createCategoryOptions(parent, categories) {
-    const currentCategory = categoryModalWrapper.getAttribute("data-form-category")
-
+    const currentCategory = categoryModalWrapper.getAttribute("data-form-category");
 
     categories.forEach(([key, value]) => {
       const color = value.color;
-      const categoryWrapper = document.createElement("div")
-      categoryWrapper.classList.add("category-modal--category")
-      categoryWrapper.style.width = "200px"
+      const categoryWrapper = document.createElement("div");
+      categoryWrapper.classList.add("category-modal--category");
+      categoryWrapper.style.width = "200px";
 
       categoryWrapper.style.backgroundColor = color;
       categoryWrapper.setAttribute("data-form-category-title", key);
       categoryWrapper.setAttribute("data-form-category-color", color);
 
-      const categoryDisplayColor = document.createElement("div")
-      categoryDisplayColor.classList.add("category-modal--category-color")
+      const categoryDisplayColor = document.createElement("div");
+      categoryDisplayColor.classList.add("category-modal--category-color");
       categoryDisplayColor.style.backgroundColor = color;
 
       const categoryTitle = document.createElement("div");
@@ -816,10 +814,10 @@ export default function setEntryForm(context, store, datepickerContext) {
         );
 
       } else {
-        categoryWrapper.append(categoryDisplayColor, categoryTitle)
+        categoryWrapper.append(categoryDisplayColor, categoryTitle);
       }
-      parent.appendChild(categoryWrapper)
-    })
+      parent.appendChild(categoryWrapper);
+    });
   }
 
   function openCategoryModal(e, categories) {
@@ -831,16 +829,16 @@ export default function setEntryForm(context, store, datepickerContext) {
       entriesFormBody.scrollTo({
         top: entriesFormBody.scrollHeight,
         behavior: "smooth"
-      })
-    }, 5)
+      });
+    }, 5);
 
     if (length >= 5) {
-      closeCategoryModalBtn.setAttribute("style", `top: -100px`)
+      closeCategoryModalBtn.setAttribute("style", `top: -100px`);
     } else {
-      closeCategoryModalBtn.setAttribute("style", `top: ${(length * 20) * -1}px`)
+      closeCategoryModalBtn.setAttribute("style", `top: ${(length * 20) * -1}px`);
     }
 
-    categoryModalWrapper.classList.add("category-modal-open")
+    categoryModalWrapper.classList.add("category-modal-open");
     if (length < 5) {
       categoryModalWrapper.style.height = `${length * 32}px`;
     } else {
@@ -851,26 +849,19 @@ export default function setEntryForm(context, store, datepickerContext) {
     categoryModal.classList.remove("hide-form-category-modal");
     categoryModal.innerText = "";
     categoryModal.style.height = `${length * 32}px`;
-    createCategoryOptions(categoryModal, categories)
-
-    if (categoryModal.childElementCount > 0) {
-      categoryModal.onclick = delegateCategorySelection;
-    }
-
+    createCategoryOptions(categoryModal, categories);
     formModalOverlay.classList.remove("hide-form-overlay");
-    formModalOverlay.onclick = closeCategoryModal;
-    closeCategoryModalBtn.onclick = closeCategoryModal;
   }
 
   function dragFormAnywhere(e) {
-    const closeBtn = document.querySelector(".form--header__icon-close")
+    const closeBtn = document.querySelector(".form--header__icon-close");
     const rect = entriesFormWrapper.getBoundingClientRect();
 
     // get current left / top form position
     const [currleft, currtop] = [
       parseInt(rect.left),
       parseInt(rect.top),
-    ]; 
+    ];
 
 
     entriesFormWrapper.style.margin = "0";
@@ -882,7 +873,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     entriesFormWrapper.style.right = "0";
     closeBtn.style.pointerEvents = "none";
     entriesForm.style.pointerEvents = "none";
-    
+
     let [leftBefore, topBefore] = [e.clientX, e.clientY];
     const [winH, winW] = [window.innerHeight, window.innerWidth];
 
@@ -913,14 +904,14 @@ export default function setEntryForm(context, store, datepickerContext) {
       entriesFormWrapper.style.top = entriesFormWrapper.offsetTop - topAfter + "px";
       entriesFormWrapper.style.left = entriesFormWrapper.offsetLeft - leftAfter + "px";
     }
-    
+
     const throttlemove = throttle(mousemove, 10);
 
     function mouseup() {
       entriesFormWrapper.style.opacity = "1";
       entriesFormWrapper.style.userSelect = "all";
-      closeBtn.removeAttribute("style")
-      entriesForm.removeAttribute("style")
+      closeBtn.removeAttribute("style");
+      entriesForm.removeAttribute("style");
       document.removeEventListener("mousemove", throttlemove);
       document.removeEventListener("mouseup", mouseup);
     }
@@ -929,22 +920,16 @@ export default function setEntryForm(context, store, datepickerContext) {
     document.addEventListener("mouseup", mouseup);
   }
 
-  function delegateCategorySelection(e) {
-    if (getClosest(e, ".category-modal--category")) {
-      handleCategorySelection(e);
-    }
-  }
-
   function handleTimepickerSetup(target) {
-    const rect = target.getBoundingClientRect()
+    const rect = target.getBoundingClientRect();
     let [x, y] = placePopup(
       180,
       200,
       [parseInt(rect.left), parseInt(rect.top)],
       [window.innerWidth, window.innerHeight],
       false,
-    )
-    return [x, y]
+    );
+    return [x, y];
   }
 
   function delegateEntryFormEvents(e) {
@@ -952,12 +937,18 @@ export default function setEntryForm(context, store, datepickerContext) {
     const dragHeader = getClosest(e, ".form-header--dragarea");
     const closeicon = getClosest(e, ".form--header__icon-close");
 
-    // form inputs
+    // date / time inputs
     const startdate = getClosest(e, ".form--body-start__date");
     const starttime = getClosest(e, ".form--body-start__time");
     const enddate = getClosest(e, ".form--body-end__date");
     const endtime = getClosest(e, ".form--body-end__time");
+
+    // category selection
+    const getCategoryModal = getClosest(e, ".form--body__category-modal");
     const category = getClosest(e, ".form--body__category-modal--wrapper-selection");
+    const getcloseCategoryModalBtn = getClosest(e, ".close-options-floating__btn");
+    const getCategoryModalOverlay = getClosest(e, ".form-modal-overlay");
+
 
     // error msg : <input> / <textarea>
     const inputError = getClosest(e, ".form-input-error");
@@ -972,8 +963,8 @@ export default function setEntryForm(context, store, datepickerContext) {
     if (dragHeader) {
       if (window.innerWidth < 500 || window.innerHeight < 500) {
         return;
-      } else 
-      dragFormAnywhere(e);
+      } else
+        dragFormAnywhere(e);
       return;
     }
 
@@ -988,7 +979,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     if (starttime) {
-      e.target.classList.add("active-form-time")
+      e.target.classList.add("active-form-time");
       createTimepicker(
         handleTimepickerSetup(e.target),
         startTimeInput.getAttribute("data-form-time"),
@@ -1004,7 +995,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
 
     if (endtime) {
-      e.target.classList.add("active-form-time")
+      e.target.classList.add("active-form-time");
       createTimepicker(
         handleTimepickerSetup(e.target),
         endTimeInput.getAttribute("data-form-time"),
@@ -1014,8 +1005,25 @@ export default function setEntryForm(context, store, datepickerContext) {
       return;
     }
 
+    if (getCategoryModal) {
+      if (categoryModal.childElementCount > 0) {
+        handleCategorySelection(e);
+      }
+      return;
+    }
+
     if (category) {
       openCategoryModal(e, categories);
+      return;
+    }
+
+    if (getcloseCategoryModalBtn) {
+      closeCategoryModal();
+      return;
+    }
+
+    if (getCategoryModalOverlay) {
+      closeCategoryModal();
       return;
     }
 
@@ -1047,14 +1055,14 @@ export default function setEntryForm(context, store, datepickerContext) {
     if (!datepicker.classList.contains("hide-datepicker")) {
       return;
     } else {
-      const timep = document?.querySelector(".timepicker")
-      const catsAct = document?.querySelector(".hide-form-category-modal")
+      const timep = document?.querySelector(".timepicker");
+      const catsAct = document?.querySelector(".hide-form-category-modal");
 
       if (e.key === "Escape") {
         if (timep !== null) {
-          closetimepicker()
+          closetimepicker();
         } else if (catsAct === null) {
-          closeCategoryModal()
+          closeCategoryModal();
         } else {
           handleFormClose(e);
         }
@@ -1066,5 +1074,5 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
   }
 
-  setFormInitialValues()
+  setFormInitialValues();
 }

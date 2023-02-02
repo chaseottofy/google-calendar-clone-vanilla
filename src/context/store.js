@@ -131,7 +131,7 @@ const colors = locales.colors;
 // ./index > ./renderViews > ./setViews > component
 
 class Store {
-  constructor() {
+  constructor () {
     this.store = localStorage.getItem("store")
       ? JSON.parse(localStorage.getItem("store"))
       : [];
@@ -306,12 +306,12 @@ class Store {
     for (let key in entry1) {
       if (key === "id" || key === "coordinates") continue;
       if (key === "end" || key === "start") {
-        if (new Date(entry1[key]).getTime() - new Date(entry2[key]).getTime() !== 0)  {
+        if (new Date(entry1[key]).getTime() - new Date(entry2[key]).getTime() !== 0) {
           return false;
         }
       } else if (entry1[key] !== entry2[key]) {
         return false;
-      } 
+      }
     }
     return true;
   }

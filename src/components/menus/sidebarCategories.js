@@ -1,41 +1,41 @@
-import setViews from "../../config/setViews"
-import setSidebarDatepicker from "../menus/sidebarDatepicker"
+import setViews from "../../config/setViews";
+import setSidebarDatepicker from "../menus/sidebarDatepicker";
 
 import {
   createCheckIcon,
   createEditIcon,
   createCloseIcon,
   createTrashIcon,
-} from "../../utilities/svgs"
+} from "../../utilities/svgs";
 
 import {
   getClosest,
   placePopup
-} from "../../utilities/helpers"
+} from "../../utilities/helpers";
 
-import createCategoryForm from "./editCategory"
+import createCategoryForm from "./editCategory";
 
-const sidebarColTwo = document.querySelector(".sb__categories")
-const cWrapper = document.querySelector(".sb__categories--body")
-const categoriesContainer = document.querySelector(".sb__categories--body-form")
-const categoriesHeader = document.querySelector(".sb__categories--header")
-const categoryHeaderCaret = document.querySelector(".sbch-caret")
+const sidebarColTwo = document.querySelector(".sb__categories");
+const cWrapper = document.querySelector(".sb__categories--body");
+const categoriesContainer = document.querySelector(".sb__categories--body-form");
+const categoriesHeader = document.querySelector(".sb__categories--header");
+const categoryHeaderCaret = document.querySelector(".sbch-caret");
 // renders via menu click -- see ./renderViews.js
 
 export default function handleSidebarCategories(context, store, datepickerContext) {
-  const defaultCtg = store.getDefaultCtg()[0]
+  const defaultCtg = store.getDefaultCtg()[0];
 
   function updateComponent() {
-    setViews(context.getComponent(), context, store, datepickerContext)
+    setViews(context.getComponent(), context, store, datepickerContext);
   }
 
 
   function renderSidebarDatepickerCtg() {
-    setSidebarDatepicker(context, store, datepickerContext)
+    setSidebarDatepicker(context, store, datepickerContext);
   }
 
   function renderCategories() {
-    categoriesContainer.innerText = ""
+    categoriesContainer.innerText = "";
     const ctg = store.getAllCtg();
     const keys = Object.keys(ctg);
     for (let i = 0; i < keys.length; i++) {
@@ -43,8 +43,8 @@ export default function handleSidebarCategories(context, store, datepickerContex
         keys[i],
         ctg[keys[i]].color,
         ctg[keys[i]].active
-      ]
-      createCategoryListItem(ctgname, color, status)
+      ];
+      createCategoryListItem(ctgname, color, status);
     }
   }
 
@@ -69,15 +69,15 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
     if (status) {
       checkbox.style.backgroundColor = ctgcolor;
-      checkIcon = createCheckIcon("var(--taskcolor0)")
+      checkIcon = createCheckIcon("var(--taskcolor0)");
     } else {
       checkbox.style.backgroundColor = "var(--black1)";
-      checkIcon = createCheckIcon("none")
+      checkIcon = createCheckIcon("none");
     }
 
     checkbox.style.border = `2px solid ${ctgcolor}`;
-    checkbox.appendChild(checkIcon)
-    checkboxWrapper.appendChild(checkbox)
+    checkbox.appendChild(checkIcon);
+    checkboxWrapper.appendChild(checkbox);
 
     const label = document.createElement('span');
     label.classList.add('sbch-form--item__label');
@@ -88,47 +88,46 @@ export default function handleSidebarCategories(context, store, datepickerContex
     coltwo.classList.add('sbch-form--item__col--actions');
     const deleteicon = document.createElement('div');
     deleteicon.classList.add('sbch-col--actions__delete-icon');
-    deleteicon.setAttribute("data-sbch-category", ctgname)
-    deleteicon.setAttribute("data-sbch-color", ctgcolor)
+    deleteicon.setAttribute("data-sbch-category", ctgname);
+    deleteicon.setAttribute("data-sbch-color", ctgcolor);
     const editicon = document.createElement('div');
-    editicon.classList.add("sbch-col--actions__edit-icon")
-    editicon.setAttribute("data-sbch-category", ctgname)
-    editicon.setAttribute("data-sbch-color", ctgcolor)
+    editicon.classList.add("sbch-col--actions__edit-icon");
+    editicon.setAttribute("data-sbch-category", ctgname);
+    editicon.setAttribute("data-sbch-color", ctgcolor);
 
     // must have at least one category, so default cannot be deleted
     if (ctgname.toLowerCase() === defaultCtg) {
-      editicon.classList.add("sbch-col--actions__edit-icon--immutable")
+      editicon.classList.add("sbch-col--actions__edit-icon--immutable");
     } else {
-      deleteicon.appendChild(createCloseIcon("var(--white2)"))
-      coltwo.appendChild(deleteicon)
+      deleteicon.appendChild(createCloseIcon("var(--white2)"));
+      coltwo.appendChild(deleteicon);
     }
 
 
-    editicon.appendChild(createEditIcon("var(--white2)"))
-    coltwo.appendChild(editicon)
-    row.append(colone, coltwo)
-    categoriesContainer.appendChild(row)
+    editicon.appendChild(createEditIcon("var(--white2)"));
+    coltwo.appendChild(editicon);
+    row.append(colone, coltwo);
+    categoriesContainer.appendChild(row);
   }
 
   function handleCategoryModalToggle() {
-    cWrapper.classList.toggle("toggle-category--modal")
+    cWrapper.classList.toggle("toggle-category--modal");
     if (!cWrapper.classList.contains("toggle-category--modal")) {
-      categoryHeaderCaret.classList.add("sbch-caret--open")
+      categoryHeaderCaret.classList.add("sbch-caret--open");
     } else {
-      categoryHeaderCaret.classList.remove("sbch-caret--open")
+      categoryHeaderCaret.classList.remove("sbch-caret--open");
     }
-    categoriesHeader.style.backgroundColor = "var(--black0)"
+    categoriesHeader.style.backgroundColor = "var(--black0)";
     setTimeout(() => {
-      categoriesHeader.style.backgroundColor = "var(--black1)"
-    }, 200)
+      categoriesHeader.style.backgroundColor = "var(--black1)";
+    }, 200);
   }
 
   function createDeleteCategoryPopup(e) {
-    const ctgname = e.target.getAttribute("data-sbch-category")
-    const ctgcolor = store.getCtgColor(ctgname)
-    // const offsetColor = hextorgba(ctgcolor, 0.8)
+    const ctgname = e.target.getAttribute("data-sbch-category");
+    const ctgcolor = store.getCtgColor(ctgname);
     const offsetColor = ctgcolor;
-    const categoryLength = store.getCtgLength(ctgname)
+    const categoryLength = store.getCtgLength(ctgname);
     let noEntries = false;
 
     // POPUP OVERLAY
@@ -140,7 +139,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     popupBox.classList.add("popup-delete-ctg");
     if (categoryLength === 0) {
       noEntries = true;
-      popupBox.classList.add("popup-delete-ctg__no-entries")
+      popupBox.classList.add("popup-delete-ctg__no-entries");
     }
     const ord = categoryLength === 1 ? "entry" : "entries";
 
@@ -160,7 +159,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     popupCategoryStats.textContent = `(${categoryLength} total ${ord} in this category)`;
     /* **************************** */
     popupHeader.append(popupTitle, popupCategoryStats);
-    popupBox.appendChild(popupHeader)
+    popupBox.appendChild(popupHeader);
 
 
     // category has entries -- provide options to move entries to another category or delete them
@@ -176,14 +175,14 @@ export default function handleSidebarCategories(context, store, datepickerContex
       const optionsWrapperOne = document.createElement("div");
       const categoryNames = store.getAllCtgNames();
       optionsWrapperOne.classList.add("popup-delete-ctg__options");
-      optionsWrapperOne.classList.add("popup-delete-act")
+      optionsWrapperOne.classList.add("popup-delete-act");
       optionsWrapperOne.style.backgroundColor = offsetColor;
-      optionsWrapperOne.style.border = `2px solid ${ctgcolor}`
+      optionsWrapperOne.style.border = `2px solid ${ctgcolor}`;
       const optionMoveRadio = document.createElement("input");
       optionMoveRadio.setAttribute("type", "radio");
       optionMoveRadio.setAttribute("name", "popup-delete-ctg__option");
       optionMoveRadio.setAttribute("id", "ctg-move");
-      optionMoveRadio.setAttribute("checked", "true")
+      optionMoveRadio.setAttribute("checked", "true");
 
       const optionMove = document.createElement("div");
       const optionMoveTitle = document.createElement("span");
@@ -206,7 +205,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       // OPTION TWO : REMOVE CATEGORY AND ENTRIES
       const optionsWrapperTwo = document.createElement("div");
       optionsWrapperTwo.classList.add("popup-delete-ctg__options");
-      optionsWrapperTwo.style.border = `2px solid ${ctgcolor}`
+      optionsWrapperTwo.style.border = `2px solid ${ctgcolor}`;
 
       const optionRemoveRadio = document.createElement("input");
       optionRemoveRadio.setAttribute("type", "radio");
@@ -226,21 +225,21 @@ export default function handleSidebarCategories(context, store, datepickerContex
           e.target.closest(".popup-delete-ctg__options").querySelector("input").checked = true;
           document.querySelectorAll(".popup-delete-ctg__options").forEach((el) => {
             // el.style.backgroundColor = "transparent";
-            el.setAttribute("style", `background-color: transparent; border: 2px solid ${ctgcolor};`)
-            el.classList.remove("popup-delete-act")
-          })
+            el.setAttribute("style", `background-color: transparent; border: 2px solid ${ctgcolor};`);
+            el.classList.remove("popup-delete-act");
+          });
           // popup-delete-act
-          e.target.closest(".popup-delete-ctg__options").setAttribute("style", `background-color: ${offsetColor}; border: 2px solid ${ctgcolor};`)
+          e.target.closest(".popup-delete-ctg__options").setAttribute("style", `background-color: ${offsetColor}; border: 2px solid ${ctgcolor};`);
 
-          e.target.closest(".popup-delete-ctg__options").classList.add("popup-delete-act")
+          e.target.closest(".popup-delete-ctg__options").classList.add("popup-delete-act");
         }
-      }
+      };
 
-      optionRemove.append(optionRemoveTitle, optionRemoveIcon)
+      optionRemove.append(optionRemoveTitle, optionRemoveIcon);
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
 
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
-      popupBox.appendChild(popupBody)
+      popupBox.appendChild(popupBody);
       optionsWrapperOne.onclick = handleWrapperClick;
       optionsWrapperTwo.onclick = handleWrapperClick;
     }
@@ -251,75 +250,75 @@ export default function handleSidebarCategories(context, store, datepickerContex
     const popupFooter = document.createElement("div");
     popupFooter.classList.add("popup-delete-ctg__footer");
     const btncancel = document.createElement("button");
-    btncancel.textContent = "cancel"
+    btncancel.textContent = "cancel";
     btncancel.classList.add("popup-delete-ctg__btn--cancel");
     btncancel.style.backgroundColor = offsetColor;
     const btnproceed = document.createElement("button");
     btnproceed.classList.add("popup-delete-ctg__btn--proceed");
-    btnproceed.textContent = "proceed"
+    btnproceed.textContent = "proceed";
     /* **************************** */
     popupFooter.append(btncancel, btnproceed);
-    popupBox.appendChild(popupFooter)
+    popupBox.appendChild(popupFooter);
     document.body.append(popupBoxOverlay, popupBox);
 
     // EVENT LISTENERS
-    store.addActiveOverlay("popup-delete-ctg__overlay")
+    store.addActiveOverlay("popup-delete-ctg__overlay");
     const closeDeletePopupOnEscape = (e) => {
-      if (e.key === "Escape") closeDeletePopup()
-    }
+      if (e.key === "Escape") closeDeletePopup();
+    };
 
     const closeDeletePopup = () => {
-      popupBox.remove()
-      popupBoxOverlay.remove()
-      store.removeActiveOverlay("popup-delete-ctg__overlay")
-      document.removeEventListener("keydown", closeDeletePopupOnEscape)
-    }
+      popupBox.remove();
+      popupBoxOverlay.remove();
+      store.removeActiveOverlay("popup-delete-ctg__overlay");
+      document.removeEventListener("keydown", closeDeletePopupOnEscape);
+    };
 
     const proceedDeletePopup = () => {
       if (!noEntries) {
-        const selectedOption = document?.querySelector("input[name='popup-delete-ctg__option']:checked").id
-        const selectedCategory = document.querySelector(".popup-delete-ctg__option--move-select").value
+        const selectedOption = document?.querySelector("input[name='popup-delete-ctg__option']:checked").id;
+        const selectedCategory = document.querySelector(".popup-delete-ctg__option--move-select").value;
         if (selectedOption === "ctg-move") {
           store.moveCategoryEntriesToNewCategory(
             ctgname, selectedCategory
           );
         } else if (selectedOption === "ctg-delete") {
-          store.removeCategoryAndEntries(ctgname)
+          store.removeCategoryAndEntries(ctgname);
         }
       } else {
-        store.deleteCategory(ctgname)
+        store.deleteCategory(ctgname);
       }
 
-      closeDeletePopup()
-      updateComponent()
-      renderSidebarDatepickerCtg()
-      renderCategories()
-    }
+      closeDeletePopup();
+      updateComponent();
+      renderSidebarDatepickerCtg();
+      renderCategories();
+    };
 
-    btnproceed.onclick = proceedDeletePopup
-    popupBoxOverlay.onclick = closeDeletePopup
-    btncancel.onclick = closeDeletePopup
-    document.addEventListener("keydown", closeDeletePopupOnEscape)
+    btnproceed.onclick = proceedDeletePopup;
+    popupBoxOverlay.onclick = closeDeletePopup;
+    btncancel.onclick = closeDeletePopup;
+    document.addEventListener("keydown", closeDeletePopupOnEscape);
   }
 
   function handleCategorySelection(e) {
-    let checkbox = e.target.children[0].children[0]
-    let status = checkbox.getAttribute("data-sbch-checked")
-    let cat = checkbox.getAttribute("data-sbch-category")
-    let color = store.getCtgColor(cat)
+    let checkbox = e.target.children[0].children[0];
+    let status = checkbox.getAttribute("data-sbch-checked");
+    let cat = checkbox.getAttribute("data-sbch-category");
+    let color = store.getCtgColor(cat);
     if (status === "true") {
-      checkbox.setAttribute("data-sbch-checked", "false")
-      store.setCategoryStatus(cat, false)
-      checkbox.style.backgroundColor = "var(--black1)"
-      checkbox.firstChild.setAttribute("fill", "none")
+      checkbox.setAttribute("data-sbch-checked", "false");
+      store.setCategoryStatus(cat, false);
+      checkbox.style.backgroundColor = "var(--black1)";
+      checkbox.firstChild.setAttribute("fill", "none");
     } else {
-      checkbox.setAttribute("data-sbch-checked", "true")
-      store.setCategoryStatus(cat, true)
-      checkbox.style.backgroundColor = color
-      checkbox.firstChild.setAttribute("fill", "var(--taskcolor0)")
+      checkbox.setAttribute("data-sbch-checked", "true");
+      store.setCategoryStatus(cat, true);
+      checkbox.style.backgroundColor = color;
+      checkbox.firstChild.setAttribute("fill", "var(--taskcolor0)");
     }
-    renderSidebarDatepickerCtg()
-    updateComponent()
+    renderSidebarDatepickerCtg();
+    updateComponent();
   }
 
   function openCategoryOptionsMenu(e, data) {
@@ -328,13 +327,13 @@ export default function handleSidebarCategories(context, store, datepickerContex
       192,
       128,
       [
-        e.clientX, 
+        e.clientX,
         parseInt(targetElement.getBoundingClientRect().top) - 8
       ],
       [window.innerWidth, window.innerHeight],
       false,
       null
-    )
+    );
 
     const popupBox = document.createElement("div");
     popupBox.classList.add("popup-ctg-options");
@@ -350,16 +349,16 @@ export default function handleSidebarCategories(context, store, datepickerContex
     const optionTurnOff = document.createElement("div");
     optionTurnOff.classList.add("option__close-other-ctg");
     optionTurnOff.textContent = "Display this only";
-    const optionTurnOn = document.createElement("div")
+    const optionTurnOn = document.createElement("div");
     optionTurnOn.classList.add("option__open-other-ctg");
     optionTurnOn.textContent = "Display all but this";
 
     function closeCategoryOptionsMenu(flag, chckbox) {
-      document.querySelector(".popup-ctg-options").remove()
-      document.querySelector(".popup-ctg-options__overlay").remove()
+      document.querySelector(".popup-ctg-options").remove();
+      document.querySelector(".popup-ctg-options__overlay").remove();
       store.removeActiveOverlay("popup-ctg-options__overlay");
-      if (flag) { chckbox.removeAttribute("style") }
-      document.removeEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu)
+      if (flag) { chckbox.removeAttribute("style"); }
+      document.removeEventListener("keydown", handleCloseOnEscapeCtgOptionsMenu);
     }
 
     function handleOpenEditCtg(e) {
@@ -374,17 +373,17 @@ export default function handleSidebarCategories(context, store, datepickerContex
     }
 
     function closeAndRemoveStyle() {
-      closeCategoryOptionsMenu(true, targetElement)
+      closeCategoryOptionsMenu(true, targetElement);
     }
 
     function turnoff() {
-      store.setAllCategoryStatusExcept(targetCtg.name, false)
+      store.setAllCategoryStatusExcept(targetCtg.name, false);
       closeAndRemoveStyle();
       rerender();
     }
 
     function turnon() {
-      store.setAllCategoryStatusExcept(targetCtg.name, true)
+      store.setAllCategoryStatusExcept(targetCtg.name, true);
       closeAndRemoveStyle();
       rerender();
     }
@@ -410,7 +409,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     const ctgPlus = getClosest(e, ".sbch-plus");
 
     if (ctgtoggleModal) {
-      handleCategoryModalToggle()
+      handleCategoryModalToggle();
       return;
     }
 
@@ -419,9 +418,9 @@ export default function handleSidebarCategories(context, store, datepickerContex
       const targetcat = {
         name: e.target.getAttribute("data-sbch-category"),
         color: e.target.getAttribute("data-sbch-color"),
-      }
-      const targetparent = e.target.parentElement.parentElement
-      targetparent.style.borderBottom = `2px solid ${targetcat.color}`
+      };
+      const targetparent = e.target.parentElement.parentElement;
+      targetparent.style.borderBottom = `2px solid ${targetcat.color}`;
       openCategoryOptionsMenu(
         e, [targetcat, targetparent]
       );
@@ -429,13 +428,13 @@ export default function handleSidebarCategories(context, store, datepickerContex
     }
 
     if (deletectgBtn) {
-      createDeleteCategoryPopup(e)
+      createDeleteCategoryPopup(e);
       return;
     }
 
     // toggle category checkbox and display entries
     if (ctgChck) {
-      handleCategorySelection(e)
+      handleCategorySelection(e);
       return;
     }
 
@@ -444,20 +443,20 @@ export default function handleSidebarCategories(context, store, datepickerContex
       const targetcat = {
         name: "new category",
         color: "#2C52BA",
-      }
+      };
       createCategoryForm(store, targetcat, false, e.target);
       return;
     }
   }
 
   const initSidebarCategories = () => {
-    renderCategories()
+    renderCategories();
     const fullCtgRender = () => {
       renderCategories();
       updateComponent();
-    }
-    store.setRenderCategoriesCallback(fullCtgRender)
-    sidebarColTwo.onmousedown = delegateCategoryEvents
-  }
+    };
+    store.setRenderCategoriesCallback(fullCtgRender);
+    sidebarColTwo.onmousedown = delegateCategoryEvents;
+  };
   initSidebarCategories();
 }

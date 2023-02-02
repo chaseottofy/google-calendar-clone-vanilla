@@ -1,10 +1,10 @@
-import setViews from "../../config/setViews"
-import locales from "../../locales/en"
-import { getClosest } from "../../utilities/helpers"
-import { getDateFromAttribute } from "../../utilities/dateutils"
+import setViews from "../../config/setViews";
+import locales from "../../locales/en";
+import { getClosest } from "../../utilities/helpers";
+import { getDateFromAttribute } from "../../utilities/dateutils";
 import setSidebarDatepicker from "../../components/menus/sidebarDatepicker";
-const monthnames = locales.labels.monthsLong
-const weekDayNames = locales.labels.weekdaysNarrow
+const monthnames = locales.labels.monthsLong;
+const weekDayNames = locales.labels.weekdaysNarrow;
 const yearviewGrid = document.querySelector(".calendar__yearview");
 const sidebar = document.querySelector(".sidebar");
 
@@ -21,7 +21,7 @@ export default function setYearView(context, store, datepickerContext) {
   }
 
   function renderMonthCells() {
-    yearviewGrid.innerText = ""
+    yearviewGrid.innerText = "";
     for (let i = 0; i < 12; i++) {
       if (entries[i]) {
         yearviewGrid.appendChild(createMonthCell(i, entries[i]));
@@ -33,130 +33,130 @@ export default function setYearView(context, store, datepickerContext) {
 
   function renderSidebarDatepicker() {
     if (!sidebar.classList.contains("hide-sidebar")) {
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay())
-      setSidebarDatepicker(context, store, datepickerContext)
+      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+      setSidebarDatepicker(context, store, datepickerContext);
     }
   }
 
   function createMonthCell(month, entries) {
-    const prevmonth = new Date(year, month, 0)
-    const daysInPrevMonth = prevmonth.getDate()
-    const nextmonth = new Date(year, month + 2, 0)
-    const currentMonth = new Date(year, month, 1)
-    const daysInMonth = new Date(year, month + 1, 0).getDate()
-    const firstDayOfMonth = currentMonth.getDay()
+    const prevmonth = new Date(year, month, 0);
+    const daysInPrevMonth = prevmonth.getDate();
+    const nextmonth = new Date(year, month + 2, 0);
+    const currentMonth = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = currentMonth.getDay();
 
-    const cellWrapper = document.createElement("div")
-    cellWrapper.classList.add("yv-monthcell")
+    const cellWrapper = document.createElement("div");
+    cellWrapper.classList.add("yv-monthcell");
 
-    const cellHeader = document.createElement("div")
-    cellHeader.classList.add("yv-monthcell__header")
+    const cellHeader = document.createElement("div");
+    cellHeader.classList.add("yv-monthcell__header");
 
-    const cellHeaderRowOne = document.createElement("div")
-    cellHeaderRowOne.classList.add("yv-monthcell__header--rowone")
+    const cellHeaderRowOne = document.createElement("div");
+    cellHeaderRowOne.classList.add("yv-monthcell__header--rowone");
 
-    const cellHeaderTitle = document.createElement("span")
-    cellHeaderTitle.textContent = monthnames[month]
+    const cellHeaderTitle = document.createElement("span");
+    cellHeaderTitle.textContent = monthnames[month];
 
     if (month === context.getMonth() && year === context.getYear()) {
-      cellHeaderTitle.classList.add("yvmht-current")
-      cellWrapper.classList.add("cell-current")
+      cellHeaderTitle.classList.add("yvmht-current");
+      cellWrapper.classList.add("cell-current");
     }
 
-    cellHeaderTitle.classList.add("yv-monthcell__header--title")
-    cellHeaderRowOne.append(cellHeaderTitle)
+    cellHeaderTitle.classList.add("yv-monthcell__header--title");
+    cellHeaderRowOne.append(cellHeaderTitle);
 
     // cell header row two
-    const cellHeaderWeekDayNames = document.createElement("div")
-    cellHeaderWeekDayNames.classList.add("yv-monthcell__header--weekdays")
+    const cellHeaderWeekDayNames = document.createElement("div");
+    cellHeaderWeekDayNames.classList.add("yv-monthcell__header--weekdays");
 
     weekDayNames.forEach((el) => {
-      const weekday = document.createElement("div")
-      weekday.classList.add("yv-monthcell__header--weekday")
-      weekday.textContent = el
-      cellHeaderWeekDayNames.appendChild(weekday)
-    })
+      const weekday = document.createElement("div");
+      weekday.classList.add("yv-monthcell__header--weekday");
+      weekday.textContent = el;
+      cellHeaderWeekDayNames.appendChild(weekday);
+    });
 
-    cellHeader.append(cellHeaderRowOne,cellHeaderWeekDayNames)
+    cellHeader.append(cellHeaderRowOne, cellHeaderWeekDayNames);
 
-    const cellBody = document.createElement("div")
-    cellBody.classList.add("yv-monthcell__body")
+    const cellBody = document.createElement("div");
+    cellBody.classList.add("yv-monthcell__body");
 
     function populateMonths() {
       let count = 0;
-      let prevmonthstart = daysInPrevMonth - firstDayOfMonth
+      let prevmonthstart = daysInPrevMonth - firstDayOfMonth;
 
       const createcell = (day, classname, year, month, current) => {
-        const daywrapper = document.createElement("div")
-        daywrapper.classList.add("yv-monthcell__body--day-wrapper")
-        
-        const daynumber = document.createElement("div")
+        const daywrapper = document.createElement("div");
+        daywrapper.classList.add("yv-monthcell__body--day-wrapper");
+
+        const daynumber = document.createElement("div");
         daynumber.setAttribute("class", classname);
         daynumber.setAttribute("data-yv-date", `${year}-${month}-${day}`);
         daynumber.textContent = day;
-        
+
         if (current) {
           // check if day is selected
           if (day === context.getDateSelected() && month === context.getMonth() && year === context.getYear()) {
-            daynumber.classList.add("yvmb-selected")
+            daynumber.classList.add("yvmb-selected");
           }
 
           // check if day is today
           if (day === td && month === tm && year === ty) {
-            daynumber.classList.add("yvmb-today")
+            daynumber.classList.add("yvmb-today");
           }
 
           // check if day has entry
           if (entries[day]) {
-            daynumber.classList.add("yvmb-has-entry")
+            daynumber.classList.add("yvmb-has-entry");
           }
         }
-        
-        daywrapper.appendChild(daynumber)
-        return daywrapper
-      }
+
+        daywrapper.appendChild(daynumber);
+        return daywrapper;
+      };
 
 
       for (let i = prevmonthstart; i < daysInPrevMonth; i++) {
 
         cellBody.appendChild(createcell(
-          i + 1, 
+          i + 1,
           "yv-monthcell__body--day yvmb-prevnext",
           prevmonth.getFullYear(),
           prevmonth.getMonth(),
           false,
-        ))
-        count++
+        ));
+        count++;
       }
 
       for (let i = 0; i < daysInMonth; i++) {
         cellBody.appendChild(createcell(
-          i + 1, 
+          i + 1,
           "yv-monthcell__body--day",
           currentMonth.getFullYear(),
           currentMonth.getMonth(),
           true,
-        ))
-        count++
+        ));
+        count++;
       }
 
-      let i = 0
+      let i = 0;
       while (count < 42) {
-        i++
+        i++;
         cellBody.appendChild(createcell(
-          i, 
+          i,
           "yv-monthcell__body--day yvmb-prevnext",
           nextmonth.getFullYear(),
           nextmonth.getMonth(),
           false,
-        ))
-        count++
+        ));
+        count++;
       }
     }
-    
-    populateMonths()
-    cellWrapper.append(cellHeader, cellBody)
-    return cellWrapper
+
+    populateMonths();
+    cellWrapper.append(cellHeader, cellBody);
+    return cellWrapper;
   }
 
   function handleDaySelection(e) {
@@ -179,15 +179,15 @@ export default function setYearView(context, store, datepickerContext) {
     renderMonthCells();
     yearviewGrid.onmousedown = delegateYearEvents;
     store.setResetPreviousViewCallback(resetYearview);
-    const currentmonth = document?.querySelector(".cell-current")
+    const currentmonth = document?.querySelector(".cell-current");
     if (currentmonth) {
       setTimeout(() => {
         yearviewGrid.scrollTo({
           top: parseInt(currentmonth.offsetTop) - 100,
           behavior: "instant",
         });
-      }, 4)
+      }, 4);
     }
-  }
+  };
   initYearview();
 }

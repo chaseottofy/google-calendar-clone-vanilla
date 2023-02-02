@@ -5,7 +5,7 @@ import fullFormConfig from "../forms/formUtils";
 import {
   getClosest,
   hextorgba
-} from '../../utilities/helpers'
+} from '../../utilities/helpers';
 import {
   getdatearray,
   getFormDateObject,
@@ -14,12 +14,12 @@ import {
   formatEntryOptionsDate,
   longerThanDay,
   formatStartEndDate
-} from "../../utilities/dateutils"
-import { formatStartEndTimes } from "../../utilities/timeutils"
-import locales from "../../locales/en"
+} from "../../utilities/dateutils";
+import { formatStartEndTimes } from "../../utilities/timeutils";
+import locales from "../../locales/en";
 
-const monthNames = locales.labels.monthsShort.map(x => x.toUpperCase())
-const weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase())
+const monthNames = locales.labels.monthsShort.map(x => x.toUpperCase());
+const weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase());
 
 const dateTimeTitle = document.querySelector(".datetime-content--title");
 const listview = document.querySelector('.listview');
@@ -27,20 +27,20 @@ const listviewBody = document.querySelector('.listview__body');
 
 export default function setListView(context, store, datepickerContext) {
   let today = new Date();
-  let [todayYear, todayMonth, todayDay] = getdatearray(today)
+  let [todayYear, todayMonth, todayDay] = getdatearray(today);
   /*************************************** */
   /* CREATE ROW GROUPS*/
   function createRowGroups(entries) {
     // console.log(entries);
     let count = 0;
     for (let [key, value] of Object.entries(entries)) {
-      count++
-      const tempdate = new Date(Date.parse(key))
+      count++;
+      const tempdate = new Date(Date.parse(key));
       const [month, day, dow] = [
         tempdate.getMonth(),
         tempdate.getDate(),
         tempdate.getDay()
-      ]
+      ];
 
       const [wn, mn] = [weekDayNames[dow], monthNames[month]];
       const rgheader = createRowGroupHeader(wn, mn, day, key, count === 1 ? true : false);
@@ -49,12 +49,12 @@ export default function setListView(context, store, datepickerContext) {
       rgContent.classList.add("rowgroup-content");
 
       value.sort((a, b) => {
-        return new Date(a.end) - new Date(b.end)
-      })
+        return new Date(a.end) - new Date(b.end);
+      });
 
       value.forEach((entry) => {
-        rgContent.append(createRowGroupCell(entry))
-      })
+        rgContent.append(createRowGroupCell(entry));
+      });
 
       const rg = document.createElement('div');
       rg.classList.add('listview__rowgroup');
@@ -71,13 +71,13 @@ export default function setListView(context, store, datepickerContext) {
 
     rgHeaderDateNumber.classList.add('rowgroup--header__datenumber');
     rgHeaderDateNumber.textContent = day;
-    rgHeaderDateNumber.setAttribute("data-rgheader-date", date)
+    rgHeaderDateNumber.setAttribute("data-rgheader-date", date);
     const rgHeaderDate = document.createElement('div');
     rgHeaderDate.classList.add('rowgroup--header__monthdow');
     rgHeaderDate.textContent = `${monthname}, ${weekname}`;
     if (settop) {
-      rgHeaderDateNumber.classList.add("top-datenumber")
-      rgHeaderDate.classList.add("top-monthdow")
+      rgHeaderDateNumber.classList.add("top-datenumber");
+      rgHeaderDate.classList.add("top-monthdow");
 
     }
     rgHeader.append(rgHeaderDateNumber, rgHeaderDate);
@@ -86,7 +86,7 @@ export default function setListView(context, store, datepickerContext) {
 
   function createRowGroupCell(entry) {
     const color = store.getCtgColor(entry.category);
-    const [start, end] = [new Date(entry.start), new Date(entry.end)]
+    const [start, end] = [new Date(entry.start), new Date(entry.end)];
     let datetitle;
     if (longerThanDay(start, end)) {
       let tempyear;
@@ -94,12 +94,12 @@ export default function setListView(context, store, datepickerContext) {
         tempyear = +end.getFullYear() - 2000;
       }
 
-      datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear ? tempyear : ""}`
+      datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear ? tempyear : ""}`;
     } else {
       datetitle = `${formatStartEndTimes(
         [start.getHours(), end.getHours()],
         [start.getMinutes(), end.getMinutes()]
-      )}`
+      )}`;
     }
 
     const rgCell = document.createElement('div');
@@ -167,7 +167,7 @@ export default function setListView(context, store, datepickerContext) {
 
     const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
-    const modal = document.querySelector(".entry__options")
+    const modal = document.querySelector(".entry__options");
     modal.style.top = y + "px";
     modal.style.left = x + "px";
   }
@@ -181,8 +181,8 @@ export default function setListView(context, store, datepickerContext) {
       datepickerContext.setDate(year, month, day);
       datepickerContext.setDateSelected(day);
     }
-    context.setComponent("day")
-    setViews("day", context, store, datepickerContext)
+    context.setComponent("day");
+    setViews("day", context, store, datepickerContext);
   }
   /*************************************** */
 
@@ -199,19 +199,19 @@ export default function setListView(context, store, datepickerContext) {
     }
 
     if (rgCell) {
-      getRgContextMenu(rgCell)
+      getRgContextMenu(rgCell);
       return;
     }
   }
 
-  
+
   function resetListview() {
     listviewBody.innerText = "";
   }
 
   const initListView = () => {
-    resetListview()
-    store.setResetPreviousViewCallback(resetListview)
+    resetListview();
+    store.setResetPreviousViewCallback(resetListview);
     const activeEnt = store.getActiveEntries();
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = "No Entries to Display";
@@ -220,9 +220,9 @@ export default function setListView(context, store, datepickerContext) {
       const entries = store.sortBy(activeEnt, "start", "desc");
 
       const groupedEntries = entries.reduce((acc, curr) => {
-        const date = new Date(curr.start)
-        const [year, month, day] = getdatearray(date)
-        const datestring = `${year}-${month}-${day}` // for parse&group
+        const date = new Date(curr.start);
+        const [year, month, day] = getdatearray(date);
+        const datestring = `${year}-${month}-${day}`; // for parse&group
 
         if (year < todayYear) {
           return acc;
@@ -234,21 +234,21 @@ export default function setListView(context, store, datepickerContext) {
           }
         }
 
-        if (!acc[datestring]) { acc[datestring] = [] }
-        acc[datestring].push(curr)
+        if (!acc[datestring]) { acc[datestring] = []; }
+        acc[datestring].push(curr);
         return acc;
-      }, {})
+      }, {});
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
       // if no entries are in the future, set the header title to "Schedule Clear";
-      const keys = Object.keys(groupedEntries)
+      const keys = Object.keys(groupedEntries);
       const length = keys.length;
       if (length === 0) {
-        dateTimeTitle.textContent = "Schedule Clear"
+        dateTimeTitle.textContent = "Schedule Clear";
       } else {
         // true will slice the year at last two digits if two years are displayed at the same time;
 
-        const earliestDate = new Date(Date.parse(keys[0]))
+        const earliestDate = new Date(Date.parse(keys[0]));
 
         context.setDate(
           earliestDate.getFullYear(),
@@ -263,7 +263,7 @@ export default function setListView(context, store, datepickerContext) {
             earliestDate.getFullYear(),
             earliestDate.getMonth(),
             earliestDate.getDate()
-          )
+          );
           datepickerContext.setDateSelected(earliestDate.getDate());
         }
 
@@ -277,6 +277,6 @@ export default function setListView(context, store, datepickerContext) {
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;
     }
-  }
+  };
   initListView();
 }

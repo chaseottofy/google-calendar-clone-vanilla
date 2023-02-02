@@ -47,7 +47,7 @@ const dvHeaderInfo = document.querySelector(".dayview--header-day__info");
 const dvOnTop = document.querySelector(".dayview--ontop-container");
 
 // main grid wrapper (row 3) (scroll wrapper) (offsettop)
-const dvContainer = document.querySelector(".calendar__dayview")
+const dvContainer = document.querySelector(".calendar__dayview");
 const dvGrid = document.querySelector(".dayview__grid");
 const dvMainGrid = document.querySelector(".dayview--main-grid");
 
@@ -242,8 +242,6 @@ export default function setDayView(context, store, datepickerContext) {
       morepopupoverlay.onclick = null;
       morepopupClose.onclick = null;
       morepopupBody.onclick = null;
-      // document.querySelector(".dv--ontop__more").onclick = null;
-      // moremessage.onclick = opdm;
     };
 
     const closeMpOnEsc = (e) => {
@@ -290,7 +288,7 @@ export default function setDayView(context, store, datepickerContext) {
       false
     );
 
-    console.log(closearg)
+    console.log(closearg);
 
     closearg
       ? store.setFormResetHandle("day", closearg)
@@ -326,7 +324,7 @@ export default function setDayView(context, store, datepickerContext) {
   function createDvTop(entr) {
     const dvtopgrid = document.createElement("div");
     dvtopgrid.classList.add("dv--ontop__grid");
-    console.log(entr)
+    console.log(entr);
 
     if (entr.length > 6) {
       const moremessage = document.createElement("div");
@@ -733,20 +731,20 @@ export default function setDayView(context, store, datepickerContext) {
   function handleScrollToOnInit() {
     if (firstY !== null) {
       let settop = +firstY * 12.5;
-      setTimeout(()=> {
+      setTimeout(() => {
         dvGrid.scrollTo({
           top: settop,
           behavior: "instant",
-        })
-      }, 4)
+        });
+      }, 4);
     } else {
       const hour = new Date().getHours() * 50;
       setTimeout(() => {
         dvGrid.scrollTo({
           top: hour - 25 <= 0 ? 0 : hour - 25,
           behavior: "instant",
-        })
-      }, 4)
+        });
+      }, 4);
     }
   }
 

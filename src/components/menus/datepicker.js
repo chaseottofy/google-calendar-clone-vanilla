@@ -1,4 +1,4 @@
-import { getClosest, throttle } from "../../utilities/helpers"
+import { getClosest, throttle } from "../../utilities/helpers";
 import {
   getDateForStore,
   compareDates,
@@ -8,17 +8,17 @@ import {
 import setViews from "../../config/setViews";
 
 const datepicker = document.querySelector(".datepicker");
-const datepickeroverlay = document.querySelector(".datepicker-overlay")
+const datepickeroverlay = document.querySelector(".datepicker-overlay");
 const datepickerBody = document.querySelector(".datepicker__body--dates");
 const datepickerTitle = document.querySelector(".datepicker-title");
-const datepickerChangeDate = document.querySelector(".datepicker-change-date")
+const datepickerChangeDate = document.querySelector(".datepicker-change-date");
 
 // prev and next buttons aside from main app header datewrapper
-const headerPrevBtn = document.querySelector(".prev")
-const headerNextBtn = document.querySelector(".next")
+const headerPrevBtn = document.querySelector(".prev");
+const headerNextBtn = document.querySelector(".next");
 
-const yearpickerTitle = document.querySelector(".yearpicker-title")
-const monthpickerMonths = document.querySelectorAll(".monthpicker__month")
+const yearpickerTitle = document.querySelector(".yearpicker-title");
+const monthpickerMonths = document.querySelectorAll(".monthpicker__month");
 
 
 export default function setDatepicker(context, store, datepickerContext, type) {
@@ -30,13 +30,13 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   const datepickerKeypressThrottle = throttle(handleKeydownNav, 100);
 
   function setDatepickerHeader() {
-    const y = datepickerContext.getYear()
-    const m = datepickerContext.getMonthName()
-    datepickerTitle.textContent = `${m} ${y}`
+    const y = datepickerContext.getYear();
+    const m = datepickerContext.getMonthName();
+    datepickerTitle.textContent = `${m} ${y}`;
   }
 
   function createCells(montharray) {
-    let groupedEntries = store.getMonthEntryDates(montharray)
+    let groupedEntries = store.getMonthEntryDates(montharray);
     let currentWeekStart = context.getWeek();
     let isDaySelected = false;
 
@@ -56,50 +56,50 @@ export default function setDatepicker(context, store, datepickerContext, type) {
       }
 
       if (hasweek) {
-        count++
+        count++;
         if (count <= 7) {
-          cell.classList.add("datepicker__body--dates-week")
+          cell.classList.add("datepicker__body--dates-week");
         }
       } else {
-        cell.classList.remove("datepicker__body--dates-week")
+        cell.classList.remove("datepicker__body--dates-week");
       }
 
       if (montharray[i].getDate() === testDateSelected && montharray[i].getMonth() === datepickerContext.getMonth()) {
         if (!datename.classList.contains("datepicker__body--datename-today")) {
-          datename.setAttribute("class", "datepicker__body--datename")
+          datename.setAttribute("class", "datepicker__body--datename");
           datename.classList.add("datepicker__body--datename-selected");
         }
       }
 
       if (context.isToday(montharray[i])) {
-        datename.setAttribute("class", "datepicker__body--datename")
+        datename.setAttribute("class", "datepicker__body--datename");
         datename.classList.add("datepicker__body--datename-today");
       }
 
       datename.innerText = montharray[i].getDate();
-      const formattedDate = getDateForStore(montharray[i])
+      const formattedDate = getDateForStore(montharray[i]);
 
       datename.setAttribute("data-datepicker-date", formattedDate);
       if (groupedEntries.includes(formattedDate)) {
         if (!datename.classList.contains("datepicker__body--datename-today") && !datename.classList.contains("datepicker__body--datename-selected")) {
-          datename.setAttribute("class", "datepicker__body--datename")
-          datename.classList.add("datepicker__body--datename-entries")
+          datename.setAttribute("class", "datepicker__body--datename");
+          datename.classList.add("datepicker__body--datename-entries");
         }
       } else {
-        datename.classList.remove("datepicker__body--datename-entries")
+        datename.classList.remove("datepicker__body--datename-entries");
       }
 
-      cell.appendChild(datename)
+      cell.appendChild(datename);
       datepickerBody.appendChild(cell);
     }
 
     currentWeekStart = null;
-    groupedEntries = []
+    groupedEntries = [];
   }
 
   function closeDatepicker() {
     datepicker.classList.add("hide-datepicker");
-    datepickeroverlay.classList.add("hide-datepicker-overlay")
+    datepickeroverlay.classList.add("hide-datepicker-overlay");
     closeChangeDateModal();
     const formOpen = store.getActiveOverlay().has("hide-form-overlay");
     const listOpen = context.getComponent() !== "list";
@@ -109,7 +109,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     }
 
     if (type === "form") {
-      document.querySelector(".active-form-date")?.classList.remove("active-form-date")
+      document.querySelector(".active-form-date")?.classList.remove("active-form-date");
     }
 
     datepickeroverlay.onclick = null;
@@ -127,18 +127,18 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   function handleFormDate(y, m, d) {
-    datepickerContext.setDate(y, m, d)
-    context.setDateSelected(d)
-    const datepickerDate = datepickerContext.getDate()
+    datepickerContext.setDate(y, m, d);
+    context.setDateSelected(d);
+    const datepickerDate = datepickerContext.getDate();
 
-    const activeFormDate = document.querySelector(".active-form-date")
-    activeFormDate.setAttribute("data-form-date", `${y}-${m}-${d}`)
-    activeFormDate.textContent = `${datepickerContext.getMonthName().slice(0, 3)} ${d}, ${y}`
+    const activeFormDate = document.querySelector(".active-form-date");
+    activeFormDate.setAttribute("data-form-date", `${y}-${m}-${d}`);
+    activeFormDate.textContent = `${datepickerContext.getMonthName().slice(0, 3)} ${d}, ${y}`;
 
-    const inactiveFormDate = document?.querySelector(".inactive-form-date")
-    const inactiveValue = inactiveFormDate.getAttribute("data-form-date").split("-").map(x => parseInt(x))
-    const inactiveDate = new Date(inactiveValue[0], inactiveValue[1], inactiveValue[2])
-    const inactiveDateType = inactiveFormDate.getAttribute("data-form-date-type")
+    const inactiveFormDate = document?.querySelector(".inactive-form-date");
+    const inactiveValue = inactiveFormDate.getAttribute("data-form-date").split("-").map(x => parseInt(x));
+    const inactiveDate = new Date(inactiveValue[0], inactiveValue[1], inactiveValue[2]);
+    const inactiveDateType = inactiveFormDate.getAttribute("data-form-date-type");
 
     /**
      * FORM DATEPICKER CONDITIONS
@@ -148,88 +148,88 @@ export default function setDatepicker(context, store, datepickerContext, type) {
      *  -- set start date to end date
      */
     if ((isBeforeDate(inactiveDate, datepickerDate) && inactiveDateType === "end") || (isBeforeDate(datepickerDate, inactiveDate) && inactiveDateType === "start")) {
-      inactiveFormDate.setAttribute("data-form-date", `${y}-${m}-${d}`)
-      inactiveFormDate.textContent = `${datepickerContext.getMonthName().slice(0, 3)} ${d}, ${y}`
+      inactiveFormDate.setAttribute("data-form-date", `${y}-${m}-${d}`);
+      inactiveFormDate.textContent = `${datepickerContext.getMonthName().slice(0, 3)} ${d}, ${y}`;
     }
   }
 
   function setNewDate(e, data) {
-    let [y, m, d] = [null, null, null]
+    let [y, m, d] = [null, null, null];
     if (e === null) {
-      y = data[0]
-      m = data[1]
-      d = data[2]
+      y = data[0];
+      m = data[1];
+      d = data[2];
     } else {
-      let temp = getDateFromAttribute(e.target, "data-datepicker-date")
-      y = temp[0]
-      m = temp[1]
-      d = temp[2]
+      let temp = getDateFromAttribute(e.target, "data-datepicker-date");
+      y = temp[0];
+      m = temp[1];
+      d = temp[2];
     }
     if (type === "form") {
-      handleFormDate(y, m, d)
-      closeDatepicker()
+      handleFormDate(y, m, d);
+      closeDatepicker();
     } else {
-      renderpicker(y, m, d)
+      renderpicker(y, m, d);
     }
   }
 
   function setCheckMonthYear() {
-    checkmonth = datepickerContext.getMonth()
-    checkyear = datepickerContext.getYear()
+    checkmonth = datepickerContext.getMonth();
+    checkyear = datepickerContext.getYear();
   }
 
   function getMonthYearCheck() {
-    return checkmonth === datepickerContext.getMonth() && checkyear === datepickerContext.getYear()
+    return checkmonth === datepickerContext.getMonth() && checkyear === datepickerContext.getYear();
   }
 
   function renderNextMonth() {
-    datepickerContext.setNextMonth()
-    montharray = datepickerContext.getMonthArray()
-    createCells(montharray)
-    setDatepickerHeader()
+    datepickerContext.setNextMonth();
+    montharray = datepickerContext.getMonthArray();
+    createCells(montharray);
+    setDatepickerHeader();
   }
 
   function renderPrevMonth() {
-    datepickerContext.setPrevMonth()
-    montharray = datepickerContext.getMonthArray()
-    createCells(montharray)
-    setDatepickerHeader()
+    datepickerContext.setPrevMonth();
+    montharray = datepickerContext.getMonthArray();
+    createCells(montharray);
+    setDatepickerHeader();
   }
 
   function setSelectedToNextDay() {
-    let curr = document.querySelector(".datepicker__body--datename-selected")
+    let curr = document.querySelector(".datepicker__body--datename-selected");
     const parent = curr.parentElement;
     const next = parent?.nextElementSibling?.firstElementChild;
 
     if (!next || next === undefined || next === null) {
       renderNextMonth();
       datepickerContext.setDateSelected(1);
-      curr = document.querySelector(".datepicker__body--datename-selected")
-      curr.classList.remove("datepicker__body--datename-selected")
+      curr = document.querySelector(".datepicker__body--datename-selected");
+      curr.classList.remove("datepicker__body--datename-selected");
       let frst = document.querySelectorAll(".datepicker__body--datename");
-      frst[0].classList.add("datepicker__body--datename-selected")
+      frst[0].classList.add("datepicker__body--datename-selected");
       return;
     } else {
-      curr.classList.remove("datepicker__body--datename-selected")
-      next.classList.add("datepicker__body--datename-selected")
+      curr.classList.remove("datepicker__body--datename-selected");
+      next.classList.add("datepicker__body--datename-selected");
       let attr = next.getAttribute("data-datepicker-date");
-      let newDateSelected = parseInt(attr.split("-")[2])
-      datepickerContext.setDateSelected(newDateSelected)
+      let newDateSelected = parseInt(attr.split("-")[2]);
+      datepickerContext.setDateSelected(newDateSelected);
       return;
     }
   }
 
   function setSelectedToPrevDay() {
-    let curr = document.querySelector(".datepicker__body--datename-selected")
+    let curr = document.querySelector(".datepicker__body--datename-selected");
     const parent = curr.parentElement;
     const prev = parent?.previousElementSibling?.firstElementChild;
 
     if (!prev || prev === undefined || prev === null) {
       renderPrevMonth();
-      const lastday = datepickerContext.getDaysInMonth()
+      const lastday = datepickerContext.getDaysInMonth();
       datepickerContext.setDateSelected(+lastday);
-      curr = document.querySelector(".datepicker__body--datename-selected")
-      curr.classList.remove("datepicker__body--datename-selected")
+      curr = document.querySelector(".datepicker__body--datename-selected");
+      curr.classList.remove("datepicker__body--datename-selected");
       let last = document.querySelectorAll(".datepicker__body--datename");
       last[last.length - 1].classList.add("datepicker__body--datename-selected");
       return;
@@ -241,8 +241,8 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   function openChangeDateModal() {
-    setCheckMonthYear()
-    datepickerChangeDate.classList.add("show-dpcd")
+    setCheckMonthYear();
+    datepickerChangeDate.classList.add("show-dpcd");
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
   }
@@ -264,11 +264,11 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     datepickerContext.setMonth(newmonth);
     monthpickerMonths.forEach((month, idx) => {
       if (idx === newmonth) {
-        month.classList.add("monthpicker__active-month")
+        month.classList.add("monthpicker__active-month");
       } else {
-        month.classList.remove("monthpicker__active-month")
+        month.classList.remove("monthpicker__active-month");
       }
-    })
+    });
   }
 
   function yearpickerSetYear(increment, init) {
@@ -343,7 +343,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     }
 
     if (mpMonth) {
-      const newmonth = parseInt(e.target.getAttribute("data-dp-month"))
+      const newmonth = parseInt(e.target.getAttribute("data-dp-month"));
       monthpickerSetMonth(newmonth, false);
       return;
     }
@@ -369,7 +369,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
           closeChangeDateModal();
         } else {
-          const target = document.querySelector(".datepicker__body--datename-selected")
+          const target = document.querySelector(".datepicker__body--datename-selected");
           if (target === null || !target) {
             // the last selected day in the previous month was longer than the days in the current month
             setNewDate(null, [
@@ -378,7 +378,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
               28
             ]);
           } else {
-            let attr = getDateFromAttribute(target, "data-datepicker-date")
+            let attr = getDateFromAttribute(target, "data-datepicker-date");
             setNewDate(null, attr);
           }
         }
@@ -402,12 +402,12 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   const initDatepicker = () => {
     setDatepickerHeader();
     createCells(montharray);
-    store.setResetDatepickerCallback(closeDatepicker)
+    store.setResetDatepickerCallback(closeDatepicker);
     datepickeroverlay.onclick = closeDatepicker;
     datepicker.onmousedown = delegateDatepickerEvents;
     document.addEventListener("keydown", datepickerKeypressThrottle);
     montharray = [];
-  }
+  };
 
-  initDatepicker()
+  initDatepicker();
 }

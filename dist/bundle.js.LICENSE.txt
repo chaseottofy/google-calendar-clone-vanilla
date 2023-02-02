@@ -2,6 +2,8 @@
 
 /*! ../../config/setViews */
 
+/*! ../../context/store */
+
 /*! ../../factory/entries */
 
 /*! ../../factory/queries */

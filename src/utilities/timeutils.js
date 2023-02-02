@@ -35,7 +35,7 @@ function formatStartEndTimes(hours, minutes) {
     formatTime(endHours, endMinutes),
   ];
 
-  if (start.slice(-2) === end.slice(-2)) { 
+  if (start.slice(-2) === end.slice(-2)) {
     start = start.slice(0, -2);
   }
 
@@ -83,9 +83,9 @@ function compareTimes(time1, time2) {
 
 
 export default calcTime;
-export { 
+export {
   configMinutesForStore,
   formatStartEndTimes,
   formatTime,
   compareTimes
-}
+};

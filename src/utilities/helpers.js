@@ -8,8 +8,8 @@ function debounce(func, limit) {
   let timeoutId;
   return function (...args) {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => func.apply(this, args), limit)
-  }
+    timeoutId = setTimeout(() => func.apply(this, args), limit);
+  };
 }
 /**
  * 
@@ -20,7 +20,7 @@ function debounce(func, limit) {
  * are delegated from their parent element.
  */
 function getClosest(e, element) {
-  return e.target.closest(element)
+  return e.target.closest(element);
 }
 
 function hextorgba(hex, alpha) {
@@ -32,12 +32,12 @@ function hextorgba(hex, alpha) {
 }
 
 function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2)
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
 const throttle = (fn, wait) => {
   let inThrottle, lastFn, lastTime;
-  return function() {
+  return function () {
     const context = this,
       args = arguments;
     if (!inThrottle) {
@@ -46,7 +46,7 @@ const throttle = (fn, wait) => {
       inThrottle = true;
     } else {
       clearTimeout(lastFn);
-      lastFn = setTimeout(function() {
+      lastFn = setTimeout(function () {
         if (Date.now() - lastTime >= wait) {
           fn.apply(context, args);
           lastTime = Date.now();
@@ -72,63 +72,63 @@ function setTheme(context) {
       return;
     }
 
-    const darkicon = document.querySelector(".sbti-one")
-    const lighticon = document.querySelector(".sbti-two")
-    const contrasticon = document.querySelector(".sbti-three")
+    const darkicon = document.querySelector(".sbti-one");
+    const lighticon = document.querySelector(".sbti-two");
+    const contrasticon = document.querySelector(".sbti-three");
 
     const setlight = () => {
-      context.setColorScheme("light")
+      context.setColorScheme("light");
       colorSchemeMeta.setAttribute("content", "light");
 
-      appBody.classList.remove("contrast-mode")
+      appBody.classList.remove("contrast-mode");
       appBody.classList.add("light-mode");
 
-      lighticon.classList.remove("sb-theme-icon-hide")
-      darkicon.classList.add("sb-theme-icon-hide")
-      contrasticon.classList.add("sb-theme-icon-hide")
-    }
+      lighticon.classList.remove("sb-theme-icon-hide");
+      darkicon.classList.add("sb-theme-icon-hide");
+      contrasticon.classList.add("sb-theme-icon-hide");
+    };
 
     const setdark = () => {
-      context.setColorScheme("dark")
+      context.setColorScheme("dark");
       colorSchemeMeta.setAttribute("content", "dark light");
 
       appBody.classList.remove("light-mode");
-      appBody.classList.remove("contrast-mode")
+      appBody.classList.remove("contrast-mode");
 
-      darkicon.classList.remove("sb-theme-icon-hide")
-      contrasticon.classList.add("sb-theme-icon-hide")
-      lighticon.classList.add("sb-theme-icon-hide")
-    }
+      darkicon.classList.remove("sb-theme-icon-hide");
+      contrasticon.classList.add("sb-theme-icon-hide");
+      lighticon.classList.add("sb-theme-icon-hide");
+    };
 
     const setcontrast = () => {
-      context.setColorScheme("contrast")
+      context.setColorScheme("contrast");
       colorSchemeMeta.setAttribute("content", "dark");
 
       appBody.classList.remove("light-mode");
-      appBody.classList.add("contrast-mode")
+      appBody.classList.add("contrast-mode");
 
-      contrasticon.classList.remove("sb-theme-icon-hide")
-      darkicon.classList.add("sb-theme-icon-hide")
-      lighticon.classList.add("sb-theme-icon-hide")
-    }
+      contrasticon.classList.remove("sb-theme-icon-hide");
+      darkicon.classList.add("sb-theme-icon-hide");
+      lighticon.classList.add("sb-theme-icon-hide");
+    };
 
 
     if (currentScheme === "light") {
-      setlight()
+      setlight();
       return;
-    } 
+    }
 
     if (currentScheme === "contrast") {
-      setcontrast()
+      setcontrast();
       return;
     }
 
     if (currentScheme === "dark") {
-      setdark()
+      setdark();
       return;
     }
-  }
-  setColorSchema()
+  };
+  setColorSchema();
 }
 
 
@@ -178,4 +178,4 @@ export {
   setTheme,
   placePopup,
   isNumeric
-} 
+}; 
