@@ -10,28 +10,25 @@ import {
   getdatearray,
   getFormDateObject,
   getDateFromAttribute,
-  getDuration,
-  formatEntryOptionsDate,
   longerThanDay,
   formatStartEndDate
 } from "../../utilities/dateutils";
 import { formatStartEndTimes } from "../../utilities/timeutils";
 import locales from "../../locales/en";
 
-const monthNames = locales.labels.monthsShort.map(x => x.toUpperCase());
-const weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase());
 
 const dateTimeTitle = document.querySelector(".datetime-content--title");
 const listview = document.querySelector('.listview');
 const listviewBody = document.querySelector('.listview__body');
 
 export default function setListView(context, store, datepickerContext) {
-  let today = new Date();
-  let [todayYear, todayMonth, todayDay] = getdatearray(today);
+  
+  let monthNames = locales.labels.monthsShort.map(x => x.toUpperCase());
+  let weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase());
+  let [todayYear, todayMonth, todayDay] = getdatearray(new Date());
   /*************************************** */
   /* CREATE ROW GROUPS*/
   function createRowGroups(entries) {
-    // console.log(entries);
     let count = 0;
     for (let [key, value] of Object.entries(entries)) {
       count++;
@@ -60,7 +57,6 @@ export default function setListView(context, store, datepickerContext) {
       rg.classList.add('listview__rowgroup');
       rg.append(rgheader, rgContent);
       listviewBody.appendChild(rg);
-
     }
   }
 
@@ -119,7 +115,6 @@ export default function setListView(context, store, datepickerContext) {
   }
   /*************************************** */
 
-
   /*************************************** */
   // EVENTS
   function resetCellActive() {
@@ -137,7 +132,6 @@ export default function setListView(context, store, datepickerContext) {
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
     cell.style.backgroundColor = hextorgba(color, 0.7);
-    // cell.style.backgroundColor = color;
 
     const rect = cell.getBoundingClientRect();
     const height = cell.offsetHeight;
@@ -204,25 +198,28 @@ export default function setListView(context, store, datepickerContext) {
     }
   }
 
-
   function resetListview() {
     listviewBody.innerText = "";
+    listview.onclick = null;
+    monthNames = null;
+    weekDayNames = null;
   }
-
+  
   const initListView = () => {
-    resetListview();
+    listviewBody.innerText = "";
     store.setResetPreviousViewCallback(resetListview);
-    const activeEnt = store.getActiveEntries();
+    
+    let activeEnt = store.getActiveEntries();
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = "No Entries to Display";
       return;
     } else {
-      const entries = store.sortBy(activeEnt, "start", "desc");
-
-      const groupedEntries = entries.reduce((acc, curr) => {
+      let entries = store.sortBy(activeEnt, "start", "desc");
+      let groupedEntries = entries.reduce((acc, curr) => {
         const date = new Date(curr.start);
         const [year, month, day] = getdatearray(date);
-        const datestring = `${year}-${month}-${day}`; // for parse&group
+        // for parse&group
+        const datestring = `${year}-${month}-${day}`; 
 
         if (year < todayYear) {
           return acc;
@@ -241,13 +238,12 @@ export default function setListView(context, store, datepickerContext) {
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
       // if no entries are in the future, set the header title to "Schedule Clear";
-      const keys = Object.keys(groupedEntries);
+      let keys = Object.keys(groupedEntries);
       const length = keys.length;
       if (length === 0) {
         dateTimeTitle.textContent = "Schedule Clear";
       } else {
         // true will slice the year at last two digits if two years are displayed at the same time;
-
         const earliestDate = new Date(Date.parse(keys[0]));
 
         context.setDate(
@@ -276,7 +272,12 @@ export default function setListView(context, store, datepickerContext) {
 
       createRowGroups(groupedEntries);
       listview.onclick = delegateListview;
+      activeEnt = null;
+      entries = null;
+      groupedEntries = null;
+      keys = null;
     }
   };
+
   initListView();
 }

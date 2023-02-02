@@ -36,7 +36,6 @@ import { getClosest, placePopup } from "../../utilities/helpers";
 import locales from "../../locales/en";
 
 // day view header (row 1)
-const dvHeader = document.querySelector(".dayview--header");
 const dvHeaderDayNumber = document.querySelector(".dayview--header-day__title");
 const dvHeaderDayOfWeek = document.querySelector(
   ".dayview--header-day__number"
@@ -51,11 +50,14 @@ const dvContainer = document.querySelector(".calendar__dayview");
 const dvGrid = document.querySelector(".dayview__grid");
 const dvMainGrid = document.querySelector(".dayview--main-grid");
 
+const dvSideGridWrapper = document.querySelector(".dayview--side-grid");
+
 export default function setDayView(context, store, datepickerContext) {
-  let entries = store.getDayEntries(context.getDate());
-  let boxes = new Day(entries.day, entries.allDay);
+  // let entries = store.getDayEntries(context.getDate());
+  // let boxes = new Day(entries.day, entries.allDay);
+  let entries = null;
+  let boxes = null;
   let firstY = null;
-  let lastY = null;
 
   function firstLastDates(bxs) {
     let longest = 0;
@@ -148,6 +150,29 @@ export default function setDayView(context, store, datepickerContext) {
     return fulltitle;
   }
 
+  function createDVSideGridCells() {
+    for (let i = 0; i < 24; i++) {
+      let hour;
+      let md;
+
+      if (i === 0) {
+        hour = "";
+        md = "";
+      } else {
+        hour = i;
+        md = "AM";
+      }
+
+      if (hour > 12) {hour -= 12;}
+      if (i >= 12) {md = "PM";}
+
+      const dvSideGridCell = document.createElement("div");
+      dvSideGridCell.classList.add("dv-sidegrid--cell");
+      dvSideGridCell.textContent = `${hour} ${md}`;
+      dvSideGridWrapper.appendChild(dvSideGridCell);
+    }
+  }
+
   function configHeader() {
     [dvHeaderDayNumber, dvHeaderDayOfWeek, dvHeaderInfo].forEach((el) => {
       el.innerText = "";
@@ -177,7 +202,12 @@ export default function setDayView(context, store, datepickerContext) {
   function resetDayview() {
     dvMainGrid.innerText = "";
     dvOnTop.innerText = "";
+    dvSideGridWrapper.innerText = "";
+    dvHeaderInfo.innerText = "";
     dvContainer.onmousedown = null;
+    entries = null;
+    boxes = null;
+    firstY = null;
   }
 
   function openDvMore(entr) {
@@ -328,8 +358,6 @@ export default function setDayView(context, store, datepickerContext) {
       moremessage.classList.add("dv--ontop__more");
       moremessage.textContent = `${entr.length} more...`;
       dvOnTop.appendChild(moremessage);
-      // const opdm = () => openDvMore(entr);
-      // moremessage.onclick = opdm;
       return;
     } else {
       createStackableEntriesOnTop(entr);
@@ -665,8 +693,6 @@ export default function setDayView(context, store, datepickerContext) {
         [startmin, endmin]
       );
 
-      lastY = +coords.y;
-
       openDayviewForm(
         box,
         [tempcategory, color],
@@ -746,11 +772,16 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   const initDayView = () => {
+    dvSideGridWrapper.innerText = "";
+    createDVSideGridCells();
+    entries = store.getDayEntries(context.getDate());
+    boxes = new Day(entries.day, entries.allDay);
     renderBoxesForGrid();
     configHeader();
     dvContainer.onmousedown = delegateDayView;
     store.setResetPreviousViewCallback(resetDayview);
     handleScrollToOnInit();
   };
+
   initDayView();
 }

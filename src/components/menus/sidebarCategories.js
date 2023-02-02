@@ -29,7 +29,6 @@ export default function handleSidebarCategories(context, store, datepickerContex
     setViews(context.getComponent(), context, store, datepickerContext);
   }
 
-
   function renderSidebarDatepickerCtg() {
     setSidebarDatepicker(context, store, datepickerContext);
   }

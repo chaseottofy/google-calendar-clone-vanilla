@@ -3,6 +3,7 @@ const shortcutsModal = document.querySelector(".shortcuts__modal");
 const shortcutsModalContent = document.querySelector(".shortcuts-modal-content");
 const shortcutsModalClose = document.querySelector(".close-shortcuts-modal");
 const notifyShortcutsStatus = document.querySelector(".keyboard-disabled-sm-two");
+
 export default function handleShortCutsModal(store) {
   function createShortcut(key, description) {
     const shortcut = document.createElement("div");
@@ -43,15 +44,14 @@ export default function handleShortCutsModal(store) {
     return shortcut;
   }
 
-  // close the modal and remove the event listener
   function handleShortcutsModalClose() {
+    shortcutsModalContent.innerText = "";
     shortcutsModalOverlay.classList.add("hide-shortcuts");
     shortcutsModal.classList.add("hide-shortcuts");
     store.removeActiveOverlay("hide-shortcuts");
     document.removeEventListener("keydown", closeShortcutsOnKeydown);
   }
 
-  // provide the ability to close the shortcuts modal with "escape" or with the keys that open it
   function closeShortcutsOnKeydown(e) {
     let inp = e.key.toLowerCase();
     if (inp === "escape" || inp === "/" || inp === "?") {
@@ -71,7 +71,6 @@ export default function handleShortCutsModal(store) {
   }
 
   function handleShortcutsModalOpen() {
-    shortcutsModalContent.innerText = "";
     shortcutsModalOverlay.classList.remove("hide-shortcuts");
     shortcutsModal.classList.remove("hide-shortcuts");
     store.addActiveOverlay("hide-shortcuts");

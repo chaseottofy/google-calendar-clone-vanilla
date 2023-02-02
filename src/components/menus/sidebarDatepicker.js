@@ -3,14 +3,15 @@ import setViews from "../../config/setViews";
 import { getClosest } from "../../utilities/helpers";
 
 
-const datepicker = document.querySelector(".datepicker-sidebar");
-const datepickerBody = document.querySelector(".sbdatepicker__body--dates");
-const datepickerTitle = document.querySelector(".sbdatepicker-title");
+const sbdatepicker = document.querySelector(".datepicker-sidebar");
+const sbdatepickerBody = document.querySelector(".sbdatepicker__body--dates");
+const sbdatepickerTitle = document.querySelector(".sbdatepicker-title");
 
 const sbdatepickerChangeDate = document.querySelector(".sb-datepicker-change-date");
 
 const sbyearpickerTitle = document.querySelector(".sb-yearpicker-title");
 const sbmonthpickerMonths = document.querySelectorAll(".sb-monthpicker__month");
+
 export default function setSidebarDatepicker(context, store, datepickerContext) {
 
   datepickerContext.setDate(
@@ -29,11 +30,11 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
   function setDatepickerHeader() {
     const month = datepickerContext.getMonthName();
     const year = datepickerContext.getYear();
-    datepickerTitle.textContent = `${month} ${year}`;
+    sbdatepickerTitle.textContent = `${month} ${year}`;
   }
 
   function createCells(montharray) {
-    datepickerBody.innerText = "";
+    sbdatepickerBody.innerText = "";
     const component = context.getComponent();
 
     for (let i = 0; i < montharray.length; i++) {
@@ -90,7 +91,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       }
 
       cell.appendChild(datename);
-      datepickerBody.appendChild(cell);
+      sbdatepickerBody.appendChild(cell);
     }
   }
 
@@ -144,7 +145,6 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     setDatepickerHeader();
     montharray = [];
   }
-
 
   /**
    * 
@@ -223,7 +223,6 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
   }
-
 
   function closeChangeDateModal() {
     // check if date has changed;
@@ -319,12 +318,14 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     }
   }
 
-  const initsbdatepicker = () => {
+  function initsbdatepicker() {
     sbdatepickerChangeDate.classList.remove("show-sbdpcd");
     setDatepickerHeader();
     createCells(montharray);
-    datepicker.onmousedown = delegateDatepickerEvents;
-    montharray = [];
+    sbdatepicker.onmousedown = delegateDatepickerEvents;
+    montharray = null;
+    groupedEntries = null;
   };
+  
   initsbdatepicker();
 }

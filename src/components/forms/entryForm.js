@@ -105,82 +105,7 @@ export default function setEntryForm(context, store, datepickerContext) {
   let currentComponent;
   let [year, month, day] = [null, null, null];
 
-  function setFormInitialValues() {
-    // variable setup
-    categories = Object.entries(store.getAllCtg());
-    activeCategories = store.getActiveCategoriesKeyPair();
-    currentComponent = context.getComponent();
-    year = context.getYear();
-    month = context.getMonth();
-    day = context.getDay();
 
-    // ****************************************** //
-    // title / description
-    descriptionInput.value = "";
-    titleInput.blur();
-    titleInput.value = "";
-    setTimeout(() => {
-      titleInput.focus();
-    }, 10);
-
-    // ****************************************** //
-    // category setup 
-    setInitialFormCategory();
-
-    // ****************************************** // 
-    // date picker setup
-    datepickerContext.setDate(year, month, day);
-    context.setDateSelected(day);
-
-    // ****************************************** // 
-    // date inputs setup
-    const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`;
-    // DATES : START/END
-    startDateInput.textContent = dateSelected;
-    startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
-    endDateInput.textContent = dateSelected;
-    endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
-
-    // TIME : START/END 
-    const temphours = new Date().getHours();
-    startTimeInput.setAttribute("data-form-time", `${temphours}:00`);
-    endTimeInput.setAttribute("data-form-time", `${temphours}:30`);
-    const getTimeAndMd = (hour, min) => {
-      return `${+hour === 0 || +hour === 12 ? 12 : hour % 12}:${min}${hour < 12 ? "am" : "pm"}`;
-    };
-    startTimeInput.textContent = getTimeAndMd(temphours, "00");
-    endTimeInput.textContent = getTimeAndMd(temphours, "30");
-
-    // ****************************************** // 
-    // submit button setup 
-    formSubmitButton.setAttribute("data-form-action", "create");
-    formSubmitButton.setAttribute("data-form-id", "");
-
-    // ****************************************** // 
-    // approve form event delegation
-    entriesFormWrapper.onmousedown = delegateEntryFormEvents;
-    formOverlay.onmousedown = handleOverlayClose;
-    document.addEventListener("keydown", delegateFormKeyDown);
-    // ****************************************** // 
-  }
-
-  function getDefaultCategory() {
-    if (activeCategories.length === 0) {
-      return [categories[0][0], categories[0][1].color];
-    } else {
-      return [activeCategories[0][0], activeCategories[0][1].color];
-    }
-  }
-
-  function setInitialFormCategory() {
-    let [categoryTitle, categoryColor] = getDefaultCategory();
-    categoryModalWrapper.setAttribute("data-form-category", categoryTitle);
-
-    selectedCategoryWrapper.style.backgroundColor = categoryColor;
-    selectedCategoryTitle.textContent = categoryTitle;
-    selectedCategoryColor.style.backgroundColor = categoryColor;
-    categoryModalIcon.firstElementChild.setAttribute("fill", categoryColor);
-  }
 
   function closetimepicker() {
     const timep = document?.querySelector(".timepicker");
@@ -403,12 +328,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     datepickerContext.setDate(year, month, day);
     datepickerContext.setDateSelected(day);
     setDatepicker(context, store, datepickerContext, "form");
-  }
-
-  function handleOverlayClose(e) {
-    if (e.target.classList.contains("form-overlay")) {
-      handleFormClose(e);
-    }
   }
 
   function handleSetDate(e, type) {
@@ -647,6 +566,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     clearAllErrors();
 
+    formOverlay.onmousedown = null;
+    entriesFormWrapper.onmousedown = null;
+    document.removeEventListener("keydown", delegateFormKeyDown);
     entriesFormWrapper.classList.add("hide-form");
     formOverlay.classList.add("hide-form-overlay");
     store.removeActiveOverlay("hide-datepicker-overlay");
@@ -658,10 +580,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     if (categoryModalWrapper.classList.contains("category-modal-open")) {
       closeCategoryModal();
     }
-
-    document.removeEventListener("keydown", delegateFormKeyDown);
-    entriesFormWrapper.onmousedown = null;
-    formOverlay.onmousedown = null;
 
     const resetCurrentView = store.getFormResetHandle(currentComponent);
     if (resetCurrentView !== null) {
@@ -778,6 +696,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     selectedCategoryWrapper.classList.remove("hide-form-category-selection");
     formModalOverlay.classList.add("hide-form-overlay");
     categoryModalWrapper.removeAttribute("style");
+    categoryModal.innerText = "";
   }
 
   function createCategoryOptions(parent, categories) {
@@ -816,6 +735,7 @@ export default function setEntryForm(context, store, datepickerContext) {
       } else {
         categoryWrapper.append(categoryDisplayColor, categoryTitle);
       }
+
       parent.appendChild(categoryWrapper);
     });
   }
@@ -847,8 +767,8 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     selectedCategoryWrapper.classList.add("hide-form-category-selection");
     categoryModal.classList.remove("hide-form-category-modal");
-    categoryModal.innerText = "";
     categoryModal.style.height = `${length * 32}px`;
+    categoryModal.innerText = "";
     createCategoryOptions(categoryModal, categories);
     formModalOverlay.classList.remove("hide-form-overlay");
   }
@@ -948,7 +868,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     const category = getClosest(e, ".form--body__category-modal--wrapper-selection");
     const getcloseCategoryModalBtn = getClosest(e, ".close-options-floating__btn");
     const getCategoryModalOverlay = getClosest(e, ".form-modal-overlay");
-
 
     // error msg : <input> / <textarea>
     const inputError = getClosest(e, ".form-input-error");
@@ -1072,6 +991,83 @@ export default function setEntryForm(context, store, datepickerContext) {
         handleFormSubmission(e);
       }
     }
+  }
+
+  function setFormInitialValues() {
+    // variable setup
+    categories = Object.entries(store.getAllCtg());
+    activeCategories = store.getActiveCategoriesKeyPair();
+    currentComponent = context.getComponent();
+    year = context.getYear();
+    month = context.getMonth();
+    day = context.getDay();
+
+    // ****************************************** //
+    // title / description
+    descriptionInput.value = "";
+    titleInput.blur();
+    titleInput.value = "";
+    setTimeout(() => {
+      titleInput.focus();
+    }, 10);
+
+    // ****************************************** //
+    // category setup 
+    setInitialFormCategory();
+
+    // ****************************************** // 
+    // date picker setup
+    datepickerContext.setDate(year, month, day);
+    context.setDateSelected(day);
+
+    // ****************************************** // 
+    // date inputs setup
+    const dateSelected = `${context.getMonthName().slice(0, 3)} ${day}, ${year}`;
+    // DATES : START/END
+    startDateInput.textContent = dateSelected;
+    startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
+    endDateInput.textContent = dateSelected;
+    endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
+
+    // TIME : START/END 
+    const temphours = new Date().getHours();
+    startTimeInput.setAttribute("data-form-time", `${temphours}:00`);
+    endTimeInput.setAttribute("data-form-time", `${temphours}:30`);
+    const getTimeAndMd = (hour, min) => {
+      return `${+hour === 0 || +hour === 12 ? 12 : hour % 12}:${min}${hour < 12 ? "am" : "pm"}`;
+    };
+    startTimeInput.textContent = getTimeAndMd(temphours, "00");
+    endTimeInput.textContent = getTimeAndMd(temphours, "30");
+
+    // ****************************************** // 
+    // submit button setup 
+    formSubmitButton.setAttribute("data-form-action", "create");
+    formSubmitButton.setAttribute("data-form-id", "");
+
+    // ****************************************** // 
+    // approve form event delegation
+    formOverlay.onmousedown = handleFormClose;
+    entriesFormWrapper.onmousedown = delegateEntryFormEvents;
+    document.addEventListener("keydown", delegateFormKeyDown);
+    // ****************************************** // 
+  }
+
+  function getDefaultCategory() {
+    if (activeCategories.length === 0) {
+      return [categories[0][0], categories[0][1].color];
+    } else {
+      return [activeCategories[0][0], activeCategories[0][1].color];
+    }
+  }
+
+  function setInitialFormCategory() {
+    let [categoryTitle, categoryColor] = getDefaultCategory();
+    categoryModalWrapper.setAttribute("data-form-category", categoryTitle);
+
+    selectedCategoryWrapper.style.backgroundColor = categoryColor;
+    selectedCategoryTitle.textContent = categoryTitle;
+    selectedCategoryColor.style.backgroundColor = categoryColor;
+    categoryModalIcon.firstElementChild.setAttribute("fill", categoryColor);
   }
 
   setFormInitialValues();

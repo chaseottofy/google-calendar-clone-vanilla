@@ -15,14 +15,6 @@ const entryOptionDescription = document.querySelector('.eob-description');
 const entryOptionCategoryIcon = document.querySelector(".eob-category--icon");
 const entryOptionCategory = document.querySelector('.eob-category');
 
-const reset = [
-  entryOptionsDateHeader,
-  entryOptionsTimeHeader,
-  entryOptionTitle,
-  entryOptionDescription,
-  entryOptionCategory,
-];
-
 export default function getEntryOptionModal(context, store, entry, datepickerContext, finishSetup) {
 
   function openEditForm() {
@@ -85,8 +77,14 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
   }
 
   function closeEntryOptions() {
-    // Close the modal and remove event listeners
-    // Only ever called directly if the form is toggled open
+    [
+      entryOptionsDateHeader,
+      entryOptionsTimeHeader,
+      entryOptionTitle,
+      entryOptionDescription,
+      entryOptionCategory,
+    ].forEach(el => el.innerText = "");
+
     entryOptionsWrapper.classList.add("entry__options--hidden");
     entryOptionsOverlay.classList.add("entry__options--hidden");
     store.removeActiveOverlay("entry__options--hidden");
@@ -97,7 +95,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
   }
 
   function setEntryDefaults() {
-    reset.forEach(el => el.textContent = "");
     entryOptionsWrapper.classList.remove("entry__options--hidden");
     entryOptionsOverlay.classList.remove("entry__options--hidden");
     store.addActiveOverlay("entry__options--hidden");
@@ -152,7 +149,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
         }
       }
     }
-
 
     entryOptionTitle.textContent = entry.title;
 

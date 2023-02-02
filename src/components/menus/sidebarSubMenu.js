@@ -17,10 +17,7 @@ const themeRadioOptions = ["dark", "light", "contrast"];
 // keyboard shortcut toggle on/off | open modal
 const shortcutSwitch = document.querySelector(".smia-toggle-shortcuts-checkbox");
 const animationsSwitchBtn = document.querySelector(".smdt-toggle-checkbox");
-// const animationsIcon = document.querySelector(".toggle-animations-icon__sm");
-const shortcutTitle = document.querySelector(".smia-set-status-title");
 const notifyDisabledShortcutsIcon = document.querySelector(".keyboard-disabled-sm");
-
 
 export default function getSidebarSubMenu(store, context) {
 
@@ -50,7 +47,6 @@ export default function getSidebarSubMenu(store, context) {
     popup.classList.add("sb-sub-popup-confirm");
     const [totalEntries, totalCategories] = store.getStoreStats();
 
-
     // let totals;
     let [hasEntries, hasCategories] = [false, false];
     let titleEntries;
@@ -75,7 +71,6 @@ export default function getSidebarSubMenu(store, context) {
       titleEntries = "Current calendar has no entries or categories.";
     }
 
-
     const subtitle = document.createElement("div");
     subtitle.classList.add("sb-sub-popup-subtitle");
     subtitle.textContent = titleEntries;
@@ -96,6 +91,7 @@ export default function getSidebarSubMenu(store, context) {
     proceedBtn.textContent = "Proceed";
 
     btns.append(cancelBtn, proceedBtn);
+    console.log(popup);
     popup.append(
       subtitle,
       subtitle2,
@@ -116,6 +112,7 @@ export default function getSidebarSubMenu(store, context) {
       sidebarSubMenu.classList.add(closemenu);
       sidebarSubMenuOverlay.classList.add(closemenu);
       document.removeEventListener("keydown", closeSubOnEscape);
+      sidebarSubMenuOverlay.onclick = null;
     }
   }
 
@@ -134,16 +131,13 @@ export default function getSidebarSubMenu(store, context) {
     const themeIdx = themeRadioOptions.indexOf(context.getColorScheme());
     themeRadioBtns[themeIdx].checked = true;
 
-
     const shortcutStatus = store.getShortcutsStatus();
     setStatusIcon(shortcutStatus);
     shortcutSwitch.checked = shortcutStatus;
 
-
     const animationStatus = store.getAnimationStatus();
     setAnimationsIcons(animationStatus);
     animationsSwitchBtn.checked = animationStatus;
-
 
     store.addActiveOverlay(closemenu);
     sidebarSubMenu.classList.remove(closemenu);
@@ -151,7 +145,7 @@ export default function getSidebarSubMenu(store, context) {
 
     document.addEventListener("keydown", closeSubOnEscape);
     sidebarSubMenuOverlay.onclick = closeSubMenu;
-    closeSubMenuBtn.onclick = closeSubMenu;
+    // closeSubMenuBtn.onclick = closeSubMenu;
   }
 
   function getJSONUpload(e) {
@@ -321,6 +315,7 @@ export default function getSidebarSubMenu(store, context) {
     const shortcutSwitchNotifyIcon = getClosest(e, ".keyboard-disabled-sm");
     const animationsSwitch = getClosest(e, ".smdt-toggle");
     const animationsIcon = getClosest(e, ".toggle-animations-icon__sm");
+    const getCloseSubMenuBtn = getClosest(e, ".close-sub-menu");
 
     if (downloadjsonBtn) {
       handleCalendarJSON("download");
@@ -359,6 +354,11 @@ export default function getSidebarSubMenu(store, context) {
 
     if (animationsIcon) {
       toggleAnimations(true);
+      return;
+    }
+
+    if (getCloseSubMenuBtn) {
+      closeSubMenu();
       return;
     }
   }

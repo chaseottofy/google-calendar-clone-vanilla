@@ -9,6 +9,12 @@
   border-radius: 8px;
 }
 
+.datepicker:focus {
+  /* border-color: var(--darkgrey2); */
+  border: 1px solid var(--primary1);
+  outline: 0 none;
+}
+
 .hide-datepicker {
   display: none;
 }

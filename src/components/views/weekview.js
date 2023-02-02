@@ -44,11 +44,14 @@ const resizeoverlay = document.querySelector(".resize-overlay");
 const main = document.querySelector(".weekview");
 const container = document.querySelector(".weekview--calendar");
 const weekviewHeaderDayNumber = document.querySelectorAll(".weekview--header-day__number");
+
 const weekviewGrid = document.querySelector(".weekview__grid");
-const cols = document.querySelectorAll(".week--col");
-// weekview top grid & children
-const alldaymodule = document.querySelector(".weekview--allday-module");
+const weekviewSideGrid = document.querySelector(".weekview--sidebar");
+
 const topCols = document.querySelectorAll(".allday--col");
+
+const cols = document.querySelectorAll(".week--col");
+
 export default function setWeekView(context, store, datepickerContext) {
   const weekArray = context.getWeekArray();
   let entries = store.getWeekEntries(weekArray);
@@ -61,6 +64,29 @@ export default function setWeekView(context, store, datepickerContext) {
     context.setDateSelected(da);
     context.setComponent("day");
     setViews("day", context, store, datepickerContext);
+  }
+
+  function createWVSideGridCells() {
+    for (let i = 0; i < 24; i++) {
+      let hour;
+      let md;
+
+      if (i === 0) {
+        hour = "";
+        md = "";
+      } else {
+        hour = i;
+        md = "AM";
+      }
+
+      if (hour > 12) {hour -= 12;}
+      if (i >= 12) {md = "PM";}
+
+      const wvSideGridCell = document.createElement("div");
+      wvSideGridCell.classList.add("sidegrid-cell");
+      wvSideGridCell.textContent = `${hour} ${md}`;
+      weekviewSideGrid.appendChild(wvSideGridCell);
+    }
   }
 
   function configureDaysOfWeek() {
@@ -121,6 +147,7 @@ export default function setWeekView(context, store, datepickerContext) {
     cols.forEach(col => { col.innerText = ""; });
     topCols.forEach(col => { col.innerText = ""; });
     main.onmousedown = null;
+    weekviewSideGrid.innerText = "";
   }
 
   function renderBoxes() {
@@ -754,6 +781,8 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   const initWeek = () => {
+    weekviewSideGrid.innerText = "";
+    createWVSideGridCells();
     configureDaysOfWeek();
     renderDataForGrid();
     main.onmousedown = delegateGridEvents;
@@ -764,5 +793,6 @@ export default function setWeekView(context, store, datepickerContext) {
       }, 4);
     }
   };
+
   initWeek();
 }

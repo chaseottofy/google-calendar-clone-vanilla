@@ -33,17 +33,12 @@ import { setStylingForEvent } from "../../utilities/dragutils";
 
 // naming
 import locales from "../../locales/en";
-const monthNames = locales.labels.monthsShort;
 
 const resizeoverlay = document.querySelector(".resize-overlay");
 const sidebar = document.querySelector(".sidebar");
 const monthWrapper = document.querySelector(".monthview--calendar");
 
 export default function setMonthView(context, store, datepickerContext) {
-  const montharray = context.getMonthArray();
-  const monthentries = store.getMonthEntries(montharray);
-  let groupedEntries = store.getGroupedMonthEntries(monthentries);
-
   const boxquery = new MonthBoxQuery(
     window.innerWidth <= 530 || window.innerHeight <= 470
   );
@@ -115,7 +110,7 @@ export default function setMonthView(context, store, datepickerContext) {
   }
 
   function createCellHeader(cell, day) {
-    const daynumberAndMonth = day.getDate() + " " + monthNames[day.getMonth()];
+    const daynumberAndMonth = day.getDate() + " " + locales.labels.monthsShort[day.getMonth()];
     const daynumber = document.createElement('span');
     daynumber.classList.add("monthview--daynumber");
     /**
@@ -161,9 +156,7 @@ export default function setMonthView(context, store, datepickerContext) {
     }
     dayofmonth.appendChild(createCellHeader(cell, day));
 
-
     let toptotal = 0; // box.style.top = (box index) * boxquery.getTop()
-
 
     if (entry !== undefined && entry.length > 0) {
 
@@ -199,13 +192,17 @@ export default function setMonthView(context, store, datepickerContext) {
   }
 
   function resetMonthview() {
+    monthWrapper.innerText = "";
     monthWrapper.onmousedown = null;
     monthWrapper.onclick = null;
   }
 
   function populateCells() {
-    // resetMonthview()
     monthWrapper.innerText = "";
+    let montharray = context.getMonthArray();
+    let monthentries = store.getMonthEntries(montharray);
+    let groupedEntries = store.getGroupedMonthEntries(monthentries);
+
     montharray.length < 42
       ? monthWrapper.classList.add("five-weeks")
       : monthWrapper.classList.remove("five-weeks");
@@ -219,7 +216,9 @@ export default function setMonthView(context, store, datepickerContext) {
       createCell(day, idx, dayHasEntry(day), getDateFormatted(day));
     });
 
-    groupedEntries = [];
+    montharray = null;
+    monthentries = null;
+    groupedEntries = null;
   }
 
   function getCoordinatesFromCell(cell) {
@@ -869,36 +868,37 @@ export default function setMonthView(context, store, datepickerContext) {
   }
 
   // event listener is added & removed @ ./setViews.js
-  function getMonthviewResize() {
-    let lastquery = boxquery.getFlag();
-    boxquery.updateFlag();
-    // run once per query change
-    if (lastquery === boxquery.getFlag()) return;
-    const boxes = document.querySelectorAll(".monthview--box");
-    const querytop = boxquery.getTop();
-    const queryHeight = boxquery.getHeight();
-    const prevtop = boxquery.getPrevTop(querytop);
-    boxes.forEach(box => {
-      // always set height 
-      box.style.height = `${queryHeight}px`;
-      let currenttop = parseInt(box.style.top);
-      if (currenttop === 0) {
-        return;
-      } else {
-        // get previous query top to find index of curren top then calc
-        let idx = currenttop / prevtop;
-        box.style.top = `${idx * querytop}px`;
-      }
-    });
-  }
+  // function getMonthviewResize() {
+  //   let lastquery = boxquery.getFlag();
+  //   console.log('ran')
+  //   boxquery.updateFlag();
+  //   // run once per query change
+  //   if (lastquery === boxquery.getFlag()) return;
+  //   const boxes = document.querySelectorAll(".monthview--box");
+  //   const querytop = boxquery.getTop();
+  //   const queryHeight = boxquery.getHeight();
+  //   const prevtop = boxquery.getPrevTop(querytop);
+  //   boxes.forEach(box => {
+  //     // always set height 
+  //     box.style.height = `${queryHeight}px`;
+  //     let currenttop = parseInt(box.style.top);
+  //     if (currenttop === 0) {
+  //       return;
+  //     } else {
+  //       // get previous query top to find index of curren top then calc
+  //       let idx = currenttop / prevtop;
+  //       box.style.top = `${idx * querytop}px`;
+  //     }
+  //   });
+  // }
 
   const initMonth = () => {
-    // see readme @ -- monthview.events -- for more info on setup
     populateCells();
     monthWrapper.onmousedown = delegateMonthEvents;
     monthWrapper.onclick = delegateNewBox;
     store.setResetPreviousViewCallback(resetMonthview);
-    store.setResizeHandle("month", getMonthviewResize);
+    // const handleMVResize = debounce(getMonthviewResize, 40);
+    // store.setResizeHandle("month", handleMVResize);
   };
 
   initMonth();

@@ -1,5 +1,5 @@
 import locales from "../../locales/en";
-import { formatStartEndDate } from "../../utilities/dateutils";
+
 export default function setHeader(context, component, store) {
   let temp = new Date();
   const btntoday = document.querySelector(".btn-today");

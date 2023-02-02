@@ -3,42 +3,44 @@ import locales from "../../locales/en";
 import { getClosest } from "../../utilities/helpers";
 import { getDateFromAttribute } from "../../utilities/dateutils";
 import setSidebarDatepicker from "../../components/menus/sidebarDatepicker";
-const monthnames = locales.labels.monthsLong;
-const weekDayNames = locales.labels.weekdaysNarrow;
 const yearviewGrid = document.querySelector(".calendar__yearview");
 const sidebar = document.querySelector(".sidebar");
 
-
 export default function setYearView(context, store, datepickerContext) {
-  const year = context.getYear();
-  const today = context.getToday();
-  const [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
-  const entries = store.getGroupedYearEntries(store.getYearEntries(year));
-
-  function resetYearview() {
-    yearviewGrid.innerText = "";
-    yearviewGrid.onmousedown = null;
-  }
-
-  function renderMonthCells() {
-    yearviewGrid.innerText = "";
-    for (let i = 0; i < 12; i++) {
-      if (entries[i]) {
-        yearviewGrid.appendChild(createMonthCell(i, entries[i]));
-      } else {
-        yearviewGrid.appendChild(createMonthCell(i, []));
-      }
-    }
-  }
 
   function renderSidebarDatepicker() {
     if (!sidebar.classList.contains("hide-sidebar")) {
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+      datepickerContext.setDate(
+        context.getYear(), context.getMonth(), context.getDay()
+      );
       setSidebarDatepicker(context, store, datepickerContext);
     }
   }
 
-  function createMonthCell(month, entries) {
+  function renderMonthCells() {
+    yearviewGrid.innerText = "";
+    let year = context.getYear();
+    let entries = store.getGroupedYearEntries(store.getYearEntries(year));
+    for (let i = 0; i < 12; i++) {
+      if (entries[i]) {
+        yearviewGrid.appendChild(createMonthCell(year, i, entries[i]));
+      } else {
+        yearviewGrid.appendChild(createMonthCell(year, i, []));
+      }
+    }
+
+    entries = null;
+    year = null;
+  }
+
+  function createMonthCell(year, month, entries) {
+    const today = context.getToday();
+    const [ty, tm, td] = [
+      +today.getFullYear(),
+      +today.getMonth(),
+      +today.getDate()
+    ];
+
     const prevmonth = new Date(year, month, 0);
     const daysInPrevMonth = prevmonth.getDate();
     const nextmonth = new Date(year, month + 2, 0);
@@ -56,7 +58,7 @@ export default function setYearView(context, store, datepickerContext) {
     cellHeaderRowOne.classList.add("yv-monthcell__header--rowone");
 
     const cellHeaderTitle = document.createElement("span");
-    cellHeaderTitle.textContent = monthnames[month];
+    cellHeaderTitle.textContent = locales.labels.monthsLong[month];
 
     if (month === context.getMonth() && year === context.getYear()) {
       cellHeaderTitle.classList.add("yvmht-current");
@@ -70,7 +72,7 @@ export default function setYearView(context, store, datepickerContext) {
     const cellHeaderWeekDayNames = document.createElement("div");
     cellHeaderWeekDayNames.classList.add("yv-monthcell__header--weekdays");
 
-    weekDayNames.forEach((el) => {
+    locales.labels.weekdaysNarrow.forEach((el) => {
       const weekday = document.createElement("div");
       weekday.classList.add("yv-monthcell__header--weekday");
       weekday.textContent = el;
@@ -116,7 +118,6 @@ export default function setYearView(context, store, datepickerContext) {
         return daywrapper;
       };
 
-
       for (let i = prevmonthstart; i < daysInPrevMonth; i++) {
 
         cellBody.appendChild(createcell(
@@ -161,9 +162,9 @@ export default function setYearView(context, store, datepickerContext) {
 
   function handleDaySelection(e) {
     const target = e.target;
-    const [year, month, day] = getDateFromAttribute(target, "data-yv-date", null);
-    context.setDate(year, month, day);
-    context.setDateSelected(day);
+    const [tempy, tempm, tempd] = getDateFromAttribute(target, "data-yv-date", null);
+    context.setDate(tempy, tempm, tempd);
+    context.setDateSelected(tempd);
     context.setComponent("day");
     setViews("day", context, store, datepickerContext);
     renderSidebarDatepicker();
@@ -175,7 +176,12 @@ export default function setYearView(context, store, datepickerContext) {
     }
   }
 
-  const initYearview = () => {
+  function resetYearview() {
+    yearviewGrid.innerText = "";
+    yearviewGrid.onmousedown = null;
+  }
+
+  function initYearview() {
     renderMonthCells();
     yearviewGrid.onmousedown = delegateYearEvents;
     store.setResetPreviousViewCallback(resetYearview);

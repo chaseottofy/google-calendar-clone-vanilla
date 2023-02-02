@@ -26,6 +26,10 @@ const datepicker = document.querySelector(".datepicker");
 const datepickeroverlay = document.querySelector(".datepicker-overlay");
 const dateTimeWrapper = document.querySelector(".datetime-wrapper");
 
+const sbDatepicker = document.querySelector(".datepicker-sidebar")
+const sbDatepickerBody = document.querySelector(".sbdatepicker__body--dates");
+const sbCategoriesWrapper = document.querySelector(".sb__categories--body-form");
+
 const selectElement = document.querySelector(".select__modal");
 const selectOverlay = document.querySelector(".change-view--overlay");
 const optionswrapper = document.querySelector(".change-view--wrapper");
@@ -210,23 +214,10 @@ export default function renderViews(context, datepickerContext, store) {
   // define a means for opening the form then provide it to the store so that it can be accessed by other components
   function handleForm() {
     setEntryForm(context, store, datepickerContext);
-
     form.setAttribute("style", "top:5%;left:5%;right:5%;bottom:5%;margin:auto;");
     form.classList.remove("hide-form");
     formOverlay.classList.remove("hide-form-overlay");
     store.addActiveOverlay("hide-form-overlay");
-
-    function closeform(e) {
-      if (e.target === formOverlay) {
-        form.classList.add("hide-form");
-        formOverlay.classList.add("hide-form-overlay");
-        store.removeActiveOverlay("hide-form-overlay");
-        formOverlay.onclick = null;
-        // formOverlay.removeEventListener("click", closeform)
-      }
-    }
-    formOverlay.onclick = closeform;
-    // formOverlay.addEventListener("click", closeform)
   }
 
   // the submenu (meatball? menu) adjacent to "create" button in sidebar
@@ -246,6 +237,11 @@ export default function renderViews(context, datepickerContext, store) {
       sbToggleSubBtn.onclick = null;
       sbFooter.onmousedown = null;
       sbCategories.onmousedown = null;
+      sbDatepicker.onmousedown = null;
+
+      // clear categories/datepicker content when inactive
+      sbDatepickerBody.innerText = "";
+      sbCategoriesWrapper.innerText = "";
 
       toggleForm.classList.remove("hide-toggle--form");
       viewsContainer.classList.remove("container__calendars-sb-active");
@@ -666,11 +662,13 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   const appinit = () => {
+    console.log('ran')
     /*************************/
     // render initial view and set initial attributes
     renderOption(context.getComponent(), true);
     setInitialAttributes();
     handleBtnMainMenu();
+    
     /*************************/
     // supply callbacks to store for opening form and sidebar
     store.setRenderFormCallback(handleForm);
@@ -679,6 +677,7 @@ export default function renderViews(context, datepickerContext, store) {
       handleBtnMainMenu();
     };
     store.setRenderSidebarCallback(ensureSidebarIsOpen);
+
     /*************************/
     // establish global event listeners
     header.onmousedown = delegateHeaderEvents;

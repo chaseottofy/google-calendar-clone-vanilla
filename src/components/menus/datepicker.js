@@ -20,7 +20,6 @@ const headerNextBtn = document.querySelector(".next");
 const yearpickerTitle = document.querySelector(".yearpicker-title");
 const monthpickerMonths = document.querySelectorAll(".monthpicker__month");
 
-
 export default function setDatepicker(context, store, datepickerContext, type) {
   let montharray = datepickerContext.getMonthArray();
   let count = 0;
@@ -36,11 +35,11 @@ export default function setDatepicker(context, store, datepickerContext, type) {
   }
 
   function createCells(montharray) {
+    datepickerBody.innerText = "";
     let groupedEntries = store.getMonthEntryDates(montharray);
     let currentWeekStart = context.getWeek();
     let isDaySelected = false;
 
-    datepickerBody.innerText = "";
     for (let i = 0; i < montharray.length; i++) {
       const cell = document.createElement("div");
       const datename = document.createElement("div");
@@ -95,27 +94,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
 
     currentWeekStart = null;
     groupedEntries = [];
-  }
-
-  function closeDatepicker() {
-    datepicker.classList.add("hide-datepicker");
-    datepickeroverlay.classList.add("hide-datepicker-overlay");
-    closeChangeDateModal();
-    const formOpen = store.getActiveOverlay().has("hide-form-overlay");
-    const listOpen = context.getComponent() !== "list";
-    if (listOpen || !formOpen) {
-      headerPrevBtn.removeAttribute("style");
-      headerNextBtn.removeAttribute("style");
-    }
-
-    if (type === "form") {
-      document.querySelector(".active-form-date")?.classList.remove("active-form-date");
-    }
-
-    datepickeroverlay.onclick = null;
-    datepicker.onmousedown = null;
-    document.removeEventListener("keydown", datepickerKeypressThrottle);
-    montharray = [];
   }
 
   function renderpicker(y, m, d) {
@@ -240,23 +218,6 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     }
   }
 
-  function openChangeDateModal() {
-    setCheckMonthYear();
-    datepickerChangeDate.classList.add("show-dpcd");
-    yearpickerSetYear(null, true);
-    monthpickerSetMonth(datepickerContext.getMonth(), true);
-  }
-
-  function closeChangeDateModal() {
-    // check if date has changed;
-    if (!getMonthYearCheck()) {
-      montharray = datepickerContext.getMonthArray();
-      createCells(montharray);
-      setDatepickerHeader();
-    }
-    datepickerChangeDate.classList.remove("show-dpcd");
-  }
-
   function monthpickerSetMonth(val, init) {
     const newmonth = val;
 
@@ -295,6 +256,50 @@ export default function setDatepicker(context, store, datepickerContext, type) {
         monthpickerSetMonth(attr - 1);
       }
     }
+  }
+
+  function openChangeDateModal() {
+    setCheckMonthYear();
+    datepickerChangeDate.classList.add("show-dpcd");
+    yearpickerSetYear(null, true);
+    monthpickerSetMonth(datepickerContext.getMonth(), true);
+  }
+
+  function closeChangeDateModal() {
+    // check if date has changed;
+    if (!getMonthYearCheck()) {
+      montharray = datepickerContext.getMonthArray();
+      createCells(montharray);
+      setDatepickerHeader();
+    }
+    datepickerChangeDate.classList.remove("show-dpcd");
+  }
+
+  function closeDatepicker() {
+    datepicker.classList.add("hide-datepicker");
+    datepickeroverlay.classList.add("hide-datepicker-overlay");
+    closeChangeDateModal();
+    const formOpen = store.getActiveOverlay().has("hide-form-overlay");
+    const listOpen = context.getComponent() !== "list";
+    if (listOpen || !formOpen) {
+      headerPrevBtn.removeAttribute("style");
+      headerNextBtn.removeAttribute("style");
+    }
+
+    if (type === "form") {
+      document.querySelector(".active-form-date")?.classList.remove("active-form-date");
+    }
+
+    datepickerBody.innerText = "";
+    datepicker.removeAttribute("tabindex");
+    count = 0;
+    checkmonth = null;
+    checkyear = null;
+    montharray = [];
+
+    datepickeroverlay.onclick = null;
+    datepicker.onmousedown = null;
+    document.removeEventListener("keydown", datepickerKeypressThrottle);
   }
 
   function delegateDatepickerEvents(e) {
@@ -353,18 +358,23 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     // functionality will change depending on whether the change date modal is open -- use flag to check
     const flag = datepickerChangeDate.classList.contains("show-dpcd");
     switch (e.key) {
+
       case "ArrowDown":
         flag ? yearpickerSetYear(-1, false) : renderPrevMonth();
         break;
+
       case "ArrowUp":
         flag ? yearpickerSetYear(1, false) : renderNextMonth();
         break;
+
       case "ArrowRight":
         flag ? handleMonthpicker("next") : setSelectedToNextDay();
         break;
+
       case "ArrowLeft":
         flag ? handleMonthpicker("prev") : setSelectedToPrevDay();
         break;
+
       case "Enter":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
           closeChangeDateModal();
@@ -383,10 +393,19 @@ export default function setDatepicker(context, store, datepickerContext, type) {
           }
         }
         break;
-      case "Tab":
-        flag ? closeChangeDateModal() : openChangeDateModal();
 
+      case "Tab":
+        e.preventDefault();
+        datepicker.setAttribute("tabindex", "1");
+        datepicker.focus();
+
+        if (flag) {
+          closeChangeDateModal();
+        } else {
+          openChangeDateModal();
+        }
         break;
+
       case "Escape":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
           closeChangeDateModal();
@@ -394,12 +413,13 @@ export default function setDatepicker(context, store, datepickerContext, type) {
           closeDatepicker();
         }
         break;
+
       default:
         break;
     }
   }
 
-  const initDatepicker = () => {
+  function initDatepicker() {
     setDatepickerHeader();
     createCells(montharray);
     store.setResetDatepickerCallback(closeDatepicker);

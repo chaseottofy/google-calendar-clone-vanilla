@@ -189,6 +189,11 @@ ____________
   * Allow user to "undo" any edits to events.
   * Allow user to remove new events.
 
+### Feb 2, 2023
+
+* Massive performance improvement:
+  * [test](https://flic.kr/p/2oeJELc)
+
 ____________
 
 ## Events

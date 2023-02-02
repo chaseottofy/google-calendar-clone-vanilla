@@ -12,22 +12,10 @@ const weekComponent = document.querySelector(".weekview");
 const dayComponent = document.querySelector(".dayview");
 const listComponent = document.querySelector(".listview");
 
-
-/**
- * 
- * @param {string} component 
- * @param {object} context 
- * @param {object} store 
- * @param {object} datepickerContext 
- * @desc  hides all views and renders @component passed in
- * 
- */
-
 let [prev1, prev2] = [null, null];
 export default function setViews(component, context, store, datepickerContext) {
   prev1 = prev2;
   prev2 = component;
-
 
   function hideViews() {
     const views = [
@@ -48,11 +36,12 @@ export default function setViews(component, context, store, datepickerContext) {
     // more info provided @readme > monthview > box queries
     views.forEach((view) => {
       view.classList.add("hide-view");
-      if (view !== monthComponent) {
-        window.removeEventListener("resize", store.getResizeHandle("month"));
-      }
+      // if (view !== monthComponent) {
+      //   window.onresize = null;
+      // }
     });
   }
+  // window.removeEventListener("resize", store.getResizeHandle("month"));
 
   function initView(component) {
     switch (component) {
@@ -73,7 +62,8 @@ export default function setViews(component, context, store, datepickerContext) {
         setHeader(context, component);
         setMonthView(context, store, datepickerContext);
         monthComponent.classList.remove("hide-view");
-        window.addEventListener("resize", store.getResizeHandle("month"));
+        // window.onresize = store.getResizeHandle("month");
+        // window.addEventListener("resize", store.getResizeHandle("month"));
         break;
       case "year":
         context.setComponent(component);

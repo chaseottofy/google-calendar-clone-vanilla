@@ -146,8 +146,6 @@ class Store {
         school: { color: colors.grey[4], active: true },
       };
 
-    this.activeCtg = ["default", "misc", "school"];
-
     this.activeOverlay = new Set();
 
     this.handleRenders = {

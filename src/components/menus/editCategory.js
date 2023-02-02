@@ -27,7 +27,6 @@ class CatFormHelper {
 
 const ctgform = document.querySelector(".category__form");
 const ctgformoverlay = document.querySelector(".category__form-overlay");
-const ctgformBody = document.querySelector(".category__form--body");
 const ctgformInput = document.querySelector(".category__form-input");
 const colorPickerTitle = document.querySelector(".color-picker__title");
 const colorPickerOptions = document.querySelector(".color-picker__options");
@@ -139,6 +138,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     if (resetParent !== null) {
       resetParent.removeAttribute("style");
     }
+    colorPickerOptions.innerText = "";
     ctgform.classList.add("hide-ctg-form");
     ctgformoverlay.classList.add("hide-ctg-form");
     ctgformInput.value = "";
@@ -228,6 +228,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   const initCtgForm = () => {
+    console.log('ran')
     createPickerOptions(formhelper.getColor());
     openCtgForm(editing);
     ctgform.onmousedown = delegateCtgForm;

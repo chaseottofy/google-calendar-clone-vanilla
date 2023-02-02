@@ -48,17 +48,21 @@ import "./styles/aside/shortcuts.css";
 /*!*************************************!*/
 // FIX;
 // * validate .json files
-
-// localStorage.clear()
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
-// @@@@week modal bug
 
-// window.addEventListener("click", () => {
+// for testing::
+// window.addEventListener("mouseup", () => {
 //   for (let i = 0; i < document.all.length; i++) {
 //     const element = document.all[i];
-//     if (element.onmousedown || element.onkeydown || element.onclick) {
-//       console.log(element);
+//     if (element.onmousedown) {
+//       console.log("onmousedown", element.getAttribute("class"));
+//     }
+//     if (element.onkeydown) {
+//       console.log("onkeydown", element.getAttribute("class"));
+//     }
+//     if (element.onclick) {
+//       console.log("onclick", element.getAttribute("class"));
 //     }
 //   }
 // });
