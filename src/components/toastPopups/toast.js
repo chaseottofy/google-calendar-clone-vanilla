@@ -5,6 +5,7 @@ import {
 import { getClosest } from "../../utilities/helpers";
 
 const body = document.querySelector(".body");
+const toast = document.querySelector(".toast");
 /**
  * 
  * @param {string} message 
@@ -16,23 +17,13 @@ const body = document.querySelector(".body");
 export default function createToast(message, undoCallback) {
 
   function closetoast() {
-    const toastpopup = document?.querySelector(".toast")
-    if (toastpopup) {
-      toastpopup.remove();
-    }
-
+    toast.classList.remove("show-toast");
+    toast.innerText = "";
     document.onmousedown = null;
   }
 
-
-  function undo() {
-    undoCallback()
-    closetoast()
-  }
-
   function createToast() {
-    const toast = document.createElement("aside");
-    toast.classList.add("toast");
+    toast.innerText = "";
 
     const toastMessage = document.createElement("div");
     toastMessage.classList.add("toast-message");
@@ -49,9 +40,6 @@ export default function createToast(message, undoCallback) {
     undoToastMessage.textContent = "Undo"
     undoToastWrapper.appendChild(undoToastMessage);
     
-
-
-
     function delegateToast(e) {
       // if e.target is not in the toast, remove the toast
       const gettoast = getClosest(e, ".toast");
@@ -76,8 +64,7 @@ export default function createToast(message, undoCallback) {
     }
 
     toast.append(toastMessage, undoToastWrapper, closeIconWrapper);
-    body.prepend(toast);
-
+    toast.classList.add("show-toast")
     document.onmousedown = delegateToast;
   }
   createToast();

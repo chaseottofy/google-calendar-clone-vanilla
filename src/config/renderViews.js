@@ -28,18 +28,20 @@ const datepickeroverlay = document.querySelector(".datepicker-overlay")
 const dateTimeWrapper = document.querySelector(".datetime-wrapper")
 
 const selectElement = document.querySelector(".select__modal")
-const selectOverlay = document.querySelector(".change-view--overlay")
-const optionswrapper = document.querySelector(".change-view--wrapper")
-const options = document.querySelectorAll(".view-option")
+const selectOverlay = document.querySelector(".change-view--overlay");
+const optionswrapper = document.querySelector(".change-view--wrapper");
+const options = document.querySelectorAll(".view-option");
 
 const sidebar = document.querySelector(".sidebar");
 
-const viewsContainer = document.querySelector(".container__calendars")
-const yearwrapper = document.querySelector(".yearview")
-const monthwrapper = document.querySelector(".monthview")
+const viewsContainer = document.querySelector(".container__calendars");
+const yearwrapper = document.querySelector(".yearview");
+const monthwrapper = document.querySelector(".monthview");
 const listviewBody = document.querySelector(".listview__body");
 
-const collapsebtn = document.querySelector(".collapse-view")
+const collapsebtn = document.querySelector(".collapse-view");
+
+const toastpopup = document.querySelector(".toast");
 
 export default function renderViews(context, datepickerContext, store) {
   function setColorScheme() {
@@ -464,7 +466,7 @@ export default function renderViews(context, datepickerContext, store) {
   * For now, I'm keeping global throttle at 150ms. 
   */
   function delegateGlobalKeyDown(e) {
-    const temptoastpopup = document?.querySelector(".toast")
+    // const temptoastpopup = document?.querySelector(".toast")
     const toggleChangeview = (e) => {
       if (selectElement.classList.contains("selection--active")) {
         if (e.key.toLowerCase() === "v") {
@@ -571,8 +573,9 @@ export default function renderViews(context, datepickerContext, store) {
         break;
 
       case "escape":
-        if (temptoastpopup) {
-          temptoastpopup.remove();
+        if (toastpopup.classList.contains("show-toast")) {
+          toastpopup.innerText = "";
+          toastpopup.classList.remove("show-toast");
           document.onmousedown = null;
         }
         break;

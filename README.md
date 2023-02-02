@@ -4,7 +4,7 @@ Contact: ottofy@zohomail.com
 
 [Live project link](https://chaseottofy.github.io/google-calendar-clone-vanilla/)
 
-[App Screenshots](https://ibb.co/album/fQrm1F)
+[App Screenshots](https://flic.kr/s/aHBqjAqx9t)
 
 ## Documentation
 
@@ -138,7 +138,7 @@ ____________
 
 ### Jan 16, 2023
 
-* **build list/agenda view prototype -- [screenshot](https://ibb.co/dPkFs8m)**.
+* **build list/agenda view prototype**.
 * Category change name bug fix.
 * Mobile query clean up.
 
@@ -159,31 +159,29 @@ ____________
   * If the entry ends today and hasn't started, display the length in hours/minutes.
   * If the entry ended yesterday, display "ended yesterday".
   * If the entry is yet to start and is not in the past, display how long until it is scheduled to start.
-* Improve collisions [screenshot](https://ibb.co/CwN951Z)
+* Improve collisions
 
 ### Jan 23, 2023
 
 * Click on datepicker title to open a month/year picker.
-  * header datepicker [screenshot](https://ibb.co/qNXBXJ2)
-  * sidebar datepicker [screenshot](https://ibb.co/nMNpjmf)
-  * form datepicker [screenshot](https://ibb.co/kqTH6rQ)
-* Added date search component [screenshot](https://ibb.co/ZMQbjgG)
-* New category options (turn all others off/on) || edit [screenshot](https://ibb.co/NWrkmww)
+  * header datepicker
+  * sidebar datepicker
+  * form datepicker
+* Added date search component
+* New category options (turn all others off/on) || edit
 * Added dynamic form drag
   * shrinks and grows if dragged away/into corners
-  * [screenshot](https://ibb.co/PghdtkS)
 * All modals are now dynamic (mobile support)
   * Will open to left if no space on right of target & viceversa
   * Will open above if no space below target & viceversa
-  * [screenshot](https://ibb.co/Ln75k7W)
 * Added switch to turn animations/transitions on and off in settings
-* Added top modal compartment for dayview (events that span longer than the calendar day) [screenshot](https://ibb.co/Byq1vJb)
-* Added floating eye icon to open/close the header for the week and day view (mobile support) [screenshot](https://ibb.co/JrpDj4X)
+* Added top modal compartment for dayview (events that span longer than the calendar day)
+* Added floating eye icon to open/close the header for the week and day view (mobile support)
 
 ### Jan 24, 2023
 
 * Prepare Production build & implement linter.
-* Start trimming bundle. [screenshot](https://ibb.co/85fSgN6)
+* Start trimming bundle.
 
 ### Feb 1, 2023
 
@@ -409,11 +407,7 @@ iii.) The left positional property of each box.
 
 IV.) the width positional property of each box.
 
-"i.)" and "ii.)" are both relatively simple to solve. The boxes are sorted by their y coordinates (start hour/min) before they are even given data attributes or classes for that matter. To understand why this is important, check out the screenshots below for an example of what not sorting by start time can lead to.
-
-[sorted by start time (y)](https://ibb.co/gjm5fN9)
-
-[not sorted](https://ibb.co/sjhGnHQ)
+"i.)" and "ii.)" are both relatively simple to solve. The boxes are sorted by their y coordinates (start hour/min) before they are even given data attributes or classes for that matter.
 
 Once the boxes are sorted by their y coordinates, they are given a z-index value based on their index in the sorted array to further ensure that the boxes are placed in the correct order in the DOM.
 

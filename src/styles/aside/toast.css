@@ -17,11 +17,20 @@
   background: #141617;
   display: flex;
   align-items: center;
-  z-index: 2000;
   box-shadow: var(--box-shadow1);
   border-radius: 6px 6px 0 0;
-  height: 48px;
-  transition: all 0.3s ease-in-out;
+  z-index: -1;
+  height: 0;
+  transform: translateY(48px);
+  transition-property: transform;
+  transition-duration: 100ms;
+  transition-timing-function: ease;
+}
+
+.show-toast {
+  height: 48px !important;
+  z-index: 2000 !important;
+  transform: translateY(0px) !important;
 }
 
 .toast svg {
@@ -54,7 +63,7 @@
 }
 
 .undo-toast-wrapper:hover {
-  background: var(--primary4);
+  background: #0f2c4f;
 }
 
 .undo-toast-message {
@@ -85,5 +94,5 @@
 }
 
 .close-toast-icon-wrapper:hover {
-  background: var(--darkgrey2);
+  background: #1f2223;
 }

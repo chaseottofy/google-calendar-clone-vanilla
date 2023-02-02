@@ -671,7 +671,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     
     // if the submission type is create, pass a callback function to allow user to remove the last entry if they wish
     if (type === "create") {
-      createToast("Event created", removeLastFormEntry);
+      setTimeout(() => {
+        createToast("Event created", removeLastFormEntry);
+      }, 4)
     } else {
     // if the submission type is edit, pass a callback function to allow user to undo the last edit if they wish
 
@@ -679,7 +681,10 @@ export default function setEntryForm(context, store, datepickerContext) {
       const handleUndoLastEdit = () => {
         undoLastFormEdit(id, entryBefore);
       }
-      createToast("Event updated", handleUndoLastEdit);
+      setTimeout(() => {
+        console.log('ran')
+        createToast("Event updated", handleUndoLastEdit);
+      }, 4)
     }
   }
 
