@@ -8,9 +8,8 @@ Contact: ottofy@zohomail.com
 
 ## Documentation
 
-Thank you for taking the time to check out this project!
-
 **This Documentation is a work in progress.**
+
 I am currently working on a dev.to writeup that will follow more as a tutorial. If the feedback is positive, I will consider making a step by step tutorial in video format but it could potentially be around 10 hours long so I'm still gauging interest. Please let me know if you would be interested in this by contacting me directly via email (ottofy@zohomail.com).
 
 ____________
@@ -188,11 +187,6 @@ ____________
 * Toast popups:
   * Allow user to "undo" any edits to events.
   * Allow user to remove new events.
-
-### Feb 2, 2023
-
-* Massive performance improvement:
-  * [test](https://flic.kr/p/2oeJELc)
 
 ____________
 
