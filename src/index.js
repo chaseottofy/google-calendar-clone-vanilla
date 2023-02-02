@@ -52,6 +52,7 @@ import "./styles/aside/shortcuts.css";
 // localStorage.clear()
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
+// @@@@week modal bug
 
 // window.addEventListener("click", () => {
 //   for (let i = 0; i < document.all.length; i++) {

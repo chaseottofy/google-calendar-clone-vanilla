@@ -288,8 +288,6 @@ export default function setDayView(context, store, datepickerContext) {
       false
     );
 
-    console.log(closearg);
-
     closearg
       ? store.setFormResetHandle("day", closearg)
       : store.setFormResetHandle("day", setResetDv);
@@ -324,7 +322,6 @@ export default function setDayView(context, store, datepickerContext) {
   function createDvTop(entr) {
     const dvtopgrid = document.createElement("div");
     dvtopgrid.classList.add("dv--ontop__grid");
-    console.log(entr);
 
     if (entr.length > 6) {
       const moremessage = document.createElement("div");

@@ -254,21 +254,23 @@ export default function setWeekView(context, store, datepickerContext) {
     // remove all listeners / functionality when context menu is opened
     // do so separately from the closealldaymodal function so that the modal itself will still be visible when form/context menu is open
     function resetalldaymodal() {
-      modal.onclick = null;
+    }
+    
+    function closealldaymodal() {
+      modal.remove();
+      modal.onmousedown = null;
       resizeoverlay.classList.add("hide-resize-overlay");
       resizeoverlay.onclick = null;
       document.removeEventListener("keydown", closealldayonEsc);
       store.removeActiveOverlay("allday-modal");
-    }
-
-    function closealldaymodal() {
-      modal.remove();
       cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B";
       cell.classList.remove("allday-modal__cell--open");
     }
 
     entries.forEach((entry, idx) => {
-      const cell = createAllDayModalCell(entry, idx, col, closealldaymodal);
+      const cell = createAllDayModalCell(
+        entry, idx, col, closealldaymodal
+      );
       modalcontent.appendChild(cell);
     });
 
@@ -277,18 +279,18 @@ export default function setWeekView(context, store, datepickerContext) {
       const getMeatballBtn = getClosest(e, ".allday-modal__cell-action-icons");
 
       if (getCloseAdBtn) {
-        resetalldaymodal();
+        // resetalldaymodal();
         closealldaymodal();
         return;
       }
 
       if (getMeatballBtn) {
+        // resetalldaymodal();
         getWeekViewContextMenu(
           store.getEntry(e.target.parentElement.getAttribute("data-allday-modal-cell-id")),
           closealldaymodal,
           e
         );
-        resetalldaymodal();
         return;
       }
     }
@@ -298,7 +300,7 @@ export default function setWeekView(context, store, datepickerContext) {
     main.insertBefore(modal, document.querySelector(".weekview__top"));
     store.addActiveOverlay("allday-modal");
     resizeoverlay.onclick = closealldaymodal;
-    modal.onclick = delegateAllDayModal;
+    modal.onmousedown = delegateAllDayModal;
     document.addEventListener("keydown", closealldayonEsc);
   }
 
@@ -738,11 +740,10 @@ export default function setWeekView(context, store, datepickerContext) {
     }
 
     if (getAllDayCol) {
-      if (e.target.childElementCount === 0) {
+      if (e.target.childElementCount > 0) {
+        openAllDayModal(e, e.target);
         return;
       }
-      openAllDayModal(e, e.target);
-      return;
     }
   }
 
