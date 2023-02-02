@@ -36,13 +36,6 @@ import handleOverlap, {
 
 import { getClosest, placePopup } from "../../utilities/helpers"
 
-import createToast from "../toastPopups/toast"
-
-import {
-  toastNoCategorySelected,
-  removeToastNoCategorySelected,
-} from "../toastPopups/toastCallbacks"
-
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
 // calendar overlay

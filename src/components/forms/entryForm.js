@@ -9,7 +9,6 @@ import { createCheckIcon } from "../../utilities/svgs"
 
 // popups confirmation
 import createToast from "../toastPopups/toast"
-import toastCallbackSaving from "../toastPopups/toastCallbacks"
 
 // event helpers
 import {
@@ -672,16 +671,15 @@ export default function setEntryForm(context, store, datepickerContext) {
     
     // if the submission type is create, pass a callback function to allow user to remove the last entry if they wish
     if (type === "create") {
-      createToast("Event created", null, null, null, removeLastFormEntry);
+      createToast("Event created", removeLastFormEntry);
     } else {
     // if the submission type is edit, pass a callback function to allow user to undo the last edit if they wish
 
     // determine whether the entry was edited or not
-    
       const handleUndoLastEdit = () => {
         undoLastFormEdit(id, entryBefore);
       }
-      createToast("Event updated", null, null, null, handleUndoLastEdit);
+      createToast("Event updated", handleUndoLastEdit);
     }
   }
 

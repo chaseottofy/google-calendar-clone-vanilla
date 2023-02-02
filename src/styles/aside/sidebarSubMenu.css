@@ -156,7 +156,7 @@
 .sub-menu--item {
   border-bottom: 1px solid var(--mediumgrey1);
   height: min-content;
-  padding: 24px 4px 24px 0;
+  padding: 24px 4px 24px 4px;
   width: 100%
 }
 
@@ -468,7 +468,7 @@
 .smdt-title,
 .smia-set-status-title {
   color: var(--white4);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 48px;
   padding: 0 12px;
@@ -505,13 +505,14 @@
   border-radius: 16px;
   height: 100%;
   position: absolute;
-  transition: .3s;
+  /* transition: .3s; */
+  transition: all 150ms ease-in-out;
   width: 100%
 }
 
 .smdt-toggle-checkbox:checked~.smdt-slider,
 .smia-toggle-shortcuts-checkbox:checked~.smia-slider {
-  background: var(--primary1)
+  background: var(--primary1);
 }
 
 .smdt-slider:before,
@@ -523,7 +524,8 @@
   left: 4px;
   position: absolute;
   top: 3px;
-  transition: .3s;
+  /* transition: .2s; */
+  transition: all 150ms ease-in-out;
   width: 26px
 }
 
@@ -542,7 +544,8 @@
   align-items: center;
   padding: 0 12px;
   border-radius: 6px;
-  background: var(--black2);
+  /* background: var(--black2); */
+  border: 1px solid var(--black2);
   font-size: 13px;
 }
 

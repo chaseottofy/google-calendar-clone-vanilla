@@ -464,6 +464,7 @@ export default function renderViews(context, datepickerContext, store) {
   * For now, I'm keeping global throttle at 150ms. 
   */
   function delegateGlobalKeyDown(e) {
+    const temptoastpopup = document?.querySelector(".toast")
     const toggleChangeview = (e) => {
       if (selectElement.classList.contains("selection--active")) {
         if (e.key.toLowerCase() === "v") {
@@ -567,7 +568,12 @@ export default function renderViews(context, datepickerContext, store) {
       // opens search modal
       case "g":
         createGoTo(context, store, datepickerContext);
-        // document.querySelector("")
+        break;
+
+      case "escape":
+        if (temptoastpopup) {
+          temptoastpopup.remove();
+        }
         break;
 
       case "+":
@@ -576,6 +582,7 @@ export default function renderViews(context, datepickerContext, store) {
           color: "#2C52BA",
         }
         createCategoryForm(store, targetcat, false, null);
+        
       default:
         break;
     }

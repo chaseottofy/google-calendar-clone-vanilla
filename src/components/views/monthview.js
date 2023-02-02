@@ -8,13 +8,6 @@ import getEntryOptionModal from "../menus/entryOptions";
 // Box query
 import MonthBoxQuery from "../../factory/queries"
 
-// popup messages / actions
-import createToast from "../toastPopups/toast"
-import {
-  toastNoCategorySelected,
-  removeToastNoCategorySelected,
-} from "../toastPopups/toastCallbacks"
-
 // date utilities
 import {
   getDateFormatted,
@@ -605,7 +598,7 @@ export default function setMonthView(context, store, datepickerContext) {
     const rect = parent.getBoundingClientRect();
     let newleft = parseInt(rect.left)
     let rectWidth = parseInt(rect.width);
-    
+
     let [x, y] = placePopup(
       216,
       modalHeight,
@@ -776,48 +769,45 @@ export default function setMonthView(context, store, datepickerContext) {
 
   function createEntryOnEmptyTarget(e, cellWrapper) {
     if (e.target.classList.contains("monthview--daycontent")) {
-      // if no categories are selected, open sidebar and highlight category box
-      const categoryBox = document.querySelector(".sb__categories--body")
+      // get first active category & create temp box with its color
+      const cell = cellWrapper.parentElement;
+      const rect = cell.getBoundingClientRect();
+      const [start, end] = generateTempStartEnd(
+        getDateFromAttribute(cell, "data-mv-date", "month")
+      );
+
+      // handle case where no category is active
+      let tempctg;
+      let color;
       if (store.getActiveCategories() === undefined) {
-        categoryBox.classList.remove("toggle-category--modal")
-        createToast(
-          "No categories selected",
-          sidebar.classList.contains("hide-sidebar") ? store.getRenderSidebarCallback() : null,
-          toastNoCategorySelected,
-          removeToastNoCategorySelected,
-          null,
-        )
-        return;
+        let tempdefaultctg = store.getDefaultCtg();
+        tempctg = tempdefaultctg[0];
+        color = tempdefaultctg[1].color;
       } else {
-
-        // get first active category & create temp box with its color
-        const cell = cellWrapper.parentElement;
-        const rect = cell.getBoundingClientRect();
-        const [start, end] = generateTempStartEnd(
-          getDateFromAttribute(cell, "data-mv-date", "month")
-        );
-        const [tempctg, color] = store.getFirstActiveCategoryKeyPair();
-        const offsetcolor = hextorgba(color, 0.5);
-
-        configNewBoxInsertion(cellWrapper, cell, tempctg, offsetcolor)
-        store.setFormResetHandle("month", handleMonthviewFormClose);
-        const openForm = store.getRenderFormCallback();
-        const setup = new FormSetup();
-
-        setup.setSubmission("create", null, null, null);
-        setup.setCategory(tempctg, color);
-        setup.setDates(getFormDateObject(start, end))
-
-        openForm()
-        fullFormConfig.setFormDatepickerDate(context, datepickerContext, start)
-        fullFormConfig.getConfig(setup.getSetup())
-        fullFormConfig.setFormStyle(
-          parseInt(rect.right), 
-          parseInt(rect.top),
-          false,
-          null
-        );
+        let tempcurrentctg = store.getFirstActiveCategoryKeyPair()
+        tempctg = tempcurrentctg[0];
+        color = tempcurrentctg[1];
       }
+      const offsetcolor = hextorgba(color, 0.5);
+
+      configNewBoxInsertion(cellWrapper, cell, tempctg, offsetcolor)
+      store.setFormResetHandle("month", handleMonthviewFormClose);
+      const openForm = store.getRenderFormCallback();
+      const setup = new FormSetup();
+
+      setup.setSubmission("create", null, null, null);
+      setup.setCategory(tempctg, color);
+      setup.setDates(getFormDateObject(start, end))
+
+      openForm()
+      fullFormConfig.setFormDatepickerDate(context, datepickerContext, start)
+      fullFormConfig.getConfig(setup.getSetup())
+      fullFormConfig.setFormStyle(
+        parseInt(rect.right),
+        parseInt(rect.top),
+        false,
+        null
+      );
     }
   }
 

@@ -1,8 +1,5 @@
 import setViews from "../../config/setViews";
 import { getClosest } from "../../utilities/helpers";
-import createToast from "../toastPopups/toast";
-import { taostDeleteEntryWarning } from "../toastPopups/toastCallbacks";
-import { formatStartEndTimes } from "../../utilities/timeutils";
 
 import {
   formatEntryOptionsDate,

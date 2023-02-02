@@ -210,8 +210,6 @@ html {
   --black000: #0c0e0e;
   --black0: #000000;
   --black1: #0c0c0d;
-  /* 181a1b */
-  /* --black1: rgb(6, 6, 7); */
   --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;
@@ -230,13 +228,13 @@ html {
   --scrollerThumbBackgroundHover: #505b65;
   --scrollerTrackBackground: var(--black1);
   --box-shadow1:
-    rgba(54, 147, 255, 0.1) 0 3px 6px 0,
+    rgba(54, 147, 255, 0.1) 0 3px 3px 0,
     rgba(0, 0, 0, 0.1) 0 6px 6px 0;
   --box-shadow3:
-    rgba(54, 147, 255, 0.14) 0 6px 14px,
-    rgba(0, 0, 0, 0.23) 0 6px 6px;
+    rgba(54, 147, 255, 0.1) 0 2px 7px 0,
+    rgba(0, 0, 0, 0.23) 0 6px 6px 0;
   --box-shadow-sbfixed:
-    rgba(59, 88, 108, .2) 4px 8px 12px 0;
+    rgba(59, 88, 108, .1) 4px 8px 12px 0;
   --box-shadow5:
     rgba(60, 64, 67, 0.4) 0px 1px 2px 0px,
     rgba(60, 64, 67, 0.2) 0px 1px 3px 1px;

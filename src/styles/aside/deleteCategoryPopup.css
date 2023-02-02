@@ -171,7 +171,7 @@ input[type=radio] {
 .popup-delete-ctg__btn--cancel,
 .popup-delete-ctg__btn--proceed {
   align-items: center;
-  border-radius: 18px;
+  border-radius: 22px;
   cursor: pointer;
   display: flex;
   font-size: 15px;
@@ -186,11 +186,12 @@ input[type=radio] {
 .popup-delete-ctg__btn--proceed {
   background: var(--black3);
   border: 1px solid var(--darkgrey1);
+
 }
 
 .popup-delete-ctg__btn--proceed:hover {
   background: var(--red1);
-  color: var(--white4);
+  color: var(--taskcolor0);
 }
 
 @media screen and (max-width:440px) {

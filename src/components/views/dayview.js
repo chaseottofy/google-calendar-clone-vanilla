@@ -33,13 +33,6 @@ import handleOverlap, {
 
 import { getClosest, placePopup } from "../../utilities/helpers";
 
-// import createToast from "../toastPopups/toast";
-
-// import {
-//   toastNoCategorySelected,
-//   removeToastNoCategorySelected,
-// } from "../toastPopups/toastCallbacks";
-
 import locales from "../../locales/en";
 
 // day view header (row 1)
