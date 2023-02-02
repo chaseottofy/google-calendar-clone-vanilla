@@ -16,10 +16,7 @@ import calcTime from "./timeutils"
  * -- render :
  * document.onmouseup intitiates all render logic
  * 
- * 
- * 
  */
-
 
 const identifiers = {
   boxnumarr: {
@@ -390,24 +387,24 @@ function createTemporaryBox(box, col, hasSibling, view) {
 
 function getBoxDefaultStyle(y, backgroundColor) {
   const style = identifiers.styles.newBox
-  return `top:${y}px; left:${style.left}; height:${style.height}; width:${style.width}; background-color:${backgroundColor};`
+  return `top:${y}px; left:${style.left}; height:${style.height}; width:${style.width}; background-color:${backgroundColor};`;
 }
 
 function resetStyleOnClick(view, box) {
-  box.setAttribute("class", identifiers.boxClasses[view].base)
+  box.setAttribute("class", identifiers.boxClasses[view].base);
   box.style.left = 'calc((100% - 0px) * 0 + 0px)';
-  box.style.width = "calc((100% - 4px) * 1)"
+  box.style.width = "calc((100% - 4px) * 1)";
 }
 
 function createTempBoxHeader(view) {
-  const baseClass = identifiers.boxClasses[view].base
+  const baseClass = identifiers.boxClasses[view].base;
   const boxheader = document.createElement('div');
   const boxtitle = document.createElement('div');
   boxheader.classList.add(`${baseClass}__header`);
   boxtitle.classList.add(`${baseClass}-title`);
   boxtitle.textContent = "(no title)";
-  boxheader.appendChild(boxtitle)
-  return boxheader
+  boxheader.appendChild(boxtitle);
+  return boxheader;
 }
 
 function startEndDefault(y) {
@@ -422,11 +419,11 @@ function startEndDefault(y) {
 }
 
 function calcNewHourFromCoords(h, y) {
-  return Math.floor(((h + y) / 12.5) / 4)
+  return Math.floor(((h + y) / 12.5) / 4);
 }
 
 function calcNewMinuteFromCoords(h, y) {
-  return Math.floor(((h + y) / 12.5) % 4) * 15
+  return Math.floor(((h + y) / 12.5) % 4) * 15;
 }
 
 function calcDateOnClick(date, start, length) {

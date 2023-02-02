@@ -66,8 +66,6 @@
 
 /*! ../toastPopups/toast */
 
-/*! ../toastPopups/toastCallbacks */
-
 /*! ../utilities/dateutils */
 
 /*! ../utilities/helpers */
@@ -373,7 +371,3 @@
 /*!***************************************************!*\
   !*** ./src/components/menus/sidebarDatepicker.js ***!
   \***************************************************/
-
-/*!******************************************************!*\
-  !*** ./src/components/toastPopups/toastCallbacks.js ***!
-  \******************************************************/

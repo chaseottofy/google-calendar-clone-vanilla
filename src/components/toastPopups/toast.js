@@ -2,6 +2,8 @@ import {
   createCloseIcon,
 } from "../../utilities/svgs"
 
+import { getClosest } from "../../utilities/helpers";
+
 const body = document.querySelector(".body");
 /**
  * 
@@ -14,19 +16,14 @@ const body = document.querySelector(".body");
 export default function createToast(message, undoCallback) {
 
   function closetoast() {
-    const closetoastbtn = document?.querySelector(".close-toast-icon-wrapper")
     const toastpopup = document?.querySelector(".toast")
-
     if (toastpopup) {
       toastpopup.remove();
     }
 
-    if (closetoastbtn) {
-      closetoastbtn.onclick = null;
-    }
-
-    window.removeEventListener("mousedown", closetoast);
+    document.onmousedown = null;
   }
+
 
   function undo() {
     undoCallback()
@@ -44,22 +41,44 @@ export default function createToast(message, undoCallback) {
     const closeIconWrapper = document.createElement("div")
     closeIconWrapper.classList.add("close-toast-icon-wrapper")
     closeIconWrapper.appendChild(createCloseIcon("var(--white4)"))
-    closeIconWrapper.onclick = closetoast
 
     const undoToastWrapper = document.createElement("div")
     undoToastWrapper.classList.add("undo-toast-wrapper")
-
     const undoToastMessage = document.createElement("div")
     undoToastMessage.classList.add("undo-toast-message")
     undoToastMessage.textContent = "Undo"
-
     undoToastWrapper.appendChild(undoToastMessage);
-    toast.append(toastMessage, undoToastWrapper, closeIconWrapper);
+    
 
-    undoToastWrapper.onclick = undo
-    body.insertBefore(toast, body.firstChild)
-    window.addEventListener("mousedown", closetoast);
+
+
+    function delegateToast(e) {
+      // if e.target is not in the toast, remove the toast
+      const gettoast = getClosest(e, ".toast");
+      if (!gettoast) {
+        closetoast();
+        return;
+      }
+
+      const getundo = getClosest(e, ".undo-toast-wrapper");
+      const getclose = getClosest(e, ".close-toast-icon-wrapper");
+
+      if (getundo) {
+        undoCallback();
+        closetoast();
+        return;
+      }
+
+      if (getclose) {
+        closetoast();
+        return;
+      }
+    }
+
+    toast.append(toastMessage, undoToastWrapper, closeIconWrapper);
+    body.prepend(toast);
+
+    document.onmousedown = delegateToast;
   }
-  
-  createToast()
+  createToast();
 }

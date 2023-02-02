@@ -573,6 +573,7 @@ export default function renderViews(context, datepickerContext, store) {
       case "escape":
         if (temptoastpopup) {
           temptoastpopup.remove();
+          document.onmousedown = null;
         }
         break;
 
@@ -582,7 +583,7 @@ export default function renderViews(context, datepickerContext, store) {
           color: "#2C52BA",
         }
         createCategoryForm(store, targetcat, false, null);
-        
+
       default:
         break;
     }
