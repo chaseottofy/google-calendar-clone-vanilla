@@ -91,7 +91,8 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     entryOptionsOverlay.classList.add("entry__options--hidden");
     store.removeActiveOverlay("entry__options--hidden");
     entryOptionDescription.parentElement.removeAttribute("style");
-
+    entryOptionsWrapper.onmousedown = null;
+    entryOptionsOverlay.onmousedown = null;
     document.removeEventListener("keydown", handleEntryOptionKD);
   }
 
@@ -167,6 +168,7 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
 
   function handleEntryOptionKD(e) {
     const deletepopup = document?.querySelector(".delete-popup")
+
     if (e.key === "Escape") {
       if (deletepopup) {
         deletepopup.remove();
@@ -186,9 +188,9 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
   }
 
   function delegateEntryOptions(e) {
-    const editBtn = getClosest(e, ".eoi__edit")
-    const deleteBtn = getClosest(e, ".eoi__delete")
-    const closeBtn = getClosest(e, ".eoi__close")
+    const editBtn = getClosest(e, ".eoi__edit");
+    const deleteBtn = getClosest(e, ".eoi__delete");
+    const closeBtn = getClosest(e, ".eoi__close");
 
     if (editBtn) {
       openEditForm();

@@ -400,8 +400,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     store.addActiveOverlay("hide-datepicker-overlay")
     datepickerContext.setDate(year, month, day)
     datepickerContext.setDateSelected(day)
-    // console.log(datepickerContext.getDateSelected());
-    console.log(datepickerContext.getDate());
     setDatepicker(context, store, datepickerContext, "form")
   }
 
@@ -654,11 +652,14 @@ export default function setEntryForm(context, store, datepickerContext) {
     entriesForm.reset();
     descriptionInput.value = "";
     titleInput.value = "";
+
     if (categoryModalWrapper.classList.contains("category-modal-open")) {
       closeCategoryModal();
     }
 
     document.removeEventListener("keydown", delegateFormKeyDown);
+    entriesFormWrapper.onmousedown = null;
+    formOverlay.onmousedown = null;
 
     const resetCurrentView = store.getFormResetHandle(currentComponent)
     if (resetCurrentView !== null) {
@@ -777,6 +778,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     categoryModalWrapper.removeAttribute("style")
     formModalOverlay.onclick = null;
     closeCategoryModalBtn.onclick = null;
+    categoryModal.onclick = null;
   }
 
   function createCategoryOptions(parent, categories) {

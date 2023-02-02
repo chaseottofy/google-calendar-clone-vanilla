@@ -12,10 +12,10 @@ export default function setHeader(context, component, store) {
   const btnnext = document.querySelector('.next');
   const datetimeWrapper = document.querySelector(".h-col-2");
   const datetimeContent = document.querySelector(".datetime-content")
-  const collapsebtn = document.querySelector(".collapse-view")
+  // const collapsebtn = document.querySelector(".collapse-view")
   const prevnext = document.querySelector(".prev-next");
   
-  component === "week" || component === "day" ? collapsebtn.classList.remove("hide-cbt") : collapsebtn.classList.add("hide-cbt");
+  // component === "week" || component === "day" ? collapsebtn.classList.remove("hide-cbt") : collapsebtn.classList.add("hide-cbt");
 
   const configHeader = (borderstyle, componentTitle) => {
     header.style.borderBottom = borderstyle;

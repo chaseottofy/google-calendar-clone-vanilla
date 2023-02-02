@@ -132,6 +132,8 @@ export default function createGoTo(context, store, datepickerContext) {
 
   function closeGoTo() {
     document.removeEventListener("keydown", closeGoToOnEscape);
+    cancelGoto.onclick = null;
+    submitGoto.onclick = null;
     store.removeActiveOverlay("hide-gotodate");
     gotoOverlay.classList.add("hide-gotodate");
     goto.classList.add("hide-gotodate");

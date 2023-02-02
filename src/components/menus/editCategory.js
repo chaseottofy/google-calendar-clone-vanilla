@@ -144,6 +144,8 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     ctgformInput.value = "";
     ctgErrMsg.classList.add("hide-ctg-err");
     store.removeActiveOverlay('hide-ctg-form');
+    ctgform.onmousedown = null;
+    ctgformoverlay.onclick = null;
     document.removeEventListener("keydown", closeCategoryFormOnEsc);
   }
 

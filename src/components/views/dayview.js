@@ -47,6 +47,7 @@ const dvHeaderInfo = document.querySelector(".dayview--header-day__info");
 const dvOnTop = document.querySelector(".dayview--ontop-container");
 
 // main grid wrapper (row 3) (scroll wrapper) (offsettop)
+const dvContainer = document.querySelector(".calendar__dayview")
 const dvGrid = document.querySelector(".dayview__grid");
 const dvMainGrid = document.querySelector(".dayview--main-grid");
 
@@ -176,8 +177,7 @@ export default function setDayView(context, store, datepickerContext) {
   function resetDayview() {
     dvMainGrid.innerText = "";
     dvOnTop.innerText = "";
-    dvGrid.onmousedown = null;
-    dvOnTop.onmousedown = null;
+    dvContainer.onmousedown = null;
   }
 
   function openDvMore(entr) {
@@ -239,6 +239,11 @@ export default function setDayView(context, store, datepickerContext) {
       morepopup.remove();
       store.removeActiveOverlay("morepopup");
       document.removeEventListener("keydown", closeMpOnEsc);
+      morepopupoverlay.onclick = null;
+      morepopupClose.onclick = null;
+      morepopupBody.onclick = null;
+      // document.querySelector(".dv--ontop__more").onclick = null;
+      // moremessage.onclick = opdm;
     };
 
     const closeMpOnEsc = (e) => {
@@ -256,11 +261,12 @@ export default function setDayView(context, store, datepickerContext) {
     }
 
     morepopup.append(morepopupHeader, morepopupBody);
-    document.body.appendChild(morepopupoverlay);
-    document.body.appendChild(morepopup);
+    document.body.prepend(morepopupoverlay, morepopup);
+    // document.body.appendChild(morepopup);
     morepopupoverlay.onclick = closemp;
     morepopupClose.onclick = closemp;
     morepopupBody.onclick = getEntrItem;
+    // document.querySelector(".dv--ontop__more").onclick = null;
     document.addEventListener("keydown", closeMpOnEsc);
   }
 
@@ -283,6 +289,8 @@ export default function setDayView(context, store, datepickerContext) {
       [window.innerWidth, window.innerHeight],
       false
     );
+
+    console.log(closearg)
 
     closearg
       ? store.setFormResetHandle("day", closearg)
@@ -318,14 +326,15 @@ export default function setDayView(context, store, datepickerContext) {
   function createDvTop(entr) {
     const dvtopgrid = document.createElement("div");
     dvtopgrid.classList.add("dv--ontop__grid");
+    console.log(entr)
 
     if (entr.length > 6) {
       const moremessage = document.createElement("div");
       moremessage.classList.add("dv--ontop__more");
       moremessage.textContent = `${entr.length} more...`;
       dvOnTop.appendChild(moremessage);
-      const opdm = () => openDvMore(entr);
-      moremessage.onclick = opdm;
+      // const opdm = () => openDvMore(entr);
+      // moremessage.onclick = opdm;
       return;
     } else {
       createStackableEntriesOnTop(entr);
@@ -603,7 +612,6 @@ export default function setDayView(context, store, datepickerContext) {
     let movedY = 0;
 
     function mousemove(e) {
-      // console.log(e)
       movedY += e.movementY;
       let newHeight =
         Math.round((e.pageY + scrolled - y - headerOffset) / 12.5) * 12.5;
@@ -684,31 +692,40 @@ export default function setDayView(context, store, datepickerContext) {
     handleOverlap(null, "day", boxes);
   }
 
-  function delegateDayViewOnTop(e) {
-    const dvhboxTop = getClosest(e, ".dayview--ontop__grid-item");
-    if (dvhboxTop) {
-      openStackEntryOnTop(e);
-      return;
-    }
-  }
-
   function delegateDayView(e) {
     const dvhresizehandle = getClosest(e, ".dv-box-resize-s");
     const dvhbox = getClosest(e, ".dv-box");
     const dvhgrid = getClosest(e, ".dayview--main-grid");
+    const dvhboxTop = getClosest(e, ".dayview--ontop__grid-item");
+    const dvhGrouped = getClosest(e, ".dv--ontop__more");
 
+    // resize existing event
     if (dvhresizehandle) {
       resizeBoxNSDay(e, e.target.parentElement);
       return;
     }
 
+    // drag existing event
     if (dvhbox) {
       dragEngineDay(e, e.target);
       return;
     }
 
+    // drag empty space to create new event
     if (dvhgrid) {
       createBoxOnDragDay(e, e.target);
+      return;
+    }
+
+    // opens stacked all day events (less than 6)
+    if (dvhboxTop) {
+      openStackEntryOnTop(e);
+      return;
+    }
+
+    // opens grouped all day events (more than 6)
+    if (dvhGrouped) {
+      openDvMore(boxes.getBoxesTop());
       return;
     }
   }
@@ -736,8 +753,7 @@ export default function setDayView(context, store, datepickerContext) {
   const initDayView = () => {
     renderBoxesForGrid();
     configHeader();
-    dvGrid.onmousedown = delegateDayView;
-    dvOnTop.onmousedown = delegateDayViewOnTop;
+    dvContainer.onmousedown = delegateDayView;
     store.setResetPreviousViewCallback(resetDayview);
     handleScrollToOnInit();
   };

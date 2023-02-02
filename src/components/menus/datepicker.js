@@ -113,16 +113,17 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     }
 
     datepickeroverlay.onclick = null;
-    document.removeEventListener("keydown", datepickerKeypressThrottle)
+    datepicker.onmousedown = null;
+    document.removeEventListener("keydown", datepickerKeypressThrottle);
     montharray = [];
   }
 
   function renderpicker(y, m, d) {
-    context.setDate(y, m, d)
-    context.setDateSelected(d)
+    context.setDate(y, m, d);
+    context.setDateSelected(d);
     setViews(context.getComponent(), context, store, datepickerContext);
-    datepickerContext.setDate(y, m, d)
-    closeDatepicker()
+    datepickerContext.setDate(y, m, d);
+    closeDatepicker();
   }
 
   function handleFormDate(y, m, d) {

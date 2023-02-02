@@ -363,7 +363,6 @@ export default function handleSidebarCategories(context, store, datepickerContex
     }
 
     function handleOpenEditCtg(e) {
-      // console.log(e.target)
       createCategoryForm(store, targetCtg, true, targetElement);
       closeCategoryOptionsMenu();
     }
@@ -404,11 +403,11 @@ export default function handleSidebarCategories(context, store, datepickerContex
   }
 
   function delegateCategoryEvents(e) {
-    const ctgtoggleModal = getClosest(e, ".sbch-col__one")
-    const editctgBtn = getClosest(e, ".sbch-col--actions__edit-icon")
-    const deletectgBtn = getClosest(e, ".sbch-col--actions__delete-icon")
-    const ctgChck = getClosest(e, ".sbch-form--item__col")
-    const ctgPlus = getClosest(e, ".sbch-plus")
+    const ctgtoggleModal = getClosest(e, ".sbch-col__one");
+    const editctgBtn = getClosest(e, ".sbch-col--actions__edit-icon");
+    const deletectgBtn = getClosest(e, ".sbch-col--actions__delete-icon");
+    const ctgChck = getClosest(e, ".sbch-form--item__col");
+    const ctgPlus = getClosest(e, ".sbch-plus");
 
     if (ctgtoggleModal) {
       handleCategoryModalToggle()

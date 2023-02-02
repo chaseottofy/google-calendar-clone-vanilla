@@ -19,7 +19,6 @@ const headerLogo = document.querySelector(".logo")
 const toggleForm = document.querySelector(".toggle-form")
 const sbToggleForm = document.querySelector(".sb-toggle-form-btn")
 const sbToggleSubBtn = document.querySelector(".sb-data-btn")
-const sbToggleThemeBtn = document.querySelector(".sb-theme-btn")
 const formOverlay = document.querySelector(".form-overlay")
 const form = document.querySelector(".entries__form")
 
@@ -33,6 +32,7 @@ const optionswrapper = document.querySelector(".change-view--wrapper");
 const options = document.querySelectorAll(".view-option");
 
 const sidebar = document.querySelector(".sidebar");
+const sbFooter = document.querySelector(".sb__info")
 
 const viewsContainer = document.querySelector(".container__calendars");
 const yearwrapper = document.querySelector(".yearview");
@@ -40,8 +40,6 @@ const monthwrapper = document.querySelector(".monthview");
 const listviewBody = document.querySelector(".listview__body");
 
 const collapsebtn = document.querySelector(".collapse-view");
-
-const toastpopup = document.querySelector(".toast");
 
 export default function renderViews(context, datepickerContext, store) {
   function setColorScheme() {
@@ -242,14 +240,24 @@ export default function renderViews(context, datepickerContext, store) {
   function handleBtnMainMenu() {
     const currentSidebarState = context.getSidebarState()
     if (currentSidebarState === "hide") {
+      toggleForm.onclick = handleForm;
+      sbToggleForm.onclick = null;
+      sbToggleSubBtn.onclick = null;
+      sbFooter.onmousedown = null;
+
       toggleForm.classList.remove("hide-toggle--form")
       viewsContainer.classList.remove("container__calendars-sb-active")
       sidebar.classList.add("hide-sidebar");
       dateTimeWrapper.classList.remove("datetime-inactive");
       listviewBody.removeAttribute("style");
     } else {
+      
+      toggleForm.onclick = null;
+      sbToggleForm.onclick = handleForm;
+      sbToggleSubBtn.onclick = handleToggleSubmenu;
       // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
       // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
+
 
       const resetdatepicker = store.getResetDatepickerCallback()
       if (resetdatepicker !== null) {
@@ -268,12 +276,11 @@ export default function renderViews(context, datepickerContext, store) {
       datepickerContext.setDate(
         context.getYear(), context.getMonth(), context.getDay()
       );
-      datepickerContext.setDateSelected(context.getDay())
+
+      datepickerContext.setDateSelected(context.getDay());
 
       renderSidebarCategories();
       renderSidebarDatepicker();
-      sbToggleSubBtn.onclick = handleToggleSubmenu
-      sbToggleThemeBtn.onclick = setColorScheme;
     }
   }
 
@@ -380,6 +387,15 @@ export default function renderViews(context, datepickerContext, store) {
 
   function renderOption(option, initialRender) {
     const comp = context.getComponent()
+    // console.log(comp, option)
+    if (option === "week" || option === "day") {
+      collapsebtn.onclick = handleCollapse;
+      collapsebtn.classList.remove("hide-cbt")
+    } else {
+      collapsebtn.onclick = null;
+      collapsebtn.classList.add("hide-cbt")
+    }
+
     if (option === comp && !initialRender) return;
     closeOptionsModal()
     context.setComponent(option)
@@ -477,6 +493,12 @@ export default function renderViews(context, datepickerContext, store) {
       }
     }
 
+    // if (toastpopup.classList.contains("show-toast")) {
+    //   toastpopup.innerText = "";
+    //   toastpopup.classList.remove("show-toast");
+    //   document.onmousedown = null;
+    // }
+
     switch (e.key.toLowerCase()) {
       // switch to day view
       case "d":
@@ -572,13 +594,8 @@ export default function renderViews(context, datepickerContext, store) {
         createGoTo(context, store, datepickerContext);
         break;
 
-      case "escape":
-        if (toastpopup.classList.contains("show-toast")) {
-          toastpopup.innerText = "";
-          toastpopup.classList.remove("show-toast");
-          document.onmousedown = null;
-        }
-        break;
+      // case "escape":
+      //   break;
 
       case "+":
         const targetcat = {
@@ -631,6 +648,7 @@ export default function renderViews(context, datepickerContext, store) {
         componentBodytoggle: "wvh-body-collapse"
       },
     };
+
     const eyeIcons = {
       on: document.querySelector(".cv-svg-on"),
       off: document.querySelector(".cv-svg-off")
@@ -660,14 +678,11 @@ export default function renderViews(context, datepickerContext, store) {
       handleBtnMainMenu();
     }
     store.setRenderSidebarCallback(ensureSidebarIsOpen);
-
     /*************************/
-    // establish delegation
-    toggleForm.onclick = handleForm;
-    sbToggleForm.onclick = handleForm;
-    collapsebtn.onclick = handleCollapse;
+    // establish global event listeners
     header.onmousedown = delegateHeaderEvents;
     document.addEventListener("keydown", handleGlobalKeydown);
   }
+
   appinit();
 }

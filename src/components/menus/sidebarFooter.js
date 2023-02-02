@@ -33,6 +33,8 @@ export default function handleSidebarFooter(store) {
     sbInfoPopup.classList.add("hide-sb-info-popup")
     sbInfoPopupOverlay.classList.add("hide-sb-info-popup")
     document.removeEventListener("keydown", closeInfoPopupOnEscape)
+    sbInfoPopupOverlay.onclick = null;
+    closePopupButton.onclick = null;
   }
 
   function setInfoContent(selection) {
@@ -47,7 +49,7 @@ export default function handleSidebarFooter(store) {
 
   function closeInfoPopupOnEscape(e) {
     if (e.key === "Escape") {
-      closeInfoPopup()
+      closeInfoPopup();
     }
   }
 
@@ -60,14 +62,14 @@ export default function handleSidebarFooter(store) {
   }
 
   function openInfoPopup(selection) {
-    const selections = ['notes', 'privacy', 'terms']
-    const idx = selections.indexOf(selection)
+    const selections = ['notes', 'privacy', 'terms'];
+    const idx = selections.indexOf(selection);
     selectInfo.selectedIndex = idx;
 
-    store.addActiveOverlay("hide-sb-info-popup")
-    sbInfoPopup.classList.remove("hide-sb-info-popup")
-    sbInfoPopupOverlay.classList.remove("hide-sb-info-popup")
-    setUpInfoPopup()
+    store.addActiveOverlay("hide-sb-info-popup");
+    sbInfoPopup.classList.remove("hide-sb-info-popup");
+    sbInfoPopupOverlay.classList.remove("hide-sb-info-popup");
+    setUpInfoPopup();
   }
 
   function delegateSidebarFooterEvents(e) {
@@ -91,5 +93,5 @@ export default function handleSidebarFooter(store) {
     }
   }
 
-  sidebarFooter.onmousedown = delegateSidebarFooterEvents
+  sidebarFooter.onmousedown = delegateSidebarFooterEvents;
 }

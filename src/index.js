@@ -48,9 +48,18 @@ import "./styles/aside/shortcuts.css"
 /*!*************************************!*/
 // FIX;
 // * validate .json files
-// * set toast to be removed on window focus
 // * linter
-// * timepicker
+
+
 
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
+
+window.addEventListener("click", () => {
+  for (let i = 0; i < document.all.length; i++) {
+    const element = document.all[i];
+    if (element.onmousedown || element.onkeydown || element.onclick) {
+      console.log(element)
+    }
+  }
+})

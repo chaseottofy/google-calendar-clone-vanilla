@@ -3,6 +3,7 @@ import {
 } from "../../utilities/svgs"
 
 import { getClosest } from "../../utilities/helpers";
+import store from "../../context/store";
 
 const body = document.querySelector(".body");
 const toast = document.querySelector(".toast");
@@ -20,6 +21,8 @@ export default function createToast(message, undoCallback) {
     toast.classList.remove("show-toast");
     toast.innerText = "";
     document.onmousedown = null;
+    document.onkeydown = null;
+    store.removeActiveOverlay("toast");
   }
 
   function createToast() {
@@ -63,8 +66,18 @@ export default function createToast(message, undoCallback) {
       }
     }
 
+    function handleToastKeydown(e) {
+      if (e.key) {
+        closetoast();
+      }
+    }
+
     toast.append(toastMessage, undoToastWrapper, closeIconWrapper);
-    toast.classList.add("show-toast")
+    toast.classList.add("show-toast");
+    store.addActiveOverlay("toast");
+
+    
+    document.onkeydown = handleToastKeydown;
     document.onmousedown = delegateToast;
   }
   createToast();

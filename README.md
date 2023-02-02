@@ -100,7 +100,7 @@ At the moment, the application works using local storage but there are options t
   * Move all events from one category to another.
   * Single page. No page refreshes, no load times.
   * Aggressive memory handling.
-  * At MAX there will be 5 active event listeners.
+  * At MAX there will be 8 active event listeners.
   * Sidebar converts to fixed positioning under 840px and main content inherits the full page width.
   * Turn animations/transitions on and off.
   * animation times adjusted.
@@ -205,7 +205,7 @@ This application relies heavily on Event Delegation, the idea of administering e
 
 ## Lifecycle
 
-**At most, 5 of the following 7 delegators will be in the DOM at the same time.**
+**At most, 7 of the following 10 handlers will be present in the DOM at the same time.**
 
 1. `window: resize` - for resizing the window (only in monthview).
 2. `document: keydown` - for handling keyboard events.
@@ -214,6 +214,9 @@ This application relies heavily on Event Delegation, the idea of administering e
 5. `document: onmouseup` - for handling drag / resize.
 6. `modal/form: onmousedown` - for handling clicks on one of the several modals or two forms.
 7. `dayview/weekview/monthview/yearview/listview: onmousedown` - calendar events are delegated from their respective views. Only one of these listeners will be active at a time.
+8. `header: onmousedown` - handles all header related events. This is the only mouse event that is not subject to change. Establishes once and remains active.
+9. `sidebar datepicker: onclick` - only active when sidebar is open.
+10. `sidebar categories: onclick` - only active when sidebar is open.
 
 ## Delegation-Example
 

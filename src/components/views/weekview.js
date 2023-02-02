@@ -103,7 +103,7 @@ export default function setWeekView(context, store, datepickerContext) {
       } else {
         weekviewHeaderDayNumber[idx].classList.remove("wvh--today")
       }
-      
+
       weekviewHeaderDayNumber[idx].textContent = num
       weekviewHeaderDayNumber[idx].setAttribute("data-weekview-date", ymd[idx]);
       topCols[idx].setAttribute("data-wvtop-day", num)
@@ -118,12 +118,11 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   function resetWeekviewBoxes() {
-    cols.forEach(col => { col.innerText = "" })
-    topCols.forEach(col => { col.innerText = "" })
+    cols.forEach(col => { col.innerText = "" });
+    topCols.forEach(col => { col.innerText = "" });
     main.onmousedown = null;
-    alldaymodule.onmousedown = null;
   }
-  
+
   function renderBoxes() {
     cols.forEach(col => { col.innerText = "" })
     topCols.forEach(col => { col.innerText = "" })
@@ -193,23 +192,19 @@ export default function setWeekView(context, store, datepickerContext) {
     cellcategoryTitle.classList.add("allday-modal__cellcategory-title")
     cellcategoryTitle.textContent = "category: " + entry.category;
 
-    const getContextMenuViaMeatball = (e) => {
-      getWeekViewContextMenu(entry, handleCloseCallback, e);
-      cell.style.filter = "brightness(1.1)";
-    }
-
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
     cellIcons.appendChild(createMeatballVertIcon("var(--taskcolor"));
     cell.append(cellcontent, cellIcons);
-    cellIcons.onclick = getContextMenuViaMeatball;
     return cell;
   }
 
   function createAllDayModal(e, col, entries, idx, cell) {
-    let dayofweek = locales.labels.weekdaysLong[idx]
-    let daynumber = col.getAttribute("data-wvtop-day")
+    let dayofweek = locales.labels.weekdaysLong[idx];
+    let daynumber = col.getAttribute("data-wvtop-day");
+
     const modal = document.createElement("div")
     modal.classList.add("allday-modal")
+
     const rect = col.getBoundingClientRect();
     let entriesoffset;
     if (entries.length < 4) {
@@ -221,10 +216,7 @@ export default function setWeekView(context, store, datepickerContext) {
     let [x, y] = placePopup(
       240,
       entriesoffset,
-      [
-        parseInt(rect.left), 
-        parseInt(rect.top) + 24
-      ],
+      [parseInt(rect.left), parseInt(rect.top) + 24],
       [window.innerWidth, window.innerHeight],
       true,
       Math.floor((window.innerWidth - 36 - weekviewGrid.offsetLeft) / 7)
@@ -253,33 +245,61 @@ export default function setWeekView(context, store, datepickerContext) {
     modalcontent.classList.add("allday-modal__content")
 
 
-    const closealldayonEsc = (e) => {
+    function closealldayonEsc(e) {
       if (e.key === "Escape") {
-        closealldaymodal()
+        closealldaymodal();
       }
     }
-    const closealldaymodal = () => {
-      modal.remove()
-      resizeoverlay.classList.add("hide-resize-overlay")
-      cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B"
-      document.removeEventListener("keydown", closealldayonEsc)
-      store.removeActiveOverlay("allday-modal")
-      cell.classList.remove("allday-modal__cell--open")
+
+    // remove all listeners / functionality when context menu is opened
+    // do so separately from the closealldaymodal function so that the modal itself will still be visible when form/context menu is open
+    function resetalldaymodal() {
+      modal.onclick = null;
+      resizeoverlay.classList.add("hide-resize-overlay");
+      resizeoverlay.onclick = null;
+      document.removeEventListener("keydown", closealldayonEsc);
+      store.removeActiveOverlay("allday-modal");
+    }
+
+    function closealldaymodal() {
+      modal.remove();
+      cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B";
+      cell.classList.remove("allday-modal__cell--open");
     }
 
     entries.forEach((entry, idx) => {
       const cell = createAllDayModalCell(entry, idx, col, closealldaymodal)
       modalcontent.appendChild(cell)
-    })
+    });
 
-    modalheader.append(modaltitle, closeAlldayModalBtn)
-    modal.append(modalheader, modalcontent)
-    main.insertBefore(modal, document.querySelector(".weekview__top"))
+    function delegateAllDayModal(e) {
+      const getCloseAdBtn = getClosest(e, ".close-allday-modal");
+      const getMeatballBtn = getClosest(e, ".allday-modal__cell-action-icons")
 
-    resizeoverlay.onclick = closealldaymodal
-    closeAlldayModalBtn.onclick = closealldaymodal
-    document.addEventListener("keydown", closealldayonEsc)
-    store.addActiveOverlay("allday-modal")
+      if (getCloseAdBtn) {
+        resetalldaymodal();
+        closealldaymodal();
+        return;
+      }
+
+      if (getMeatballBtn) {
+        getWeekViewContextMenu(
+          store.getEntry(e.target.parentElement.getAttribute("data-allday-modal-cell-id")),
+          closealldaymodal,
+          e
+        );
+        resetalldaymodal();
+        return;
+      }
+    }
+
+    modalheader.append(modaltitle, closeAlldayModalBtn);
+    modal.append(modalheader, modalcontent);
+    main.insertBefore(modal, document.querySelector(".weekview__top"));
+    store.addActiveOverlay("allday-modal");
+    resizeoverlay.onclick = closealldaymodal;
+    modal.onclick = delegateAllDayModal;
+    document.addEventListener("keydown", closealldayonEsc);
   }
 
   function openAllDayModal(e, cell) {
@@ -691,29 +711,33 @@ export default function setWeekView(context, store, datepickerContext) {
 
   /** delegate via grid */
   function delegateGridEvents(e) {
-    if (getClosest(e, ".weekview--header-day__number")) {
-      setDayView(e)
+    const getHeaderDayNumber = getClosest(e, ".weekview--header-day__number");
+    const getBoxResizeHandle = getClosest(e, ".box-resize-s");
+    const getBox = getClosest(e, ".box");
+    const getWeekCol = getClosest(e, ".week--col");
+    const getAllDayCol = getClosest(e, ".allday--col");
+
+    if (getHeaderDayNumber) {
+      setDayView(e);
       return;
     }
-    
-    if (getClosest(e, ".box-resize-s")) {
+
+    if (getBoxResizeHandle) {
       resizeBoxNS(e, e.target.parentElement);
       return;
     }
 
-    if (getClosest(e, ".box")) {
+    if (getBox) {
       dragEngineWeek(e, e.target);
       return;
     }
 
-    if (getClosest(e, ".week--col")) {
+    if (getWeekCol) {
       createBoxOnDrag(e, e.target);
       return;
     }
-  }
 
-  function delegateGridTop(e) {
-    if (getClosest(e, ".allday--col")) {
+    if (getAllDayCol) {
       if (e.target.childElementCount === 0) {
         return;
       }
@@ -732,12 +756,11 @@ export default function setWeekView(context, store, datepickerContext) {
     configureDaysOfWeek();
     renderDataForGrid();
     main.onmousedown = delegateGridEvents;
-    alldaymodule.onmousedown = delegateGridTop;
     store.setResetPreviousViewCallback(resetWeekviewBoxes)
     if (firstY !== null) {
       setTimeout(() => {
-        weekviewGrid.scrollTo({top:Math.abs((+firstY * 12.5) - 25), behavior: "instant"})
-      }, 4)
+        weekviewGrid.scrollTo({ top: Math.abs((+firstY * 12.5) - 25), behavior: "instant" })
+      }, 4);
     }
   }
   initWeek();

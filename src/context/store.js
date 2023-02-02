@@ -303,7 +303,6 @@ class Store {
   }
 
   compareEntries(entry1, entry2) {
-    console.log(entry1, entry2)
     for (let key in entry1) {
       if (key === "id" || key === "coordinates") continue;
       if (key === "end" || key === "start") {
