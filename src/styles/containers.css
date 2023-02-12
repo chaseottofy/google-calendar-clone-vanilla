@@ -110,12 +110,13 @@
 }
 
 .cc-tran {
-  transition: .3s cubic-bezier(.4, 0, .2, 1);
+  transition-duration: 250ms;
   transition-property: width, transform;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .container__calendars-sb-active {
-  width: calc(100% - 256px);
+  width: calc(100% - 248px);
 }
 
 .hide-view {

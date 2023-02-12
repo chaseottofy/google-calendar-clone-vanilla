@@ -161,12 +161,13 @@
 .monthview--box {
   position: absolute;
   border: none;
+  border-right: 1px solid red;
   cursor: pointer;
   display: flex;
   align-items: center;
   border-radius: 4px;
+  transition-duration: 100ms;
   transition-property: background, height;
-  transition-duration: .1s;
   transition-timing-function: ease-in-out;
 }
 
@@ -179,6 +180,7 @@
   margin-right: 4px;
   align-items: center;
   border-radius: 4px 0 0 4px;
+  background:rgba(0,0,0,.5);
   font-family: var(--primaryFont);
   font-size: 11px;
   font-weight:500;
@@ -211,6 +213,7 @@
   z-index: 1000;
   pointer-events: none;
   opacity: 0.8;
+  /* overflow:hidden; */
 }
 
 .monthview--box__drop {

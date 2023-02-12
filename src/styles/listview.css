@@ -7,9 +7,9 @@
   flex-direction: column;
   background: var(--black1);
   border-left: var(--bordergrey);
+  transition-duration: 0.3s;
   transition-property: margin-left, width;
   transition-timing-function: cubic-bezier(.4,0,.2,1);
-  transition-duration: 0.3s;
 }
 
 .listview__rowgroup {

@@ -3,7 +3,7 @@
   left: 0;
   height: calc(100% - 60px);
   top: 60px;
-  width: 256px;
+  width: 248px;
   background: var(--black1);
   display: flex;
   flex-direction: column;
@@ -14,12 +14,13 @@
 }
 
 .sidebar-transition {
-  transition: .3s cubic-bezier(.4, 0, .2, 1);
-  transition-property: transform, box-shadow;
+  transition-duration: 250ms;
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .hide-sidebar {
-  transform: translateX(-256px);
+  transform: translateX(-248px);
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0) !important;
 }
 

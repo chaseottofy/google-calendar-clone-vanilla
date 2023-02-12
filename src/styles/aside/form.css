@@ -160,7 +160,7 @@
 
 .form--body__description-input,
 .form--body__title-input {
-  transition-duration: .3s;
+  transition-duration: 250ms;
   transition-property: border-bottom;
   transition-timing-function: cubic-bezier(.33, 1, .68, 1)
 }
@@ -176,7 +176,6 @@
   border-bottom: 2px solid transparent;
   border-radius: var(--borderradius);
   color: var(--white2);
-  font-family: var(--primaryFont);
   font-size: 14px;
   font-weight: 400;
   height: 100%;
@@ -276,7 +275,7 @@
   align-items: center;
   min-width: 60px;
   margin-left: 13px;
-  transition-duration: .3s;
+  transition-duration: 250ms;
   transition-property: border-bottom;
   transition-timing-function: cubic-bezier(.33, 1, .68, 1)
 }
@@ -569,7 +568,10 @@
   display: flex;
   height: 100%;
   left: 0;
-  padding: 0 14px;
+  font-size: 16px;
+  font-weight: 500;
+  /* padding: 0 14px; */
+  /*  */
   position: absolute;
   top: 0;
   z-index: 1300 !important;
@@ -606,7 +608,12 @@
     right: 2% !important;
     top: 5% !important;
     bottom: 5% !important;
+    margin: auto !important;
     min-width: 180px !important;
+  }
+
+  .form-header--dragarea {
+    pointer-events:none;
   }
 
   .entries__form--body {

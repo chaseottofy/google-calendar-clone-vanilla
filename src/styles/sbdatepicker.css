@@ -29,9 +29,9 @@
   top: 0;
   left: 0;
   z-index: 2;
+  transition-duration: 200ms;
   transition-property: opacity, transform;
   transition-timing-function: ease-in-out;
-  transition-duration: 200ms;
   padding: 0 4px;
 }
 

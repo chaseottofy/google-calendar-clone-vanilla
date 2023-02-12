@@ -54,7 +54,7 @@
   width: 100%;
   padding: 0 4px;
   z-index: 1;
-  transition-duration: .3s;
+  transition-duration: 250ms;
   transition-property: border-bottom;
   transition-timing-function: cubic-bezier(.33, 1, .68, 1)
 }

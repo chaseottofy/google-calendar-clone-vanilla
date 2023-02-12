@@ -22,9 +22,9 @@
   z-index: -1;
   height: 0;
   transform: translateY(48px);
-  transition-property: transform;
   transition-duration: 100ms;
-  transition-timing-function: ease;
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
 }
 
 .show-toast {

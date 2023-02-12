@@ -249,7 +249,7 @@ export default function setMonthView(context, store, datepickerContext) {
 
   function createTemporaryBox(box) {
     const clone = box.cloneNode(true);
-    monthWrapper.appendChild(clone);
+    monthWrapper.prepend(clone);
     clone.classList.add("box-mv-dragactive");
     clone.focus();
   }
@@ -331,6 +331,7 @@ export default function setMonthView(context, store, datepickerContext) {
     const cellRect = cell.getBoundingClientRect();
     const cellWidth = parseFloat(cellRect.width.toFixed(2));
     const cellHeight = parseFloat(cellRect.height.toFixed(2));
+    const cellLeft = parseFloat(parent.getBoundingClientRect().left.toFixed(4)) + 1;
     const wrapperLeft = parseInt(monthWrapper.offsetLeft);
     const boxRect = box.getBoundingClientRect();
     const boxWidth = parseFloat(boxRect.width);
@@ -339,8 +340,9 @@ export default function setMonthView(context, store, datepickerContext) {
     clone.style.top = `${parent.offsetTop}px`;
     clone.style.width = `${boxWidth}px`;
     clone.style.height = `${boxHeight}px`;
-    clone.style.left = `${parent.offsetLeft}px`;
+    clone.style.left = `${cellLeft}px`;
     clone.style.display = "none";
+    console.log(cellLeft)
 
     let hasFiveWeeks = monthWrapper.classList.contains("five-weeks");
     let [startcursorx, startcursory] = [e.clientX, e.clientY];
@@ -348,8 +350,6 @@ export default function setMonthView(context, store, datepickerContext) {
     let [lastX, lastY] = [cellX, cellY];
     let gaveStyles = false;
     let changeCursor = false;
-
-
 
     const mousemove = e => {
       movedX = Math.abs(e.clientX - startcursorx);
@@ -368,7 +368,8 @@ export default function setMonthView(context, store, datepickerContext) {
         if (!gaveStyles) {
           // document.body.style.cursor = "move";
           box.style.opacity = "0.5";
-          clone.style.display = "block";
+          // box.style.display = "inherit";
+          clone.style.display = "inline";
         }
         gaveStyles = true;
       }
@@ -440,7 +441,6 @@ export default function setMonthView(context, store, datepickerContext) {
       const boxes = newCellContent?.children;
       let boxmoved = false;
 
-
       // newcell not found 
       // edge case, haven't come across this yet
       if (newCell === undefined || newCell === null) {
@@ -511,7 +511,6 @@ export default function setMonthView(context, store, datepickerContext) {
           renderSidebarDatepickerMonth();
         }
       }
-
 
       if (boxmoved) {
         // & original cell empty 

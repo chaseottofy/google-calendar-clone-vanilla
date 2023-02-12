@@ -357,17 +357,17 @@
   user-select: none;
   z-index: 3;
   color: var(--taskcolor) !important;
-  transition-property: left, width;
   transition-duration: 200ms;
+  transition-property: left, width;
   transition-timing-function: ease-in-out;
   padding: 0 2px;
 }
 
-.tempbox-tra {
-  transition-property: height, top !important;
+/* .tempbox-tra {
   transition-duration: 500ms;
+  transition-property: height, top !important;
   transition-timing-function: ease-in-out;
-}
+} */
 
 .dv-box__header {
   font-size: 12px;

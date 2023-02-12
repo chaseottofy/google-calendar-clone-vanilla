@@ -47,10 +47,19 @@ import "./styles/aside/shortcuts.css";
 
 /*!*************************************!*/
 // FIX;
+// hide sidebar datepicker after sidebar has been closed
+// invalid date mobile 
+// drag mobile
+// keyframes cause lag
+// cursor issue, don't remember what it was
 // * validate .json files
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
-
+// window.addEventListener("")
+// console.log(window)
+// window.addEventListener("touchmove", e => {
+//   console.log("touchmove", e.target.getAttribute("class"));
+// })
 // for testing::
 // window.addEventListener("mouseup", () => {
 //   for (let i = 0; i < document.all.length; i++) {

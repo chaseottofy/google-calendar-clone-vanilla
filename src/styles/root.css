@@ -137,8 +137,6 @@ html {
   font-weight: 400;
   background: var(--black1);
   color: var(--white1);
-  min-width: 100%;
-  width: 100%;
   height: 100vh;
   overflow: hidden;
   position: relative;
@@ -151,10 +149,10 @@ html {
 
 .disable-transitions * {
   -webkit-transition: none !important;
-  transition: none !important;
-  transition-property: none !important;
   transition-duration: none !important;
+  transition-property: none !important;
   transition-timing-function: none !important;
+  transition: none !important;
 }
 
 .light-mode {
@@ -200,16 +198,16 @@ html {
   --primary5: #0f2c4f;
   --white1: #ffffff;
   --white2: #ffffff;
-  --white3: #b0b5bb;
+  --white3: #ccc;
   --white4: #ffffff;
   --taskcolor0: #ffffff;
   --taskcolor: #ffffff;
   --taskcolor2: #ffffff;
-  --offwhite1: #BFC0C1;
-  --offwhite2: #BFC0C1;
-  --black000: #0c0e0e;
+  --offwhite1: #ccc;
+  --offwhite2: #ccc;
+  --black000: #0b0b0b;
   --black0: #000000;
-  --black1: #0c0c0d;
+  --black1: #0b0b0b;
   --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;
@@ -217,7 +215,7 @@ html {
   --darkgrey1: #2f3841;
   --darkgrey2: #2f3841;
   --darkgrey3: #191b1c;
-  --darkgrey4: #0d1012;
+  --darkgrey4: #161a1d;
   --mediumgrey0: #415763;
   --mediumgrey1: #414e5a;
   --mediumgrey2: #505b65;
@@ -267,12 +265,20 @@ form>button {
   padding: 0.6rem 1.4rem;
 }
 
-input[type="text"]::placeholder {
+input[type="text"]::placeholder,
+textarea::placeholder {
   color: var(--white4);
+  font-weight: 400 !important;
 }
 
 button:hover {
   background: var(--black0);
+}
+
+input[type="text"],
+textarea,
+select {
+  font-family: var(--primaryFont) !important;
 }
 
 button,
@@ -285,6 +291,13 @@ textarea:focus {
 textarea {
   overflow: hidden;
 }
+
+/* textarea::placeholder {
+  color: var(--white4);
+  font-size: 16px;
+  font-weight: 400 !important;
+  font-family: var(--primaryFont) !important;
+} */
 
 svg {
   user-select: none !important;

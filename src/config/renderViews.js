@@ -240,8 +240,10 @@ export default function renderViews(context, datepickerContext, store) {
       sbDatepicker.onmousedown = null;
 
       // clear categories/datepicker content when inactive
-      sbDatepickerBody.innerText = "";
-      sbCategoriesWrapper.innerText = "";
+      setTimeout(() => {
+        sbDatepickerBody.innerText = "";
+        sbCategoriesWrapper.innerText = "";
+      }, 150)
 
       toggleForm.classList.remove("hide-toggle--form");
       viewsContainer.classList.remove("container__calendars-sb-active");
