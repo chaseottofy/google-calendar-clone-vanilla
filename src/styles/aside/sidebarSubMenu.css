@@ -11,24 +11,24 @@
 .sub-overlay-vis {
   backdrop-filter: blur(6px);
   background: rgba(0, 0, 0, .6);
-  z-index: 1042
+  z-index: 1042;
 }
 
 .sidebar-sub-menu {
   background: var(--black1);
   border-radius: 8px;
   bottom: 2%;
-  box-shadow: 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2);
+  box-shadow: var(--box-shadow1);
   height: auto;
   left: 2%;
   margin: auto;
   max-height: 600px;
-  max-width: 700px;
+  max-width: 920px;
   overflow: hidden;
   position: absolute;
   right: 2%;
   top: 36px;
-  transition: all .2s ease-in-out;
+  transition: all 200ms ease-in-out;
   width: auto;
   z-index: 1041
 }
@@ -437,7 +437,7 @@
   cursor: pointer;
   display: flex;
   height: 100%;
-  max-width: 200px;
+  max-width: 240px;
   justify-content: center;
   padding: 0 12px;
   transition: background 150ms ease-in-out;
@@ -505,7 +505,6 @@
   border-radius: 16px;
   height: 100%;
   position: absolute;
-  /* transition: .3s; */
   transition: all 150ms ease-in-out;
   width: 100%
 }
@@ -524,7 +523,6 @@
   left: 4px;
   position: absolute;
   top: 3px;
-  /* transition: .2s; */
   transition: all 150ms ease-in-out;
   width: 26px
 }
@@ -544,7 +542,6 @@
   align-items: center;
   padding: 0 12px;
   border-radius: 6px;
-  /* background: var(--black2); */
   border: 1px solid var(--black2);
   font-size: 13px;
 }
@@ -607,7 +604,9 @@
 
   .theme-actions {
     flex-direction: column;
-    padding: 0 16px 16px
+    padding: 0 16px;
+    max-width: 286px;
+    margin: 0 auto;
   }
 
   .theme-option:not(:first-child) {

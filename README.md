@@ -188,6 +188,13 @@ ____________
   * Allow user to "undo" any edits to events.
   * Allow user to remove new events.
 
+### Feb 12, 2023
+
+* Reduce HTML size where applicable to avoid lighthouse excessive DOM size warning.
+  * Main culprit of was the yearview display. Reduced size from 2400 elements to 1200 elements.
+* Optimize animations/keyframes.
+* CSS Detailing.
+
 ____________
 
 ## Events

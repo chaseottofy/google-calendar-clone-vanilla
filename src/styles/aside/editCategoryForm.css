@@ -223,8 +223,8 @@
 }
 
 .option__open-ctg-edit,
-.option__open-other-ctg,
-.option__close-other-ctg {
+.option__close-other-ctg, 
+.option__open-other-ctg {
   line-height: 40px;
   height: 40px;
   padding: 0 8px;
@@ -232,8 +232,11 @@
   font-weight: 400;
   color: var(--white3);
   cursor: pointer;
-  border-bottom: 1px solid var(--darkgrey1);
   transition: background 150ms ease-in-out;
+}
+.option__open-ctg-edit,
+.option__close-other-ctg {
+  border-bottom: 1px solid var(--darkgrey1);
 }
 
 .option__open-ctg-edit:hover,

@@ -56,18 +56,14 @@ export default function setYearView(context, store, datepickerContext) {
 
     const cellHeaderRowOne = document.createElement("div");
     cellHeaderRowOne.classList.add("yv-monthcell__header--rowone");
-
-    const cellHeaderTitle = document.createElement("span");
-    cellHeaderTitle.textContent = locales.labels.monthsLong[month];
+    cellHeaderRowOne.textContent = locales.labels.monthsLong[month];
 
     if (month === context.getMonth() && year === context.getYear()) {
-      cellHeaderTitle.classList.add("yvmht-current");
+      cellHeaderRowOne.classList.add("yvmht-current");
       cellWrapper.classList.add("cell-current");
     }
 
-    cellHeaderTitle.classList.add("yv-monthcell__header--title");
-    cellHeaderRowOne.append(cellHeaderTitle);
-
+    // **************************
     // cell header row two
     const cellHeaderWeekDayNames = document.createElement("div");
     cellHeaderWeekDayNames.classList.add("yv-monthcell__header--weekdays");
@@ -79,7 +75,6 @@ export default function setYearView(context, store, datepickerContext) {
       cellHeaderWeekDayNames.appendChild(weekday);
     });
 
-    cellHeader.append(cellHeaderRowOne, cellHeaderWeekDayNames);
 
     const cellBody = document.createElement("div");
     cellBody.classList.add("yv-monthcell__body");
@@ -88,41 +83,41 @@ export default function setYearView(context, store, datepickerContext) {
       let count = 0;
       let prevmonthstart = daysInPrevMonth - firstDayOfMonth;
 
-      const createcell = (day, classname, year, month, current) => {
+      const createyvcell = (day, classname, year, month, current) => {
         const daywrapper = document.createElement("div");
         daywrapper.classList.add("yv-monthcell__body--day-wrapper");
-
-        const daynumber = document.createElement("div");
-        daynumber.setAttribute("class", classname);
-        daynumber.setAttribute("data-yv-date", `${year}-${month}-${day}`);
-        daynumber.textContent = day;
-
+      
+        if (classname !== null) {
+          daywrapper.classList.add(classname);
+        }
+        
         if (current) {
+          daywrapper.setAttribute("data-yv-date", `${year}-${month}-${day}`);
+          daywrapper.textContent = day;
           // check if day is selected
           if (day === context.getDateSelected() && month === context.getMonth() && year === context.getYear()) {
-            daynumber.classList.add("yvmb-selected");
+            daywrapper.classList.add("yvmb-selected");
           }
-
+      
           // check if day is today
           if (day === td && month === tm && year === ty) {
-            daynumber.classList.add("yvmb-today");
+            daywrapper.classList.add("yvmb-today");
           }
-
+      
           // check if day has entry
           if (entries[day]) {
-            daynumber.classList.add("yvmb-has-entry");
+            daywrapper.classList.add("yvmb-has-entry");
           }
         }
-
-        daywrapper.appendChild(daynumber);
+      
         return daywrapper;
       };
 
+      // if first day of month is not sunday, add previous month days until the start of the current month
       for (let i = prevmonthstart; i < daysInPrevMonth; i++) {
-
-        cellBody.appendChild(createcell(
+        cellBody.appendChild(createyvcell(
           i + 1,
-          "yv-monthcell__body--day yvmb-prevnext",
+          "yvmb-prevnext",
           prevmonth.getFullYear(),
           prevmonth.getMonth(),
           false,
@@ -131,9 +126,9 @@ export default function setYearView(context, store, datepickerContext) {
       }
 
       for (let i = 0; i < daysInMonth; i++) {
-        cellBody.appendChild(createcell(
+        cellBody.appendChild(createyvcell(
           i + 1,
-          "yv-monthcell__body--day",
+          null,
           currentMonth.getFullYear(),
           currentMonth.getMonth(),
           true,
@@ -141,20 +136,22 @@ export default function setYearView(context, store, datepickerContext) {
         count++;
       }
 
-      let i = 0;
-      while (count < 42) {
-        i++;
-        cellBody.appendChild(createcell(
-          i,
-          "yv-monthcell__body--day yvmb-prevnext",
-          nextmonth.getFullYear(),
-          nextmonth.getMonth(),
-          false,
-        ));
-        count++;
-      }
+      // ensure that each month cell has 42 days, use next month days if necessary
+      // let i = 0;
+      // while (count < 42) {
+      //   i++;
+      //   cellBody.appendChild(createyvcell(
+      //     i,
+      //     "yvmb-prevnext",
+      //     nextmonth.getFullYear(),
+      //     nextmonth.getMonth(),
+      //     false,
+      //   ));
+      //   count++;
+      // }
     }
 
+    cellHeader.append(cellHeaderRowOne, cellHeaderWeekDayNames);
     populateMonths();
     cellWrapper.append(cellHeader, cellBody);
     return cellWrapper;
@@ -171,8 +168,9 @@ export default function setYearView(context, store, datepickerContext) {
   }
 
   function delegateYearEvents(e) {
-    if (getClosest(e, ".yv-monthcell__body--day")) {
+    if (getClosest(e, ".yv-monthcell__body--day-wrapper")) {
       handleDaySelection(e);
+      return;
     }
   }
 

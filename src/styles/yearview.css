@@ -3,17 +3,17 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  grid-auto-rows: 290px;
-  column-gap: 8px;
+  grid-auto-rows: 300px;
+  column-gap: 12px;
   row-gap: 30px;
-  padding: 16px 16px 16px 40px;
+  padding: 16px 2px;
   height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
 }
 
 .calendar__yearview::-webkit-scrollbar-thumb {
-  min-height: 80px;
+  min-height: 120px;
 }
 
 .yv-monthcell {
@@ -26,14 +26,13 @@
   max-width: 320px;
   margin: 0 auto;
   color: var(--white2);
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .yv-monthcell__header {
   padding-top: 8px;
   width: 100%;
-  max-width: 320px;
-  height: 68px;
+  height: 72px;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -42,45 +41,23 @@
 
 .yv-monthcell__header--rowone {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 48px;
-  padding-left: 18px;
-}
-
-.yv-monthcell__header--title {
-  height: 100%;
-  width: 100%;
+  height: 36px;
+  padding-left: 26px;
   letter-spacing: 0.5px;
   font-weight: 400;
-  color: var(--white2);
+  color: var(--white3);
   font-size: 17px;
-  padding-left: 8px;
-  line-height: 28px;
-  user-select: none;
-  pointer-events: none;
 }
 
 .cell-current {
   box-shadow: var(--box-shadow3);
+  border:none;
 }
 
 .yvmht-current {
-  color: var(--primarylight1);
-}
-
-.yv-monthcell__header--taskcount {
-  height: 32px;
-  width: 100%;
-  line-height: 32px;
-  text-align: end;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 14px;
-  user-select: none;
-  pointer-events: none;
-  letter-spacing: 0.3px;
+  color: var(--primarylight1) !important;
 }
 
 .yv-monthcell__header--weekdays {
@@ -89,7 +66,8 @@
   width: 100%;
   margin: 0 auto;
   max-width: 290px;
-  height: 36px;
+  column-gap: 6px;
+  height: 32px;
 }
 
 .yv-monthcell__header--weekdays>div {
@@ -107,37 +85,32 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
-  grid-gap: 0;
+  grid-gap: 6px;
   max-width: 290px;
   margin: 0 auto;
   height: 100%;
   width: 100%;
-  padding-bottom: 24px;
+  padding-bottom: 8px;
 }
 
 .yv-monthcell__body--day-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  margin: 0 auto;
-}
-
-.yv-monthcell__body--day {
-  font-size: 13px;
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
-  text-align: center;
+  width: 32px;
+  height: 32px;
+  margin: auto;
+  border-radius: 16px;
   cursor: pointer;
-  border-radius: 50%;
   user-select: none;
   color: var(--white1);
+  font-size: 13px;
 }
 
 .yvmb-prevnext {
   color: var(--offwhite1);
+  border-radius: 0 !important;
+  pointer-events:none;
 }
 
 .yvmb-today {
@@ -149,60 +122,23 @@
   color: var(--taskcolor0);
 }
 
-.yvmb-parent-has-entry {
+.yvmb-has-entry {
+  color: var(--primarylight1);
   background: var(--black0);
 }
 
-.yvmb-has-entry {
-  color: var(--primarylight1);
-}
-
 .yvmb-selected {
-  background: var(--primary3);
   color: var(--taskcolor0);
+  background: var(--primary3) !important;
 }
 
-.yv-monthcell__body--day:hover {
+.yv-monthcell__body--day-wrapper:hover {
   background: var(--darkgrey2);
-  filter: brightness(1.2);
   color: var(--taskcolor0);
 }
 
-
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 840px) {
   .calendar__yearview {
-    padding: 16px 8px;
-  }
-
-  .calendar__yearview {
-    padding: 16px 2px;
     grid-template-rows: repeat(auto-fit, minmax(272px, 1fr));
   }
-
-  .yv-monthcell__body {
-    padding-bottom: 6px;
-  }
 }
-
-/*
-  .calendar__yearview {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-
-  }
-  .yv-monthcell {
-    max-width: 290px;
-  }
-  
-  .yv-monthcell__header {
-    max-width: 290px;
-  }
-  
-  .yv-monthcell__header--rowone {
-    padding-left: 11px;
-  }
-  
-  .yv-monthcell__header--weekdays,
-  .yv-monthcell__body {
-    max-width: 278px;
-  }
-*/

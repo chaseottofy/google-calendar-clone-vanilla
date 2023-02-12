@@ -1,5 +1,4 @@
 .popup-delete-ctg__overlay {
-  backdrop-filter: blur(2px);
   background: rgba(0, 0, 0, .4);
   height: 100%;
   left: 0;
@@ -89,7 +88,7 @@
   padding: 0 8px;
   position: relative;
   width: 100%;
-  transition: background 150ms ease-in-out;
+  /* transition: background 100ms ease-in-out; */
 }
 
 input[type=radio] {

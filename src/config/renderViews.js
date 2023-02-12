@@ -26,7 +26,7 @@ const datepicker = document.querySelector(".datepicker");
 const datepickeroverlay = document.querySelector(".datepicker-overlay");
 const dateTimeWrapper = document.querySelector(".datetime-wrapper");
 
-const sbDatepicker = document.querySelector(".datepicker-sidebar")
+const sbDatepicker = document.querySelector(".datepicker-sidebar");
 const sbDatepickerBody = document.querySelector(".sbdatepicker__body--dates");
 const sbCategoriesWrapper = document.querySelector(".sb__categories--body-form");
 
@@ -243,7 +243,7 @@ export default function renderViews(context, datepickerContext, store) {
       setTimeout(() => {
         sbDatepickerBody.innerText = "";
         sbCategoriesWrapper.innerText = "";
-      }, 150)
+      }, 100);
 
       toggleForm.classList.remove("hide-toggle--form");
       viewsContainer.classList.remove("container__calendars-sb-active");
@@ -633,6 +633,10 @@ export default function renderViews(context, datepickerContext, store) {
     getKeyPressThrottled(e);
   }
 
+  const handleHeaderDelegation = (e) => {
+    delegateHeaderEvents(e);
+  }
+
   function handleCollapse() {
     const view = context.getComponent();
     const headers = {
@@ -664,13 +668,12 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   const appinit = () => {
-    console.log('ran')
     /*************************/
     // render initial view and set initial attributes
     renderOption(context.getComponent(), true);
     setInitialAttributes();
     handleBtnMainMenu();
-    
+
     /*************************/
     // supply callbacks to store for opening form and sidebar
     store.setRenderFormCallback(handleForm);
@@ -682,9 +685,8 @@ export default function renderViews(context, datepickerContext, store) {
 
     /*************************/
     // establish global event listeners
-    header.onmousedown = delegateHeaderEvents;
+    header.onclick = throttle(handleHeaderDelegation, 150);
     document.addEventListener("keydown", handleGlobalKeydown);
   };
-
   appinit();
 }

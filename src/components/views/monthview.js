@@ -331,7 +331,6 @@ export default function setMonthView(context, store, datepickerContext) {
     const cellRect = cell.getBoundingClientRect();
     const cellWidth = parseFloat(cellRect.width.toFixed(2));
     const cellHeight = parseFloat(cellRect.height.toFixed(2));
-    const cellLeft = parseFloat(parent.getBoundingClientRect().left.toFixed(4)) + 1;
     const wrapperLeft = parseInt(monthWrapper.offsetLeft);
     const boxRect = box.getBoundingClientRect();
     const boxWidth = parseFloat(boxRect.width);
@@ -340,9 +339,8 @@ export default function setMonthView(context, store, datepickerContext) {
     clone.style.top = `${parent.offsetTop}px`;
     clone.style.width = `${boxWidth}px`;
     clone.style.height = `${boxHeight}px`;
-    clone.style.left = `${cellLeft}px`;
-    clone.style.display = "none";
-    console.log(cellLeft)
+    clone.style.left = `${parent.offsetLeft}px`;
+    clone.classList.add("hide-mv-clone")
 
     let hasFiveWeeks = monthWrapper.classList.contains("five-weeks");
     let [startcursorx, startcursory] = [e.clientX, e.clientY];
@@ -366,10 +364,8 @@ export default function setMonthView(context, store, datepickerContext) {
       }
       if (movedX > 3 || movedY > 3) {
         if (!gaveStyles) {
-          // document.body.style.cursor = "move";
           box.style.opacity = "0.5";
-          // box.style.display = "inherit";
-          clone.style.display = "inline";
+          clone.classList.remove("hide-mv-clone")
         }
         gaveStyles = true;
       }
@@ -490,6 +486,7 @@ export default function setMonthView(context, store, datepickerContext) {
             // ***********************
             // setup for cases 2 & 3 (not grouped/not empty)
             configClonedBoxForDrop(clone);
+            clone.classList.remove("hide-mv-clone")
             newCellContent.insertBefore(clone, boxes[0]);
             configureForStorage(newCell, clone);
             box.remove();
@@ -506,6 +503,7 @@ export default function setMonthView(context, store, datepickerContext) {
           // (case 4)
           configClonedBoxForDrop(clone);
           box.remove();
+          clone.classList.remove("hide-mv-clone")
           newCellContent.appendChild(clone);
           configureForStorage(newCell, clone);
           renderSidebarDatepickerMonth();
@@ -526,6 +524,7 @@ export default function setMonthView(context, store, datepickerContext) {
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     };
+
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
   }
@@ -820,7 +819,7 @@ export default function setMonthView(context, store, datepickerContext) {
     // target : any box (task/event) within a day
     // execute : drag and drop
     if (monthviewBox) {
-      if (window.innerHeight <= 300) return;
+      if (window.innerHeight <= 280) return;
       dragEngineMonth(e, e.target);
       return;
     }

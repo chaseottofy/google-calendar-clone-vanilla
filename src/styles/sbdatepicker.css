@@ -6,7 +6,7 @@
   flex-direction:column;
   justify-content:center;
   z-index:1002;
-  padding: 4px 20px 4px 6px;
+  padding: 4px 6px 4px 6px;
 }
 
 .sb-datepicker__content {
@@ -166,14 +166,6 @@
 }
 
 .sbdatepicker-title {
-  /* color: var(--white2);
-  font-weight:500;
-  font-size:14px;
-  letter-spacing: .25px;
-  user-select:none;
-  cursor: pointer;
-  pointer-events:none;
-  padding-left:10px; */
   color: var(--white2);
   font-weight: 500;
   font-size: 14px;
@@ -181,7 +173,7 @@
   height: 100%;
   width: auto;
   user-select: none;
-  padding-left: 11px;
+  padding-left: 10px;
   padding-right: 18px;
   cursor: pointer;
   display: flex;
@@ -210,7 +202,9 @@
   height:100%;
   align-items:center;
   justify-content:space-between;
-  width:60px;
+  width:61px;
+  margin-right: 1px;
+
 }
 
 .sbdatepicker-nav--prev,
@@ -307,7 +301,6 @@
   background: var(--black3);
 }
 
-
 .sbdatepicker__body--datename:hover {
   background:var(--mediumgrey1);
   color:var(--white1);
@@ -319,7 +312,6 @@
 
 .sbdatepicker__body--datename-selected {
   background: var(--primary3);
-  /* border: 1px solid var(--primary2); */
   color: var(--taskcolor0);
 }
 
@@ -330,4 +322,5 @@
 
 .sbdatepicker__body--datename-entries {
   color: var(--primarylight1);
+  background: var(--black0);
 }

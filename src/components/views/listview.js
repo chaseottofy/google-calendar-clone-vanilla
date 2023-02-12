@@ -16,7 +16,6 @@ import {
 import { formatStartEndTimes } from "../../utilities/timeutils";
 import locales from "../../locales/en";
 
-
 const dateTimeTitle = document.querySelector(".datetime-content--title");
 const listview = document.querySelector('.listview');
 const listviewBody = document.querySelector('.listview__body');
@@ -179,7 +178,6 @@ export default function setListView(context, store, datepickerContext) {
     setViews("day", context, store, datepickerContext);
   }
   /*************************************** */
-
 
   /*************************************** */
   // DELEGATION

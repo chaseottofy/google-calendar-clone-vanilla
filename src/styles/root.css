@@ -52,10 +52,10 @@
   --mediumgrey3: #95a0a5;
   --primary1: #1a6ee2;
   --primary2: #125ab8;
-  --primary3: #123662;
+  --primary3: #122e5c;
   --primary4: #0f2c4f;
   --primary5: #1c1f21;
-  --primarylight1: #3693FF;
+  --primarylight1: #4c9cf8;
   --primarylight2: #4BA0F4;
   --taskcolor0: #ffffff;
   --taskcolor: #fcfbf9;
@@ -178,12 +178,13 @@ html {
   --white2: #3c4043;
   --white3: #3c4043;
   --white4: #3c4043;
-  --offwhite1: #70757A;
+  --offwhite1: #7e848b;
   --offwhite2: #3C4043;
   --bordergrey: 1px solid #dadce0;
   --borderdarkgrey: 1px solid #dadce0;
   --primary3: #5693e8;
   --primary4: #41638c;
+  --primarylight1: #2e7ae5;
   --scrollerThumbBackground: #dadce0;
   --scrollerThumbBorder: 4px solid #ffffff;
   --scrollerThumbBackgroundHover: #bdc1c6;
@@ -292,13 +293,6 @@ textarea {
   overflow: hidden;
 }
 
-/* textarea::placeholder {
-  color: var(--white4);
-  font-size: 16px;
-  font-weight: 400 !important;
-  font-family: var(--primaryFont) !important;
-} */
-
 svg {
   user-select: none !important;
   pointer-events: none !important;
@@ -310,7 +304,7 @@ svg {
 }
 
 ::-webkit-scrollbar {
-  width: 16px;
+  width: 20px;
   height: 20px;
 }
 

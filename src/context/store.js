@@ -142,8 +142,6 @@ class Store {
       ? JSON.parse(localStorage.getItem("ctg"))
       : {
         default: { color: colors.blue[4], active: true },
-        misc: { color: colors.grey[2], active: true },
-        school: { color: colors.grey[4], active: true },
       };
 
     this.activeOverlay = new Set();
