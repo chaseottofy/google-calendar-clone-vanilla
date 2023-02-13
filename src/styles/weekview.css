@@ -62,6 +62,7 @@
   border-radius: 50%;
   color: var(--offwhite1);
   cursor: pointer;
+  border: 1px solid transparent;
 }
 
 .weekview--header-day__number:hover {
@@ -69,8 +70,9 @@
 }
 
 .wvh--selected {
-  background: var(--primary3);
-  color: var(--taskcolor);
+  border: 1px solid var(--primarylight1);
+  /* background: var(--primary3); */
+  /* color: var(--taskcolor); */
 }
 
 .wvh--today {

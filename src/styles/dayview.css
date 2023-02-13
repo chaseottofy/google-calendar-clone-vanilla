@@ -15,7 +15,6 @@
   width: 100%;
   min-height: 54px;
   margin-left: 4px;
-
   transition: margin-left 150ms ease-in-out;
 }
 
@@ -26,7 +25,7 @@
   align-items: center;
   height: 100%;
   width: calc((100% / 7));
-  margin-left: 42px;
+  margin-left: 44px;
   max-width: 80px;
   border-bottom: 2px solid transparent;
 }
@@ -48,8 +47,8 @@
   color: var(--offwhite1);
   display: flex;
   font-size: 20px;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   font-weight: 500;
   justify-content: center;
   user-select: none;
@@ -592,7 +591,4 @@
     margin: 0 auto;
     max-height: 320px !important;
   }
-}
-
-@media screen and (max-width: 440px) {
 }

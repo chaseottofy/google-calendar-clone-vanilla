@@ -30,7 +30,7 @@
 }
 
 .yv-monthcell__header {
-  padding-top: 8px;
+  padding-top: 12px;
   width: 100%;
   height: 72px;
   display: flex;
@@ -90,7 +90,7 @@
   margin: 0 auto;
   height: 100%;
   width: 100%;
-  padding-bottom: 8px;
+  /* padding-bottom: 8px; */
 }
 
 .yv-monthcell__body--day-wrapper {

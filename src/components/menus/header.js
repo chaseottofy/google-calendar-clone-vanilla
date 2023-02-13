@@ -52,7 +52,8 @@ export default function setHeader(context, component, store) {
     case "list":
       setHeaderAttributes("list");
       header.style.borderBottom = "1px solid var(--mediumgrey1)";
-      prevnext.setAttribute("style", "opacity: 0; pointer-events:none;");
+      prevnext.setAttribute("style", "pointer-events:none;");
+      // prevnext.setAttribute("style", "opacity: 0; pointer-events:none;");
       datetimeWrapper.classList.add("datetime-inactive");
       break;
     default:

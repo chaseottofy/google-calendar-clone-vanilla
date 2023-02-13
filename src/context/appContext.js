@@ -52,7 +52,7 @@ const labels = locales.labels;
 */
 class Context {
   constructor () {
-    this.colorScheme = "light";
+    this.colorScheme = "dark";
     this.component = "month";
     this.sidebarState = "hide";
     this.date = new Date();
@@ -101,7 +101,7 @@ class Context {
   setSchemaDefaults() {
     if (localStorage.getItem("colorScheme") === null) {
       if (this.colorScheme === undefined) {
-        this.colorScheme = "light";
+        this.colorScheme = "dark";
       }
       Context.setLocalColorScheme(this.colorScheme);
     }

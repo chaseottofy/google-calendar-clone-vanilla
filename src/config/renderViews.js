@@ -245,9 +245,9 @@ export default function renderViews(context, datepickerContext, store) {
         sbCategoriesWrapper.innerText = "";
       }, 100);
 
-      toggleForm.classList.remove("hide-toggle--form");
       viewsContainer.classList.remove("container__calendars-sb-active");
       sidebar.classList.add("hide-sidebar");
+      toggleForm.classList.remove("hide-toggle--form");
       dateTimeWrapper.classList.remove("datetime-inactive");
       listviewBody.removeAttribute("style");
     } else {
@@ -264,19 +264,21 @@ export default function renderViews(context, datepickerContext, store) {
         store.setResetDatepickerCallback(null);
       }
 
-      listviewBody.style.width = "100%";
-      listviewBody.style.marginLeft = "0";
+      if (context.getComponent() === "list") {
+        listviewBody.style.width = "100%";
+        listviewBody.style.marginLeft = "0";
+      }
 
-      toggleForm.classList.add("hide-toggle--form");
       viewsContainer.classList.add("container__calendars-sb-active");
-      dateTimeWrapper.classList.add("datetime-inactive");
       sidebar.classList.remove("hide-sidebar");
+      toggleForm.classList.add("hide-toggle--form");
+      dateTimeWrapper.classList.add("datetime-inactive");
 
       datepickerContext.setDate(
-        context.getYear(), context.getMonth(), context.getDay()
+        +context.getYear(), +context.getMonth(), +context.getDay()
       );
 
-      datepickerContext.setDateSelected(context.getDay());
+      datepickerContext.setDateSelected(+context.getDay());
 
       renderSidebarCategories();
       renderSidebarDatepicker();
@@ -609,6 +611,7 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   const getKeyPressThrottled = throttle(delegateGlobalKeyDown, 150);
+  const handleHeaderDelegation = throttle(delegateHeaderEvents, 150);
   // shortcuts defined within this function are global and will work anywhere within the application (except for modal/popup/form windows)
 
   // If a modal/popup is open, all keyboard shortcuts defined within this function will be disabled until the modal/popup is closed.
@@ -631,10 +634,6 @@ export default function renderViews(context, datepickerContext, store) {
     }
 
     getKeyPressThrottled(e);
-  }
-
-  const handleHeaderDelegation = (e) => {
-    delegateHeaderEvents(e);
   }
 
   function handleCollapse() {

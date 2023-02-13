@@ -302,14 +302,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 22px;
-  width: 22px;
+  height: 23px;
+  width: 23px;
   cursor: pointer;
   border-radius: 50%;
   font-size: 11px;
   font-weight: 500;
   color: var(--white2);
   user-select: none;
+  border: 1px solid transparent;
 }
 
 .datepicker__body--dates-week {
@@ -326,7 +327,7 @@
 }
 
 .datepicker__body--datename-selected {
-  background: var(--primary3) !important;
+  border: 2px solid var(--primarylight2) !important;
 }
 
 .datepicker__body--datename-today {

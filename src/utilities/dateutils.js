@@ -38,7 +38,6 @@ function getDateForStore(date) {
 
 function getdatearray(date) {
   return [+date.getFullYear(), +date.getMonth() + 1, +date.getDate()];
-
 }
 
 function formatDateForDisplay(date) {

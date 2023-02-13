@@ -521,12 +521,17 @@ export default function setMonthView(context, store, datepickerContext) {
       }
       /*******************/
       setStylingForEvent("dragend", monthWrapper, store);
+
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
+      // document.removeEventListener("touchmove", mousemove);
+      // document.removeEventListener("touchend", mouseup);
     };
 
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
+    // document.addEventListener("touchmove", mousemove);
+    // document.addEventListener("touchend", mouseup);
   }
 
   function getMoreModalEntries(e) {

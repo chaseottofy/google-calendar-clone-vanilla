@@ -172,7 +172,7 @@ html {
   --mediumgrey1: #dadce0;
   --mediumgrey2: #dadce0;
   --mediumgrey3: #dadce0;
-  --taskcolor: #e8f0fe;
+  --taskcolor: #ffffff;
   --taskcolor2: #e8f0fe;
   --white1: #3c4043;
   --white2: #3c4043;
@@ -204,11 +204,11 @@ html {
   --taskcolor0: #ffffff;
   --taskcolor: #ffffff;
   --taskcolor2: #ffffff;
-  --offwhite1: #ccc;
+  --offwhite1: #909ba7;
   --offwhite2: #ccc;
   --black000: #0b0b0b;
   --black0: #000000;
-  --black1: #0b0b0b;
+  --black1: #0a0b0b;
   --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;

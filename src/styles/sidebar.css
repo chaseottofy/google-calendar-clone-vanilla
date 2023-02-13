@@ -11,13 +11,13 @@
   overflow: hidden;
   transform: translateX(0px);
   z-index: 901;
+  will-change: auto;
 }
 
 .sidebar-transition {
   transition-duration: 200ms;
   transition-property: transform;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-  /* transition-timing-function: ease-in-out; */
 }
 
 .hide-sidebar {
@@ -29,7 +29,7 @@
   opacity: .1;
   user-select: none;
   pointer-events: none;
-  transition: opacity .2s cubic-bezier(.4, 0, .2, 1);
+  transition: opacity 200ms cubic-bezier(.4, 0, .2, 1);
 }
 
 .sidebar-content--header {

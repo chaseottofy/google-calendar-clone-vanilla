@@ -53,7 +53,7 @@
 }
 
 .hide-cbt {
-  display:none;
+  display: none;
 }
 
 .collapse-view svg {
@@ -94,23 +94,25 @@
   height: 100%;
   width: 100%;
   overflow-x: auto;
-  margin-left: auto;
+  margin-left: 0;
+  transition-duration: 200ms;
+  transition-property: width, margin-left;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .container__calendars::-webkit-scrollbar {
   display: none;
 }
 
-.cc-tran {
+/* .cc-tran {
   transition-duration: 200ms;
-  transition-property: width, transform;
+  transition-property: transform, width;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-  /* transition-timing-function: ease-in-out; */
-  /* transition-timing-function: cubic-bezier(.4, 0, .2, 1); */
-}
+} */
 
 .container__calendars-sb-active {
   width: calc(100% - 248px);
+  margin-left: 248px;
 }
 
 .hide-view {
@@ -123,7 +125,6 @@
   width: 100%;
   height: 100%;
   user-select: none;
-
 }
 
 .listview {
@@ -149,10 +150,10 @@
 }
 
 
-/*  */
 @media screen and (max-width: 840px) {
   .container__calendars {
     width: 100% !important;
+    margin-left: 0 !important;
   }
 }
 
