@@ -132,24 +132,24 @@ class Week {
 
   checkForCollision(col) {
     const bxs = this.getBoxesByColumn(col);
-    const arr = [];
-    let collisions = new Set();
-
-    for (const box of bxs) {
-      arr.push([box.coordinates.y, box.coordinates.e]);
-    }
-
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
-          collisions.add(bxs[i]);
-          collisions.add(bxs[j]);
+    let overlaps = []; // a list to store the overlapping entries
+    for (let i = 0; i < bxs.length; i++) {
+      for (let j = i + 1; j < bxs.length; j++) {
+        const e1 = bxs[i];
+        const e2 = bxs[j];
+        if (e1.coordinates.y < e2.coordinates.e && e1.coordinates.e > e2.coordinates.y) {
+          if (!overlaps.includes(e1)) {
+            overlaps.push(e1);
+          }
+          if (!overlaps.includes(e2)) {
+            overlaps.push(e2);
+          }
         }
       }
     }
-    return this.sortByY([...collisions]);
+    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
   }
-
+  
   updateStore(store, id, weekArray) {
     const boxEntry = this.getBox(id);
     const coords = boxEntry.coordinates;
@@ -175,8 +175,6 @@ class Week {
     });
   }
 }
-
-
 /**
  * @class Week
  * 
@@ -263,23 +261,23 @@ class Day {
 
   checkForCollision() {
     const bxs = this.getBoxes();
-    const arr = [];
-    let collisions = new Set();
-
-    for (const box of bxs) {
-      arr.push([box.coordinates.y, box.coordinates.e]);
-    }
-
-    for (let i = 0; i < arr.length; i++) {
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[i][1] > arr[j][0] && arr[i][0] < arr[j][1]) {
-          collisions.add(bxs[i]);
-          collisions.add(bxs[j]);
+    let overlaps = []; // a list to store the overlapping entries
+    // entries.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
+    for (let i = 0; i < bxs.length; i++) {
+      for (let j = i + 1; j < bxs.length; j++) {
+        const e1 = bxs[i];
+        const e2 = bxs[j];
+        if (e1.coordinates.y < e2.coordinates.e && e1.coordinates.e > e2.coordinates.y) {
+          if (!overlaps.includes(e1)) {
+            overlaps.push(e1);
+          }
+          if (!overlaps.includes(e2)) {
+            overlaps.push(e2);
+          }
         }
       }
     }
-
-    return this.sortByY([...collisions]);
+    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
   }
 
   updateStore(store, id) {

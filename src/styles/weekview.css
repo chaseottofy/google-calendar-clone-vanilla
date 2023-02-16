@@ -70,9 +70,7 @@
 }
 
 .wvh--selected {
-  border: 1px solid var(--primarylight1);
-  /* background: var(--primary3); */
-  /* color: var(--taskcolor); */
+  border: 2px solid var(--primarylight1);
 }
 
 .wvh--today {

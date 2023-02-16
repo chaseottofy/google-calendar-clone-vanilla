@@ -25,10 +25,10 @@ export default function setListView(context, store, datepickerContext) {
   let monthNames = locales.labels.monthsShort.map(x => x.toUpperCase());
   let weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase());
   let [todayYear, todayMonth, todayDay] = getdatearray(new Date());
-
   /*************************************** */
+
   /**
-   * 
+   * createRowGroups
    * @param {object} entries { "2020-01-01": [ {entry}, {entry}, {entry} ], "2020-01-02": [ {entry}, {entry}, {entry} ] }
    * @desc createRowGroups() is called from setListView(). 
    * The entries object uses the date as the key and the value as an array of entries for that specific date.
@@ -38,7 +38,9 @@ export default function setListView(context, store, datepickerContext) {
     let count = 1;
     for (let [key, value] of Object.entries(entries)) {
 
-      const tempdate = new Date(key.split("-").map(x => parseInt(x, 10)));
+      const tempdate = new Date(
+        key.split("-").map(x => parseInt(x, 10))
+      );
       // {mumber} month, {number} day of month, {number} day of week
       const [month, day, dow] = [
         tempdate.getMonth(),
@@ -246,7 +248,10 @@ export default function setListView(context, store, datepickerContext) {
       dateTimeTitle.textContent = "No Entries to Display";
       return;
     } else {
+
       let entries = store.sortBy(activeEnt, "start", "desc");
+      // console.log(entries)
+      // console.log(activeEnt)
       let groupedEntries = entries.reduce((acc, curr) => {
         const date = new Date(curr.start);
         const [year, month, day] = getdatearray(date);
@@ -266,6 +271,7 @@ export default function setListView(context, store, datepickerContext) {
         acc[datestring].push(curr);
         return acc;
       }, {});
+      // console.log(groupedEntries)
 
       // set the header title to the first date with entries that is not in the past and the last date with entries
       // if no entries are in the future, set the header title to "Schedule Clear";

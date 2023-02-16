@@ -195,6 +195,10 @@ ____________
 * Optimize animations/keyframes.
 * CSS Detailing.
 
+### Feb 16, 2023
+
+* Improve collision detection for day/week.
+
 ____________
 
 ## Events
