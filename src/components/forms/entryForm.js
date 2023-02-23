@@ -991,10 +991,13 @@ export default function setEntryForm(context, store, datepickerContext) {
       }
 
       if (e.key === "Enter") {
-        handleFormSubmission(e);
-        // let tempactive = document.activeElement;
-        // if (tempactive.classList.contains("form--footer__button-save") || tempactive === document.body || tempactive.classList.contains("form--body__title-input") || tempactive.classList.contains("form--body__description-input")) {
-        // }
+        if (timep !== null) {
+          closetimepicker();
+        } else if (catsAct === null) {
+          closeCategoryModal();
+        } else {
+          handleFormSubmission(e);
+        }
       }
     }
   }
@@ -1032,8 +1035,10 @@ export default function setEntryForm(context, store, datepickerContext) {
     // DATES : START/END
     startDateInput.textContent = dateSelected;
     startDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
+    // startDateInput.setAttribute("tabindex", "1")
     endDateInput.textContent = dateSelected;
     endDateInput.setAttribute("data-form-date", getDateForStore(context.getDate()));
+    // endDateInput.setAttribute("tabindex", "2")
 
     // TIME : START/END 
     const temphours = new Date().getHours();
@@ -1052,8 +1057,8 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     // ****************************************** // 
     // approve form event delegation
-    formOverlay.onclick = handleFormClose;
     entriesFormHeader.onmousedown = delegateEntryHeader;
+    formOverlay.onclick = handleFormClose;
     entriesFormWrapper.onclick = delegateEntryFormEvents;
     document.addEventListener("keydown", delegateFormKeyDown);
     // ****************************************** // 
