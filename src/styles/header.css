@@ -4,8 +4,8 @@
   overflow: visible;
   transition: height .2s ease-in-out;
   width: 100%;
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
   z-index: 197;
 }
 
@@ -37,11 +37,12 @@
 }
 
 .menu:hover {
-  background: var(--mediumgrey0)
+  background: var(--mediumgrey1)
 }
 
-.menu:hover:after {
-  background: var(--mediumgrey0);
+.menu:hover:after,
+.menu:focus-visible:after {
+  background: var(--mediumgrey1);
   border-radius: 2px;
   content: attr(data-tooltip);
   font-size: 12px;
@@ -56,7 +57,8 @@
 }
 
 .logo,
-.menu:hover:after {
+.menu:hover:after,
+.menu:focus-visible:after {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -99,7 +101,6 @@
   user-select: none;
   font-weight: 400;
   height: 36px;
-  /* padding-right: 36px; */
   padding-right: 24px;
 }
 
@@ -114,7 +115,7 @@
   font-weight: 400;
 }
 
-.btn-today {  
+.btn-today {
   height: 32px;
   width: 65px;
   font-weight: 400;
@@ -126,7 +127,6 @@
 }
 
 .group-right {
-  /* display:flex; height:36px; align-items:center; */
   justify-content: space-between;
   margin-left: auto;
   width: 100%;
@@ -151,13 +151,19 @@
 
 .next,
 .prev {
-  background: var(--black1);
   border-radius: 50%;
   cursor: pointer;
   position: relative;
   height: 32px;
   width: 32px;
-  user-select: none;
+}
+
+.next {
+  margin-left: 1px;
+}
+
+.prev {
+  margin-right: 1px;
 }
 
 .next:hover,
@@ -167,7 +173,10 @@
 
 .btn-today:hover:after,
 .next:hover:after,
-.prev:hover:after {
+.prev:hover:after,
+.btn-today:focus-visible:after,
+.next:focus-visible:after,
+.prev:focus-visible:after {
   font-family: var(--primaryFont) !important;
   align-items: center;
   background: var(--mediumgrey1);
@@ -189,7 +198,9 @@
 }
 
 .next:hover:after,
-.prev:hover:after {
+.prev:hover:after,
+.next:focus-visible:after,
+.prev:focus-visible:after {
   width: 70px;
 }
 
@@ -216,7 +227,6 @@
   overflow: visible;
   padding-left: 2px;
   text-align: start;
-  user-select: none;
   white-space: nowrap;
   width: 100%;
 }
@@ -237,6 +247,7 @@
 
 .datetime-inactive {
   pointer-events: none;
+  user-select: none;
 }
 
 .datetime-inactive .datetime-content::after {
@@ -270,6 +281,7 @@
 .h-search svg {
   transform: scale(0.9);
 }
+
 .h-search:hover:after,
 .settings:hover:after {
   align-items: center;
@@ -333,27 +345,9 @@
   background: var(--black0);
 }
 
-.select__modal:focus {
-  outline: none
-}
-
 .selection--active {
   background: var(--mediumgrey1)
 }
-
-.btn-today,
-.datetime-content,
-.menu,
-.next,
-.prev,
-.settings,
-.select__modal,
-h2 {
-  user-select: none
-}
-
-
-
 
 
 @media screen and (max-width: 840px) {
@@ -364,7 +358,7 @@ h2 {
 
 @media screen and (max-width: 780px) {
   .h-search {
-    display:none;
+    display: none;
   }
 }
 
@@ -388,12 +382,13 @@ h2 {
   .prev-next {
     margin-right: 4px;
   }
+
   .prev,
   .next {
     height: 28px;
     width: 28px;
   }
-  
+
   .btn-today,
   .select__modal {
     font-size: 12px;
@@ -407,7 +402,7 @@ h2 {
   .datetime-content {
     font-size: 18px;
   }
-  
+
   .settings svg {
     height: 20px;
     width: 20px
@@ -549,7 +544,7 @@ h2 {
   }
 
   .select-wrapper {
-    margin: 0 4px 0 0 ;
+    margin: 0 4px 0 0;
   }
 
   .select__modal {

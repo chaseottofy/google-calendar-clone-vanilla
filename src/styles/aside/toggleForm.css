@@ -1,7 +1,7 @@
 .toggle-form {
   z-index: 198;
   position: fixed;
-  display:flex;
+  display: flex;
   left: 9px;
   top: 68px;
   width: 44px;
@@ -12,24 +12,38 @@
   align-items: center;
   z-index: 902;
   cursor: pointer;
-  box-shadow: 
-  rgba(60,64,67,0.3) 0px 1px 2px 0px,
-  rgba(60,64,67,0.15) 0px 1px 3px 1px;
-  transition:all 200ms ease-in-out;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  transition: all 200ms ease-in-out;
 }
+
+.toggle-form:focus-visible {
+  outline:none;
+  background: var(--mediumgrey1);
+  box-shadow: var(--box-shadow2-hover);
+}
+
 .hide-toggle--form {
-  opacity:0;
-  box-shadow:none;
-  pointer-events:none;
+  opacity: 0;
+  box-shadow: none;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hide-toggle--form .toggle-form-btn {
   user-select:none;
 }
+
 .toggle-form:hover {
   background: var(--black1);
   box-shadow: var(--box-shadow2-hover);
 }
-.toggle-form-btn { 
-  border-radius: 50%; 
+
+.toggle-form-btn {
+  border-radius: 50%;
 }
+
 .toggle-form svg {
   height: 36px;
   width: 36px;
@@ -60,15 +74,18 @@
 }
 
 .open-toggle--fixed {
-  z-index:198 !important;
+  z-index: 198 !important;
 }
+
 .close-toggle--fixed {
-  z-index:-1 !important;
+  z-index: -1 !important;
 }
 
 
 @media screen and (max-width: 530px) {
-  .toggle-form{ display:none; }
+  .toggle-form {
+    display: none;
+  }
 }
 
 @media screen and (max-height: 470px) {

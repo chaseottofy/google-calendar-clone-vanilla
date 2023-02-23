@@ -322,7 +322,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     sbdatepickerChangeDate.classList.remove("show-sbdpcd");
     setDatepickerHeader();
     createCells(montharray);
-    sbdatepicker.onmousedown = delegateDatepickerEvents;
+    sbdatepicker.onclick = delegateDatepickerEvents;
     montharray = null;
     groupedEntries = null;
   };

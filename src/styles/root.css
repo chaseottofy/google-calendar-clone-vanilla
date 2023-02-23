@@ -242,9 +242,24 @@ html {
 select,
 button {
   background: var(--black1);
+  padding:none;
+  border: none;
+}
+
+.btn-root {
+  padding: 0.5rem 1rem;
   border: var(--bordergrey);
   border-radius: var(--borderradius);
   color: var(--white1);
+}
+
+form>button {
+  padding: 0.6rem 1.4rem;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--primary1);
+  background: var(--black0);
 }
 
 input[type="search"],
@@ -258,22 +273,10 @@ select {
   padding: 0.55rem 0rem;
 }
 
-button {
-  padding: 0.5rem 1rem;
-}
-
-form>button {
-  padding: 0.6rem 1.4rem;
-}
-
 input[type="text"]::placeholder,
 textarea::placeholder {
   color: var(--white4);
   font-weight: 400 !important;
-}
-
-button:hover {
-  background: var(--black0);
 }
 
 input[type="text"],
@@ -282,11 +285,9 @@ select {
   font-family: var(--primaryFont) !important;
 }
 
-button,
-input,
-select,
+input[type="text"],
 textarea:focus {
-  outline: none;
+  outline:none;
 }
 
 textarea {

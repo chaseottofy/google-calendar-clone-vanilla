@@ -35,6 +35,7 @@ const datepickeroverlay = document.querySelector(".datepicker-overlay");
 const formOverlay = document.querySelector(".form-overlay");
 const formModalOverlay = document.querySelector(".form-modal-overlay");
 const entriesFormWrapper = document.querySelector(".entries__form");
+const entriesFormHeader = document.querySelector(".entries__form--header")
 const entriesForm = document.querySelector(".entry-form");
 const entriesFormBody = document.querySelector(".entries__form--body");
 
@@ -64,7 +65,10 @@ const formSubmitButton = document.querySelector(".form--footer__button-save");
 
 
 /**
- * list of methods -- I plan on cleaning the form up
+ * function table of contents
+ * I attempted to give a break down of the thought process / order of operations and by page 16 I realized this may well be the worst thing I have ever done.
+ * I am haunted by this mess.
+ *  
  * 
  * closetimepicker
  * setEndDateToNextDay
@@ -104,8 +108,6 @@ export default function setEntryForm(context, store, datepickerContext) {
   let activeCategories;
   let currentComponent;
   let [year, month, day] = [null, null, null];
-
-
 
   function closetimepicker() {
     const timep = document?.querySelector(".timepicker");
@@ -331,6 +333,7 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function handleSetDate(e, type) {
+    e.preventDefault();
     if (type === "start") {
       startDateInput.setAttribute("class", "form--body-start__date active-form-date");
       endDateInput.setAttribute("class", "form--body-end__date inactive-form-date");
@@ -566,8 +569,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     clearAllErrors();
 
-    formOverlay.onmousedown = null;
-    entriesFormWrapper.onmousedown = null;
+    formOverlay.onclick = null;
+    entriesFormHeader.onmousedown = null;
+    entriesFormWrapper.onclick = null;
     document.removeEventListener("keydown", delegateFormKeyDown);
     entriesFormWrapper.classList.add("hide-form");
     formOverlay.classList.add("hide-form-overlay");
@@ -783,7 +787,6 @@ export default function setEntryForm(context, store, datepickerContext) {
       parseInt(rect.top),
     ];
 
-
     entriesFormWrapper.style.margin = "0";
     entriesFormWrapper.style.opacity = "0.8";
     entriesFormWrapper.style.userSelect = "none";
@@ -852,11 +855,24 @@ export default function setEntryForm(context, store, datepickerContext) {
     return [x, y];
   }
 
-  function delegateEntryFormEvents(e) {
-    // header
+  function delegateEntryHeader(e) {
     const dragHeader = getClosest(e, ".form-header--dragarea");
     const closeicon = getClosest(e, ".form--header__icon-close");
+    if (dragHeader) {
+      if (window.innerWidth < 500 || window.innerHeight < 500) {
+        return;
+      } else
+        dragFormAnywhere(e);
+      return;
+    }
 
+    if (closeicon) {
+      handleFormClose(e);
+      return;
+    }
+  }
+
+  function delegateEntryFormEvents(e) {
     // date / time inputs
     const startdate = getClosest(e, ".form--body-start__date");
     const starttime = getClosest(e, ".form--body-start__time");
@@ -878,19 +894,6 @@ export default function setEntryForm(context, store, datepickerContext) {
     // form footer buttons
     const resetbtn = getClosest(e, ".form--footer__button-cancel");
     const submitbtn = getClosest(e, ".form--footer__button-save");
-
-    if (dragHeader) {
-      if (window.innerWidth < 500 || window.innerHeight < 500) {
-        return;
-      } else
-        dragFormAnywhere(e);
-      return;
-    }
-
-    if (closeicon) {
-      handleFormClose(e);
-      return;
-    }
 
     if (startdate) {
       handleSetDate(e, "start");
@@ -989,6 +992,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
       if (e.key === "Enter") {
         handleFormSubmission(e);
+        // let tempactive = document.activeElement;
+        // if (tempactive.classList.contains("form--footer__button-save") || tempactive === document.body || tempactive.classList.contains("form--body__title-input") || tempactive.classList.contains("form--body__description-input")) {
+        // }
       }
     }
   }
@@ -1046,8 +1052,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     // ****************************************** // 
     // approve form event delegation
-    formOverlay.onmousedown = handleFormClose;
-    entriesFormWrapper.onmousedown = delegateEntryFormEvents;
+    formOverlay.onclick = handleFormClose;
+    entriesFormHeader.onmousedown = delegateEntryHeader;
+    entriesFormWrapper.onclick = delegateEntryFormEvents;
     document.addEventListener("keydown", delegateFormKeyDown);
     // ****************************************** // 
   }

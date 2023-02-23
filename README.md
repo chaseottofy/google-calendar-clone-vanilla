@@ -199,6 +199,10 @@ ____________
 
 * Improve collision detection for day/week.
 
+### Feb 23, 2023
+
+* Improve tab support and html semantics.
+
 ____________
 
 ## Events

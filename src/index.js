@@ -52,10 +52,16 @@ import "./styles/aside/shortcuts.css";
 // stats sidebar
 // drag mobile
 // keyframe lag
+// improve tabbing
 // cursor issue, don't remember what it was
 // * validate .json files
 setAppDefaults(context, store);
 renderViews(context, datepickerContext, store);
+
+
+
+
+
 // window.addEventListener("touchmove", e => {
 //   console.log("touchmove", e.target.getAttribute("class"));
 // })

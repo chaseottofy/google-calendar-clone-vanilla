@@ -298,7 +298,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     montharray = [];
 
     datepickeroverlay.onclick = null;
-    datepicker.onmousedown = null;
+    datepicker.onclick = null;
     document.removeEventListener("keydown", datepickerKeypressThrottle);
   }
 
@@ -375,36 +375,36 @@ export default function setDatepicker(context, store, datepickerContext, type) {
         flag ? handleMonthpicker("prev") : setSelectedToPrevDay();
         break;
 
-      case "Enter":
-        if (datepickerChangeDate.classList.contains("show-dpcd")) {
-          closeChangeDateModal();
-        } else {
-          const target = document.querySelector(".datepicker__body--datename-selected");
-          if (target === null || !target) {
-            // the last selected day in the previous month was longer than the days in the current month
-            setNewDate(null, [
-              datepickerContext.getYear(),
-              datepickerContext.getMonth(),
-              28
-            ]);
-          } else {
-            let attr = getDateFromAttribute(target, "data-datepicker-date");
-            setNewDate(null, attr);
-          }
-        }
-        break;
+      // case "Enter":
+      //   if (datepickerChangeDate.classList.contains("show-dpcd")) {
+      //     closeChangeDateModal();
+      //   } else {
+      //     const target = document.querySelector(".datepicker__body--datename-selected");
+      //     if (target === null || !target) {
+      //       // the last selected day in the previous month was longer than the days in the current month
+      //       setNewDate(null, [
+      //         datepickerContext.getYear(),
+      //         datepickerContext.getMonth(),
+      //         28
+      //       ]);
+      //     } else {
+      //       let attr = getDateFromAttribute(target, "data-datepicker-date");
+      //       setNewDate(null, attr);
+      //     }
+      //   }
+      //   break;
 
-      case "Tab":
-        e.preventDefault();
-        datepicker.setAttribute("tabindex", "1");
-        datepicker.focus();
+      // case "Tab":
+      //   e.preventDefault();
+      //   datepicker.setAttribute("tabindex", "1");
+      //   datepicker.focus();
 
-        if (flag) {
-          closeChangeDateModal();
-        } else {
-          openChangeDateModal();
-        }
-        break;
+      //   if (flag) {
+      //     closeChangeDateModal();
+      //   } else {
+      //     openChangeDateModal();
+      //   }
+      //   break;
 
       case "Escape":
         if (datepickerChangeDate.classList.contains("show-dpcd")) {
@@ -424,7 +424,7 @@ export default function setDatepicker(context, store, datepickerContext, type) {
     createCells(montharray);
     store.setResetDatepickerCallback(closeDatepicker);
     datepickeroverlay.onclick = closeDatepicker;
-    datepicker.onmousedown = delegateDatepickerEvents;
+    datepicker.onclick = delegateDatepickerEvents;
     document.addEventListener("keydown", datepickerKeypressThrottle);
     montharray = [];
   };

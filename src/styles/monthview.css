@@ -88,6 +88,15 @@
   position: relative;
 }
 
+.monthview--dayofmonth:focus-visible {
+  outline:none;
+  background: var(--black0);
+}
+
+.monthview--dayofmonth:focus-visible + .monthview--daycontent {
+  background: var(--black0);
+}
+
 .monthview--dayofmonth-selected {
   color: var(--primarylight1);
   transition: background .2s ease-in-out;
@@ -100,8 +109,6 @@
 .monthview--dayofmonth-top {
   justify-content: space-between;
 }
-
-
 
 .monthview--daynumber {
   font-size: 10px;

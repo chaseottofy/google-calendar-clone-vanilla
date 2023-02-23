@@ -9,7 +9,7 @@
   border-radius: 8px;
 }
 
-.datepicker:focus {
+.datepicker:focus-visible {
   /* border-color: var(--darkgrey2); */
   border: 1px solid var(--primary1);
   outline: 0 none;

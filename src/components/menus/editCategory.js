@@ -228,7 +228,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   const initCtgForm = () => {
-    console.log('ran')
     createPickerOptions(formhelper.getColor());
     openCtgForm(editing);
     ctgform.onmousedown = delegateCtgForm;

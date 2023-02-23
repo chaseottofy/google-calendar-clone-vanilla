@@ -8,6 +8,7 @@ import {
 
 const entryOptionsOverlay = document.querySelector(".entry__options--overlay");
 const entryOptionsWrapper = document.querySelector('.entry__options');
+const entryOptionsHeaderWrapper = document.querySelector(".entry__options--header")
 const entryOptionsDateHeader = document.querySelector('.entry__options-date');
 const entryOptionsTimeHeader = document.querySelector('.entry__options-time');
 const entryOptionTitle = document.querySelector(".eob-title");
@@ -67,10 +68,12 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     deletepopupConfirm.onclick = submitDelete;
   }
 
+
+  /**
+   * formNegated
+   * @desc anytime the entry options modal is opened, the form is set to represent the entry selected. If user chooses to not open the form from this modal, reset form & modal to default state.
+   */
   function formNegated() {
-    // The form is responsible for resetting the current view
-    // If the form is not toggled open from this modal,
-    // reset it manually on close
     const resetCurrentView = store.getFormResetHandle(context.getComponent());
     closeEntryOptions();
     resetCurrentView();
@@ -89,8 +92,9 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     entryOptionsOverlay.classList.add("entry__options--hidden");
     store.removeActiveOverlay("entry__options--hidden");
     entryOptionDescription.parentElement.removeAttribute("style");
-    entryOptionsWrapper.onmousedown = null;
-    entryOptionsOverlay.onmousedown = null;
+    entryOptionsWrapper.onclick = null;
+    entryOptionsOverlay.onclick = null;
+    entryOptionsHeaderWrapper.focus();
     document.removeEventListener("keydown", handleEntryOptionKD);
   }
 
@@ -157,8 +161,9 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     entryOptionCategoryIcon.setAttribute("fill", store.getCtgColor(entry.category));
     entryOptionCategory.textContent = entry.category;
 
-    entryOptionsWrapper.onmousedown = delegateEntryOptions;
-    entryOptionsOverlay.onmousedown = formNegated;
+    entryOptionsWrapper.onclick = delegateEntryOptions;
+    entryOptionsOverlay.onclick = formNegated;
+    // entryOptionsWrapper.focus();
     document.addEventListener("keydown", handleEntryOptionKD);
   }
 

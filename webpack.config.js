@@ -69,7 +69,6 @@ module.exports = {
   optimization: {
     minimize: true,
     minimizer: [
-      // prod.
       new TerserPlugin({
         extractComments: true,
       }),
@@ -79,7 +78,6 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    // publicPath: "./",
     clean: true,
   },
 };

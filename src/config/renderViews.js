@@ -25,6 +25,7 @@ const form = document.querySelector(".entries__form");
 const datepicker = document.querySelector(".datepicker");
 const datepickeroverlay = document.querySelector(".datepicker-overlay");
 const dateTimeWrapper = document.querySelector(".datetime-wrapper");
+const dateTimeBtn = document.querySelector(".datetime-content");
 
 const sbDatepicker = document.querySelector(".datepicker-sidebar");
 const sbDatepickerBody = document.querySelector(".sbdatepicker__body--dates");
@@ -47,19 +48,13 @@ const listviewBody = document.querySelector(".listview__body");
 const collapsebtn = document.querySelector(".collapse-view");
 
 export default function renderViews(context, datepickerContext, store) {
+  
   function setColorScheme() {
-    const darkicon = document.querySelector(".sbti-one");
-    const lighticon = document.querySelector(".sbti-two");
-    const contrasticon = document.querySelector(".sbti-three");
-
     const setlight = () => {
       context.setColorScheme("light");
       colorSchemeMeta.setAttribute("content", "light");
       appBody.classList.add("light-mode");
       appBody.classList.remove("contrast-mode");
-      darkicon.classList.add("sb-theme-icon-hide");
-      contrasticon.classList.add("sb-theme-icon-hide");
-      lighticon.classList.remove("sb-theme-icon-hide");
     };
 
     const setdark = () => {
@@ -67,9 +62,6 @@ export default function renderViews(context, datepickerContext, store) {
       colorSchemeMeta.setAttribute("content", "dark light");
       appBody.classList.remove("light-mode");
       appBody.classList.remove("contrast-mode");
-      darkicon.classList.remove("sb-theme-icon-hide");
-      contrasticon.classList.add("sb-theme-icon-hide");
-      lighticon.classList.add("sb-theme-icon-hide");
     };
 
     const setcontrast = () => {
@@ -77,9 +69,6 @@ export default function renderViews(context, datepickerContext, store) {
       colorSchemeMeta.setAttribute("content", "dark");
       appBody.classList.remove("light-mode");
       appBody.classList.add("contrast-mode");
-      contrasticon.classList.remove("sb-theme-icon-hide");
-      darkicon.classList.add("sb-theme-icon-hide");
-      lighticon.classList.add("sb-theme-icon-hide");
     };
 
     const currentScheme = context.getColorScheme();
@@ -220,24 +209,26 @@ export default function renderViews(context, datepickerContext, store) {
     store.addActiveOverlay("hide-form-overlay");
   }
 
-  // the submenu (meatball? menu) adjacent to "create" button in sidebar
+  // the submenu (meatball menu) adjacent to "create" button in sidebar
   // opens instance of settings menu
   function handleToggleSubmenu() {
     getSidebarSubMenu(store, context);
   }
 
   // open / close sidebar
+  // sidebar state (open / closed) is stored locally and will persist across sessions
   // triggers via "s" keypress or by clicking on the hamburger menu icon
   // will also trigger in instances where the user tries to create a new entry on a blank day but no categories are selected.
   function handleBtnMainMenu() {
     const currentSidebarState = context.getSidebarState();
+
     if (currentSidebarState === "hide") {
       toggleForm.onclick = handleForm;
       sbToggleForm.onclick = null;
       sbToggleSubBtn.onclick = null;
       sbFooter.onmousedown = null;
       sbCategories.onmousedown = null;
-      sbDatepicker.onmousedown = null;
+      sbDatepicker.onclick = null;
 
       // clear categories/datepicker content when inactive
       setTimeout(() => {
@@ -249,20 +240,13 @@ export default function renderViews(context, datepickerContext, store) {
       sidebar.classList.add("hide-sidebar");
       toggleForm.classList.remove("hide-toggle--form");
       dateTimeWrapper.classList.remove("datetime-inactive");
+      dateTimeBtn.removeAttribute("tabindex");
       listviewBody.removeAttribute("style");
-    } else {
 
+    } else {
       toggleForm.onclick = null;
       sbToggleForm.onclick = handleForm;
       sbToggleSubBtn.onclick = handleToggleSubmenu;
-      // if a callback has been provided to the store (from the datepicker), this means that the header datepicker is open and needs to be closed to prevent two calendars that share the same date state from coinciding.
-      // this can only happen if datepicker is open and user presses "s" on their keyboard to open sidebar
-
-      const resetdatepicker = store.getResetDatepickerCallback();
-      if (resetdatepicker !== null) {
-        resetdatepicker();
-        store.setResetDatepickerCallback(null);
-      }
 
       if (context.getComponent() === "list") {
         listviewBody.style.width = "100%";
@@ -273,11 +257,21 @@ export default function renderViews(context, datepickerContext, store) {
       sidebar.classList.remove("hide-sidebar");
       toggleForm.classList.add("hide-toggle--form");
       dateTimeWrapper.classList.add("datetime-inactive");
+      dateTimeBtn.setAttribute("tabindex", "-1");
+
+      /**
+       * @function resetdatepicker
+       * @desc if at any point the datepicker in the header is opened, it will provide a callback to the global store with instructions to close. This can only trigger if the user presses "s" on the keyboard (open sidebar toggle) while the datepicker is open.
+       */
+      const resetdatepicker = store.getResetDatepickerCallback();
+      if (resetdatepicker !== null) {
+        resetdatepicker();
+        store.setResetDatepickerCallback(null);
+      }
 
       datepickerContext.setDate(
         +context.getYear(), +context.getMonth(), +context.getDay()
       );
-
       datepickerContext.setDateSelected(+context.getDay());
 
       renderSidebarCategories();
@@ -494,12 +488,6 @@ export default function renderViews(context, datepickerContext, store) {
       }
     };
 
-    // if (toastpopup.classList.contains("show-toast")) {
-    //   toastpopup.innerText = "";
-    //   toastpopup.classList.remove("show-toast");
-    //   document.onmousedown = null;
-    // }
-
     switch (e.key.toLowerCase()) {
       // switch to day view
       case "d":
@@ -595,15 +583,11 @@ export default function renderViews(context, datepickerContext, store) {
         createGoTo(context, store, datepickerContext);
         break;
 
-      // case "escape":
-      //   break;
-
       case "+":
-        const targetcat = {
+        createCategoryForm(store, {
           name: "new category",
           color: "#2C52BA",
-        };
-        createCategoryForm(store, targetcat, false, null);
+        }, false, null);
 
       default:
         break;

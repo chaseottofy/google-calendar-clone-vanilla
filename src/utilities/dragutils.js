@@ -241,31 +241,6 @@ function setBoxWidthDay(box, prepend, dataidx) {
 function handleOverlap(col, view, boxes) {
 
   const collisions = view === "day" ? boxes.checkForCollision() : boxes.checkForCollision(col);
-  let temp = {
-    title: [],
-    y: [],
-    h: [],
-    e: [],
-  }
-  collisions.forEach((col) => {
-    // console.log(col.coordinates)
-    let overlapping = col.title
-    console.log(overlapping)
-    let [y, h, e] = [
-      +col.coordinates.y,
-      +col.coordinates.h,
-      +col.coordinates.e,
-    ]
-    temp.title.push(overlapping)
-    temp.y.push(y)
-    temp.h.push(h)
-    temp.e.push(e)
-  })
-  console.log(temp)
-  // console.log('ran')
-  // let temp = Object.values(collisions).length
-  // console.log(temp.length)
-  // console.log({col, temp})
 
   const identifyBox = identifiers.boxnumarr[view];
 

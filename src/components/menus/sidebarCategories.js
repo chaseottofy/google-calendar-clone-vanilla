@@ -60,12 +60,12 @@ export default function handleSidebarCategories(context, store, datepickerContex
     colone.classList.add('sbch-form--item__col');
     const checkboxWrapper = document.createElement('div');
     checkboxWrapper.classList.add('sbch-form--item__checkbox--wrapper');
-    const checkbox = document.createElement('div');
+    const checkbox = document.createElement('button');
     checkbox.classList.add('sbch-form--item__checkbox');
     checkbox.setAttribute("data-sbch-checked", `${status}`);
     checkbox.setAttribute("data-sbch-category", ctgname);
+    
     let checkIcon;
-
     if (status) {
       checkbox.style.backgroundColor = ctgcolor;
       checkIcon = createCheckIcon("var(--taskcolor0)");
@@ -85,11 +85,11 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
     const coltwo = document.createElement('div');
     coltwo.classList.add('sbch-form--item__col--actions');
-    const deleteicon = document.createElement('div');
+    const deleteicon = document.createElement('button');
     deleteicon.classList.add('sbch-col--actions__delete-icon');
     deleteicon.setAttribute("data-sbch-category", ctgname);
     deleteicon.setAttribute("data-sbch-color", ctgcolor);
-    const editicon = document.createElement('div');
+    const editicon = document.createElement('button');
     editicon.classList.add("sbch-col--actions__edit-icon");
     editicon.setAttribute("data-sbch-category", ctgname);
     editicon.setAttribute("data-sbch-color", ctgcolor);

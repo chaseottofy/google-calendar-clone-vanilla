@@ -165,7 +165,7 @@
   transition-timing-function: cubic-bezier(.33, 1, .68, 1)
 }
 
-.form--body__title-input:focus {
+.form--body__title-input:focus-visible {
   border-bottom: 2px solid var(--primary2)
 }
 
@@ -188,11 +188,12 @@
   padding: 0 6px;
   resize: none;
   white-space: pre-wrap;
+  outline: none;
   width: 100%
 }
 
 .form--body__description-input:focus {
-  border-bottom: 2px solid var(--primary2)
+  border-bottom: 2px solid var(--primary2);
 }
 
 .form--body__category,

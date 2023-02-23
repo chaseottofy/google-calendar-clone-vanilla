@@ -72,20 +72,12 @@ function setTheme(context) {
       return;
     }
 
-    const darkicon = document.querySelector(".sbti-one");
-    const lighticon = document.querySelector(".sbti-two");
-    const contrasticon = document.querySelector(".sbti-three");
-
     const setlight = () => {
       context.setColorScheme("light");
       colorSchemeMeta.setAttribute("content", "light");
 
       appBody.classList.remove("contrast-mode");
       appBody.classList.add("light-mode");
-
-      lighticon.classList.remove("sb-theme-icon-hide");
-      darkicon.classList.add("sb-theme-icon-hide");
-      contrasticon.classList.add("sb-theme-icon-hide");
     };
 
     const setdark = () => {
@@ -94,24 +86,14 @@ function setTheme(context) {
 
       appBody.classList.remove("light-mode");
       appBody.classList.remove("contrast-mode");
-
-      darkicon.classList.remove("sb-theme-icon-hide");
-      contrasticon.classList.add("sb-theme-icon-hide");
-      lighticon.classList.add("sb-theme-icon-hide");
     };
 
     const setcontrast = () => {
       context.setColorScheme("contrast");
       colorSchemeMeta.setAttribute("content", "dark");
-
       appBody.classList.remove("light-mode");
       appBody.classList.add("contrast-mode");
-
-      contrasticon.classList.remove("sb-theme-icon-hide");
-      darkicon.classList.add("sb-theme-icon-hide");
-      lighticon.classList.add("sb-theme-icon-hide");
     };
-
 
     if (currentScheme === "light") {
       setlight();

@@ -146,9 +146,9 @@ export default function setMonthView(context, store, datepickerContext) {
     cell.setAttribute("data-mv-idx", idx);
     cell.setAttribute("data-mv-coordinates", cellCoordinates);
 
-    const dayofmonth = document.createElement('div');
-    const cellContent = document.createElement('div');
+    const dayofmonth = document.createElement('button');
     dayofmonth.classList.add('monthview--dayofmonth');
+    const cellContent = document.createElement('div');
     cellContent.classList.add('monthview--daycontent');
 
     if (day.getMonth() === context.getMonth() && day.getDate() === context.getDateSelected()) {
@@ -832,6 +832,7 @@ export default function setMonthView(context, store, datepickerContext) {
     // target : cell day number
     // execute : open day view of that day 
     if (monthviewBoxHeader) {
+      e.stopPropagation();
       openDayView(e);
       return;
     }

@@ -43,6 +43,7 @@ const resizeoverlay = document.querySelector(".resize-overlay");
 // weekview main grid wrapper & children
 const main = document.querySelector(".weekview");
 const container = document.querySelector(".weekview--calendar");
+const weekviewHeader = document.querySelector(".weekview--header");
 const weekviewHeaderDayNumber = document.querySelectorAll(".weekview--header-day__number");
 
 const weekviewGrid = document.querySelector(".weekview__grid");
@@ -147,6 +148,7 @@ export default function setWeekView(context, store, datepickerContext) {
     cols.forEach(col => { col.innerText = ""; });
     topCols.forEach(col => { col.innerText = ""; });
     main.onmousedown = null;
+    weekviewHeader.onclick = null;
     weekviewSideGrid.innerText = "";
   }
 
@@ -740,16 +742,12 @@ export default function setWeekView(context, store, datepickerContext) {
 
   /** delegate via grid */
   function delegateGridEvents(e) {
-    const getHeaderDayNumber = getClosest(e, ".weekview--header-day__number");
+
     const getBoxResizeHandle = getClosest(e, ".box-resize-s");
     const getBox = getClosest(e, ".box");
     const getWeekCol = getClosest(e, ".week--col");
     const getAllDayCol = getClosest(e, ".allday--col");
 
-    if (getHeaderDayNumber) {
-      setDayView(e);
-      return;
-    }
 
     if (getBoxResizeHandle) {
       resizeBoxNS(e, e.target.parentElement);
@@ -780,12 +778,26 @@ export default function setWeekView(context, store, datepickerContext) {
     colsToCheck.forEach(col => handleOverlap(col, "week", boxes));
   }
 
+  /*
+  
+  */
+  function delegateWvHeader(e) {
+    const getHeaderDayNumber = getClosest(e, ".weekview--header-day__number");
+    if (getHeaderDayNumber) {
+      setDayView(e);
+      return;
+    }
+
+  }
+
   const initWeek = () => {
     weekviewSideGrid.innerText = "";
     createWVSideGridCells();
     configureDaysOfWeek();
     renderDataForGrid();
     main.onmousedown = delegateGridEvents;
+    // need to use onclick to delegate header events in order to allow for tab + enter
+    weekviewHeader.onclick = delegateWvHeader;
     store.setResetPreviousViewCallback(resetWeekviewBoxes);
     if (firstY !== null) {
       setTimeout(() => {
