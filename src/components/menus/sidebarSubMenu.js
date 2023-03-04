@@ -2,8 +2,6 @@ import { getClosest, setTheme } from "../../utilities/helpers";
 import { createTimestamp } from "../../utilities/dateutils";
 import handleShortCutsModal from "./shortcutsModal";
 
-
-
 const sidebarSubMenuOverlay = document.querySelector('.sidebar-sub-menu__overlay');
 const sidebarSubMenu = document.querySelector('.sidebar-sub-menu');
 const closeSubMenuBtn = document.querySelector('.close-sub-menu');
@@ -161,6 +159,7 @@ export default function getSidebarSubMenu(store, context) {
         closeSubMenu();
       };
       reader.readAsText(file);
+      reader = null;
     };
     document.body.appendChild(file);
     file.click();
@@ -180,6 +179,7 @@ export default function getSidebarSubMenu(store, context) {
     link.download = filename + ".json";
     document.body.appendChild(link);
     link.click();
+    URL.revokeObjectURL(href);
     document.body.removeChild(link);
   }
 

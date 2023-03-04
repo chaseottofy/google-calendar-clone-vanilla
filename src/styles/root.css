@@ -132,15 +132,7 @@ html {
   font-size: 14px;
 }
 
-.body {
-  font-family: var(--primaryFont);
-  font-weight: 400;
-  background: var(--black1);
-  color: var(--white1);
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-}
+
 
 .preload * {
   -webkit-transition: none !important;
