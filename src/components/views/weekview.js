@@ -83,7 +83,7 @@ export default function setWeekView(context, store, datepickerContext) {
       if (hour > 12) {hour -= 12;}
       if (i >= 12) {md = "PM";}
 
-      const wvSideGridCell = document.createElement("div");
+      const wvSideGridCell = document.createElement("span");
       wvSideGridCell.classList.add("sidegrid-cell");
       wvSideGridCell.textContent = `${hour} ${md}`;
       weekviewSideGrid.appendChild(wvSideGridCell);

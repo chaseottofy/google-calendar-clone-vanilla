@@ -35,6 +35,10 @@
 :root {
   --primaryFont: "Roboto", sans-serif;
   --secondaryFont: "Google Sans", sans-serif;
+  --taskcolor0: #ffffff;
+  --primarylight1: #4c9cf8;
+  --primarylight2: #4BA0F4;
+  --offwhite3: #70757a;
   --black000: #0c0e0e;
   --black0: #141617;
   --black1: #181a1b;
@@ -55,9 +59,6 @@
   --primary3: #122e5c;
   --primary4: #0f2c4f;
   --primary5: #1c1f21;
-  --primarylight1: #4c9cf8;
-  --primarylight2: #4BA0F4;
-  --taskcolor0: #ffffff;
   --taskcolor: #fcfbf9;
   --taskcolor2: #C0BAB2;
   --white1: #E8E6E3;
@@ -66,7 +67,6 @@
   --white4: #BFC0C1;
   --offwhite1: #9e9689;
   --offwhite2: #c0bab2;
-  --offwhite3: #70757a;
   --error: #d93025;
   --red1: #B01244;
   --red2: #7b0d25;
@@ -204,11 +204,11 @@ html {
   --taskcolor0: #ffffff;
   --taskcolor: #ffffff;
   --taskcolor2: #ffffff;
-  --offwhite1: #909ba7;
+  --offwhite1: #bec8d2;
   --offwhite2: #ccc;
   --black000: #0b0b0b;
-  --black0: #000000;
-  --black1: #0a0b0b;
+  --black0: #121415;
+  --black1: #000000;
   --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;
@@ -242,7 +242,7 @@ html {
 select,
 button {
   background: var(--black1);
-  padding:none;
+  padding: none;
   border: none;
 }
 
@@ -287,7 +287,7 @@ select {
 
 input[type="text"],
 textarea:focus {
-  outline:none;
+  outline: none;
 }
 
 textarea {

@@ -56,12 +56,22 @@ const throttle = (fn, wait) => {
   };
 };
 
+function handleTheme(context) {
+  const currTheme = context.getColorScheme();
+  const appBody = document.querySelector(".body");
+  const currMeta = document.getElementsByName("color-scheme")[0];
+
+  // const hasLightMode = appBody.classList.contains("light-mode");
+  // const hasContrastMode = appBody.classList.contains("contrast-mode");
+}
+
 function setTheme(context) {
   const appBody = document.querySelector(".body");
   const colorSchemeMeta = document.getElementsByName("color-scheme")[0];
   const currentScheme = context.getColorScheme();
   const hasLightMode = appBody.classList.contains("light-mode");
   const hasContrastMode = appBody.classList.contains("contrast-mode");
+  console.log(currentScheme)
 
   const setColorSchema = () => {
     if (currentScheme === "light" && hasLightMode && !hasContrastMode) {
@@ -75,7 +85,6 @@ function setTheme(context) {
     const setlight = () => {
       context.setColorScheme("light");
       colorSchemeMeta.setAttribute("content", "light");
-
       appBody.classList.remove("contrast-mode");
       appBody.classList.add("light-mode");
     };
@@ -83,7 +92,6 @@ function setTheme(context) {
     const setdark = () => {
       context.setColorScheme("dark");
       colorSchemeMeta.setAttribute("content", "dark light");
-
       appBody.classList.remove("light-mode");
       appBody.classList.remove("contrast-mode");
     };
@@ -112,6 +120,7 @@ function setTheme(context) {
   };
   setColorSchema();
 }
+
 
 
 /**

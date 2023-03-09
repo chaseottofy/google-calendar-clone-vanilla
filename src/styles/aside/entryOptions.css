@@ -15,7 +15,7 @@
   bottom: 5%;
   min-width: 400px;
   height: 165px;
-  background: var(--black0);
+  background: var(--black1);
   box-shadow: var(--box-shadow1);
   border-radius: 8px;
   z-index: 983;
@@ -88,7 +88,7 @@
   width: 38px;
   position: relative;
   cursor: pointer;
-  background: var(--black0);
+  background: var(--black1);
   border-radius: 6px;
 }
 

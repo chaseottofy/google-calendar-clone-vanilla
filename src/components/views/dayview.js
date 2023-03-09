@@ -166,7 +166,7 @@ export default function setDayView(context, store, datepickerContext) {
       if (hour > 12) {hour -= 12;}
       if (i >= 12) {md = "PM";}
 
-      const dvSideGridCell = document.createElement("div");
+      const dvSideGridCell = document.createElement("span");
       dvSideGridCell.classList.add("dv-sidegrid--cell");
       dvSideGridCell.textContent = `${hour} ${md}`;
       dvSideGridWrapper.appendChild(dvSideGridCell);
