@@ -270,7 +270,7 @@ input[type="checkbox"] {
 }
 
 select {
-  padding: 0.55rem 0rem;
+  padding: 0.55rem 0;
 }
 
 input[type="text"]::placeholder,

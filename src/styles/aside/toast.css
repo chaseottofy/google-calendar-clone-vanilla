@@ -30,7 +30,7 @@
 .show-toast {
   height: 48px !important;
   z-index: 2000 !important;
-  transform: translateY(0px) !important;
+  transform: translateY(0) !important;
 }
 
 .toast svg {
