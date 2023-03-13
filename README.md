@@ -1,6 +1,10 @@
 # Google Calendar Clone
 
+demo: lightmode / weekview
 ![screen](screenshots/screen_weekview.png)
+
+demo: darkmode / monthview
+![screen](screenshots/screen_month_dark.png)
 
 Contact: ottofy@zohomail.com
 
