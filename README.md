@@ -1,5 +1,7 @@
 # Google Calendar Clone
 
+![screen](screenshots/screen_weekview.png)
+
 Contact: ottofy@zohomail.com
 
 [Live project link](https://chaseottofy.github.io/google-calendar-clone-vanilla/)

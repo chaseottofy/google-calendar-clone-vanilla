@@ -56,14 +56,6 @@ const throttle = (fn, wait) => {
   };
 };
 
-function handleTheme(context) {
-  const currTheme = context.getColorScheme();
-  const appBody = document.querySelector(".body");
-  const currMeta = document.getElementsByName("color-scheme")[0];
-
-  // const hasLightMode = appBody.classList.contains("light-mode");
-  // const hasContrastMode = appBody.classList.contains("contrast-mode");
-}
 
 function setTheme(context) {
   const appBody = document.querySelector(".body");
