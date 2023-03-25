@@ -308,13 +308,11 @@ export default function setWeekView(context, store, datepickerContext) {
       const getMeatballBtn = getClosest(e, ".allday-modal__cell-action-icons");
 
       if (getCloseAdBtn) {
-        // resetalldaymodal();
         closealldaymodal();
         return;
       }
 
       if (getMeatballBtn) {
-        // resetalldaymodal();
         getWeekViewContextMenu(
           store.getEntry(e.target.parentElement.getAttribute("data-allday-modal-cell-id")),
           closealldaymodal,

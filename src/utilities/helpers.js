@@ -63,7 +63,6 @@ function setTheme(context) {
   const currentScheme = context.getColorScheme();
   const hasLightMode = appBody.classList.contains("light-mode");
   const hasContrastMode = appBody.classList.contains("contrast-mode");
-  console.log(currentScheme)
 
   const setColorSchema = () => {
     if (currentScheme === "light" && hasLightMode && !hasContrastMode) {

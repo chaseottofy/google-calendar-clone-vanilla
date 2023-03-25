@@ -209,35 +209,6 @@ export default function getSidebarSubMenu(store, context) {
       const proceedBtn = popup.querySelector(".sb-sub-popup-btn--proceed");
       cancelBtn.onclick = removePopup;
       proceedBtn.onclick = getJSONUpload;
-
-      // if user clicks proceed, create blob to open user's local file system
-      // const handleProceed = (e) => {
-      //   cancelBtn.classList.add("hide-cancel-btn");
-      //   let proceedBtnText = "Waiting for file upload";
-      //   setTimeout(() => {
-      //     console.log("waiting for file upload");
-      //     proceedBtnText += ".";
-      //     proceedBtn.textContent = proceedBtnText;
-      //     if (proceedBtnText.length > 20) {
-      //       proceedBtnText = "Waiting for file upload";
-      //     }
-      //   }, 2000);
-      //   getJSONUpload(e);
-      // }
-
-
-      // check if user has cancelled out of their file explorer
-      // const checkForUpload = setInterval(() => {
-      //   const userUpload = store.getUserUpload()
-      //   if (userUpload) {
-      //     clearInterval(checkForUpload);
-      //     popup.remove();
-      //     sidebarSubMenuOverlay.classList.remove("sub-overlay-vis");
-      //     store.clearUserUpload()
-      //     return;
-      //   } else {
-      //   }
-      // })
     }
   }
 

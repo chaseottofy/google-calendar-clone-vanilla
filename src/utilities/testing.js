@@ -5,17 +5,16 @@
     "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
     "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
   },
-
 */
+
+/**
+ * The following are functions that are used for testing purposes. The majority of testing has been done manually
+ */
 
 const randomTitles = "quaerat velit veniam amet cupiditate aut numquam ut sequi".split(" ");
 
 const categoryNames = [
   'default',
-  'default',
-  'default',
-  // 'misc',
-  // 'school'
 ];
 let endYears = [2023, 2023];
 function generateStart() {
@@ -75,3 +74,22 @@ export default function generateRandomEvents(numberOfEvents) {
   }
   return events;
 }
+
+
+/**
+ * use the event listener below to find all elements with event listeners.
+ */
+// window.addEventListener("mouseup", () => {
+//   for (let i = 0; i < document.all.length; i++) {
+//     const element = document.all[i];
+//     if (element.onmousedown) {
+//       console.log("onmousedown", element.getAttribute("class"));
+//     }
+//     if (element.onkeydown) {
+//       console.log("onkeydown", element.getAttribute("class"));
+//     }
+//     if (element.onclick) {
+//       console.log("onclick", element.getAttribute("class"));
+//     }
+//   }
+// });

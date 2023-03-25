@@ -104,12 +104,6 @@
   display: none;
 }
 
-/* .cc-tran {
-  transition-duration: 200ms;
-  transition-property: transform, width;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-} */
-
 .container__calendars-sb-active {
   width: calc(100% - 248px);
   margin-left: 248px;

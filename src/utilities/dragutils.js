@@ -241,6 +241,7 @@ function setBoxWidthDay(box, prepend, dataidx) {
 function handleOverlap(col, view, boxes) {
 
   const collisions = view === "day" ? boxes.checkForCollision() : boxes.checkForCollision(col);
+  // console.log(boxes)
 
   const identifyBox = identifiers.boxnumarr[view];
 

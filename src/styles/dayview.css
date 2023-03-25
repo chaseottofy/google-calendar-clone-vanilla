@@ -134,7 +134,6 @@
 
 
 .dv--ontop__more {
-  width: 100%;
   cursor: pointer;
   background: var(--black0);
   color: var(--offwhite1);
@@ -312,7 +311,6 @@
   grid-template-columns: 1fr;
   grid-template-rows: repeat(25, 1fr);
   width: 36px;
-  user-select: none;
   z-index: 2;
   user-select: none;
   pointer-events: none;
@@ -540,10 +538,7 @@
 }
 
 .dayview--footer {
-  /* border-top: var(--bordergrey); */
   background: var(--black1);
-  /* height: 62.5px; */
-  /* margin-top: -62.5px; */
   position: relative;
   user-select: none;
   width: 100%;
