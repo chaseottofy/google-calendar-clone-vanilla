@@ -9,7 +9,7 @@ import handleShortCutsModal from "../components/menus/shortcutsModal";
 import getSidebarSubMenu from "../components/menus/sidebarSubMenu";
 import createGoTo from "../components/forms/goto";
 import createCategoryForm from "../components/menus/editCategory";
-
+import react from 'react'
 const appBody = document.querySelector(".body");
 const colorSchemeMeta = document.getElementsByName("color-scheme")[0];
 
