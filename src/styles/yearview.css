@@ -4,12 +4,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   grid-auto-rows: 300px;
-  column-gap: 12px;
-  row-gap: 30px;
+  gap: 30px 12px;
   padding: 16px 2px;
   height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden scroll;
 }
 
 .calendar__yearview::-webkit-scrollbar-thumb {
@@ -90,6 +88,7 @@
   margin: 0 auto;
   height: 100%;
   width: 100%;
+
   /* padding-bottom: 8px; */
 }
 

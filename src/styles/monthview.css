@@ -141,8 +141,7 @@
   position: relative;
   min-height:100%;
   height: 100%;
-  overflow-y: scroll;
-  overflow-x:hidden;
+  overflow: hidden scroll;
   width: 100%;
 }
 
@@ -214,6 +213,7 @@
   pointer-events:none;
   user-select:none;
 }
+
 .monthview--daycontent__form-temp .monthview--daycontent {
   overflow:hidden;
 }
@@ -222,6 +222,7 @@
   z-index: 1000;
   pointer-events: none;
   opacity: 0.8;
+
   /* overflow:hidden; */
 }
 
@@ -367,8 +368,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   height: 100%;
   width: 100%;
 }
@@ -433,6 +433,7 @@
     font-size:8px;
   }
 }
+
 @media screen and (max-width:380px) {
   /* .monthview--title {
     font-size:10px;

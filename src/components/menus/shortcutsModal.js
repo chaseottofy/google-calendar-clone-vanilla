@@ -1,39 +1,39 @@
-const shortcutsModalOverlay = document.querySelector(".shortcuts-modal-overlay");
-const shortcutsModal = document.querySelector(".shortcuts__modal");
-const shortcutsModalContent = document.querySelector(".shortcuts-modal-content");
-const shortcutsModalClose = document.querySelector(".close-shortcuts-modal");
-const notifyShortcutsStatus = document.querySelector(".keyboard-disabled-sm-two");
+const shortcutsModalOverlay = document.querySelector('.shortcuts-modal-overlay');
+const shortcutsModal = document.querySelector('.shortcuts__modal');
+const shortcutsModalContent = document.querySelector('.shortcuts-modal-content');
+const shortcutsModalClose = document.querySelector('.close-shortcuts-modal');
+const notifyShortcutsStatus = document.querySelector('.keyboard-disabled-sm-two');
 
 export default function handleShortCutsModal(store) {
   function createShortcut(key, description) {
-    const shortcut = document.createElement("div");
-    shortcut.classList.add("sm-item");
+    const shortcut = document.createElement('div');
+    shortcut.classList.add('sm-item');
 
-    const shortcutKey = document.createElement("div");
-    shortcutKey.classList.add("sm-key");
-    const keyone = document.createElement("span");
+    const shortcutKey = document.createElement('div');
+    shortcutKey.classList.add('sm-key');
+    const keyone = document.createElement('span');
     if (Array.isArray(key)) {
-      const or = document.createElement("span");
-      or.textContent = " or ";
-      const keytwo = document.createElement("span");
+      const or = document.createElement('span');
+      or.textContent = ' or ';
+      const keytwo = document.createElement('span');
       keyone.textContent = key[0].toUpperCase();
       keytwo.textContent = key[1].toUpperCase();
       shortcutKey.append(keyone, or, keytwo);
     } else {
-      if (key == "ENTER" || key == "ESCAPE" || key == "DELETE") {
-        keyone.classList.add("key-full");
+      if (key == 'ENTER' || key == 'ESCAPE' || key == 'DELETE') {
+        keyone.classList.add('key-full');
       }
       keyone.textContent = key.toUpperCase();
       shortcutKey.appendChild(keyone);
     }
 
-    const shortcutDescription = document.createElement("div");
-    shortcutDescription.classList.add("sm-description");
+    const shortcutDescription = document.createElement('div');
+    shortcutDescription.classList.add('sm-description');
     if (Array.isArray(description)) {
-      shortcut.classList.add("sm-item--full");
-      shortcutDescription.classList.add("sm-description--full");
-      const descriptionOne = document.createElement("span");
-      const descriptionTwo = document.createElement("span");
+      shortcut.classList.add('sm-item--full');
+      shortcutDescription.classList.add('sm-description--full');
+      const descriptionOne = document.createElement('span');
+      const descriptionTwo = document.createElement('span');
       descriptionOne.textContent = description[0];
       descriptionTwo.textContent = description[1];
       shortcutDescription.append(descriptionOne, descriptionTwo);
@@ -45,35 +45,35 @@ export default function handleShortCutsModal(store) {
   }
 
   function handleShortcutsModalClose() {
-    shortcutsModalContent.innerText = "";
-    shortcutsModalOverlay.classList.add("hide-shortcuts");
-    shortcutsModal.classList.add("hide-shortcuts");
-    store.removeActiveOverlay("hide-shortcuts");
-    document.removeEventListener("keydown", closeShortcutsOnKeydown);
+    shortcutsModalContent.innerText = '';
+    shortcutsModalOverlay.classList.add('hide-shortcuts');
+    shortcutsModal.classList.add('hide-shortcuts');
+    store.removeActiveOverlay('hide-shortcuts');
+    document.removeEventListener('keydown', closeShortcutsOnKeydown);
   }
 
   function closeShortcutsOnKeydown(e) {
     let inp = e.key.toLowerCase();
-    if (inp === "escape" || inp === "/" || inp === "?") {
+    if (inp === 'escape' || inp === '/' || inp === '?') {
       handleShortcutsModalClose();
     }
   }
 
   function setStatusIcon(status) {
     if (status) {
-      notifyShortcutsStatus.setAttribute("data-tooltip", "Keyboard shortcuts enabled");
-      notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--primary1)");
+      notifyShortcutsStatus.setAttribute('data-tooltip', 'Keyboard shortcuts enabled');
+      notifyShortcutsStatus.firstElementChild.setAttribute('fill', 'var(--primary1)');
 
     } else {
-      notifyShortcutsStatus.setAttribute("data-tooltip", "Keyboard shortcuts disabled");
-      notifyShortcutsStatus.firstElementChild.setAttribute("fill", "var(--red1)");
+      notifyShortcutsStatus.setAttribute('data-tooltip', 'Keyboard shortcuts disabled');
+      notifyShortcutsStatus.firstElementChild.setAttribute('fill', 'var(--red1)');
     }
   }
 
   function handleShortcutsModalOpen() {
-    shortcutsModalOverlay.classList.remove("hide-shortcuts");
-    shortcutsModal.classList.remove("hide-shortcuts");
-    store.addActiveOverlay("hide-shortcuts");
+    shortcutsModalOverlay.classList.remove('hide-shortcuts');
+    shortcutsModal.classList.remove('hide-shortcuts');
+    store.addActiveOverlay('hide-shortcuts');
 
     const status = store.getShortcutsStatus();
     setStatusIcon(status);
@@ -88,15 +88,15 @@ export default function handleShortCutsModal(store) {
     }
 
     function toggleShortcutsStatus() {
-      const status = store.getShortcutsStatus() === false ? true : false;
-      setStatusIcon(status);
-      store.setShortcutsStatus(status);
+      const tgstatus = store.getShortcutsStatus() === false;
+      setStatusIcon(tgstatus);
+      store.setShortcutsStatus(tgstatus);
     }
 
     shortcutsModalOverlay.onclick = handleShortcutsModalClose;
     shortcutsModalClose.onclick = handleShortcutsModalClose;
     notifyShortcutsStatus.onclick = toggleShortcutsStatus;
-    document.addEventListener("keydown", closeShortcutsOnKeydown);
+    document.addEventListener('keydown', closeShortcutsOnKeydown);
   }
 
   handleShortcutsModalOpen();

@@ -1,60 +1,11 @@
-import { compareDates } from "../utilities/dateutils";
-import locales from "../locales/en";
-const labels = locales.labels;
+import { compareDates } from '../utilities/dateutils';
+import locales from '../locales/en';
 
-
-/*
-"setDateDefaults",
-"setSchemaDefaults",
-"setDefaults",
-"getAllMethodNames",
-"getColorScheme",
-"setColorScheme",
-"setSidebarState",
-"toggleSidebarState",
-"getComponent",
-"setComponent",
-"getSidebarState",
-"setDay",
-"setMonth",
-"setYear",
-"setDate",
-"setDateSelected",
-"setPrevDay",
-"setPrevWeek",
-"setPrevMonth",
-"setPrevYear",
-"setNextDay",
-"setNextWeek",
-"setNextMonth",
-"setNextYear",
-
-"getGmt",
-"getDateSelected",
-"getDay",
-"getMonth",
-"getYear",
-"getDate",
-"getToday",
-"getWeek",
-"getWeekday",
-"getWeekArray",
-"getWeekRange",
-"getWeekNumber",
-"getMonthName",
-"getDaysInMonth",
-"getMonthArrayStartDay",
-"getMonthArrayStart",
-"getMonthArrayEndDay",
-"getMonthArrayEnd",
-"getMonthArray",
-"isToday"
-*/
 class Context {
-  constructor () {
-    this.colorScheme = "dark";
-    this.component = "month";
-    this.sidebarState = "hide";
+  constructor() {
+    this.colorScheme = 'dark';
+    this.component = 'month';
+    this.sidebarState = 'hide';
     this.date = new Date();
     this.gmt = new Date().getTimezoneOffset() / 60;
 
@@ -69,28 +20,28 @@ class Context {
   }
 
   setDateDefaults() {
-    if (localStorage.getItem("yearSelected") === null) {
+    if (localStorage.getItem('yearSelected') === null) {
       if (this.yearSelected === undefined) {
         this.yearSelected = this.date.getFullYear();
       }
       Context.setLocalYear(this.yearSelected);
     }
 
-    if (localStorage.getItem("monthSelected") === null) {
+    if (localStorage.getItem('monthSelected') === null) {
       if (this.monthSelected === undefined) {
         this.monthSelected = this.date.getMonth();
       }
       Context.setLocalMonth(this.monthSelected);
     }
 
-    if (localStorage.getItem("daySelected") === null) {
+    if (localStorage.getItem('daySelected') === null) {
       if (this.daySelected === undefined) {
         this.daySelected = this.date.getDate();
       }
       Context.setLocalDay(this.daySelected);
     }
 
-    if (localStorage.getItem("dateSelected") === null) {
+    if (localStorage.getItem('dateSelected') === null) {
       if (this.dateSelected === undefined) {
         this.dateSelected = 1;
       }
@@ -99,23 +50,23 @@ class Context {
   }
 
   setSchemaDefaults() {
-    if (localStorage.getItem("colorScheme") === null) {
+    if (localStorage.getItem('colorScheme') === null) {
       if (this.colorScheme === undefined) {
-        this.colorScheme = "dark";
+        this.colorScheme = 'dark';
       }
       Context.setLocalColorScheme(this.colorScheme);
     }
 
-    if (localStorage.getItem("component") === null) {
+    if (localStorage.getItem('component') === null) {
       if (this.component === undefined) {
-        this.component = "month";
+        this.component = 'month';
       }
       Context.setLocalComponent(this.component);
     }
 
-    if (localStorage.getItem("sidebarState") === null) {
+    if (localStorage.getItem('sidebarState') === null) {
       if (this.sidebarState === undefined) {
-        this.sidebarState = "hide";
+        this.sidebarState = 'hide';
       }
       Context.setLocalSidebarState(this.sidebarState);
     }
@@ -129,70 +80,69 @@ class Context {
   /* **************************************** */
   /* LOCAL STATE MANAGEMENT */
   static getLocalDay() {
-    return +localStorage.getItem("daySelected") === undefined ? 1 : +localStorage.getItem("daySelected");
+    return +localStorage.getItem('daySelected') === undefined ? 1 : +localStorage.getItem('daySelected');
   }
 
   static getLocalMonth() {
-    return +localStorage.getItem("monthSelected") === undefined ? 1 : +localStorage.getItem("monthSelected");
+    return +localStorage.getItem('monthSelected') === undefined ? 1 : +localStorage.getItem('monthSelected');
   }
 
   static getLocalYear() {
-    return +localStorage.getItem("yearSelected") === undefined ? 1 : +localStorage.getItem("yearSelected");
+    return +localStorage.getItem('yearSelected') === undefined ? 1 : +localStorage.getItem('yearSelected');
   }
 
   static getLocalDateSelected() {
-    return +localStorage.getItem("dateSelected");
+    return +localStorage.getItem('dateSelected');
   }
 
   static getLocalComponent() {
-    return localStorage.getItem("component");
+    return localStorage.getItem('component');
   }
 
   static getLocalColorScheme() {
-    return localStorage.getItem("colorScheme");
+    return localStorage.getItem('colorScheme');
   }
 
   static getLocalSidebarState() {
-    return localStorage.getItem("sidebarState");
+    return localStorage.getItem('sidebarState');
   }
 
   static setLocalDay(day) {
-    localStorage.setItem("daySelected", day);
+    localStorage.setItem('daySelected', day);
   }
 
   static setLocalMonth(month) {
-    localStorage.setItem("monthSelected", month);
+    localStorage.setItem('monthSelected', month);
   }
 
   static setLocalYear(year) {
-    localStorage.setItem("yearSelected", year);
+    localStorage.setItem('yearSelected', year);
   }
 
   static setLocalDateSelected(date) {
-    localStorage.setItem("dateSelected", date);
+    localStorage.setItem('dateSelected', date);
   }
 
   static setLocalComponent(component) {
-    localStorage.setItem("component", component);
+    localStorage.setItem('component', component);
   }
 
   static setLocalSidebarState(state) {
-    localStorage.setItem("sidebarState", state);
+    localStorage.setItem('sidebarState', state);
   }
 
   static setLocalColorScheme(colorScheme) {
-    localStorage.setItem("colorScheme", colorScheme);
+    localStorage.setItem('colorScheme', colorScheme);
   }
   /* **************************************** */
-
 
   /* **************************************** */
   /* TESTING -- DEV ONLY */
   getAllMethodNames() {
     return Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(
       (method) => {
-        return method !== "constructor" && method !== "getStoreStats";
-      }
+        return method !== 'constructor' && method !== 'getStoreStats';
+      },
     );
   }
 
@@ -201,36 +151,38 @@ class Context {
   getColorScheme() {
     return Context.getLocalColorScheme();
   }
+
   setColorScheme(colorScheme) {
     this.colorScheme = colorScheme;
     Context.setLocalColorScheme(colorScheme);
   }
+
   setSidebarState(state) {
     this.sidebarState = state;
     Context.setLocalSidebarState(state);
   }
+
   toggleSidebarState() {
-    this.sidebarState = this.getSidebarState() === "open" ? "hide" : "open";
+    this.sidebarState = this.getSidebarState() === 'open' ? 'hide' : 'open';
     Context.setLocalSidebarState(this.sidebarState);
   }
   /* **************************************** */
 
-
   /* **************************************** */
   /* APPLICATION CURRENT COMPONENT */
   getComponent() {
-    return Context.getLocalComponent() || "month";
+    return Context.getLocalComponent() || 'month';
   }
+
   setComponent(component) {
     this.component = component;
     Context.setLocalComponent(component);
   }
+
   getSidebarState() {
-    return Context.getLocalSidebarState() || "hide";
+    return Context.getLocalSidebarState() || 'hide';
   }
   /* **************************************** */
-
-
 
   /* **************************************** */
   /* APPLICATION DATE HANDLING */
@@ -261,37 +213,26 @@ class Context {
     this.dateSelected = date;
     Context.setLocalDateSelected(date);
   }
+
   /* ************** */
   // Take current date and set it to previous day/week/month/year
   /* PREVIOUS : DAY, WEEK, MONTH, YEAR */
   setPrevDay() {
-    const prevDay = new Date(
-      this.getYear(), this.getMonth(), this.getDay() - 1
-    );
+    const prevDay = new Date(this.getYear(), this.getMonth(), this.getDay() - 1);
 
-    this.setDate(
-      prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate()
-    );
+    this.setDate(prevDay.getFullYear(), prevDay.getMonth(), prevDay.getDate());
   }
 
   setPrevWeek() {
-    const prevWeek = new Date(
-      this.getYear(), this.getMonth(), this.getDay() - 7
-    );
+    const prevWeek = new Date(this.getYear(), this.getMonth(), this.getDay() - 7);
 
-    this.setDate(
-      prevWeek.getFullYear(), prevWeek.getMonth(), prevWeek.getDate()
-    );
+    this.setDate(prevWeek.getFullYear(), prevWeek.getMonth(), prevWeek.getDate());
   }
 
   setPrevMonth() {
-    const prevMonth = new Date(
-      this.getYear(), +this.getMonth() - 1, this.getDay()
-    );
+    const prevMonth = new Date(this.getYear(), +this.getMonth() - 1, this.getDay());
 
-    this.setDate(
-      prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate()
-    );
+    this.setDate(prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate());
   }
 
   setPrevYear() {
@@ -321,11 +262,10 @@ class Context {
   }
   /* ************** */
 
-
   /* ************** */
   /* GETTERS */
   getGmt() {
-    return this.gmt;  // UTC Offset
+    return this.gmt; // UTC Offset
   }
 
   getDateSelected() {
@@ -382,6 +322,7 @@ class Context {
   }
 
   getWeekRange() {
+    const { labels } = locales;
     let weekArray = this.getWeekArray();
     let [m1, m2] = [weekArray[0].getMonth(), weekArray[6].getMonth()];
     let [d1, d2] = [weekArray[0].getDate(), weekArray[6].getDate()];
@@ -403,6 +344,7 @@ class Context {
   }
 
   getMonthName() {
+    const { labels } = locales;
     return labels.monthsLong[this.getMonth()];
   }
 
@@ -487,8 +429,8 @@ class Context {
 /**
   * DatepickerContext
   * @class
-  * @classdesc date context for datepicker -- 
-  * slimmed down version of @Context class 
+  * @classdesc date context for datepicker --
+  * slimmed down version of @Context class
   * @property {Date} date - today's date
   * @property {Date} dateSelected - selected date
   * @property {number} daySelected - selected day
@@ -496,10 +438,10 @@ class Context {
   * @property {number} yearSelected - selected year
   * @property {number} month - current month
   * @property {Array} monthArray - current month array
-  * 
+  *
  */
 class DatepickerContext {
-  constructor () {
+  constructor() {
     this.date = new Date();
     this.dateSelected = this.date.getDate();
     this.daySelected = this.date.getDate();
@@ -510,28 +452,28 @@ class DatepickerContext {
   }
 
   setDefaults() {
-    if (localStorage.getItem("pickerYearSelected") === null) {
+    if (localStorage.getItem('pickerYearSelected') === null) {
       if (this.yearSelected === undefined) {
         this.yearSelected = this.date.getFullYear();
       }
       DatepickerContext.setLocalPickerYear(this.yearSelected);
     }
 
-    if (localStorage.getItem("pickerMonthSelected") === null) {
+    if (localStorage.getItem('pickerMonthSelected') === null) {
       if (this.monthSelected === undefined) {
         this.monthSelected = this.date.getMonth();
       }
       DatepickerContext.setLocalPickerMonth(this.monthSelected);
     }
 
-    if (localStorage.getItem("pickerDaySelected") === null) {
+    if (localStorage.getItem('pickerDaySelected') === null) {
       if (this.daySelected === undefined) {
         this.daySelected = this.date.getDate();
       }
       DatepickerContext.setLocalPickerDay(this.daySelected);
     }
 
-    if (localStorage.getItem("pickerDateSelected") === null) {
+    if (localStorage.getItem('pickerDateSelected') === null) {
       if (this.dateSelected === undefined) {
         this.dateSelected = this.date.getDate();
       }
@@ -542,35 +484,35 @@ class DatepickerContext {
   /* **************************************** */
   /* LOCAL STATE MANAGEMENT */
   static getLocalPickerDay() {
-    return +localStorage.getItem("pickerDaySelected");
+    return +localStorage.getItem('pickerDaySelected');
   }
 
   static getLocalPickerMonth() {
-    return +localStorage.getItem("pickerMonthSelected");
+    return +localStorage.getItem('pickerMonthSelected');
   }
 
   static getLocalPickerYear() {
-    return +localStorage.getItem("pickerYearSelected");
+    return +localStorage.getItem('pickerYearSelected');
   }
 
   static getLocalPickerDateSelected() {
-    return +localStorage.getItem("pickerDateSelected");
+    return +localStorage.getItem('pickerDateSelected');
   }
 
   static setLocalPickerDay(day) {
-    localStorage.setItem("pickerDaySelected", day);
+    localStorage.setItem('pickerDaySelected', day);
   }
 
   static setLocalPickerMonth(month) {
-    localStorage.setItem("pickerMonthSelected", month);
+    localStorage.setItem('pickerMonthSelected', month);
   }
 
   static setLocalPickerYear(year) {
-    localStorage.setItem("pickerYearSelected", year);
+    localStorage.setItem('pickerYearSelected', year);
   }
 
   static setLocalPickerDateSelected(date) {
-    localStorage.setItem("pickerDateSelected", date);
+    localStorage.setItem('pickerDateSelected', date);
   }
 
   /* **************************************** */
@@ -603,24 +545,17 @@ class DatepickerContext {
 
   /* ************** */
   setPrevMonth() {
-    const prevMonth = new Date(
-      this.getYear(), this.getMonth() - 1, this.getDay()
-    );
+    const prevMonth = new Date(this.getYear(), this.getMonth() - 1, this.getDay());
 
-    this.setDate(
-      prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate()
-    );
+    this.setDate(prevMonth.getFullYear(), prevMonth.getMonth(), prevMonth.getDate());
   }
 
   setNextMonth() {
-    const nextMonth = new Date(
-      this.getYear(), this.getMonth() + 1, this.getDay()
-    );
+    const nextMonth = new Date(this.getYear(), this.getMonth() + 1, this.getDay());
 
-    this.setDate(
-      nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate()
-    );
+    this.setDate(nextMonth.getFullYear(), nextMonth.getMonth(), nextMonth.getDate());
   }
+
   /* ************** */
   getDateSelected() {
     return +DatepickerContext.getLocalPickerDateSelected();
@@ -647,6 +582,7 @@ class DatepickerContext {
   }
 
   getMonthName() {
+    const { labels } = locales;
     return labels.monthsLong[this.getMonth()];
   }
 

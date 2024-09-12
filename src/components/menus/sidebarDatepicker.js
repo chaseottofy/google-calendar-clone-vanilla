@@ -1,23 +1,22 @@
-import { getDateForStore } from "../../utilities/dateutils";
-import setViews from "../../config/setViews";
-import { getClosest } from "../../utilities/helpers";
+import { getDateForStore } from '../../utilities/dateutils';
+import setViews from '../../config/setViews';
+import { getClosest } from '../../utilities/helpers';
 
+const sbdatepicker = document.querySelector('.datepicker-sidebar');
+const sbdatepickerBody = document.querySelector('.sbdatepicker__body--dates');
+const sbdatepickerTitle = document.querySelector('.sbdatepicker-title');
 
-const sbdatepicker = document.querySelector(".datepicker-sidebar");
-const sbdatepickerBody = document.querySelector(".sbdatepicker__body--dates");
-const sbdatepickerTitle = document.querySelector(".sbdatepicker-title");
+const sbdatepickerChangeDate = document.querySelector('.sb-datepicker-change-date');
 
-const sbdatepickerChangeDate = document.querySelector(".sb-datepicker-change-date");
-
-const sbyearpickerTitle = document.querySelector(".sb-yearpicker-title");
-const sbmonthpickerMonths = document.querySelectorAll(".sb-monthpicker__month");
+const sbyearpickerTitle = document.querySelector('.sb-yearpicker-title');
+const sbmonthpickerMonths = document.querySelectorAll('.sb-monthpicker__month');
 
 export default function setSidebarDatepicker(context, store, datepickerContext) {
 
   datepickerContext.setDate(
     context.getYear(),
     context.getMonth(),
-    context.getDay()
+    context.getDay(),
   );
 
   let montharray = datepickerContext.getMonthArray();
@@ -33,24 +32,24 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     sbdatepickerTitle.textContent = `${month} ${year}`;
   }
 
-  function createCells(montharray) {
-    sbdatepickerBody.innerText = "";
+  function createCells(marr) {
+    sbdatepickerBody.innerText = '';
     const component = context.getComponent();
 
-    for (let i = 0; i < montharray.length; i++) {
-      const cell = document.createElement("div");
-      const datename = document.createElement("div");
-      cell.classList.add("sbdatepicker__body--dates-cell");
-      datename.classList.add("sbdatepicker__body--datename");
+    for (let i = 0; i < marr.length; i++) {
+      const cell = document.createElement('div');
+      const datename = document.createElement('div');
+      cell.classList.add('sbdatepicker__body--dates-cell');
+      datename.classList.add('sbdatepicker__body--datename');
 
-      if (montharray[i].getMonth() !== datepickerContext.getMonth()) {
-        datename.classList.add("sbdatepicker__body--datename-disabled");
+      if (marr[i].getMonth() !== datepickerContext.getMonth()) {
+        datename.classList.add('sbdatepicker__body--datename-disabled');
       }
 
-      if (component === "week") {
-        if (currentWeekStart.getDate() === montharray[i].getDate()) {
-          if (currentWeekStart.getMonth() === montharray[i].getMonth()) {
-            if (currentWeekStart.getFullYear() === montharray[i].getFullYear()) {
+      if (component === 'week') {
+        if (currentWeekStart.getDate() === marr[i].getDate()) {
+          if (currentWeekStart.getMonth() === marr[i].getMonth()) {
+            if (currentWeekStart.getFullYear() === marr[i].getFullYear()) {
               hasweek = true;
             }
           }
@@ -60,34 +59,37 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       if (hasweek) {
         count++;
         if (count <= 7) {
-          cell.classList.add("sbdatepicker__body--dates-week");
+          cell.classList.add('sbdatepicker__body--dates-week');
         }
       } else {
-        cell.classList.remove("sbdatepicker__body--dates-week");
+        cell.classList.remove('sbdatepicker__body--dates-week');
       }
 
-      if (context.isToday(montharray[i])) {
-        datename.setAttribute("class", "sbdatepicker__body--datename");
-        datename.classList.add("sbdatepicker__body--datename-today");
+      if (context.isToday(marr[i])) {
+        datename.setAttribute('class', 'sbdatepicker__body--datename');
+        datename.classList.add('sbdatepicker__body--datename-today');
       }
 
-      if (montharray[i].getDate() === context.getDateSelected() && montharray[i].getMonth() === datepickerContext.getMonth()) {
-        if (!datename.classList.contains("sbdatepicker__body--datename-today")) {
-          datename.setAttribute("class", "sbdatepicker__body--datename");
-          datename.classList.add("sbdatepicker__body--datename-selected");
+      if (marr[i].getDate() === context.getDateSelected() && marr[i].getMonth() === datepickerContext.getMonth()) {
+        if (!datename.classList.contains('sbdatepicker__body--datename-today')) {
+          datename.setAttribute('class', 'sbdatepicker__body--datename');
+          datename.classList.add('sbdatepicker__body--datename-selected');
         }
       }
 
-      datename.textContent = montharray[i].getDate();
-      const formattedDate = getDateForStore(montharray[i]);
-      datename.setAttribute("data-datepicker-date", formattedDate);
+      datename.textContent = marr[i].getDate();
+      const formattedDate = getDateForStore(marr[i]);
+
+      datename.setAttribute('data-datepicker-date', formattedDate);
       if (groupedEntries.includes(formattedDate)) {
-        if (!datename.classList.contains("sbdatepicker__body--datename-selected") && !datename.classList.contains("sbdatepicker__body--datename-today")) {
-          datename.setAttribute("class", "sbdatepicker__body--datename");
-          datename.classList.add("sbdatepicker__body--datename-entries");
+        if (!datename.classList.contains('sbdatepicker__body--datename-selected')
+          && !datename.classList.contains('sbdatepicker__body--datename-today')
+        ) {
+          datename.setAttribute('class', 'sbdatepicker__body--datename');
+          datename.classList.add('sbdatepicker__body--datename-entries');
         }
       } else {
-        datename.classList.remove("sbdatepicker__body--datename-entries");
+        datename.classList.remove('sbdatepicker__body--datename-entries');
       }
 
       cell.appendChild(datename);
@@ -122,12 +124,12 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
 
   function renderSelectedDay(e, d) {
     context.setDateSelected(d);
-    const selected = document.querySelectorAll(".sbdatepicker__body--datename-selected");
+    const selected = document.querySelectorAll('.sbdatepicker__body--datename-selected');
     selected.forEach((x) => {
-      x.classList.remove("sbdatepicker__body--datename-selected");
+      x.classList.remove('sbdatepicker__body--datename-selected');
     });
-    e.target.setAttribute("class", "sbdatepicker__body--datename");
-    e.target.classList.add("sbdatepicker__body--datename-selected");
+    e.target.setAttribute('class', 'sbdatepicker__body--datename');
+    e.target.classList.add('sbdatepicker__body--datename-selected');
   }
 
   function renderprevMonth() {
@@ -147,9 +149,9 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
   }
 
   /**
-   * 
-   * @param {*} e 
-   * @description some extra steps required for the sidebar datepicker 
+   *
+   * @param {*} e
+   * @description some extra steps required for the sidebar datepicker
    * vs any other datepicker due to the fact that the sidebar datepicker will stay open after a date is selected.
    * These extra steps include:
    *  1. do not re render datepicker if the selected date is in the current month, just update the selected date
@@ -158,16 +160,16 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
    */
   function setNewDate(e) {
     const target = e.target;
-    let [y, m, d] = target.getAttribute("data-datepicker-date").split('-').map(x => parseInt(x));
+    let [y, m, d] = target.getAttribute('data-datepicker-date').split('-').map((x) => parseInt(x));
 
     const component = context.getComponent();
 
-    if (component === "list") {
+    if (component === 'list') {
       renderSelectedDay(e, d);
       return;
     }
 
-    if (component === "year") {
+    if (component === 'year') {
       if (context.getYear() !== y) {
         renderpicker(y, m, d);
         return;
@@ -177,7 +179,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       }
     }
 
-    if (component === "month") {
+    if (component === 'month') {
       if (context.getMonth() !== m) {
         renderpicker(y, m, d);
         return;
@@ -187,8 +189,8 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       }
     }
 
-    if (component === "week") {
-      if (e.target.parentElement.classList.contains("sbdatepicker__body--dates-week")) {
+    if (component === 'week') {
+      if (e.target.parentElement.classList.contains('sbdatepicker__body--dates-week')) {
         renderSelectedDay(e, d);
         return;
       } else {
@@ -197,7 +199,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       return;
     }
 
-    if (component === "day") {
+    if (component === 'day') {
       if (context.isToday(new Date(y, m, d))) {
         renderSelectedDay(e, d);
         return;
@@ -219,7 +221,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
 
   function openChangeDateModal() {
     setCheckMonthYear();
-    sbdatepickerChangeDate.classList.add("show-sbdpcd");
+    sbdatepickerChangeDate.classList.add('show-sbdpcd');
     yearpickerSetYear(null, true);
     monthpickerSetMonth(datepickerContext.getMonth(), true);
   }
@@ -232,7 +234,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       setDatepickerHeader();
       montharray = [];
     }
-    sbdatepickerChangeDate.classList.remove("show-sbdpcd");
+    sbdatepickerChangeDate.classList.remove('show-sbdpcd');
   }
 
   function monthpickerSetMonth(val, init) {
@@ -242,9 +244,9 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     datepickerContext.setMonth(newmonth);
     sbmonthpickerMonths.forEach((month, idx) => {
       if (idx === newmonth) {
-        month.classList.add("monthpicker__active-month");
+        month.classList.add('monthpicker__active-month');
       } else {
-        month.classList.remove("monthpicker__active-month");
+        month.classList.remove('monthpicker__active-month');
       }
     });
   }
@@ -262,14 +264,14 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
   }
 
   function delegateDatepickerEvents(e) {
-    const datenumber = getClosest(e, ".sbdatepicker__body--datename");
-    const navnext = getClosest(e, ".sbdatepicker-nav--next");
-    const navprev = getClosest(e, ".sbdatepicker-nav--prev");
-    const title = getClosest(e, ".sbdatepicker-title");
-    const closeChangeDateBtn = getClosest(e, ".sb-close-change-date");
-    const ypNext = getClosest(e, ".sb-yearpicker-next");
-    const ypPrev = getClosest(e, ".sb-yearpicker-prev");
-    const mpMonth = getClosest(e, ".sb-monthpicker__month");
+    const datenumber = getClosest(e, '.sbdatepicker__body--datename');
+    const navnext = getClosest(e, '.sbdatepicker-nav--next');
+    const navprev = getClosest(e, '.sbdatepicker-nav--prev');
+    const title = getClosest(e, '.sbdatepicker-title');
+    const closeChangeDateBtn = getClosest(e, '.sb-close-change-date');
+    const ypNext = getClosest(e, '.sb-yearpicker-next');
+    const ypPrev = getClosest(e, '.sb-yearpicker-prev');
+    const mpMonth = getClosest(e, '.sb-monthpicker__month');
 
     if (datenumber) {
       setNewDate(e);
@@ -312,20 +314,20 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     }
 
     if (mpMonth) {
-      const newmonth = parseInt(e.target.getAttribute("data-sbdp-month"));
+      const newmonth = parseInt(e.target.getAttribute('data-sbdp-month'));
       monthpickerSetMonth(newmonth, false);
       return;
     }
   }
 
   function initsbdatepicker() {
-    sbdatepickerChangeDate.classList.remove("show-sbdpcd");
+    sbdatepickerChangeDate.classList.remove('show-sbdpcd');
     setDatepickerHeader();
     createCells(montharray);
     sbdatepicker.onclick = delegateDatepickerEvents;
     montharray = null;
     groupedEntries = null;
-  };
-  
+  }
+
   initsbdatepicker();
 }

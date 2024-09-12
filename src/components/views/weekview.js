@@ -1,25 +1,25 @@
-import setViews from "../../config/setViews";
-import setSidebarDatepicker from "../menus/sidebarDatepicker";
-import fullFormConfig from "../forms/formUtils";
-import FormSetup from "../forms/setForm";
-import getEntryOptionModal from "../menus/entryOptions";
-import { Week } from "../../factory/entries";
-import locales from "../../locales/en";
-import calcTime, { formatTime } from "../../utilities/timeutils";
+import setViews from '../../config/setViews';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
+import fullFormConfig from '../forms/formUtils';
+import FormSetup from '../forms/setForm';
+import getEntryOptionModal from '../menus/entryOptions';
+import { Week } from '../../factory/entries';
+import locales from '../../locales/en';
+import calcTime, { formatTime } from '../../utilities/timeutils';
 
 import {
   createCloseIcon,
   createMeatballVertIcon,
-  createExpandDownIcon
-} from "../../utilities/svgs";
+  createExpandDownIcon,
+} from '../../utilities/svgs';
 
 import {
   formatStartEndDate,
   getTempDates,
   getFormDateObject,
   getDateFromAttribute,
-  getDayOrdinal
-} from "../../utilities/dateutils";
+  getDayOrdinal,
+} from '../../utilities/dateutils';
 
 import handleOverlap, {
   setStylingForEvent,
@@ -32,26 +32,26 @@ import handleOverlap, {
   createTempBoxHeader,
   startEndDefault,
   getOriginalBoxObject,
-} from "../../utilities/dragutils";
+} from '../../utilities/dragutils';
 
-import { getClosest, placePopup } from "../../utilities/helpers";
+import { getClosest, placePopup } from '../../utilities/helpers';
 
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
 // calendar overlay
-const resizeoverlay = document.querySelector(".resize-overlay");
+const resizeoverlay = document.querySelector('.resize-overlay');
 // weekview main grid wrapper & children
-const main = document.querySelector(".weekview");
-const container = document.querySelector(".weekview--calendar");
-const weekviewHeader = document.querySelector(".weekview--header");
-const weekviewHeaderDayNumber = document.querySelectorAll(".weekview--header-day__number");
+const main = document.querySelector('.weekview');
+const container = document.querySelector('.weekview--calendar');
+const weekviewHeader = document.querySelector('.weekview--header');
+const weekviewHeaderDayNumber = document.querySelectorAll('.weekview--header-day__number');
 
-const weekviewGrid = document.querySelector(".weekview__grid");
-const weekviewSideGrid = document.querySelector(".weekview--sidebar");
+const weekviewGrid = document.querySelector('.weekview__grid');
+const weekviewSideGrid = document.querySelector('.weekview--sidebar');
 
-const topCols = document.querySelectorAll(".allday--col");
+const topCols = document.querySelectorAll('.allday--col');
 
-const cols = document.querySelectorAll(".week--col");
+const cols = document.querySelectorAll('.week--col');
 
 export default function setWeekView(context, store, datepickerContext) {
   const weekArray = context.getWeekArray();
@@ -60,11 +60,11 @@ export default function setWeekView(context, store, datepickerContext) {
   let firstY = null;
 
   function setDayView(e) {
-    let [yr, mo, da] = getDateFromAttribute(e.target, "data-weekview-date");
+    let [yr, mo, da] = getDateFromAttribute(e.target, 'data-weekview-date');
     context.setDate(yr, mo, da);
     context.setDateSelected(da);
-    context.setComponent("day");
-    setViews("day", context, store, datepickerContext);
+    context.setComponent('day');
+    setViews('day', context, store, datepickerContext);
   }
 
   function createWVSideGridCells() {
@@ -73,25 +73,25 @@ export default function setWeekView(context, store, datepickerContext) {
       let md;
 
       if (i === 0) {
-        hour = "";
-        md = "";
+        hour = '';
+        md = '';
       } else {
         hour = i;
-        md = "AM";
+        md = 'AM';
       }
 
-      if (hour > 12) {hour -= 12;}
-      if (i >= 12) {md = "PM";}
+      if (hour > 12) { hour -= 12; }
+      if (i >= 12) { md = 'PM'; }
 
-      const wvSideGridCell = document.createElement("span");
-      wvSideGridCell.classList.add("sidegrid-cell");
+      const wvSideGridCell = document.createElement('span');
+      wvSideGridCell.classList.add('sidegrid-cell');
       wvSideGridCell.textContent = `${hour} ${md}`;
       weekviewSideGrid.appendChild(wvSideGridCell);
     }
   }
 
   function configureDaysOfWeek() {
-    document.querySelector(".wv-gmt").textContent = `UTC ${context.getGmt()}`;
+    document.querySelector('.wv-gmt').textContent = `UTC ${context.getGmt()}`;
     let hasToday;
     let hasSelected;
     let dayNumbers = [];
@@ -99,7 +99,7 @@ export default function setWeekView(context, store, datepickerContext) {
     const today = context.getToday();
     let [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
 
-    weekArray.forEach((day, idx) => {
+    weekArray.forEach((day) => {
       let [y, m, d] = [
         day.getFullYear(),
         day.getMonth(),
@@ -120,47 +120,50 @@ export default function setWeekView(context, store, datepickerContext) {
 
     dayNumbers.forEach((num, idx) => {
       if (num === hasSelected) {
-        weekviewHeaderDayNumber[idx].classList.add("wvh--selected");
+        weekviewHeaderDayNumber[idx].classList.add('wvh--selected');
       } else {
-        weekviewHeaderDayNumber[idx].classList.remove("wvh--selected");
+        weekviewHeaderDayNumber[idx].classList.remove('wvh--selected');
       }
 
       if (num === hasToday) {
-        weekviewHeaderDayNumber[idx].classList.add("wvh--today");
+        weekviewHeaderDayNumber[idx].classList.add('wvh--today');
       } else {
-        weekviewHeaderDayNumber[idx].classList.remove("wvh--today");
+        weekviewHeaderDayNumber[idx].classList.remove('wvh--today');
       }
 
       weekviewHeaderDayNumber[idx].textContent = num;
-      weekviewHeaderDayNumber[idx].setAttribute("data-weekview-date", ymd[idx]);
-      topCols[idx].setAttribute("data-wvtop-day", num);
+      weekviewHeaderDayNumber[idx].setAttribute('data-weekview-date', ymd[idx]);
+      topCols[idx].setAttribute('data-wvtop-day', num);
     });
   }
 
   function renderSidebarDatepickerWeek() {
-    if (!sidebar.classList.contains("hide-sidebar")) {
+    if (!sidebar.classList.contains('hide-sidebar')) {
       datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
       setSidebarDatepicker(context, store, datepickerContext);
     }
   }
 
   function resetWeekviewBoxes() {
-    cols.forEach(col => { col.innerText = ""; });
-    topCols.forEach(col => { col.innerText = ""; });
+    cols.forEach((col) => { col.innerText = ''; });
+    topCols.forEach((col) => { col.innerText = ''; });
     main.onmousedown = null;
     weekviewHeader.onclick = null;
-    weekviewSideGrid.innerText = "";
+    weekviewSideGrid.innerText = '';
   }
 
   function renderBoxes() {
-    cols.forEach(col => { col.innerText = ""; });
-    topCols.forEach(col => { col.innerText = ""; });
+    cols.forEach((col) => { col.innerText = ''; });
+    topCols.forEach((col) => { col.innerText = ''; });
 
     boxes.getBoxes().forEach((entry) => {
       const y = entry.coordinates.y;
-      firstY == null || y < firstY ? (firstY = y) : null;
+      if (firstY === null || y < firstY) {
+        firstY = y;
+      }
+      // firstY == null || y < firstY ? (firstY = y) : null;
       const col = cols[+entry.coordinates.x];
-      createBox(col, entry, "week", store.getCtgColor(entry.category));
+      createBox(col, entry, 'week', store.getCtgColor(entry.category));
     });
 
     const boxt = boxes.getBoxesTopLengths();
@@ -171,73 +174,72 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   function createBoxesTop(col, len) {
-    const cell = document.createElement("div");
-    cell.classList.add("allday__cell");
-    cell.classList.add("allday__cell--active");
+    const cell = document.createElement('div');
+    cell.classList.add('allday__cell');
+    cell.classList.add('allday__cell--active');
 
-    const taskicons = document.createElement("div");
-    taskicons.classList.add("wv-ad--taskicons");
+    const taskicons = document.createElement('div');
+    taskicons.classList.add('wv-ad--taskicons');
 
-    const icon = document.createElement("div");
-    icon.classList.add("wv-ad--taskicon");
-    icon.style.backgroundColor = "#6F0C2B";
+    const icon = document.createElement('div');
+    icon.classList.add('wv-ad--taskicon');
+    icon.style.backgroundColor = '#6F0C2B';
     taskicons.appendChild(icon);
 
-    const celltitle = document.createElement("div");
-    celltitle.classList.add("wv-ad--celltitle");
+    const celltitle = document.createElement('div');
+    celltitle.classList.add('wv-ad--celltitle');
     celltitle.textContent = `${len} more`;
-    const cellexpand = document.createElement("div");
-    cellexpand.classList.add("wv-ad--cellexpand");
-    cellexpand.appendChild(createExpandDownIcon("var(--white3)"));
+    const cellexpand = document.createElement('div');
+    cellexpand.classList.add('wv-ad--cellexpand');
+    cellexpand.appendChild(createExpandDownIcon('var(--white3)'));
 
     cell.append(taskicons, celltitle, cellexpand);
     col.appendChild(cell);
   }
 
-  function createAllDayModalCell(entry, idx, col, handleCloseCallback) {
-    const cell = document.createElement("div");
-    cell.classList.add("allday-modal__cell");
-    cell.setAttribute("data-allday-modal-cell", idx);
-    cell.setAttribute("data-allday-modal-cell-id", entry.id);
+  function createAllDayModalCell(entry, idx) {
+    const cell = document.createElement('div');
+    cell.classList.add('allday-modal__cell');
+    cell.setAttribute('data-allday-modal-cell', idx);
+    cell.setAttribute('data-allday-modal-cell-id', entry.id);
     cell.style.backgroundColor = store.getCtgColor(entry.category);
 
-    const cellcontent = document.createElement("div");
-    cellcontent.classList.add("allday-modal__cell-content");
+    const cellcontent = document.createElement('div');
+    cellcontent.classList.add('allday-modal__cell-content');
 
-    const cellIcons = document.createElement("div");
-    cellIcons.classList.add("allday-modal__cell-action-icons");
+    const cellIcons = document.createElement('div');
+    cellIcons.classList.add('allday-modal__cell-action-icons');
 
-    const celltitle = document.createElement("div");
-    celltitle.classList.add("allday-modal__celltitle");
+    const celltitle = document.createElement('div');
+    celltitle.classList.add('allday-modal__celltitle');
     celltitle.textContent = entry.title;
 
-    const cellendDate = document.createElement("div");
-    cellendDate.classList.add("allday-modal__cellend-date");
-    cellendDate.textContent = formatStartEndDate(
-      new Date(entry.start), new Date(entry.end)
-    );
+    const cellendDate = document.createElement('div');
+    cellendDate.classList.add('allday-modal__cellend-date');
+    cellendDate.textContent = formatStartEndDate(new Date(entry.start), new Date(entry.end));
 
-    const cellcategoryTitle = document.createElement("div");
-    cellcategoryTitle.classList.add("allday-modal__cellcategory-title");
-    cellcategoryTitle.textContent = "category: " + entry.category;
+    const cellcategoryTitle = document.createElement('div');
+    cellcategoryTitle.classList.add('allday-modal__cellcategory-title');
+    cellcategoryTitle.textContent = 'category: ' + entry.category;
 
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
-    cellIcons.appendChild(createMeatballVertIcon("var(--taskcolor"));
+    cellIcons.appendChild(createMeatballVertIcon('var(--taskcolor'));
     cell.append(cellcontent, cellIcons);
     return cell;
   }
 
-  function createAllDayModal(e, col, entries, idx, cell) {
-    let dayofweek = locales.labels.weekdaysLong[idx];
-    let daynumber = col.getAttribute("data-wvtop-day");
+  function createAllDayModal(e, col, adentries, idx, cell) {
+    const { labels } = locales;
+    let dayofweek = labels.weekdaysLong[idx];
+    let daynumber = col.getAttribute('data-wvtop-day');
 
-    const modal = document.createElement("div");
-    modal.classList.add("allday-modal");
+    const modal = document.createElement('div');
+    modal.classList.add('allday-modal');
 
     const rect = col.getBoundingClientRect();
     let entriesoffset;
-    if (entries.length < 4) {
-      entriesoffset = parseInt(55 * entries.length) + 60;
+    if (adentries.length < 4) {
+      entriesoffset = parseInt(55 * adentries.length) + 60;
     } else {
       entriesoffset = parseInt(55 * 4) + 60;
     }
@@ -248,64 +250,55 @@ export default function setWeekView(context, store, datepickerContext) {
       [parseInt(rect.left), parseInt(rect.top) + 24],
       [window.innerWidth, window.innerHeight],
       true,
-      Math.floor((window.innerWidth - 36 - weekviewGrid.offsetLeft) / 7)
+      Math.floor((window.innerWidth - 36 - weekviewGrid.offsetLeft) / 7),
     );
 
     if (x + 250 > window.innerWidth) {
-      modal.style.left = window.innerWidth - 246 + "px";
+      modal.style.left = window.innerWidth - 246 + 'px';
     } else {
-      modal.style.left = x + "px";
+      modal.style.left = x + 'px';
     }
 
-    modal.style.top = y + "px";
+    modal.style.top = y + 'px';
 
-    const modalheader = document.createElement("div");
-    modalheader.classList.add("allday-modal__header");
+    const modalheader = document.createElement('div');
+    modalheader.classList.add('allday-modal__header');
 
-    const modaltitle = document.createElement("div");
-    modaltitle.classList.add("allday-modal-title");
-    modaltitle.textContent = `${dayofweek}, ${locales.labels.monthsLong[weekArray[idx].getMonth()]} ${daynumber}${getDayOrdinal(daynumber)}`;
+    const modaltitle = document.createElement('div');
+    modaltitle.classList.add('allday-modal-title');
+    modaltitle.textContent = `${dayofweek}, ${labels.monthsLong[weekArray[idx].getMonth()]} ${daynumber}${getDayOrdinal(daynumber)}`;
 
-    const closeAlldayModalBtn = document.createElement("div");
-    closeAlldayModalBtn.classList.add("close-allday-modal");
-    closeAlldayModalBtn.appendChild(createCloseIcon("var(--white4"));
+    const closeAlldayModalBtn = document.createElement('div');
+    closeAlldayModalBtn.classList.add('close-allday-modal');
+    closeAlldayModalBtn.appendChild(createCloseIcon('var(--white4'));
 
-    const modalcontent = document.createElement("div");
-    modalcontent.classList.add("allday-modal__content");
-
+    const modalcontent = document.createElement('div');
+    modalcontent.classList.add('allday-modal__content');
 
     function closealldayonEsc(e) {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         closealldaymodal();
       }
     }
 
-    // remove all listeners / functionality when context menu is opened
-    // do so separately from the closealldaymodal function so that the modal itself will still be visible when form/context menu is open
-    function resetalldaymodal() {
-    }
-    
     function closealldaymodal() {
       modal.remove();
       modal.onmousedown = null;
-      resizeoverlay.classList.add("hide-resize-overlay");
+      resizeoverlay.classList.add('hide-resize-overlay');
       resizeoverlay.onclick = null;
-      document.removeEventListener("keydown", closealldayonEsc);
-      store.removeActiveOverlay("allday-modal");
-      cell.firstChild.firstChild.style.backgroundColor = "#6F0C2B";
-      cell.classList.remove("allday-modal__cell--open");
+      document.removeEventListener('keydown', closealldayonEsc);
+      store.removeActiveOverlay('allday-modal');
+      cell.firstChild.firstChild.style.backgroundColor = '#6F0C2B';
+      cell.classList.remove('allday-modal__cell--open');
     }
 
-    entries.forEach((entry, idx) => {
-      const cell = createAllDayModalCell(
-        entry, idx, col, closealldaymodal
-      );
-      modalcontent.appendChild(cell);
+    adentries.forEach((entry, nidx) => {
+      modalcontent.appendChild(createAllDayModalCell(entry, nidx));
     });
 
     function delegateAllDayModal(e) {
-      const getCloseAdBtn = getClosest(e, ".close-allday-modal");
-      const getMeatballBtn = getClosest(e, ".allday-modal__cell-action-icons");
+      const getCloseAdBtn = getClosest(e, '.close-allday-modal');
+      const getMeatballBtn = getClosest(e, '.allday-modal__cell-action-icons');
 
       if (getCloseAdBtn) {
         closealldaymodal();
@@ -314,9 +307,9 @@ export default function setWeekView(context, store, datepickerContext) {
 
       if (getMeatballBtn) {
         getWeekViewContextMenu(
-          store.getEntry(e.target.parentElement.getAttribute("data-allday-modal-cell-id")),
+          store.getEntry(e.target.parentElement.getAttribute('data-allday-modal-cell-id')),
           closealldaymodal,
-          e
+          e,
         );
         return;
       }
@@ -324,22 +317,22 @@ export default function setWeekView(context, store, datepickerContext) {
 
     modalheader.append(modaltitle, closeAlldayModalBtn);
     modal.append(modalheader, modalcontent);
-    main.insertBefore(modal, document.querySelector(".weekview__top"));
-    store.addActiveOverlay("allday-modal");
+    main.insertBefore(modal, document.querySelector('.weekview__top'));
+    store.addActiveOverlay('allday-modal');
     resizeoverlay.onclick = closealldaymodal;
     modal.onmousedown = delegateAllDayModal;
-    document.addEventListener("keydown", closealldayonEsc);
+    document.addEventListener('keydown', closealldayonEsc);
   }
 
   function openAllDayModal(e, cell) {
     const col = cell.parentElement;
-    cell.classList.add("allday-modal__cell--open");
-    cell.firstChild.firstChild.style.backgroundColor = "#01635b";
-    const colidx = parseInt(col.getAttribute("data-allday-column"));
+    cell.classList.add('allday-modal__cell--open');
+    cell.firstChild.firstChild.style.backgroundColor = '#01635b';
+    const colidx = parseInt(col.getAttribute('data-allday-column'));
     let colentries = boxes.getBoxesByColumnTop(colidx);
     if (colentries.length > 0) {
       createAllDayModal(e, col, colentries, colidx, cell);
-      resizeoverlay.classList.remove("hide-resize-overlay");
+      resizeoverlay.classList.remove('hide-resize-overlay');
     }
   }
 
@@ -348,18 +341,18 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   function handleWeekviewFormClose() {
-    document.querySelector(".temp-week-box")?.remove();
+    document.querySelector('.temp-week-box')?.remove();
   }
 
   function openWeekviewForm(box, coords, category, dates, type) {
-    store.setFormResetHandle("week", handleWeekviewFormClose);
+    store.setFormResetHandle('week', handleWeekviewFormClose);
 
     const openForm = store.getRenderFormCallback();
     const setup = new FormSetup();
 
     const [submitType, id, title, description] = type;
     setup.setSubmission(submitType, id, title, description);
-    if (submitType === "create") { box.style.opacity = 0.9; }
+    if (submitType === 'create') { box.style.opacity = 0.9; }
 
     const [categoryName, color] = category;
     setup.setCategory(
@@ -389,9 +382,9 @@ export default function setWeekView(context, store, datepickerContext) {
       [window.innerWidth, window.innerHeight],
     );
 
-    store.setFormResetHandle("week", handleCloseCallback);
+    store.setFormResetHandle('week', handleCloseCallback);
     const setup = new FormSetup();
-    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setSubmission('edit', id, entry.title, entry.description);
     setup.setCategory(entry.category, color);
     setup.setDates(getFormDateObject(start, entry.end));
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
@@ -400,27 +393,26 @@ export default function setWeekView(context, store, datepickerContext) {
 
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
 
-    const modal = document.querySelector(".entry__options");
-    modal.style.top = y + "px";
-    modal.style.left = x + "px";
+    const modal = document.querySelector('.entry__options');
+    modal.style.top = y + 'px';
+    modal.style.left = x + 'px';
   }
   // ***********************
 
   /** DRAG NORTH, SOUTH, EAST, WEST */
   function dragEngineWeek(e, box) {
-    setStylingForEvent("dragstart", main, store);
+    setStylingForEvent('dragstart', main, store);
     const col = box.parentElement;
-    const originalColumn = col.getAttribute("data-column-index");
-    let currentColumn = col.getAttribute("data-column-index");
+    const originalColumn = col.getAttribute('data-column-index');
+    let currentColumn = col.getAttribute('data-column-index');
     let boxhasOnTop = false;
-    box.setAttribute("data-box-col", currentColumn);
+    box.setAttribute('data-box-col', currentColumn);
 
-    const startTop = +box.style.top.split("px")[0];
-    const boxHeight = +box.style.height.split("px")[0];
+    const startTop = +box.style.top.split('px')[0];
+    const boxHeight = +box.style.height.split('px')[0];
     let startCursorY = e.pageY - weekviewGrid.offsetTop;
     let tempstartY = e.pageY;
     let startCursorX = e.pageX;
-    let [movedX, movedY] = [0, 0];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
 
@@ -431,13 +423,13 @@ export default function setWeekView(context, store, datepickerContext) {
       if (!hasStyles) {
         if (sX > 3 || sY > 3) {
           hasStyles = true;
-          document.body.style.cursor = "move";
-          if (box.classList.contains("box-ontop")) {
+          document.body.style.cursor = 'move';
+          if (box.classList.contains('box-ontop')) {
             boxhasOnTop = true;
-            resetStyleOnClick("week", box);
+            resetStyleOnClick('week', box);
           }
-          box.classList.add("box-dragging");
-          createTemporaryBox(box, col, boxhasOnTop, "week");
+          box.classList.add('box-dragging');
+          createTemporaryBox(box, col, boxhasOnTop, 'week');
           sX = 0;
           sY = 0;
         }
@@ -457,9 +449,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
       box.style.top = `${newTop}px`;
       /** DRAG EAST/WEST */
-      const direction = e.pageX - startCursorX > 0 ? "right" : "left";
-      const currentCursorX = e.pageX;
-      let newOffsetX = startCursorX - currentCursorX;
+      const direction = e.pageX - startCursorX > 0 ? 'right' : 'left';
       let leftColX;
       let rightColX;
 
@@ -475,41 +465,38 @@ export default function setWeekView(context, store, datepickerContext) {
         rightColX = null;
       }
 
-      if (direction === "right" && rightColX !== null) {
+      if (direction === 'right' && rightColX !== null) {
         if (e.pageX >= rightColX) {
           getcol(+currentColumn + 1).appendChild(box);
           startCursorX = e.pageX;
           currentColumn = +currentColumn + 1;
-          box.setAttribute("data-box-col", +currentColumn);
+          box.setAttribute('data-box-col', +currentColumn);
         }
       }
 
-      if (direction === "left" && leftColX !== null) {
+      if (direction === 'left' && leftColX !== null) {
         if (e.pageX <= leftColX) {
           getcol(+currentColumn - 1).appendChild(box);
           startCursorX = e.pageX;
           currentColumn = +currentColumn - 1;
-          box.setAttribute("data-box-col", +currentColumn);
+          box.setAttribute('data-box-col', +currentColumn);
         }
       }
-
-      movedY = newOffsetY;
-      movedX = newOffsetX;
     };
 
     function mouseup() {
-      const tempbox = document.querySelector(".temporary-box");
-      box.classList.remove("box-dragging");
-      if (boxhasOnTop) { box.classList.add("box-ontop"); }
+      const tempbox = document.querySelector('.temporary-box');
+      box.classList.remove('box-dragging');
+      if (boxhasOnTop) { box.classList.add('box-ontop'); }
 
       if (tempbox === null) {
         // const reset
         const setResetWv = () => {
-          setStylingForEvent("dragend", main, store);
-          box.classList.remove("wv-box-clicked");
+          setStylingForEvent('dragend', main, store);
+          box.classList.remove('wv-box-clicked');
         };
-        box.classList.add("wv-box-clicked");
-        const id = box.getAttribute("data-box-id");
+        box.classList.add('wv-box-clicked');
+        const id = box.getAttribute('data-box-id');
         const entry = store.getEntry(id);
         const start = entry.start;
         const color = box.style.backgroundColor;
@@ -521,10 +508,10 @@ export default function setWeekView(context, store, datepickerContext) {
           [window.innerWidth, window.innerHeight],
           false,
         );
-        store.setFormResetHandle("week", setResetWv);
+        store.setFormResetHandle('week', setResetWv);
 
         const setup = new FormSetup();
-        setup.setSubmission("edit", id, entry.title, entry.description);
+        setup.setSubmission('edit', id, entry.title, entry.description);
         setup.setCategory(entry.category, color);
         setup.setDates(getFormDateObject(start, entry.end));
         fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
@@ -532,73 +519,73 @@ export default function setWeekView(context, store, datepickerContext) {
         const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
         getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
 
-        const modal = document.querySelector(".entry__options");
+        const modal = document.querySelector('.entry__options');
         if (window.innerWidth > 580) {
-          modal.style.top = +y + "px";
-          modal.style.left = x + "px";
+          modal.style.top = +y + 'px';
+          modal.style.left = x + 'px';
         } else {
-          modal.style.top = "64px";
+          modal.style.top = '64px';
         }
 
       } else {
         tempbox.remove();
-        setBoxTimeAttributes(box, "week");
+        setBoxTimeAttributes(box, 'week');
         const time = calcTime(
-          +box.getAttribute("data-start-time"),
-          +box.getAttribute("data-time-intervals")
+          +box.getAttribute('data-start-time'),
+          +box.getAttribute('data-time-intervals'),
         );
 
-        box.setAttribute("data-time", time);
+        box.setAttribute('data-time', time);
         box.children[1].children[0].textContent = time;
 
-        updateBoxCoordinates(box, "week", boxes);
+        updateBoxCoordinates(box, 'week', boxes);
         boxes.updateStore(
           store,
-          box.getAttribute("data-box-id"),
-          weekArray
+          box.getAttribute('data-box-id'),
+          weekArray,
         );
         // if box is moved to a new column, update sidebar datepicker
         if (currentColumn !== +originalColumn) {
           renderSidebarDatepickerWeek();
-        };
-        // check if new position overlaps with other boxes and handle
-        let droppedCol = +box.getAttribute("data-box-col");
-        if (boxes.getBoxesByColumn(droppedCol).length > 1) {
-          handleOverlap(droppedCol, "week", boxes);
-        } else {
-          box.setAttribute("box-idx", "box-one");
         }
-        setStylingForEvent("dragend", main, store);
+        // check if new position overlaps with other boxes and handle
+        let droppedCol = +box.getAttribute('data-box-col');
+        if (boxes.getBoxesByColumn(droppedCol).length > 1) {
+          handleOverlap(droppedCol, 'week', boxes);
+        } else {
+          box.setAttribute('box-idx', 'box-one');
+        }
+        setStylingForEvent('dragend', main, store);
       }
 
-      document.removeEventListener("mousemove", mousemove);
-      document.removeEventListener("mouseup", mouseup);
+      document.removeEventListener('mousemove', mousemove);
+      document.removeEventListener('mouseup', mouseup);
     }
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
   }
 
-  /** RESIZE NORTH/SOUTH 
+  /** RESIZE NORTH/SOUTH
    * resizing will never trigger form
   */
   function resizeBoxNS(e, box) {
-    setStylingForEvent("dragstart", main, store);
-    document.body.style.cursor = "move";
+    setStylingForEvent('dragstart', main, store);
+    document.body.style.cursor = 'move';
 
     const col = box.parentElement;
-    const currentColumn = col.getAttribute("data-column-index");
-    box.setAttribute("data-box-col", currentColumn);
+    const currentColumn = col.getAttribute('data-column-index');
+    box.setAttribute('data-box-col', currentColumn);
 
     let boxhasOnTop = false;
     let boxorig = getOriginalBoxObject(box);
-    if (box.classList.contains("box-ontop")) {
+    if (box.classList.contains('box-ontop')) {
       boxhasOnTop = true;
-      resetStyleOnClick("week", box);
+      resetStyleOnClick('week', box);
     }
 
-    box.classList.add("box-resizing");
+    box.classList.add('box-resizing');
     const boxTop = box.offsetTop;
-    createTemporaryBox(box, col, boxhasOnTop, "week");
+    createTemporaryBox(box, col, boxhasOnTop, 'week');
 
     const mousemove = (e) => {
       const headerOffset = weekviewGrid.offsetTop;
@@ -623,57 +610,57 @@ export default function setWeekView(context, store, datepickerContext) {
       }
     };
 
-    const mouseup = (e) => {
-      document.querySelector(".temporary-box").remove();
-      box.classList.remove("box-resizing");
-      if (boxhasOnTop) { box.classList.add("box-ontop"); }
+    const mouseup = () => {
+      document.querySelector('.temporary-box').remove();
+      box.classList.remove('box-resizing');
+      if (boxhasOnTop) { box.classList.add('box-ontop'); }
 
       if (box.style.height === boxorig.height) {
         if (boxhasOnTop) {
-          box.setAttribute("class", boxorig.class);
+          box.setAttribute('class', boxorig.class);
           box.style.left = boxorig.left;
           box.style.width = boxorig.width;
         }
       } else {
-        setBoxTimeAttributes(box, "week");
-        const start = +box.getAttribute("data-start-time");
-        const length = +box.getAttribute("data-time-intervals");
+        setBoxTimeAttributes(box, 'week');
+        const start = +box.getAttribute('data-start-time');
+        const length = +box.getAttribute('data-time-intervals');
         const time = calcTime(start, length);
         box.children[1].children[0].textContent = time;
-        updateBoxCoordinates(box, "week", boxes);
+        updateBoxCoordinates(box, 'week', boxes);
 
-        let droppedCol = +box.getAttribute("data-box-col");
+        let droppedCol = +box.getAttribute('data-box-col');
         if (boxes.getBoxesByColumn(droppedCol).length > 1) {
-          handleOverlap(droppedCol, "week", boxes);
+          handleOverlap(droppedCol, 'week', boxes);
         }
 
         boxes.updateStore(
           store,
-          box.getAttribute("data-box-id"),
+          box.getAttribute('data-box-id'),
           weekArray,
         );
       }
 
-      setStylingForEvent("dragend", main, store);
-      document.removeEventListener("mousemove", mousemove);
-      document.removeEventListener("mouseup", mouseup);
+      setStylingForEvent('dragend', main, store);
+      document.removeEventListener('mousemove', mousemove);
+      document.removeEventListener('mouseup', mouseup);
     };
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
   }
 
   /** Drag down empty column to create box */
   function createBoxOnDrag(e) {
-    setStylingForEvent("dragstart", main, store);
-    document.body.style.cursor = "move";
+    setStylingForEvent('dragstart', main, store);
+    document.body.style.cursor = 'move';
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair();
-    const colIdx = parseInt(e.target.getAttribute("data-column-index"));
+    const colIdx = parseInt(e.target.getAttribute('data-column-index'));
 
     const box = document.createElement('div');
-    box.setAttribute("class", "box box-dragging temp-week-box");
+    box.setAttribute('class', 'box box-dragging temp-week-box');
 
     // boxheader is static - create from template
-    const boxheader = createTempBoxHeader("week");
+    const boxheader = createTempBoxHeader('week');
     const boxcontent = document.createElement('div');
     const boxtime = document.createElement('span');
     const boxtimeend = document.createElement('span');
@@ -681,13 +668,12 @@ export default function setWeekView(context, store, datepickerContext) {
     boxtime.classList.add('box-time');
     boxtimeend.classList.add('box-time');
 
-
     const headerOffset = +weekviewGrid.offsetTop;
     const scrolled = parseInt(weekviewGrid.scrollTop);
     const startCursorY = e.pageY - weekviewGrid.offsetTop;
 
     let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
-    box.setAttribute("style", getBoxDefaultStyle(y, color));
+    box.setAttribute('style', getBoxDefaultStyle(y, color));
 
     let coords = { y: +y / 12.5, x: colIdx, h: 1, e: 2 };
     let [starthour, startmin, endhour, endmin] = startEndDefault(y);
@@ -706,7 +692,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
       endhour = Math.floor(((+newHeight + +y) / 12.5) / 4);
       endmin = Math.floor(((+newHeight + +y) / 12.5) % 4) * 15;
-      boxtime.style.wordBreak = "break-word";
+      boxtime.style.wordBreak = 'break-word';
       boxtime.textContent = `${formatTime(starthour, startmin)} – `;
       boxtimeend.textContent = `${formatTime(endhour, endmin)}`;
     }
@@ -727,25 +713,24 @@ export default function setWeekView(context, store, datepickerContext) {
         coords,
         [tempcategory, color],
         datesData,
-        ["create", null, null, null],
+        ['create', null, null, null],
       );
 
-      setStylingForEvent("dragend", main, store);
-      document.removeEventListener("mouseup", mouseup);
-      document.removeEventListener("mousemove", mousemove);
+      setStylingForEvent('dragend', main, store);
+      document.removeEventListener('mouseup', mouseup);
+      document.removeEventListener('mousemove', mousemove);
     }
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
   }
 
   /** delegate via grid */
   function delegateGridEvents(e) {
 
-    const getBoxResizeHandle = getClosest(e, ".box-resize-s");
-    const getBox = getClosest(e, ".box");
-    const getWeekCol = getClosest(e, ".week--col");
-    const getAllDayCol = getClosest(e, ".allday--col");
-
+    const getBoxResizeHandle = getClosest(e, '.box-resize-s');
+    const getBox = getClosest(e, '.box');
+    const getWeekCol = getClosest(e, '.week--col');
+    const getAllDayCol = getClosest(e, '.allday--col');
 
     if (getBoxResizeHandle) {
       resizeBoxNS(e, e.target.parentElement);
@@ -773,14 +758,14 @@ export default function setWeekView(context, store, datepickerContext) {
   function renderDataForGrid() {
     renderBoxes();
     const colsToCheck = boxes.getColumnsWithMultipleBoxes();
-    colsToCheck.forEach(col => handleOverlap(col, "week", boxes));
+    colsToCheck.forEach((col) => handleOverlap(col, 'week', boxes));
   }
 
   /*
-  
+
   */
   function delegateWvHeader(e) {
-    const getHeaderDayNumber = getClosest(e, ".weekview--header-day__number");
+    const getHeaderDayNumber = getClosest(e, '.weekview--header-day__number');
     if (getHeaderDayNumber) {
       setDayView(e);
       return;
@@ -789,7 +774,7 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   const initWeek = () => {
-    weekviewSideGrid.innerText = "";
+    weekviewSideGrid.innerText = '';
     createWVSideGridCells();
     configureDaysOfWeek();
     renderDataForGrid();
@@ -799,7 +784,7 @@ export default function setWeekView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetWeekviewBoxes);
     if (firstY !== null) {
       setTimeout(() => {
-        weekviewGrid.scrollTo({ top: Math.abs((+firstY * 12.5) - 25), behavior: "instant" });
+        weekviewGrid.scrollTo({ top: Math.abs((+firstY * 12.5) - 25), behavior: 'instant' });
       }, 4);
     }
   };

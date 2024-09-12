@@ -1,36 +1,36 @@
-import getEntryOptionModal from "../menus/entryOptions";
-import setViews from "../../config/setViews";
-import FormSetup from "../forms/setForm";
-import fullFormConfig from "../forms/formUtils";
+import getEntryOptionModal from '../menus/entryOptions';
+import setViews from '../../config/setViews';
+import FormSetup from '../forms/setForm';
+import fullFormConfig from '../forms/formUtils';
 import {
   getClosest,
-  hextorgba
+  hextorgba,
 } from '../../utilities/helpers';
 import {
   getdatearray,
   getFormDateObject,
   getDateFromAttribute,
   longerThanDay,
-  formatStartEndDate
-} from "../../utilities/dateutils";
-import { formatStartEndTimes } from "../../utilities/timeutils";
-import locales from "../../locales/en";
+  formatStartEndDate,
+} from '../../utilities/dateutils';
+import { formatStartEndTimes } from '../../utilities/timeutils';
+import locales from '../../locales/en';
 
-const dateTimeTitle = document.querySelector(".datetime-content--title");
+const dateTimeTitle = document.querySelector('.datetime-content--title');
 const listview = document.querySelector('.listview');
 const listviewBody = document.querySelector('.listview__body');
 
 export default function setListView(context, store, datepickerContext) {
-
-  let monthNames = locales.labels.monthsShort.map(x => x.toUpperCase());
-  let weekDayNames = locales.labels.weekdaysShort.map(x => x.toUpperCase());
+  const { labels } = locales;
+  let monthNames = labels.monthsShort.map((x) => x.toUpperCase());
+  let weekDayNames = labels.weekdaysShort.map((x) => x.toUpperCase());
   let [todayYear, todayMonth, todayDay] = getdatearray(new Date());
-  /*************************************** */
+  /** ************************************* */
 
   /**
    * createRowGroups
    * @param {object} entries { "2020-01-01": [ {entry}, {entry}, {entry} ], "2020-01-02": [ {entry}, {entry}, {entry} ] }
-   * @desc createRowGroups() is called from setListView(). 
+   * @desc createRowGroups() is called from setListView().
    * The entries object uses the date as the key and the value as an array of entries for that specific date.
    */
   function createRowGroups(entries) {
@@ -39,7 +39,7 @@ export default function setListView(context, store, datepickerContext) {
     for (let [key, value] of Object.entries(entries)) {
 
       const tempdate = new Date(
-        key.split("-").map(x => parseInt(x, 10))
+        key.split('-').map((x) => parseInt(x, 10)),
       );
       // {mumber} month, {number} day of month, {number} day of week
       const [month, day, dow] = [
@@ -55,7 +55,7 @@ export default function setListView(context, store, datepickerContext) {
         mn,
         day,
         key,
-        count === 1 ? true : false
+        count === 1,
       );
       count = null;
 
@@ -66,8 +66,8 @@ export default function setListView(context, store, datepickerContext) {
         });
       }
 
-      const rgContent = document.createElement("div");
-      rgContent.classList.add("rowgroup-content");
+      const rgContent = document.createElement('div');
+      rgContent.classList.add('rowgroup-content');
       value.forEach((entry) => {
         rgContent.append(createRowGroupCell(entry));
       });
@@ -94,14 +94,14 @@ export default function setListView(context, store, datepickerContext) {
 
     rgHeaderDateNumber.classList.add('rowgroup--header__datenumber');
     rgHeaderDateNumber.textContent = day;
-    rgHeaderDateNumber.setAttribute("data-rgheader-date", date);
+    rgHeaderDateNumber.setAttribute('data-rgheader-date', date);
     const rgHeaderDate = document.createElement('div');
     rgHeaderDate.classList.add('rowgroup--header__monthdow');
     rgHeaderDate.textContent = `${monthname}, ${weekname}`;
-    
+
     if (settop) {
-      rgHeaderDateNumber.classList.add("top-datenumber");
-      rgHeaderDate.classList.add("top-monthdow");
+      rgHeaderDateNumber.classList.add('top-datenumber');
+      rgHeaderDate.classList.add('top-monthdow');
     }
 
     rgHeader.append(rgHeaderDateNumber, rgHeaderDate);
@@ -113,45 +113,45 @@ export default function setListView(context, store, datepickerContext) {
     const [start, end] = [new Date(entry.start), new Date(entry.end)];
     let datetitle;
     if (longerThanDay(start, end)) {
-      let tempyear;
+      let tempyear = 0;
       if (start.getFullYear() !== end.getFullYear()) {
         tempyear = +end.getFullYear() - 2000;
       }
 
-      datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear ? tempyear : ""}`;
+      datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear > 0 ? tempyear : ''}`;
     } else {
       datetitle = `${formatStartEndTimes(
         [start.getHours(), end.getHours()],
-        [start.getMinutes(), end.getMinutes()]
+        [start.getMinutes(), end.getMinutes()],
       )}`;
     }
 
     const rgCell = document.createElement('div');
     rgCell.classList.add('rowgroup--cell');
     rgCell.setAttribute('data-rgcell-id', entry.id);
-    const rgCellColor = document.createElement("div");
-    rgCellColor.classList.add("rowgroup--cell__color");
+    const rgCellColor = document.createElement('div');
+    rgCellColor.classList.add('rowgroup--cell__color');
     rgCellColor.style.backgroundColor = color;
-    const rgCellTime = document.createElement("div");
-    rgCellTime.classList.add("rowgroup--cell__time");
+    const rgCellTime = document.createElement('div');
+    rgCellTime.classList.add('rowgroup--cell__time');
     rgCellTime.textContent = datetitle;
-    const rgCellTitle = document.createElement("div");
-    rgCellTitle.classList.add("rowgroup--cell__title");
+    const rgCellTitle = document.createElement('div');
+    rgCellTitle.classList.add('rowgroup--cell__title');
     rgCellTitle.textContent = entry.title;
     rgCell.append(rgCellColor, rgCellTime, rgCellTitle);
     return rgCell;
   }
-  /*************************************** */
+  /** ************************************* */
 
   /**
    * resetCellActive
    * @desc remove active class & inline style from clicked cell
    */
   function resetCellActive() {
-    const activeCell = document?.querySelector(".rowgroup--cell-active");
+    const activeCell = document?.querySelector('.rowgroup--cell-active');
     if (activeCell) {
-      activeCell.classList.remove("rowgroup--cell-active");
-      activeCell.removeAttribute("style");
+      activeCell.classList.remove('rowgroup--cell-active');
+      activeCell.removeAttribute('style');
     }
   }
 
@@ -161,8 +161,8 @@ export default function setListView(context, store, datepickerContext) {
    */
   function getRgContextMenu(cell) {
     console.log(cell);
-    const id = cell.getAttribute("data-rgcell-id");
-    cell.classList.add("rowgroup--cell-active");
+    const id = cell.getAttribute('data-rgcell-id');
+    cell.classList.add('rowgroup--cell-active');
     const entry = store.getEntry(id);
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
@@ -185,19 +185,19 @@ export default function setListView(context, store, datepickerContext) {
     }
 
     // *** config & open form ***
-    store.setFormResetHandle("list", resetCellActive);
+    store.setFormResetHandle('list', resetCellActive);
 
     const setup = new FormSetup();
-    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setSubmission('edit', id, entry.title, entry.description);
     setup.setCategory(entry.category, color);
     setup.setDates(getFormDateObject(start, entry.end));
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
 
     const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
-    const modal = document.querySelector(".entry__options");
-    modal.style.top = y + "px";
-    modal.style.left = x + "px";
+    const modal = document.querySelector('.entry__options');
+    modal.style.top = y + 'px';
+    modal.style.left = x + 'px';
   }
 
   /**
@@ -206,20 +206,20 @@ export default function setListView(context, store, datepickerContext) {
    * @desc switch to day view and set date to clicked day
    */
   function setDayViewLV(target) {
-    let [year, month, day] = getDateFromAttribute(target, 'data-rgheader-date', "month");
+    let [year, month, day] = getDateFromAttribute(target, 'data-rgheader-date', 'month');
     context.setDate(year, month, day);
     context.setDateSelected(day);
-    if (context.getSidebarState() === "open") {
+    if (context.getSidebarState() === 'open') {
       datepickerContext.setDate(year, month, day);
       datepickerContext.setDateSelected(day);
     }
-    context.setComponent("day");
-    setViews("day", context, store, datepickerContext);
+    context.setComponent('day');
+    setViews('day', context, store, datepickerContext);
   }
 
   function delegateListview(e) {
-    const headerNum = getClosest(e, ".rowgroup--header__datenumber");
-    const rgCell = getClosest(e, ".rowgroup--cell");
+    const headerNum = getClosest(e, '.rowgroup--header__datenumber');
+    const rgCell = getClosest(e, '.rowgroup--cell');
 
     if (headerNum) {
       setDayViewLV(e.target);
@@ -233,23 +233,23 @@ export default function setListView(context, store, datepickerContext) {
   }
 
   function resetListview() {
-    listviewBody.innerText = "";
+    listviewBody.innerText = '';
     listview.onclick = null;
     monthNames = null;
     weekDayNames = null;
   }
 
   const initListView = () => {
-    listviewBody.innerText = "";
+    listviewBody.innerText = '';
     store.setResetPreviousViewCallback(resetListview);
 
     let activeEnt = store.getActiveEntries();
     if (activeEnt.length === 0) {
-      dateTimeTitle.textContent = "No Entries to Display";
+      dateTimeTitle.textContent = 'No Entries to Display';
       return;
     } else {
 
-      let entries = store.sortBy(activeEnt, "start", "desc");
+      let entries = store.sortBy(activeEnt, 'start', 'desc');
       // console.log(entries)
       // console.log(activeEnt)
       let groupedEntries = entries.reduce((acc, curr) => {
@@ -278,24 +278,24 @@ export default function setListView(context, store, datepickerContext) {
       let keys = Object.keys(groupedEntries);
       const length = keys.length;
       if (length === 0) {
-        dateTimeTitle.textContent = "Schedule Clear";
+        dateTimeTitle.textContent = 'Schedule Clear';
       } else {
         // true will slice the year at last two digits if two years are displayed at the same time;
-        const earliestDate = new Date(keys[0].split("-").map(x => parseInt(x)));
+        const earliestDate = new Date(keys[0].split('-').map((x) => parseInt(x)));
 
         context.setDate(
           earliestDate.getFullYear(),
           earliestDate.getMonth(),
-          earliestDate.getDate()
+          earliestDate.getDate(),
         );
 
         context.setDateSelected(earliestDate.getDate());
 
-        if (context.getSidebarState === "open") {
+        if (context.getSidebarState === 'open') {
           datepickerContext.setDate(
             earliestDate.getFullYear(),
             earliestDate.getMonth(),
-            earliestDate.getDate()
+            earliestDate.getDate(),
           );
 
           datepickerContext.setDateSelected(earliestDate.getDate());
@@ -304,7 +304,7 @@ export default function setListView(context, store, datepickerContext) {
         dateTimeTitle.textContent = formatStartEndDate(
           keys[0],
           keys[length - 1],
-          true
+          true,
         );
       }
 

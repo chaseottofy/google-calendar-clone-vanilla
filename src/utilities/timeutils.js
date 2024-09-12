@@ -6,17 +6,17 @@ function formatTime(hours, minutes) {
   }
   if (+hours === 0) {
     hours = 12;
-    md = "am";
+    md = 'am';
   } else if (hours < 12) {
-    md = "am";
+    md = 'am';
   } else if (hours === 12) {
-    md = "pm";
+    md = 'pm';
   } else if (hours === 24) {
-    md = "am";
+    md = 'am';
     hours -= 12;
   } else {
     hours -= 12;
-    md = "pm";
+    md = 'pm';
   }
 
   if (+minutes === 0) {
@@ -43,7 +43,7 @@ function formatStartEndTimes(hours, minutes) {
 }
 
 function configMinutesForStore(minutes) {
-  return minutes === 0 ? "00" : minutes;
+  return minutes === 0 ? '00' : minutes;
 }
 
 function calcTime(start, length) {
@@ -56,7 +56,7 @@ function calcTime(start, length) {
   let startingtime = formatTime(startHours, startMinutes);
   let endingtime = formatTime(endHours, endMinutes);
 
-  if (startingtime.slice(-2) == endingtime.slice(-2)) {
+  if (startingtime.slice(-2) === endingtime.slice(-2)) {
     startingtime = startingtime.slice(0, -2);
   }
 
@@ -65,8 +65,8 @@ function calcTime(start, length) {
 }
 
 function compareTimes(time1, time2) {
-  let [hours1, minutes1] = time1.split(":");
-  let [hours2, minutes2] = time2.split(":");
+  let [hours1, minutes1] = time1.split(':');
+  let [hours2, minutes2] = time2.split(':');
   // get time difference in minutes
   let diff = (hours2 - hours1) * 60 + (minutes2 - minutes1);
   let closest;
@@ -81,11 +81,10 @@ function compareTimes(time1, time2) {
   return [diff, closest];
 }
 
-
 export default calcTime;
 export {
   configMinutesForStore,
   formatStartEndTimes,
   formatTime,
-  compareTimes
+  compareTimes,
 };

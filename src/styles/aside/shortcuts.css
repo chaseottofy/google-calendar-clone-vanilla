@@ -10,10 +10,7 @@
 
 .shortcuts__modal {
   position: absolute;
-  top: 10%;
-  right: 5%;
-  bottom: 10%;
-  left: 5%;
+  inset: 10% 5% 10% 5%;
   margin: auto;
   min-width: 240px;
   width: auto;
@@ -108,8 +105,7 @@
 .shortcuts-modal-content {
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   height: calc(100% + 80px);
   width: 100%;
   font-size: 14px;

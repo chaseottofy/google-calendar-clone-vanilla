@@ -1,58 +1,57 @@
 import {
   createCloseIcon,
-} from "../../utilities/svgs";
+} from '../../utilities/svgs';
 
-import { getClosest } from "../../utilities/helpers";
-import store from "../../context/store";
+import { getClosest } from '../../utilities/helpers';
+import store from '../../context/store';
 
-const body = document.querySelector(".body");
-const toast = document.querySelector(".toast");
+const toast = document.querySelector('.toast');
 /**
- * 
- * @param {string} message 
- * @param {function} callback 
- * @param {function} callbackTwo 
- * @param {function} removeCallback 
- * @param {function} undoCallback 
+ *
+ * @param {string} message
+ * @param {function} callback
+ * @param {function} callbackTwo
+ * @param {function} removeCallback
+ * @param {function} undoCallback
  */
 export default function createToast(message, undoCallback) {
 
   function closetoast() {
-    toast.classList.remove("show-toast");
-    toast.innerText = "";
+    toast.classList.remove('show-toast');
+    toast.innerText = '';
     document.onmousedown = null;
     document.onkeydown = null;
-    store.removeActiveOverlay("toast");
+    store.removeActiveOverlay('toast');
   }
 
-  function createToast() {
-    toast.innerText = "";
+  function initToast() {
+    toast.innerText = '';
 
-    const toastMessage = document.createElement("div");
-    toastMessage.classList.add("toast-message");
+    const toastMessage = document.createElement('div');
+    toastMessage.classList.add('toast-message');
     toastMessage.textContent = message;
 
-    const closeIconWrapper = document.createElement("div");
-    closeIconWrapper.classList.add("close-toast-icon-wrapper");
-    closeIconWrapper.appendChild(createCloseIcon("var(--white4)"));
+    const closeIconWrapper = document.createElement('div');
+    closeIconWrapper.classList.add('close-toast-icon-wrapper');
+    closeIconWrapper.appendChild(createCloseIcon('var(--white4)'));
 
-    const undoToastWrapper = document.createElement("div");
-    undoToastWrapper.classList.add("undo-toast-wrapper");
-    const undoToastMessage = document.createElement("div");
-    undoToastMessage.classList.add("undo-toast-message");
-    undoToastMessage.textContent = "Undo";
+    const undoToastWrapper = document.createElement('div');
+    undoToastWrapper.classList.add('undo-toast-wrapper');
+    const undoToastMessage = document.createElement('div');
+    undoToastMessage.classList.add('undo-toast-message');
+    undoToastMessage.textContent = 'Undo';
     undoToastWrapper.appendChild(undoToastMessage);
 
     function delegateToast(e) {
       // if e.target is not in the toast, remove the toast
-      const gettoast = getClosest(e, ".toast");
+      const gettoast = getClosest(e, '.toast');
       if (!gettoast) {
         closetoast();
         return;
       }
 
-      const getundo = getClosest(e, ".undo-toast-wrapper");
-      const getclose = getClosest(e, ".close-toast-icon-wrapper");
+      const getundo = getClosest(e, '.undo-toast-wrapper');
+      const getclose = getClosest(e, '.close-toast-icon-wrapper');
 
       if (getundo) {
         undoCallback();
@@ -73,12 +72,12 @@ export default function createToast(message, undoCallback) {
     }
 
     toast.append(toastMessage, undoToastWrapper, closeIconWrapper);
-    toast.classList.add("show-toast");
-    store.addActiveOverlay("toast");
-
+    toast.classList.add('show-toast');
+    store.addActiveOverlay('toast');
 
     document.onkeydown = handleToastKeydown;
     document.onmousedown = delegateToast;
   }
-  createToast();
+
+  initToast();
 }

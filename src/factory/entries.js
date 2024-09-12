@@ -1,4 +1,4 @@
-import { generateId } from "../utilities/helpers";
+import { generateId } from '../utilities/helpers';
 
 /**
  * @class Entry
@@ -11,7 +11,7 @@ import { generateId } from "../utilities/helpers";
  * @param {Boolean} completed
  */
 export default class Entry {
-  constructor (category, completed, description, end, start, title) {
+  constructor(category, completed, description, end, start, title) {
     this.category = category;
     this.completed = completed;
     this.description = description;
@@ -23,7 +23,7 @@ export default class Entry {
 }
 
 class CoordinateEntry {
-  constructor (category, completed, coordinates, description, id, title) {
+  constructor(category, completed, coordinates, description, id, title) {
     this.category = category;
     this.completed = completed || false;
     this.coordinates = coordinates || {};
@@ -35,15 +35,15 @@ class CoordinateEntry {
 
 /**
  * @class Week
- * 
+ *
  * @param {Array} dayEntries
  * @description Array of entries that span a single day.
- * 
+ *
  * @param {Array} allDayEntries
  * @description Array of entries that span multiple days.
  */
 class Week {
-  constructor (dayEntries, allDayEntries) {
+  constructor(dayEntries, allDayEntries) {
     this.boxes = dayEntries;
     this.boxesTop = allDayEntries;
   }
@@ -62,7 +62,7 @@ class Week {
   }
 
   getBox(id) {
-    return this.boxes.find(box => box.id === id);
+    return this.boxes.find((box) => box.id === id);
   }
 
   getBoxes() {
@@ -78,15 +78,11 @@ class Week {
   }
 
   getBoxesByColumn(col) {
-    return this.boxes.filter(box => +box.coordinates.x == col);
+    return this.boxes.filter((box) => +box.coordinates.x === col);
   }
 
   getBoxesByColumnTop(col) {
-    return this.boxesTop.filter(box => +box.coordinates.x == col);
-  }
-
-  getBoxesTopByDay(day) {
-    return this.boxesTop.filter(box => +box.coordinates.y == day);
+    return this.boxesTop.filter((box) => +box.coordinates.x === col);
   }
 
   getBoxesTopLengths() {
@@ -94,8 +90,7 @@ class Week {
       let start = new Date(c.start);
       if (a[start.getDay()]) {
         a[start.getDay()]++;
-      }
-      else {
+      } else {
         a[start.getDay()] = 1;
       }
       return a;
@@ -119,7 +114,7 @@ class Week {
   }
 
   getEntriesByTitle(title) {
-    return this.boxes.filter(box => box.title.toLowerCase().includes(title.toLowerCase()));
+    return this.boxes.filter((box) => box.title.toLowerCase().includes(title.toLowerCase()));
   }
 
   updateCoordinates(id, coordinates) {
@@ -147,9 +142,9 @@ class Week {
         }
       }
     }
-    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
+    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y);
   }
-  
+
   updateStore(store, id, weekArray) {
     const boxEntry = this.getBox(id);
     const coords = boxEntry.coordinates;
@@ -177,15 +172,15 @@ class Week {
 }
 /**
  * @class Week
- * 
+ *
  * @param {Array} dayEntries
  * @description Array of entries that span a single day.
- * 
+ *
  * @param {Array} allDayEntries
  * @description Array of entries that span multiple days.
  */
 class Day {
-  constructor (dayEntries, allDayEntries) {
+  constructor(dayEntries, allDayEntries) {
     this.boxes = dayEntries;
     this.boxesTop = allDayEntries;
   }
@@ -204,7 +199,7 @@ class Day {
   }
 
   getBox(id) {
-    return this.boxes.find(box => box.id === id);
+    return this.boxes.find((box) => box.id === id);
   }
 
   getBoxes() {
@@ -228,8 +223,7 @@ class Day {
       let start = new Date(c.start);
       if (a[start.getDay()]) {
         a[start.getDay()]++;
-      }
-      else {
+      } else {
         a[start.getDay()] = 1;
       }
       return a;
@@ -237,7 +231,7 @@ class Day {
   }
 
   getEntriesByTitle(title) {
-    return this.boxes.filter(box => box.title.toLowerCase().includes(title.toLowerCase()));
+    return this.boxes.filter((box) => box.title.toLowerCase().includes(title.toLowerCase()));
   }
 
   updateCoordinates(id, coordinates) {
@@ -245,7 +239,7 @@ class Day {
   }
 
   getEntriesEndingOnDay(day) {
-    return this.boxes.filter(box => +box.coordinates.e === day);
+    return this.boxes.filter((box) => +box.coordinates.e === day);
   }
 
   sortByY(bxs) {
@@ -277,7 +271,7 @@ class Day {
         }
       }
     }
-    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
+    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y);
   }
 
   updateStore(store, id) {

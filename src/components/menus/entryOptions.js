@@ -1,19 +1,19 @@
-import setViews from "../../config/setViews";
-import { getClosest } from "../../utilities/helpers";
+import setViews from '../../config/setViews';
+import { getClosest } from '../../utilities/helpers';
 
 import {
   formatEntryOptionsDate,
   compareDates,
-} from "../../utilities/dateutils";
+} from '../../utilities/dateutils';
 
-const entryOptionsOverlay = document.querySelector(".entry__options--overlay");
+const entryOptionsOverlay = document.querySelector('.entry__options--overlay');
 const entryOptionsWrapper = document.querySelector('.entry__options');
-const entryOptionsHeaderWrapper = document.querySelector(".entry__options--header")
+const entryOptionsHeaderWrapper = document.querySelector('.entry__options--header');
 const entryOptionsDateHeader = document.querySelector('.entry__options-date');
 const entryOptionsTimeHeader = document.querySelector('.entry__options-time');
-const entryOptionTitle = document.querySelector(".eob-title");
+const entryOptionTitle = document.querySelector('.eob-title');
 const entryOptionDescription = document.querySelector('.eob-description');
-const entryOptionCategoryIcon = document.querySelector(".eob-category--icon");
+const entryOptionCategoryIcon = document.querySelector('.eob-category--icon');
 const entryOptionCategory = document.querySelector('.eob-category');
 
 export default function getEntryOptionModal(context, store, entry, datepickerContext, finishSetup) {
@@ -25,30 +25,30 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     closeEntryOptions();
   }
 
-  function proceedDelete(entry) {
-    store.deleteEntry(entry.id);
+  function proceedDelete(dentry) {
+    store.deleteEntry(dentry.id);
     closeEntryOptions();
     setViews(context.getComponent(), context, store, datepickerContext);
   }
 
   function openDeleteWarning() {
-    const deletepopup = document.createElement("div");
-    deletepopup.classList.add("delete-popup");
+    const deletepopup = document.createElement('div');
+    deletepopup.classList.add('delete-popup');
 
-    const deletebtns = document.createElement("div");
-    deletebtns.classList.add("delete-popup__btns");
+    const deletebtns = document.createElement('div');
+    deletebtns.classList.add('delete-popup__btns');
 
-    const deletepopupCancel = document.createElement("button");
-    deletepopupCancel.classList.add("delete-popup__cancel");
-    deletepopupCancel.textContent = "Cancel";
+    const deletepopupCancel = document.createElement('button');
+    deletepopupCancel.classList.add('delete-popup__cancel');
+    deletepopupCancel.textContent = 'Cancel';
 
-    const deletepopupConfirm = document.createElement("button");
-    deletepopupConfirm.classList.add("delete-popup__confirm");
-    deletepopupConfirm.textContent = "Delete";
+    const deletepopupConfirm = document.createElement('button');
+    deletepopupConfirm.classList.add('delete-popup__confirm');
+    deletepopupConfirm.textContent = 'Delete';
 
-    const deletepopupText = document.createElement("p");
-    deletepopupText.classList.add("delete-popup__text");
-    deletepopupText.textContent = "Are you sure you want to delete this entry?";
+    const deletepopupText = document.createElement('p');
+    deletepopupText.classList.add('delete-popup__text');
+    deletepopupText.textContent = 'Are you sure you want to delete this entry?';
 
     deletebtns.append(deletepopupCancel, deletepopupConfirm);
     deletepopup.append(deletepopupText, deletebtns);
@@ -68,7 +68,6 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     deletepopupConfirm.onclick = submitDelete;
   }
 
-
   /**
    * formNegated
    * @desc anytime the entry options modal is opened, the form is set to represent the entry selected. If user chooses to not open the form from this modal, reset form & modal to default state.
@@ -86,22 +85,24 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
       entryOptionTitle,
       entryOptionDescription,
       entryOptionCategory,
-    ].forEach(el => el.innerText = "");
+    ].forEach((el) => {
+      el.innerText = '';
+    });
 
-    entryOptionsWrapper.classList.add("entry__options--hidden");
-    entryOptionsOverlay.classList.add("entry__options--hidden");
-    store.removeActiveOverlay("entry__options--hidden");
-    entryOptionDescription.parentElement.removeAttribute("style");
+    entryOptionsWrapper.classList.add('entry__options--hidden');
+    entryOptionsOverlay.classList.add('entry__options--hidden');
+    store.removeActiveOverlay('entry__options--hidden');
+    entryOptionDescription.parentElement.removeAttribute('style');
     entryOptionsWrapper.onclick = null;
     entryOptionsOverlay.onclick = null;
     entryOptionsHeaderWrapper.focus();
-    document.removeEventListener("keydown", handleEntryOptionKD);
+    document.removeEventListener('keydown', handleEntryOptionKD);
   }
 
   function setEntryDefaults() {
-    entryOptionsWrapper.classList.remove("entry__options--hidden");
-    entryOptionsOverlay.classList.remove("entry__options--hidden");
-    store.addActiveOverlay("entry__options--hidden");
+    entryOptionsWrapper.classList.remove('entry__options--hidden');
+    entryOptionsOverlay.classList.remove('entry__options--hidden');
+    store.addActiveOverlay('entry__options--hidden');
 
     const [start, end] = [new Date(entry.start), new Date(entry.end)];
     let istoday = false;
@@ -140,14 +141,14 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
             timeheadertitle = `ended ${hourSince} hours ago`;
           }
         } else if (daysSince === 1) {
-          timeheadertitle = "ended yesterday";
+          timeheadertitle = 'ended yesterday';
         } else {
           timeheadertitle = `ended ${daysSince} days ago`;
         }
         entryOptionsTimeHeader.textContent = timeheadertitle;
       } else {
         if (istoday) {
-          entryOptionsTimeHeader.textContent = "ending in " + getDateTime.time;
+          entryOptionsTimeHeader.textContent = 'ending in ' + getDateTime.time;
         } else {
           entryOptionsTimeHeader.textContent = getDateTime.time;
         }
@@ -156,21 +157,22 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
 
     entryOptionTitle.textContent = entry.title;
 
-    entry.description.length === 0 ? entryOptionDescription.parentElement.style.display = "none" : entryOptionDescription.textContent = entry.description;
-
-    entryOptionCategoryIcon.setAttribute("fill", store.getCtgColor(entry.category));
+    if (entry.description === 0) {
+      entryOptionDescription.parentElement.style.display = 'none';
+    } else {
+      entryOptionDescription.textContent = entry.description;
+    }
+    entryOptionCategoryIcon.setAttribute('fill', store.getCtgColor(entry.category));
     entryOptionCategory.textContent = entry.category;
-
     entryOptionsWrapper.onclick = delegateEntryOptions;
     entryOptionsOverlay.onclick = formNegated;
-    // entryOptionsWrapper.focus();
-    document.addEventListener("keydown", handleEntryOptionKD);
+    document.addEventListener('keydown', handleEntryOptionKD);
   }
 
   function handleEntryOptionKD(e) {
-    const deletepopup = document?.querySelector(".delete-popup");
+    const deletepopup = document?.querySelector('.delete-popup');
 
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       if (deletepopup) {
         deletepopup.remove();
         return;
@@ -179,19 +181,19 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
       }
     }
 
-    if (e.key.toLowerCase() === "e") {
+    if (e.key.toLowerCase() === 'e') {
       openEditForm();
     }
 
-    if (e.key === "Delete") {
+    if (e.key === 'Delete') {
       openDeleteWarning();
     }
   }
 
   function delegateEntryOptions(e) {
-    const editBtn = getClosest(e, ".eoi__edit");
-    const deleteBtn = getClosest(e, ".eoi__delete");
-    const closeBtn = getClosest(e, ".eoi__close");
+    const editBtn = getClosest(e, '.eoi__edit');
+    const deleteBtn = getClosest(e, '.eoi__delete');
+    const closeBtn = getClosest(e, '.eoi__close');
 
     if (editBtn) {
       openEditForm();

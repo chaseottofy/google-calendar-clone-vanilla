@@ -1,24 +1,29 @@
-import locales from "../../locales/en";
-import setViews from "../../config/setViews";
-import setSidebarDatepicker from "../menus/sidebarDatepicker";
-const monthsArray = locales.labels.monthsShortLower;
-const monthsArrayLong = locales.labels.monthsLongLower;
-const gotoOverlay = document.querySelector(".go-to-date-overlay");
-const goto = document.querySelector(".go-to-date");
-const gotoInput = document.querySelector(".go-to-input");
-const inputErrMessage = document.querySelector(".go-to-err");
-const cancelGoto = document.querySelector(".cancel-go-to");
-const submitGoto = document.querySelector(".submit-go-to");
+import locales from '../../locales/en';
+import setViews from '../../config/setViews';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
+
+const gotoOverlay = document.querySelector('.go-to-date-overlay');
+const goto = document.querySelector('.go-to-date');
+const gotoInput = document.querySelector('.go-to-input');
+const inputErrMessage = document.querySelector('.go-to-err');
+const cancelGoto = document.querySelector('.cancel-go-to');
+const submitGoto = document.querySelector('.submit-go-to');
 export default function createGoTo(context, store, datepickerContext) {
+  const { labels } = locales;
+  const {
+    monthsShortLower: monthsArray,
+    monthsLongLower: monthsArrayLong,
+  } = labels;
+
   function validateDate(date) {
     let arr;
     let haserr = false;
 
     // accepts two formats: DD/MM/YYYY or jan 1 2021
-    if (date.includes("/")) {
-      arr = date.split("/");
+    if (date.includes('/')) {
+      arr = date.split('/');
     } else {
-      arr = date.split(" ");
+      arr = date.split(' ');
     }
 
     if (arr.length !== 3) {
@@ -27,16 +32,15 @@ export default function createGoTo(context, store, datepickerContext) {
 
     // convert string year/month/day to int
     // convert 'jan' to 0 || 'january' to 0
-    const [month, day, year] = arr.map((date, idx) => {
-      let dateInt = parseInt(date);
+    const [month, day, year] = arr.map((vdate, idx) => {
+      let dateInt = parseInt(vdate);
       let tempMonth = null; // in case of month string
 
-
-      if (isNaN(dateInt)) {
+      if (Number.isNaN(dateInt)) {
         if (date.length > 3) {
-          tempMonth = monthsArrayLong.indexOf(date.toLowerCase());
+          tempMonth = monthsArrayLong.indexOf(vdate.toLowerCase());
         } else {
-          tempMonth = monthsArray.indexOf(date.toLowerCase());
+          tempMonth = monthsArray.indexOf(vdate.toLowerCase());
         }
       }
 
@@ -67,10 +71,9 @@ export default function createGoTo(context, store, datepickerContext) {
       return tempMonth === null ? dateInt : tempMonth;
     });
 
-
     // form date object and check if valid
     const dateObj = new Date(year, month, day);
-    if (dateObj.toString() === "Invalid Date") {
+    if (dateObj.toString() === 'Invalid Date') {
       haserr = true;
     }
 
@@ -78,12 +81,12 @@ export default function createGoTo(context, store, datepickerContext) {
   }
 
   function removeError() {
-    inputErrMessage.style.display = "none";
+    inputErrMessage.style.display = 'none';
     inputErrMessage.onmousedown = null;
   }
 
   function handleError() {
-    inputErrMessage.style.display = "block";
+    inputErrMessage.style.display = 'block';
     inputErrMessage.onmousedown = removeError;
   }
 
@@ -93,11 +96,11 @@ export default function createGoTo(context, store, datepickerContext) {
       context.setDate(
         newdate.getFullYear(),
         newdate.getMonth(),
-        newdate.getDate()
+        newdate.getDate(),
       );
 
       context.setDateSelected(newdate.getDate());
-      if (context.getSidebarState() !== "hide") {
+      if (context.getSidebarState() !== 'hide') {
         setSidebarDatepicker(context, store, datepickerContext);
       }
 
@@ -115,8 +118,8 @@ export default function createGoTo(context, store, datepickerContext) {
 
   function closeGoToOnEscape(e) {
     const key = e.key.toLowerCase();
-    if (key === "escape") {
-      if (inputErrMessage.style.display === "block") {
+    if (key === 'escape') {
+      if (inputErrMessage.style.display === 'block') {
         removeError();
       } else {
         closeGoTo();
@@ -124,20 +127,20 @@ export default function createGoTo(context, store, datepickerContext) {
       return;
     }
 
-    if (key === "enter") {
+    if (key === 'enter') {
       handleGoTo();
       return;
     }
   }
 
   function closeGoTo() {
-    document.removeEventListener("keydown", closeGoToOnEscape);
+    document.removeEventListener('keydown', closeGoToOnEscape);
     cancelGoto.onclick = null;
     submitGoto.onclick = null;
-    store.removeActiveOverlay("hide-gotodate");
-    gotoOverlay.classList.add("hide-gotodate");
-    goto.classList.add("hide-gotodate");
-    gotoInput.value = "";
+    store.removeActiveOverlay('hide-gotodate');
+    gotoOverlay.classList.add('hide-gotodate');
+    goto.classList.add('hide-gotodate');
+    gotoInput.value = '';
   }
 
   function formatStart() {
@@ -156,10 +159,10 @@ export default function createGoTo(context, store, datepickerContext) {
       gotoInput.focus();
       gotoInput.value = formatStart();
     }, 10); // 10ms is within browser threshold
-    gotoOverlay.classList.remove("hide-gotodate");
-    goto.classList.remove("hide-gotodate");
-    store.addActiveOverlay("hide-gotodate");
-    document.addEventListener("keydown", closeGoToOnEscape);
+    gotoOverlay.classList.remove('hide-gotodate');
+    goto.classList.remove('hide-gotodate');
+    store.addActiveOverlay('hide-gotodate');
+    document.addEventListener('keydown', closeGoToOnEscape);
     cancelGoto.onclick = closeGoTo;
     submitGoto.onclick = handleGoTo;
   }

@@ -6,7 +6,5 @@
   "dist/google-sans-regular.woff2": "auto/44a05ce8bbc40b0f1c6d.woff2",
   "dist/roboto-v30-latin-500.woff2": "auto/f25d774ecfe0996f8eb5.woff2",
   "dist/roboto-v30-latin-regular.woff2": "auto/b009a76ad6afe4ebd301.woff2",
-  "dist/favicon.ico": "auto/favicon.ico",
-  "dist/main.css.map": "auto/main.css.map",
-  "dist/bundle.js.map": "auto/bundle.js.map"
+  "dist/favicon.ico": "auto/favicon.ico"
 }

@@ -5,6 +5,7 @@
   font-family: var(--secondaryFont) !important;
   font-weight: 400 !important;
 }
+
 .go-to-date-overlay {
   position: absolute;
   top: 0;
@@ -17,10 +18,7 @@
 
 .go-to-date {
   position: absolute;
-  top: 5%;
-  right: 5%;
-  bottom: 5%;
-  left: 5%;
+  inset: 5% 5% 5% 5%;
   margin: auto;
   width: auto;
   max-width: 420px;
@@ -52,7 +50,7 @@
 }
 
 .go-to-title {
-  padding: 8px 0 0px 4px;
+  padding: 8px 0 0 4px;
 }
 
 .go-to-subtitle {
@@ -68,6 +66,7 @@
   text-align: center;
   padding: 0 5px;
 }
+
 .gts-mid {
   width: 24px;
   text-align: center;
@@ -106,9 +105,11 @@
   background: var(--black0);
   color: var(--white4);
 }
+
 .go-to-input:focus {
   border-bottom: 2px solid var(--primary2);
 }
+
 .go-to-input::placeholder {
   color: var(--white4);
 }
@@ -117,7 +118,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
   background: var(--black000);
   border: none;
   border-bottom: 2px solid var(--red1);

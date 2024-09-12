@@ -1,5 +1,5 @@
 class MonthBoxQuery {
-  constructor (flag) {
+  constructor(flag) {
     this.flag = flag;
     this.tops = [20, 20];
     this.heights = [18, 18];

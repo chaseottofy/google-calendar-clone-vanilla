@@ -16,7 +16,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -24,7 +24,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -33,9 +33,9 @@
 }
 
 :root {
-  --primaryFont: "Roboto", sans-serif;
-  --secondaryFont: "Google Sans", sans-serif;
-  --taskcolor0: #ffffff;
+  --primaryFont: "Roboto", sans-serif, roboto, -apple-system, ui-sans-serif, system-ui, blinkmacsystemfont, segoe ui, helvetica neue, arial, noto sans, sans-serif, monospace;
+  --secondaryFont: "Google Sans", sans-serif, georgia, sans-serif, -apple-system, ui-sans-serif, system-ui, blinkmacsystemfont, segoe ui, roboto, helvetica neue, arial, noto sans, sans-serif, monospace;
+  --taskcolor0: #fff;
   --primarylight1: #4c9cf8;
   --primarylight2: #4BA0F4;
   --offwhite3: #70757a;
@@ -125,11 +125,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
 }
 
 html {
   font-size: 14px;
+  font-family: var(--primaryFont);
+  text-size-adjust: 100%;
 }
 
 .body {
@@ -140,26 +141,41 @@ html {
   height: 100vh;
   overflow: hidden;
   position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+span,
+button,
+p,
+a,
+li,
+ul,
+div,
+input,
+textarea {
+  font-family: var(--primaryFont);
 }
 
 .preload * {
-  -webkit-transition: none !important;
   transition: none !important;
 }
 
 .disable-transitions * {
-  -webkit-transition: none !important;
   transition-duration: none !important;
   transition-property: none !important;
   transition-timing-function: none !important;
-  transition: none !important;
 }
 
 .light-mode {
   --primary5: #e9eff6;
   --black000: rgb(224, 229, 237);
   --black0: #E8F0FE;
-  --black1: #ffffff;
+  --black1: #fff;
   --black2: #E8F0FE;
   --black3: #D2E3FC;
   --darkgrey000: #9AA0A6;
@@ -172,7 +188,7 @@ html {
   --mediumgrey1: #dadce0;
   --mediumgrey2: #dadce0;
   --mediumgrey3: #dadce0;
-  --taskcolor: #ffffff;
+  --taskcolor: #fff;
   --taskcolor2: #e8f0fe;
   --white1: #3c4043;
   --white2: #3c4043;
@@ -186,9 +202,9 @@ html {
   --primary4: #41638c;
   --primarylight1: #2e7ae5;
   --scrollerThumbBackground: #dadce0;
-  --scrollerThumbBorder: 4px solid #ffffff;
+  --scrollerThumbBorder: 4px solid #fff;
   --scrollerThumbBackgroundHover: #bdc1c6;
-  --scrollerTrackBackground: #ffffff;
+  --scrollerTrackBackground: #fff;
   --box-shadow5:
     rgba(51, 54, 55, 0.14) 0px 4px 4px 0px,
     rgba(51, 54, 55, 0.12) 0px 3px 2px 0px,
@@ -197,18 +213,18 @@ html {
 
 .contrast-mode {
   --primary5: #0f2c4f;
-  --white1: #ffffff;
-  --white2: #ffffff;
+  --white1: #fff;
+  --white2: #fff;
   --white3: #ccc;
-  --white4: #ffffff;
-  --taskcolor0: #ffffff;
-  --taskcolor: #ffffff;
-  --taskcolor2: #ffffff;
+  --white4: #fff;
+  --taskcolor0: #fff;
+  --taskcolor: #fff;
+  --taskcolor2: #fff;
   --offwhite1: #bec8d2;
   --offwhite2: #ccc;
   --black000: #0b0b0b;
   --black0: #121415;
-  --black1: #000000;
+  --black1: #000;
   --black2: #121415;
   --black3: #131516;
   --darkgrey000: #111314;
@@ -253,7 +269,7 @@ button {
   color: var(--white1);
 }
 
-form>button {
+form > button {
   padding: 0.6rem 1.4rem;
 }
 

@@ -17,17 +17,14 @@
 .sidebar-sub-menu {
   background: var(--black1);
   border-radius: 8px;
-  bottom: 2%;
+  inset: 36px 2% 2% 2%;
   box-shadow: var(--box-shadow1);
   height: auto;
-  left: 2%;
   margin: auto;
   max-height: 600px;
   max-width: 920px;
   overflow: hidden;
   position: absolute;
-  right: 2%;
-  top: 36px;
   transition: all 200ms ease-in-out;
   width: auto;
   z-index: 1041
@@ -94,8 +91,8 @@
   width: 32px
 }
 
-.keyboard-disabled-sm:hover:before,
-.toggle-animations-icon__sm:hover:before {
+.keyboard-disabled-sm:hover::before,
+.toggle-animations-icon__sm:hover::before {
   align-items: center;
   background: var(--mediumgrey1);
   border-radius: 2px;
@@ -116,7 +113,7 @@
   z-index: 2000
 }
 
-.toggle-animations-icon__sm:hover:before {
+.toggle-animations-icon__sm:hover::before {
   width: 120px
 }
 
@@ -142,8 +139,7 @@
 .sub-menu-content {
   background: var(--black1);
   height: calc(100% - 56px);
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden scroll;
   padding: 8px 8px 16px 10px
 }
 
@@ -269,19 +265,16 @@
 .sb-sub-popup-confirm {
   background: var(--black0);
   border-radius: 8px;
-  bottom: 5%;
+  inset: 5% 5% 5% 5%;
   display: flex;
   flex-direction: column;
   height: auto;
-  left: 5%;
   margin: auto;
   max-height: 240px;
   max-width: 620px;
   overflow-y: auto;
   padding-top: 20px;
   position: absolute;
-  right: 5%;
-  top: 5%;
   width: auto;
   z-index: 1044
 }
@@ -514,8 +507,8 @@
   background: var(--primary1);
 }
 
-.smdt-slider:before,
-.smia-slider:before {
+.smdt-slider::before,
+.smia-slider::before {
   background: var(--black3);
   border-radius: 50%;
   content: "";
@@ -527,8 +520,8 @@
   width: 26px
 }
 
-.smdt-toggle-checkbox:checked~.smdt-slider:before,
-.smia-toggle-shortcuts-checkbox:checked~.smia-slider:before {
+.smdt-toggle-checkbox:checked~.smdt-slider::before,
+.smia-toggle-shortcuts-checkbox:checked~.smia-slider::before {
   transform: translateX(30px)
 }
 
@@ -623,6 +616,7 @@
 
   .smia-set-shortcut-status,
   .smia-ani {
+    height: 40px;
     margin: 0 auto;
   }
 
@@ -634,11 +628,6 @@
   .smdt-toggle,
   .smia-disable-shortcuts__btn {
     transform: scale(0.8);
-  }
-
-  .smia-set-shortcut-status,
-  .smia-ani {
-    height: 40px;
   }
 }
 

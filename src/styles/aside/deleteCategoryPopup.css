@@ -11,19 +11,16 @@
 .popup-delete-ctg {
   background: var(--black0);
   border-radius: 12px;
-  bottom: 5%;
+  inset: 5% 5% 5% 5%;
   display: flex;
   flex-direction: column;
   height: auto;
-  left: 5%;
   margin: auto;
   max-height: 360px;
   max-width: 600px;
   overflow: hidden;
   padding: 2px;
   position: absolute;
-  right: 5%;
-  top: 5%;
   width: auto;
   z-index: 1044
 }
@@ -88,10 +85,11 @@
   padding: 0 8px;
   position: relative;
   width: 100%;
+
   /* transition: background 100ms ease-in-out; */
 }
 
-input[type=radio] {
+input[type="radio"] {
   height: 18px;
   pointer-events: none;
   position: relative;
@@ -208,6 +206,7 @@ input[type=radio] {
 
   .popup-delete-ctg__options {
     column-gap: 8px;
+    font-size: 13px;
     grid-template-columns: 24px 1fr
   }
 
@@ -221,10 +220,6 @@ input[type=radio] {
     margin-left: auto;
     min-width: auto;
     width: auto
-  }
-
-  .popup-delete-ctg__options {
-    font-size: 13px
   }
 
   .popup-delete-ctg__option--remove {

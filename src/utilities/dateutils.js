@@ -1,29 +1,28 @@
-import { formatTime, formatStartEndTimes } from "./timeutils";
-import locales from "../locales/en";
-const labels = locales.labels;
-const monthNames = labels.monthsShort;
+import { formatTime, formatStartEndTimes } from './timeutils';
+import locales from '../locales/en';
+
+function toCustomISO(date) {
+  const pad = (num) => { return num < 10 ? `0${num}` : num; };
+  return date.getFullYear()
+    + '-' + pad(date.getMonth() + 1)
+    + '-' + pad(date.getDate())
+    + 'T' + pad(date.getHours())
+    + ':' + pad(date.getMinutes())
+    + ':' + pad(date.getSeconds())
+    + '.' + (date.getMilliseconds() / 1000).toFixed(3).slice(2, 5)
+    + 'Z';
+}
 
 export default function createDate(year, month, day) {
-  const pad = (num) => { return num < 10 ? `0${num}` : num; };
-  Date.prototype.toCustomISO = function () {
-    return this.getFullYear() +
-      '-' + pad(this.getMonth() + 1) +
-      '-' + pad(this.getDate()) +
-      'T' + pad(this.getHours()) +
-      ':' + pad(this.getMinutes()) +
-      ':' + pad(this.getSeconds()) +
-      '.' + (this.getMilliseconds() / 1000).toFixed(3).slice(2, 5) +
-      'Z';
-  };
   if (!year && !month && !day) {
-    return new Date().toCustomISO();
+    return toCustomISO(new Date());
   } else {
-    return new Date(year, month, day, 0, 0, 0, 0).toCustomISO().slice(0, 10);
+    return toCustomISO(new Date(year, month, day, 0, 0, 0, 0)).slice(0, 10);
   }
 }
 
 function testDate(date) {
-  return date instanceof Date && !isNaN(date) ? date : new Date(date);
+  return date instanceof Date && !Number.isNaN(date) ? date : new Date(date);
 }
 
 function getDateFormatted(date) {
@@ -42,7 +41,8 @@ function getdatearray(date) {
 
 function formatDateForDisplay(date) {
   date = testDate(date);
-  const month = locales.labels.monthsShort[date.getMonth()];
+  const { labels } = locales;
+  const month = labels.monthsShort[date.getMonth()];
   const day = date.getDate();
   let hours = date.getHours();
   let minutes = date.getMinutes();
@@ -58,46 +58,47 @@ function compareDates(date1, date2) {
 }
 
 function formatDuration(seconds) {
-  let time = { year: 31536000, day: 86400, hour: 3600 },
-    res = [];
+  let time = { year: 31536000, day: 86400, hour: 3600 };
+  let res = [];
   if (seconds === 0) return 'now';
   for (let key in time) {
     if (seconds >= time[key]) {
       let val = Math.floor(seconds / time[key]);
       res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
-      seconds = seconds % time[key];
+      seconds %= time[key];
     }
   }
-  return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &' + '$1') : res[0];
+  return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &$1') : res[0];
 }
 
 function formatDurationHourMin(seconds) {
-  let time = { hour: 3600, minute: 60 },
-    res = [];
+  let time = { hour: 3600, minute: 60 };
+  let res = [];
   if (seconds === 0) return 'now';
   for (let key in time) {
     if (seconds >= time[key]) {
       let val = Math.floor(seconds / time[key]);
       res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
-      seconds = seconds % time[key];
+      seconds %= time[key];
     }
   }
-  return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &' + '$1') : res[0];
+  return res.length > 1 ? res.join(', ').replace(/,([^,]*)$/, ' &$1') : res[0];
 }
 
 function formatStartEndDate(start, end, flag) {
+  const { monthsShort: monthNames } = locales.labels;
   [start, end] = [testDate(start), testDate(end)];
 
   const [startday, startmonth, startyear] = [
     start.getDate(),
     monthNames[start.getMonth()],
-    start.getFullYear()
+    start.getFullYear(),
   ];
 
   const [endday, endmonth, endyear] = [
     end.getDate(),
     monthNames[end.getMonth()],
-    end.getFullYear()
+    end.getFullYear(),
   ];
 
   let tempstartyear = startyear;
@@ -144,14 +145,14 @@ function getDuration(start, end) {
   [start, end] = [new Date(start), new Date(end)];
   const duration = formatDuration((Math.floor(end.getTime() / 1000)) - (Math.floor(start.getTime() / 1000)));
   if (duration === undefined) {
-    return "completed";
+    return 'completed';
   } else {
     return duration;
   }
 }
 
 function createDateFromFormattedString(dateString) {
-  const dateArray = dateString.split("-");
+  const dateArray = dateString.split('-');
   return new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
 }
 
@@ -161,12 +162,12 @@ function isBeforeDate(date1, date2) {
 }
 
 function isDate(value) {
-  return value instanceof Date && !isNaN(value);
+  return value instanceof Date && !Number.isNaN(value);
 }
 
 function getDateFromAttribute(target, attribute, view) {
-  return target.getAttribute(attribute).split("-").map((x, i) => {
-    if (view === "month") {
+  return target.getAttribute(attribute).split('-').map((x, i) => {
+    if (view === 'month') {
       return i === 1 ? parseInt(x) - 1 : parseInt(x);
     } else {
       return parseInt(x);
@@ -175,7 +176,7 @@ function getDateFromAttribute(target, attribute, view) {
 }
 
 function getTimeFromAttribute(target, attribute) {
-  return target.getAttribute(attribute).split(":").map((x) => {
+  return target.getAttribute(attribute).split(':').map((x) => {
     return parseInt(x);
   });
 }
@@ -218,11 +219,15 @@ function generateTempStartEnd(data) {
 
 function getFormDateObject(start, end) {
   [start, end] = [testDate(start), testDate(end)];
+  const setmin = (min) => {
+    const minval = min.getMinutes();
+    if (minval === 0) return '00';
+    return minval;
+  };
 
-  const setmin = min => min === 0 ? "00" : min;
   return {
     dateObj: [start, end],
-    minutes: [setmin(start.getMinutes()), setmin(end.getMinutes())],
+    minutes: [setmin(start), setmin(end)],
     formatted: [getDateForStore(start), getDateForStore(end)],
   };
 }
@@ -230,7 +235,7 @@ function getFormDateObject(start, end) {
 function sortDates(dates, dir) {
   return dates.sort((a, b) => {
     let [date1, date2] = [new Date(a), new Date(b)];
-    if (dir === "asc") {
+    if (dir === 'asc') {
       return date1 - date2;
     } else {
       return date2 - date1;
@@ -243,6 +248,7 @@ function getDurationSeconds(date1, date2) {
 }
 
 function formatEntryOptionsDate(date1, date2) {
+  const { labels } = locales;
   let [y1, y2] = [date1.getFullYear(), date2.getFullYear()];
   let [m1, m2] = [date1.getMonth(), date2.getMonth()];
   let [d1, d2] = [date1.getDate(), date2.getDate()];
@@ -296,8 +302,8 @@ function formatEntryOptionsDate(date1, date2) {
 }
 
 function createTimestamp() {
+  const { monthsShort: monthNames } = locales;
   const date = new Date();
-  const year = date.getFullYear().toString().slice(-2);
   const month = monthNames[date.getMonth()].toUpperCase();
   const day = parseInt(date.getDate());
   return `${month}${day}`;
@@ -310,10 +316,10 @@ function longerThanDay(date1, date2) {
 function getDayOrdinal(day) {
   if (day > 3 && day < 21) return 'th';
   switch (day % 10) {
-    case 1: return "st";
-    case 2: return "nd";
-    case 3: return "rd";
-    default: return "th";
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
   }
 }
 

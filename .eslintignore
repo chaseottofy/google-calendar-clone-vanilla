@@ -1,0 +1,16 @@
+node_modules
+/src/drafts/
+/dist/
+/src/testing/
+/src/_docs/
+/src/data/
+/scripts/
+handle-pdf.js
+webpack.config.babel.js
+unused/
+todo.js
+/dist/bundle.js
+/dist/bundle.js.map
+/temp/
+/src/utilities/testing.js
+webpack.config.js

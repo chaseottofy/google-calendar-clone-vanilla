@@ -36,8 +36,7 @@
   height: auto;
   position: relative;
   padding: 20px 12px 20px 12px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden auto;
 }
 
 .category__form-input {
@@ -234,6 +233,7 @@
   cursor: pointer;
   transition: background 150ms ease-in-out;
 }
+
 .option__open-ctg-edit,
 .option__close-other-ctg {
   border-bottom: 1px solid var(--darkgrey1);
@@ -244,6 +244,7 @@
 .option__open-other-ctg:hover {
   background: var(--black2);
 }
+
 /* end popup box */
 
 

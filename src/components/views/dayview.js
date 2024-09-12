@@ -1,19 +1,19 @@
-import fullFormConfig from "../forms/formUtils";
-import FormSetup from "../forms/setForm";
-import getEntryOptionModal from "../menus/entryOptions";
+import fullFormConfig from '../forms/formUtils';
+import FormSetup from '../forms/setForm';
+import getEntryOptionModal from '../menus/entryOptions';
 
-import { Day } from "../../factory/entries";
+import { Day } from '../../factory/entries';
 
-import calcTime, { formatTime } from "../../utilities/timeutils";
+import calcTime, { formatTime } from '../../utilities/timeutils';
 
 import {
   formatStartEndTime,
   getTempDates,
   getFormDateObject,
   formatEntryOptionsDate,
-} from "../../utilities/dateutils";
+} from '../../utilities/dateutils';
 
-import { createCloseIcon } from "../../utilities/svgs";
+import { createCloseIcon } from '../../utilities/svgs';
 
 import handleOverlap, {
   setStylingForEvent,
@@ -29,28 +29,28 @@ import handleOverlap, {
   calcNewMinuteFromCoords,
   getOriginalBoxObject,
   resetOriginalBox,
-} from "../../utilities/dragutils";
+} from '../../utilities/dragutils';
 
-import { getClosest, placePopup } from "../../utilities/helpers";
+import { getClosest, placePopup } from '../../utilities/helpers';
 
-import locales from "../../locales/en";
+import locales from '../../locales/en';
 
 // day view header (row 1)
-const dvHeaderDayNumber = document.querySelector(".dayview--header-day__title");
+const dvHeaderDayNumber = document.querySelector('.dayview--header-day__title');
 const dvHeaderDayOfWeek = document.querySelector(
-  ".dayview--header-day__number"
+  '.dayview--header-day__number',
 );
-const dvHeaderInfo = document.querySelector(".dayview--header-day__info");
+const dvHeaderInfo = document.querySelector('.dayview--header-day__info');
 
 // day view on top container (row 2)
-const dvOnTop = document.querySelector(".dayview--ontop-container");
+const dvOnTop = document.querySelector('.dayview--ontop-container');
 
 // main grid wrapper (row 3) (scroll wrapper) (offsettop)
-const dvContainer = document.querySelector(".calendar__dayview");
-const dvGrid = document.querySelector(".dayview__grid");
-const dvMainGrid = document.querySelector(".dayview--main-grid");
+const dvContainer = document.querySelector('.calendar__dayview');
+const dvGrid = document.querySelector('.dayview__grid');
+const dvMainGrid = document.querySelector('.dayview--main-grid');
 
-const dvSideGridWrapper = document.querySelector(".dayview--side-grid");
+const dvSideGridWrapper = document.querySelector('.dayview--side-grid');
 
 export default function setDayView(context, store, datepickerContext) {
   // let entries = store.getDayEntries(context.getDate());
@@ -87,7 +87,7 @@ export default function setDayView(context, store, datepickerContext) {
   function getDayviewHeaderEntryCount() {
     let allboxes = boxes.getAllBoxes();
     if (allboxes.length === 0) {
-      return "no entries";
+      return 'no entries';
     }
     let [endingToday, startingToday] = [0, 0];
     let tempEndCase1;
@@ -112,17 +112,17 @@ export default function setDayView(context, store, datepickerContext) {
     if (startingToday === 1 && endingToday === 1) {
       return `1 entry ( ${formatStartEndTime(
         new Date(allboxes[0].start),
-        new Date(allboxes[0].end)
+        new Date(allboxes[0].end),
       )} )`;
     }
 
     if (startingToday > 1 && startingToday === endingToday) {
       return `${startingToday} entries starting & ending today ( ${firstLastDates(
-        boxes.boxes
+        boxes.boxes,
       )} )`;
     }
 
-    let fulltitle = "";
+    let fulltitle = '';
     if (startingToday > 0) {
       if (startingToday === 1) {
         fulltitle += `${startingToday} entry starting today`;
@@ -130,22 +130,22 @@ export default function setDayView(context, store, datepickerContext) {
         fulltitle += `${startingToday} entries started`;
       }
     } else {
-      fulltitle += `no entries started`;
+      fulltitle += 'no entries started';
     }
 
     if (endingToday > 0) {
       if (endingToday === 1) {
         fulltitle += ` – ${endingToday} ending ( ${formatStartEndTime(
           new Date(tempEndCase1.start),
-          new Date(tempEndCase1.end)
+          new Date(tempEndCase1.end),
         )} )`;
       } else {
         fulltitle += ` – ${endingToday} ending ( ${firstLastDates(
-          boxes.boxes
+          boxes.boxes,
         )} )`;
       }
     } else {
-      fulltitle += ` – no entries ending today`;
+      fulltitle += ' – no entries ending today';
     }
     return fulltitle;
   }
@@ -156,18 +156,18 @@ export default function setDayView(context, store, datepickerContext) {
       let md;
 
       if (i === 0) {
-        hour = "";
-        md = "";
+        hour = '';
+        md = '';
       } else {
         hour = i;
-        md = "AM";
+        md = 'AM';
       }
 
-      if (hour > 12) {hour -= 12;}
-      if (i >= 12) {md = "PM";}
+      if (hour > 12) { hour -= 12; }
+      if (i >= 12) { md = 'PM'; }
 
-      const dvSideGridCell = document.createElement("span");
-      dvSideGridCell.classList.add("dv-sidegrid--cell");
+      const dvSideGridCell = document.createElement('span');
+      dvSideGridCell.classList.add('dv-sidegrid--cell');
       dvSideGridCell.textContent = `${hour} ${md}`;
       dvSideGridWrapper.appendChild(dvSideGridCell);
     }
@@ -175,7 +175,7 @@ export default function setDayView(context, store, datepickerContext) {
 
   function configHeader() {
     [dvHeaderDayNumber, dvHeaderDayOfWeek, dvHeaderInfo].forEach((el) => {
-      el.innerText = "";
+      el.innerText = '';
     });
 
     let gmtOffset = new Date().getTimezoneOffset() / 60;
@@ -183,27 +183,26 @@ export default function setDayView(context, store, datepickerContext) {
       gmtOffset = `+${Math.abs(gmtOffset)}`;
     }
 
-    document.querySelector(".dv-gmt").textContent = `UTC ${context.getGmt()}`;
+    document.querySelector('.dv-gmt').textContent = `UTC ${context.getGmt()}`;
     let day = context.getDay();
     dvHeaderDayOfWeek.textContent = day;
 
     if (context.isToday()) {
-      dvHeaderDayOfWeek.classList.add("dayview--header-day__number--today");
-      dvHeaderDayNumber.style.color = "var(--primary1)";
+      dvHeaderDayOfWeek.classList.add('dayview--header-day__number--today');
+      dvHeaderDayNumber.style.color = 'var(--primary1)';
     } else {
-      dvHeaderDayOfWeek.classList.remove("dayview--header-day__number--today");
-      dvHeaderDayNumber.removeAttribute("style");
+      dvHeaderDayOfWeek.classList.remove('dayview--header-day__number--today');
+      dvHeaderDayNumber.removeAttribute('style');
     }
-    dvHeaderDayNumber.textContent =
-      locales.labels.weekdaysShort[context.getWeekday()].toUpperCase();
+    dvHeaderDayNumber.textContent = locales.labels.weekdaysShort[context.getWeekday()].toUpperCase();
     dvHeaderInfo.textContent = getDayviewHeaderEntryCount();
   }
 
   function resetDayview() {
-    dvMainGrid.innerText = "";
-    dvOnTop.innerText = "";
-    dvSideGridWrapper.innerText = "";
-    dvHeaderInfo.innerText = "";
+    dvMainGrid.innerText = '';
+    dvOnTop.innerText = '';
+    dvSideGridWrapper.innerText = '';
+    dvHeaderInfo.innerText = '';
     dvContainer.onmousedown = null;
     entries = null;
     boxes = null;
@@ -211,50 +210,50 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   function openDvMore(entr) {
-    store.addActiveOverlay("morepopup");
-    const morepopupoverlay = document.createElement("aside");
-    morepopupoverlay.classList.add("dv--morepopup__overlay");
+    store.addActiveOverlay('morepopup');
+    const morepopupoverlay = document.createElement('aside');
+    morepopupoverlay.classList.add('dv--morepopup__overlay');
 
-    const morepopup = document.createElement("aside");
-    morepopup.classList.add("dv--morepopup");
+    const morepopup = document.createElement('aside');
+    morepopup.classList.add('dv--morepopup');
     morepopup.style.left = `${dvOnTop.offsetLeft}px`;
     morepopup.style.top = `${dvOnTop.offsetTop}px`;
 
-    const morepopupHeader = document.createElement("div");
-    morepopupHeader.classList.add("dv--morepopup__header");
-    const morepopupTitle = document.createElement("span");
-    morepopupTitle.classList.add("dv--morepopup__title");
-    morepopupTitle.textContent = "Events spanning multiple days";
-    const morepopupClose = document.createElement("span");
-    morepopupClose.classList.add("dv--morepopup__close");
-    morepopupClose.appendChild(createCloseIcon("var(--white3)"));
+    const morepopupHeader = document.createElement('div');
+    morepopupHeader.classList.add('dv--morepopup__header');
+    const morepopupTitle = document.createElement('span');
+    morepopupTitle.classList.add('dv--morepopup__title');
+    morepopupTitle.textContent = 'Events spanning multiple days';
+    const morepopupClose = document.createElement('span');
+    morepopupClose.classList.add('dv--morepopup__close');
+    morepopupClose.appendChild(createCloseIcon('var(--white3)'));
     morepopupHeader.append(morepopupTitle, morepopupClose);
-    const morepopupBody = document.createElement("div");
-    morepopupBody.classList.add("dv--morepopup__body");
+    const morepopupBody = document.createElement('div');
+    morepopupBody.classList.add('dv--morepopup__body');
 
     const createMorePopupEntry = (entry) => {
-      const morepopupEntry = document.createElement("div");
-      morepopupEntry.classList.add("dv--morepopup__entry");
+      const morepopupEntry = document.createElement('div');
+      morepopupEntry.classList.add('dv--morepopup__entry');
       morepopupEntry.style.backgroundColor = `${store.getCtgColor(
-        entry.category
+        entry.category,
       )}`;
-      morepopupEntry.setAttribute("data-sdvt-id", entry.id);
-      const morepopupEntryTitle = document.createElement("span");
-      morepopupEntryTitle.classList.add("dv--morepopup__entry-title");
+      morepopupEntry.setAttribute('data-sdvt-id', entry.id);
+      const morepopupEntryTitle = document.createElement('span');
+      morepopupEntryTitle.classList.add('dv--morepopup__entry-title');
       morepopupEntryTitle.textContent = entry.title;
-      const morepopupCategory = document.createElement("span");
-      morepopupCategory.classList.add("dv--morepopup__entry-category");
+      const morepopupCategory = document.createElement('span');
+      morepopupCategory.classList.add('dv--morepopup__entry-category');
       morepopupCategory.textContent = entry.category;
-      const morepopupEntryTime = document.createElement("span");
-      morepopupEntryTime.classList.add("dv--morepopup__entry-time");
+      const morepopupEntryTime = document.createElement('span');
+      morepopupEntryTime.classList.add('dv--morepopup__entry-time');
       morepopupEntryTime.textContent = formatEntryOptionsDate(
         new Date(entry.start),
-        new Date(entry.end)
+        new Date(entry.end),
       ).date;
       morepopupEntry.append(
         morepopupEntryTitle,
         morepopupCategory,
-        morepopupEntryTime
+        morepopupEntryTime,
       );
       return morepopupEntry;
     };
@@ -267,22 +266,22 @@ export default function setDayView(context, store, datepickerContext) {
     const closemp = () => {
       morepopupoverlay.remove();
       morepopup.remove();
-      store.removeActiveOverlay("morepopup");
-      document.removeEventListener("keydown", closeMpOnEsc);
+      store.removeActiveOverlay('morepopup');
+      document.removeEventListener('keydown', closeMpOnEsc);
       morepopupoverlay.onclick = null;
       morepopupClose.onclick = null;
       morepopupBody.onclick = null;
     };
 
     const closeMpOnEsc = (e) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         closemp();
         return;
       }
     };
 
     function getEntrItem(e) {
-      if (getClosest(e, ".dv--morepopup__entry")) {
+      if (getClosest(e, '.dv--morepopup__entry')) {
         openStackEntryOnTop(e, closemp);
         return;
       }
@@ -290,19 +289,17 @@ export default function setDayView(context, store, datepickerContext) {
 
     morepopup.append(morepopupHeader, morepopupBody);
     document.body.prepend(morepopupoverlay, morepopup);
-    // document.body.appendChild(morepopup);
     morepopupoverlay.onclick = closemp;
     morepopupClose.onclick = closemp;
     morepopupBody.onclick = getEntrItem;
-    // document.querySelector(".dv--ontop__more").onclick = null;
-    document.addEventListener("keydown", closeMpOnEsc);
+    document.addEventListener('keydown', closeMpOnEsc);
   }
 
   function openStackEntryOnTop(e, closearg) {
     const target = e.target;
-    const id = target.getAttribute("data-sdvt-id");
+    const id = target.getAttribute('data-sdvt-id');
     const setResetDv = () => {
-      console.log("reset");
+      console.log('reset');
     };
 
     const entry = store.getEntry(id);
@@ -315,14 +312,16 @@ export default function setDayView(context, store, datepickerContext) {
       165,
       [parseInt(rect.left), parseInt(rect.top) + 24],
       [window.innerWidth, window.innerHeight],
-      false
+      false,
     );
 
-    closearg
-      ? store.setFormResetHandle("day", closearg)
-      : store.setFormResetHandle("day", setResetDv);
+    store.setFormResetHandle(
+      'day',
+      closearg || setResetDv,
+    );
+
     const setup = new FormSetup();
-    setup.setSubmission("edit", id, entry.title, entry.description);
+    setup.setSubmission('edit', id, entry.title, entry.description);
     setup.setCategory(entry.category, color);
     setup.setDates(getFormDateObject(start, entry.end));
     fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
@@ -330,32 +329,32 @@ export default function setDayView(context, store, datepickerContext) {
     const finishSetup = () => fullFormConfig.getConfig(setup.getSetup());
     getEntryOptionModal(context, store, entry, datepickerContext, finishSetup);
 
-    const modal = document.querySelector(".entry__options");
-    modal.style.top = +y + "px";
-    modal.style.left = +x + "px";
+    const modal = document.querySelector('.entry__options');
+    modal.style.top = +y + 'px';
+    modal.style.left = +x + 'px';
   }
 
   function createStackableEntriesOnTop(entr) {
-    const dvOnTopGrid = document.createElement("div");
-    dvOnTopGrid.classList.add("dayview--ontop__grid");
+    const dvOnTopGrid = document.createElement('div');
+    dvOnTopGrid.classList.add('dayview--ontop__grid');
     entr.forEach((ent) => {
-      const dvOnTopEntry = document.createElement("div");
-      dvOnTopEntry.classList.add("dayview--ontop__grid-item");
+      const dvOnTopEntry = document.createElement('div');
+      dvOnTopEntry.classList.add('dayview--ontop__grid-item');
       dvOnTopEntry.textContent = ent.title;
       dvOnTopEntry.style.backgroundColor = store.getCtgColor(ent.category);
-      dvOnTopEntry.setAttribute("data-sdvt-id", ent.id);
+      dvOnTopEntry.setAttribute('data-sdvt-id', ent.id);
       dvOnTopGrid.appendChild(dvOnTopEntry);
     });
     dvOnTop.appendChild(dvOnTopGrid);
   }
 
   function createDvTop(entr) {
-    const dvtopgrid = document.createElement("div");
-    dvtopgrid.classList.add("dv--ontop__grid");
+    const dvtopgrid = document.createElement('div');
+    dvtopgrid.classList.add('dv--ontop__grid');
 
     if (entr.length > 6) {
-      const moremessage = document.createElement("div");
-      moremessage.classList.add("dv--ontop__more");
+      const moremessage = document.createElement('div');
+      moremessage.classList.add('dv--ontop__more');
       moremessage.textContent = `${entr.length} more...`;
       dvOnTop.appendChild(moremessage);
       return;
@@ -365,47 +364,48 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   function renderBoxes() {
-    dvMainGrid.innerText = "";
-    dvOnTop.innerText = "";
+    dvMainGrid.innerText = '';
+    dvOnTop.innerText = '';
     createDvTop(boxes.getBoxesTop());
     boxes.getBoxes().forEach((entry) => {
       const y = entry.coordinates.y;
-      firstY == null || y < firstY ? (firstY = y) : null;
+      if (firstY === null || y < firstY) {
+        firstY = y;
+      }
       createBox(
         dvMainGrid, // column
         entry, // entry object
-        "day", // current view
-        store.getCtgColor(entry.category) // background color
+        'day', // current view
+        store.getCtgColor(entry.category), // background color
       );
     });
   }
 
   /** RESIZE NORTH/SOUTH */
   function resizeBoxNSDay(e, box) {
-    setStylingForEvent("dragstart", dvGrid, store);
-    document.body.style.cursor = "move";
+    setStylingForEvent('dragstart', dvGrid, store);
+    document.body.style.cursor = 'move';
     const col = box.parentElement;
 
     let boxhasOnTop = false;
     const boxorig = getOriginalBoxObject(box);
-    if (box.classList.contains("dv-box-ontop")) {
+    if (box.classList.contains('dv-box-ontop')) {
       boxhasOnTop = true;
-      resetStyleOnClick("day", box);
+      resetStyleOnClick('day', box);
     }
 
-    box.classList.add("dv-box-resizing");
+    box.classList.add('dv-box-resizing');
     const boxTop = box.offsetTop;
     const headerOffset = parseInt(dvGrid.offsetTop);
-    createTemporaryBox(box, col, boxhasOnTop, "day");
+    createTemporaryBox(box, col, boxhasOnTop, 'day');
 
     let amountScrolled = parseInt(dvGrid.scrollTop);
     const mousemove = (e) => {
-      let newHeight =
-        Math.round((e.pageY + amountScrolled - boxTop - headerOffset) / 12.5) *
-        12.5;
+      let newHeight = Math.round((e.pageY + amountScrolled - boxTop - headerOffset) / 12.5)
+        * 12.5;
 
       if (newHeight <= 12.5) {
-        box.style.height = "12.5px";
+        box.style.height = '12.5px';
         return;
       } else if (newHeight + boxTop > 1188) {
         return;
@@ -415,49 +415,49 @@ export default function setDayView(context, store, datepickerContext) {
     };
 
     function mouseup() {
-      document.querySelector(".dv-temporary-box").remove();
-      box.classList.remove("dv-box-resizing");
+      document.querySelector('.dv-temporary-box').remove();
+      box.classList.remove('dv-box-resizing');
       if (boxhasOnTop) {
-        box.classList.add("dv-box-ontop");
+        box.classList.add('dv-box-ontop');
       }
 
       if (boxorig.height === box.offsetHeight) {
         resetOriginalBox(box, boxorig);
       } else {
-        setBoxTimeAttributes(box, "day");
-        const start = +box.getAttribute("data-dv-start-time");
-        const length = +box.getAttribute("data-dv-time-intervals");
+        setBoxTimeAttributes(box, 'day');
+        const start = +box.getAttribute('data-dv-start-time');
+        const length = +box.getAttribute('data-dv-time-intervals');
         const time = calcTime(start, length);
-        box.setAttribute("data-dv-time", time);
+        box.setAttribute('data-dv-time', time);
         box.firstChild.nextSibling.firstElementChild.textContent = time;
 
-        updateBoxCoordinates(box, "day", boxes);
-        boxes.updateStore(store, box.getAttribute("data-dv-box-id"));
+        updateBoxCoordinates(box, 'day', boxes);
+        boxes.updateStore(store, box.getAttribute('data-dv-box-id'));
         // check if new position overlaps with other boxes and handle
         if (boxes.getBoxes().length > 1) {
-          handleOverlap(null, "day", boxes);
+          handleOverlap(null, 'day', boxes);
         } else {
-          box.setAttribute("data-dv-box-index", "box-one");
+          box.setAttribute('data-dv-box-index', 'box-one');
         }
       }
 
       configHeader();
-      setStylingForEvent("dragend", dvGrid, store);
-      document.removeEventListener("mousemove", mousemove);
-      document.removeEventListener("mouseup", mouseup);
+      setStylingForEvent('dragend', dvGrid, store);
+      document.removeEventListener('mousemove', mousemove);
+      document.removeEventListener('mouseup', mouseup);
     }
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
   }
 
   /** DRAG NORTH/ SOUTH, EAST/ WEST */
   function dragEngineDay(e, box) {
-    setStylingForEvent("dragstart", dvGrid, store);
+    setStylingForEvent('dragstart', dvGrid, store);
     const col = box.parentElement;
     let boxhasOnTop = false;
 
-    const startTop = +box.style.top.split("px")[0];
-    const boxHeight = +box.style.height.split("px")[0];
+    const startTop = +box.style.top.split('px')[0];
+    const boxHeight = +box.style.height.split('px')[0];
     const startCursorY = e.pageY - parseInt(dvGrid.offsetTop);
     const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
     let [tempX, tempY] = [e.pageX, e.pageY];
@@ -471,13 +471,13 @@ export default function setDayView(context, store, datepickerContext) {
       if (!hasStyles) {
         if (sX > 3 || sY > 3) {
           hasStyles = true;
-          document.body.style.cursor = "move";
-          if (box.classList.contains("dv-box-ontop")) {
+          document.body.style.cursor = 'move';
+          if (box.classList.contains('dv-box-ontop')) {
             boxhasOnTop = true;
-            resetStyleOnClick("day", box);
+            resetStyleOnClick('day', box);
           }
-          box.classList.add("dv-box-dragging");
-          createTemporaryBox(box, col, boxhasOnTop, "day");
+          box.classList.add('dv-box-dragging');
+          createTemporaryBox(box, col, boxhasOnTop, 'day');
           sX = 0;
           sY = 0;
         }
@@ -496,17 +496,17 @@ export default function setDayView(context, store, datepickerContext) {
     };
 
     const mouseup = () => {
-      const tempbox = document?.querySelector(".dv-temporary-box");
+      const tempbox = document?.querySelector('.dv-temporary-box');
       // if box did not move, no render needed
       // click event to open form
       if (tempbox === null) {
         const setResetDv = () => {
-          setStylingForEvent("dragend", dvGrid, store);
-          box.classList.remove("dv-box-clicked");
+          setStylingForEvent('dragend', dvGrid, store);
+          box.classList.remove('dv-box-clicked');
         };
 
-        box.classList.add("dv-box-clicked");
-        const id = box.getAttribute("data-dv-box-id");
+        box.classList.add('dv-box-clicked');
+        const id = box.getAttribute('data-dv-box-id');
         const entry = store.getEntry(id);
         const start = entry.start;
         const color = box.style.backgroundColor;
@@ -517,11 +517,11 @@ export default function setDayView(context, store, datepickerContext) {
           165,
           [parseInt(rect.left) + 32, parseInt(rect.top) + 32],
           [window.innerWidth, window.innerHeight],
-          false
+          false,
         );
-        store.setFormResetHandle("day", setResetDv);
+        store.setFormResetHandle('day', setResetDv);
         const setup = new FormSetup();
-        setup.setSubmission("edit", id, entry.title, entry.description);
+        setup.setSubmission('edit', id, entry.title, entry.description);
         setup.setCategory(entry.category, color);
         setup.setDates(getFormDateObject(start, entry.end));
         fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
@@ -532,64 +532,64 @@ export default function setDayView(context, store, datepickerContext) {
           store,
           entry,
           datepickerContext,
-          finishSetup
+          finishSetup,
         );
 
-        const modal = document.querySelector(".entry__options");
+        const modal = document.querySelector('.entry__options');
         if (window.innerWidth > 580) {
-          modal.style.top = +y + "px";
-          modal.style.left = x + "px";
+          modal.style.top = +y + 'px';
+          modal.style.left = x + 'px';
         } else {
-          modal.style.top = "64px";
+          modal.style.top = '64px';
         }
         // ******************
       } else {
         tempbox.remove();
-        box.classList.remove("dv-box-dragging");
+        box.classList.remove('dv-box-dragging');
         if (boxhasOnTop) {
-          box.classList.add("dv-box-ontop");
+          box.classList.add('dv-box-ontop');
         }
 
-        setBoxTimeAttributes(box, "day");
-        const start = +box.getAttribute("data-dv-start-time");
-        const length = +box.getAttribute("data-dv-time-intervals");
+        setBoxTimeAttributes(box, 'day');
+        const start = +box.getAttribute('data-dv-start-time');
+        const length = +box.getAttribute('data-dv-time-intervals');
         const time = calcTime(start, length);
-        box.setAttribute("data-dv-time", time);
+        box.setAttribute('data-dv-time', time);
 
         box.children[1].children[0].textContent = time;
-        updateBoxCoordinates(box, "day", boxes);
-        boxes.updateStore(store, box.getAttribute("data-dv-box-id"));
+        updateBoxCoordinates(box, 'day', boxes);
+        boxes.updateStore(store, box.getAttribute('data-dv-box-id'));
         // check if new position overlaps with other boxes and handle
         if (boxes.getBoxes().length > 1) {
-          handleOverlap(null, "day", boxes);
+          handleOverlap(null, 'day', boxes);
         } else {
-          box.setAttribute("data-dv-box-index", "box-one");
+          box.setAttribute('data-dv-box-index', 'box-one');
         }
 
         configHeader();
-        setStylingForEvent("dragend", dvGrid, store);
+        setStylingForEvent('dragend', dvGrid, store);
       }
 
-      document.removeEventListener("mousemove", mousemove);
-      document.removeEventListener("mouseup", mouseup);
+      document.removeEventListener('mousemove', mousemove);
+      document.removeEventListener('mouseup', mouseup);
     };
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
   }
 
   function handleDayviewClose() {
-    document.querySelector(".dayview-temp-box")?.remove();
+    document.querySelector('.dayview-temp-box')?.remove();
   }
 
   function openDayviewForm(box, category, dates, type) {
-    store.setFormResetHandle("day", handleDayviewClose);
+    store.setFormResetHandle('day', handleDayviewClose);
 
     const openForm = store.getRenderFormCallback();
     const setup = new FormSetup();
 
     const [submitType, id, title, description] = type;
     setup.setSubmission(submitType, id, title, description);
-    if (submitType === "create") {
+    if (submitType === 'create') {
       box.style.opacity = 0.9;
     }
 
@@ -607,28 +607,28 @@ export default function setDayView(context, store, datepickerContext) {
 
   /** CREATE BOX ON DRAG */
   function createBoxOnDragDay(e) {
-    setStylingForEvent("dragstart", dvGrid, store);
-    document.body.style.cursor = "move";
+    setStylingForEvent('dragstart', dvGrid, store);
+    document.body.style.cursor = 'move';
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair();
 
-    const box = document.createElement("div");
-    box.setAttribute("class", "dv-box dv-box-dragging dayview-temp-box");
+    const box = document.createElement('div');
+    box.setAttribute('class', 'dv-box dv-box-dragging dayview-temp-box');
 
     // boxheader is static - create from template
-    const boxheader = createTempBoxHeader("day");
-    const boxcontent = document.createElement("div");
-    const boxtime = document.createElement("span");
-    const boxtimeend = document.createElement("span");
-    boxcontent.classList.add("dv-box__content");
-    boxtime.classList.add("dv-box-time");
-    boxtimeend.classList.add("dv-box-time");
+    const boxheader = createTempBoxHeader('day');
+    const boxcontent = document.createElement('div');
+    const boxtime = document.createElement('span');
+    const boxtimeend = document.createElement('span');
+    boxcontent.classList.add('dv-box__content');
+    boxtime.classList.add('dv-box-time');
+    boxtimeend.classList.add('dv-box-time');
 
     const headerOffset = parseInt(dvGrid.offsetTop);
     const scrolled = parseInt(dvGrid.scrollTop);
     const startCursorY = e.pageY - headerOffset;
 
     let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
-    box.setAttribute("style", getBoxDefaultStyle(y, color));
+    box.setAttribute('style', getBoxDefaultStyle(y, color));
 
     let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 };
     let [starthour, startmin, endhour, endmin] = startEndDefault(y);
@@ -636,8 +636,7 @@ export default function setDayView(context, store, datepickerContext) {
 
     function mousemove(e) {
       movedY += e.movementY;
-      let newHeight =
-        Math.round((e.pageY + scrolled - y - headerOffset) / 12.5) * 12.5;
+      let newHeight = Math.round((e.pageY + scrolled - y - headerOffset) / 12.5) * 12.5;
       if (newHeight <= 12.5) {
         newHeight = 12.5;
       }
@@ -652,7 +651,7 @@ export default function setDayView(context, store, datepickerContext) {
       endhour = calcNewHourFromCoords(newHeight, y);
       endmin = calcNewMinuteFromCoords(newHeight, y);
 
-      boxtime.style.wordBreak = "break-word";
+      boxtime.style.wordBreak = 'break-word';
       boxtime.textContent = `${formatTime(starthour, startmin)} – `;
       boxtimeend.textContent = `${formatTime(endhour, endmin)}`;
     }
@@ -668,8 +667,8 @@ export default function setDayView(context, store, datepickerContext) {
           coords.y = 92;
           coords.e = 95;
           coords.h = 3;
-          box.style.height = "37.5px";
-          box.style.top = "1150px";
+          box.style.height = '37.5px';
+          box.style.top = '1150px';
           [starthour, startmin] = [23, 0];
           [endhour, endmin] = [23, 45];
           boxtime.textContent = `${formatTime(starthour, startmin)} – `;
@@ -678,9 +677,10 @@ export default function setDayView(context, store, datepickerContext) {
           coords.y = starthour * 4;
           coords.e = +coords.y + 4;
           coords.h = 4;
-          box.style.height = "50px";
+          box.style.height = '50px';
           box.style.top = `${+coords.y * 12.5}px`;
-          [starthour, startmin] = [starthour, 0];
+          // [starthour, startmin] = [starthour, 0];
+          startmin = 0;
           [endhour, endmin] = [starthour + 1, 0];
           boxtime.textContent = `${formatTime(starthour, startmin)} – `;
           boxtimeend.textContent = `${formatTime(endhour, endmin)}`;
@@ -690,35 +690,35 @@ export default function setDayView(context, store, datepickerContext) {
       const datesData = getTempDates(
         new Date(context.getDate()),
         [starthour, endhour],
-        [startmin, endmin]
+        [startmin, endmin],
       );
 
       openDayviewForm(
         box,
         [tempcategory, color],
         datesData,
-        ["create", null, null, null]
+        ['create', null, null, null],
       );
 
-      setStylingForEvent("dragend", dvGrid, store);
-      document.removeEventListener("mouseup", mouseup);
-      document.removeEventListener("mousemove", mousemove);
+      setStylingForEvent('dragend', dvGrid, store);
+      document.removeEventListener('mouseup', mouseup);
+      document.removeEventListener('mousemove', mousemove);
     }
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
+    document.addEventListener('mousemove', mousemove);
+    document.addEventListener('mouseup', mouseup);
   }
 
   function renderBoxesForGrid() {
     renderBoxes();
-    handleOverlap(null, "day", boxes);
+    handleOverlap(null, 'day', boxes);
   }
 
   function delegateDayView(e) {
-    const dvhresizehandle = getClosest(e, ".dv-box-resize-s");
-    const dvhbox = getClosest(e, ".dv-box");
-    const dvhgrid = getClosest(e, ".dayview--main-grid");
-    const dvhboxTop = getClosest(e, ".dayview--ontop__grid-item");
-    const dvhGrouped = getClosest(e, ".dv--ontop__more");
+    const dvhresizehandle = getClosest(e, '.dv-box-resize-s');
+    const dvhbox = getClosest(e, '.dv-box');
+    const dvhgrid = getClosest(e, '.dayview--main-grid');
+    const dvhboxTop = getClosest(e, '.dayview--ontop__grid-item');
+    const dvhGrouped = getClosest(e, '.dv--ontop__more');
 
     // resize existing event
     if (dvhresizehandle) {
@@ -757,7 +757,7 @@ export default function setDayView(context, store, datepickerContext) {
       setTimeout(() => {
         dvGrid.scrollTo({
           top: settop,
-          behavior: "instant",
+          behavior: 'instant',
         });
       }, 4);
     } else {
@@ -765,14 +765,14 @@ export default function setDayView(context, store, datepickerContext) {
       setTimeout(() => {
         dvGrid.scrollTo({
           top: hour - 25 <= 0 ? 0 : hour - 25,
-          behavior: "instant",
+          behavior: 'instant',
         });
       }, 4);
     }
   }
 
   const initDayView = () => {
-    dvSideGridWrapper.innerText = "";
+    dvSideGridWrapper.innerText = '';
     createDVSideGridCells();
     entries = store.getDayEntries(context.getDate());
     boxes = new Day(entries.day, entries.allDay);

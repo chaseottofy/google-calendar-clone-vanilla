@@ -1,9 +1,6 @@
 .calendar__dayview {
   height: 100%;
-  overflow: hidden
-}
-
-.calendar__dayview {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -128,6 +125,7 @@
   overflow: hidden;
   white-space: nowrap;
 }
+
 .dayview--ontop__grid-item:hover {
   filter: brightness(1.2);
 }
@@ -193,6 +191,7 @@
   padding-left: 4px;
   width: 100%;
 }
+
 .dv--morepopup__close {
   cursor: pointer;
   width: 24px;
@@ -202,6 +201,7 @@
   align-items: center;
   border-radius: 50%;
 }
+
 .dv--morepopup__close:hover {
   background: var(--mediumgrey1);
 }
@@ -209,11 +209,9 @@
 .dv--morepopup__body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  column-gap: 4px;
-  row-gap: 2px;
+  gap: 2px 4px;
   height: auto;
-  overflow-y:scroll;
-  overflow-x:hidden;
+  overflow:hidden scroll;
   width: 100%;
 }
 
@@ -427,23 +425,20 @@
   border: 1px solid var(--black000);
   pointer-events: none;
   opacity: 0.8;
+  z-index: 1000 !important;
+  transition: none;
 }
 
 .dv-box-ontop {
   border: 1px solid var(--black1);
   box-shadow:none;
+  z-index: 3;
 }
 
 .dv-temporary-box {
   opacity: .5;
   pointer-events: none;
   user-select: none
-}
-
-.dv-box-dragging,
-.dv-box-resizing {
-  z-index: 1000 !important;
-  transition: none;
 }
 
 .dv-box-clicked {
@@ -454,10 +449,6 @@
 
 .dv-box-one {
   z-index: 2
-}
-
-.dv-box-ontop {
-  z-index: 3;
 }
 
 .dv-box-ontop:hover {

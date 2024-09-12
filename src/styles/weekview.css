@@ -2,8 +2,7 @@
   display: grid;
   grid-template-columns: 36px 1fr;
   height: auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden scroll;
 }
 
 .weekview__top::-webkit-scrollbar-track {
@@ -42,7 +41,6 @@
   text-align: center;
   font-weight: 400;
   user-select: none;
-  pointer-events: none;
   color: var(--offwhite1);
   font-size: 10px;
   letter-spacing: 0.8px;
@@ -186,8 +184,8 @@
   border: none;
   max-height: 280px;
   box-shadow:
-    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    rgba(60, 64, 67, 0.3) 0 1px 2px 0,
+    rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
   background: var(--black0);
   display: flex;
   flex-direction: column;
@@ -337,7 +335,6 @@
   grid-template-columns: 1fr;
   grid-template-rows: repeat(25, 1fr);
   width: 36px;
-  user-select: none;
   background: transparent;
   z-index: 2;
   user-select: none;
@@ -396,16 +393,19 @@
 /* box events */
 .box-dragging {
   pointer-events: none;
+  z-index: 1000;
   box-shadow: var(--box-shadow1);
 }
 
 .box-resizing {
   pointer-events: none;
   box-shadow: var(--box-shadow1);
+  z-index: 1000;
 }
 
 /* box events */
 .box-ontop {
+  z-index: 3;
   border: 1px solid var(--black1);
   transition-duration: 150ms;
   transition-property: left, width;
@@ -486,10 +486,6 @@
 /*  Z INDICES */
 .box-one {
   z-index: 2;
-}
-
-.box-ontop {
-  z-index: 3;
 }
 
 .box-two {
@@ -576,14 +572,6 @@
 .box-six:hover {
   opacity: .9;
   transition: .1s ease-in-out;
-}
-
-.box-dragging {
-  z-index: 1000;
-}
-
-.box-resizing {
-  z-index: 1000;
 }
 
 .box-dragging,

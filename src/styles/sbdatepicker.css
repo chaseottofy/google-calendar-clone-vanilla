@@ -74,8 +74,7 @@
   height: 48px;
   grid-template-columns: 32px 1fr 32px;
   grid-template-rows: 1fr;
-  align-items: center;
-  justify-items: center;
+  place-items: center center;
   margin: 0 auto;
   padding: 8px 16px 0 16px;
 }
@@ -91,6 +90,7 @@
   border-radius: 50%;
   transition: all 100ms ease-in-out;
 }
+
 .sb-yearpicker-prev svg,
 .sb-yearpicker-next svg {
   width: 22px;
@@ -118,8 +118,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  row-gap: 12px;
-  column-gap: 4px;
+  gap: 12px 4px;
   padding: 6px 2px;
   user-select:none;
 }
@@ -131,7 +130,6 @@
   font-size: 11px;
   font-weight: 400;
   color: var(--offwhite2);
-  cursor: pointer;
   transition: all 150ms ease-in-out;
   cursor: pointer;
   border-radius: 4px;
@@ -150,6 +148,7 @@
 .sb-monthpicker__active-month:hover {
   background: var(--black1);
 }
+
 /* END MONTH/YEAR PICKER */
 
 
@@ -312,7 +311,9 @@
 
 .sbdatepicker__body--datename-selected {
   border: 2px solid var(--primarylight2) !important;
+
   /* background: var(--primary3); */
+
   /* color: var(--taskcolor0); */
 }
 

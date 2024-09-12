@@ -1,147 +1,20 @@
-import Entry from "../factory/entries";
-import localStoreKeyNames from "./constants";
-import { testDate, compareDates } from "../utilities/dateutils";
-import locales from "../locales/en";
-import defautlKeyboardShortcuts from "../locales/kbDefault";
-const colors = locales.colors;
-/*
-  this is a temporary list of store methods for development purposes, it is not a complete list of methods
-
-
-
-  ***************************************
-  // ENTRY MANAGEMENT
-  "addEntry",
-  "createEntry",
-  "deleteEntry",
-  "getActiveEntries",
-  "getEntry",
-  "getEntries",
-  "removeLastEntry",
-  "updateEntry",
-  "searchBy",
-  "sortBy",
-  "getFirstAndLastEntry",
-  "generateCoordinates",
-  "getDayEntries",
-  "getDayEntriesArray",
-  "getMonthEntries",
-  "getMonthEntryDates",
-  "getGroupedMonthEntries",
-  "getWeekEntries",
-  "getYearEntries",
-  "getGroupedYearEntries",
-  ***************************************
-
-
-  ***************************************
-  // CATEGORY MANAGEMENT
-  "addNewCtg",
-  "deleteCategory",
-  "getDefaultCtg",
-  "getFirstActiveCategory",
-  "getFirstActiveCategoryKeyPair",
-  "getActiveCategories",
-  "getActiveCategoriesKeyPair",
-  "getAllCtg",
-  "getAllCtgColors",
-  "getAllCtgNames",
-  "getCategoryStatus",
-  "getCtgColor",
-  "getCtgLength",
-  "hasCtg",
-  "moveCategoryEntriesToNewCategory",
-  "removeCategoryAndEntries",
-  "setCategoryStatus",
-  "setAllCategoryStatusExcept",
-  "updateCtgColor",
-  "updateCtg"
-  ***************************************
-
-
-  ***************************************
-  // KEYBOARD SHORTCUT MANAGEMENT
-  "getShortcuts",
-  "setShortCut",
-  "setShortcutsStatus",
-  "getShortcutsStatus",
-  ***************************************
-
-  ***************************************
-  // ANIMATION MANAGEMENT
-  "setAnimationStatus",
-  "getAnimationStatus"
-  ***************************************
-
-
-  ***************************************
-  // POPUP/TOAST/NOTIFICATION MANAGEMENT
-  "addActiveOverlay",
-  "removeActiveOverlay",
-  "getActiveOverlay",
-  "hasActiveOverlay",
-  ***************************************
-
-
-  ***************************************
-  // USER UPLOAD/DOWNLOAD MANAGEMNET
-  "validateUserUpload",
-  "setUserUpload",
-  "setDataReconfigCallback",
-  "getUserUpload",
-  "getDataReconfigCallback",
-  ***************************************
-
-
-  ***************************************
-  // FORM MANAGEMENT 
-  "setFormRenderHandle",
-  "getFormRenderHandle",
-
-  "setFormResetHandle",
-  "getFormResetHandle",
-
-  "setRenderFormCallback",
-  "getRenderFormCallback",
-  ***************************************
-
-
-  ***************************************
-  // SIDEBAR MANAGEMENT
-  "setRenderSidebarCallback",
-  "getRenderSidebarCallback"
-  ***************************************
-
-
-  ***************************************
-  // DATEPICKER MANAGEMENT
-  "setResetDatepickerCallback",
-  "getResetDatepickerCallback",
-  ***************************************
-
-
-  ***************************************
-  // CALENDAR MANAGEMENT
-  "setResizeHandle",
-  "getResizeHandle",
-  ***************************************
-]
-*/
-// Store is passed to all calendar views in the following order :
-// ./index > ./renderViews > ./setViews > component
+import Entry from '../factory/entries';
+import { testDate, compareDates } from '../utilities/dateutils';
+import locales from '../locales/en';
+import defautlKeyboardShortcuts from '../locales/kbDefault';
 
 class Store {
-  constructor () {
-    this.store = localStorage.getItem("store")
-      ? JSON.parse(localStorage.getItem("store"))
+  constructor() {
+    this.store = localStorage.getItem('store')
+      ? JSON.parse(localStorage.getItem('store'))
       : [];
 
-    this.userUpload;
+    this.userUpload = {};
 
-    this.ctg = localStorage.getItem("ctg")
-      ? JSON.parse(localStorage.getItem("ctg"))
+    this.ctg = localStorage.getItem('ctg')
+      ? JSON.parse(localStorage.getItem('ctg'))
       : {
-        default: { color: colors.blue[4], active: true },
+        default: { color: locales.colors.blue[4], active: true },
       };
 
     this.activeOverlay = new Set();
@@ -200,52 +73,52 @@ class Store {
   getAllMethodNames() {
     return Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(
       (method) => {
-        return method !== "constructor" && method !== "getStoreStats";
-      }
+        return method !== 'constructor' && method !== 'getStoreStats';
+      },
     );
   }
 
   /* ************************* */
   /* LOCAL STORAGE MANAGEMENT */
   static getStore() {
-    return JSON.parse(localStorage.getItem("store")) || [];
+    return JSON.parse(localStorage.getItem('store')) || [];
   }
 
   static getActiveStore() {
-    return JSON.parse(localStorage.getItem("activeStore")) || [];
+    return JSON.parse(localStorage.getItem('activeStore')) || [];
   }
 
   static getCtg() {
-    return JSON.parse(localStorage.getItem("ctg")) || [];
+    return JSON.parse(localStorage.getItem('ctg')) || [];
   }
 
   static getShortcutsStatus() {
-    return JSON.parse(localStorage.getItem("keyboardShortcutsStatus"));
+    return JSON.parse(localStorage.getItem('keyboardShortcutsStatus'));
   }
 
   static getAnimationStatus() {
-    return JSON.parse(localStorage.getItem("animationStatus"));
+    return JSON.parse(localStorage.getItem('animationStatus'));
   }
 
   // *******************
   static setStore(store) {
-    localStorage.setItem("store", JSON.stringify(store));
+    localStorage.setItem('store', JSON.stringify(store));
   }
 
   static setActiveStore(activeStore) {
-    localStorage.setItem("activeStore", JSON.stringify(activeStore));
+    localStorage.setItem('activeStore', JSON.stringify(activeStore));
   }
 
   static setCtg(ctg) {
-    localStorage.setItem("ctg", JSON.stringify(ctg));
+    localStorage.setItem('ctg', JSON.stringify(ctg));
   }
 
   static setShortcutsStatus(status) {
-    localStorage.setItem("keyboardShortcutsStatus", JSON.stringify(status));
+    localStorage.setItem('keyboardShortcutsStatus', JSON.stringify(status));
   }
 
   static setAnimationStatus(status) {
-    localStorage.setItem("animationStatus", JSON.stringify(status));
+    localStorage.setItem('animationStatus', JSON.stringify(status));
   }
   /* ************************* */
 
@@ -268,7 +141,7 @@ class Store {
 
   getActiveEntries() {
     const active = this.getActiveCategories();
-    if (!active) return [];
+    if (active.length === 0) return [];
     const activeEntries = this.store.filter((entry) => {
       return active ? active.indexOf(entry.category) > -1 : [];
     });
@@ -300,8 +173,9 @@ class Store {
 
   compareEntries(entry1, entry2) {
     for (let key in entry1) {
-      if (key === "id" || key === "coordinates") continue;
-      if (key === "end" || key === "start") {
+      if (key === 'id' || key === 'coordinates') continue;
+
+      if (key === 'end' || key === 'start') {
         if (new Date(entry1[key]).getTime() - new Date(entry2[key]).getTime() !== 0) {
           return false;
         }
@@ -321,49 +195,24 @@ class Store {
 
   /* **************************** */
   /* (ENTRIES) FILTER/SORT/PARTITION/ */
-  searchBy(entries, searchtype, value) {
-    if (entries.length === 0) return;
-    return entries.filter((entry) => {
-      return entry[searchtype].toLowerCase().slice(0, value.length) === value;
-    });
-  }
-
   sortBy(entries, type, direction) {
-    if (entries.length === 0) return;
+    if (entries.length === 0) return [];
+    const targType = ['description', 'title', 'category'].includes(type);
 
-    if (direction === "desc") {
-      return entries.sort((a, b) => {
-        if (type === "start") {
-          return new Date(a.start) - new Date(b.start);
-        } else if (type === "end") {
-          return new Date(a.end) - new Date(b.end);
-        } else if (
-          type === "description" ||
-          type === "title" ||
-          type === "category"
-        ) {
-          return a[type].localeCompare(b[type]);
-        } else {
-          return a[type] - b[type];
-        }
-      });
-    } else {
-      return entries.sort((a, b) => {
-        if (type === "start") {
-          return new Date(b.start) - new Date(a.start);
-        } else if (type === "end") {
-          return new Date(b.end) - new Date(a.end);
-        } else if (
-          type === "description" ||
-          type === "title" ||
-          type === "category"
-        ) {
-          return b[type].localeCompare(a[type]);
-        } else {
-          return b[type] - a[type];
-        }
-      });
-    }
+    const comp = (a, b) => {
+      if (direction === 'desc') return a - b;
+      return b - a;
+    };
+    return entries.sort((a, b) => {
+      if (type === 'start') {
+        return comp(new Date(a.start), new Date(b.start));
+      } else if (type === 'end') {
+        return comp(new Date(a.end), new Date(b.end));
+      } else if (targType) {
+        return comp(a[type].localeCompare(b[type]));
+      }
+      return comp(a[type], b[type]);
+    });
   }
 
   /**
@@ -374,17 +223,13 @@ class Store {
    * ]
    */
   getFirstAndLastEntry() {
-    let sorted = this.sortBy(this.getActiveEntries(), "start", "desc");
-    if (sorted === undefined) {
-      return [0, 0];
-    } else {
-      return [sorted[0].start, sorted[sorted.length - 1].end];
-    }
+    const sorted = this.sortBy(this.getActiveEntries(), 'start', 'desc');
+    return sorted === undefined ? [0, 0] : [sorted[0].start, sorted[sorted.length - 1].end];
   }
   /* **************************** */
 
   /* *************************************** */
-  /* SEGMENT ENTRIES FOR SPECIFIC VIEWS (YEAR/MONTH/...ect)*/
+  /* SEGMENT ENTRIES FOR SPECIFIC VIEWS (YEAR/MONTH/...ect) */
 
   // @generateCoordinates -- (only used in week and day view)
   // generates coordinates based on start and end times for a given entry
@@ -439,7 +284,7 @@ class Store {
     dayEntries.forEach((entry) => {
       entry.coordinates = this.generateCoordinates(
         new Date(entry.start),
-        new Date(entry.end)
+        new Date(entry.end),
       );
 
       if (entry.coordinates.allDay) {
@@ -463,9 +308,9 @@ class Store {
         entryDate.getDate(),
       ];
       return (
-        y === targetDate.getFullYear() &&
-        m === targetDate.getMonth() &&
-        d === targetDate.getDate()
+        y === targetDate.getFullYear()
+        && m === targetDate.getMonth()
+        && d === targetDate.getDate()
       );
     });
   }
@@ -530,7 +375,7 @@ class Store {
     entries.forEach((entry) => {
       entry.coordinates = this.generateCoordinates(
         new Date(entry.start),
-        new Date(entry.end)
+        new Date(entry.end),
       );
 
       if (entry.coordinates.allDay) {
@@ -547,7 +392,7 @@ class Store {
     let activeEntries = this.getActiveEntries();
     if (activeEntries.length === 0) return [];
     return activeEntries.filter(
-      (entry) => new Date(entry.start).getFullYear() === year
+      (entry) => new Date(entry.start).getFullYear() === year,
     );
   }
 
@@ -603,7 +448,7 @@ class Store {
         return key;
       }
     }
-    return "default";
+    return 'default';
   }
 
   getFirstActiveCategoryKeyPair() {
@@ -617,12 +462,8 @@ class Store {
   }
 
   getActiveCategories() {
-    let active = Object.keys(this.ctg).filter((key) => this.ctg[key].active);
-    if (active.length > 0) {
-      return active;
-    } else {
-      active = [];
-    }
+    const active = Object.keys(this.ctg).filter((key) => this.ctg[key].active);
+    return active.length > 0 ? active : [];
   }
 
   getActiveCategoriesKeyPair() {
@@ -639,12 +480,6 @@ class Store {
 
   getAllCtgNames() {
     return Object.keys(this.ctg);
-  }
-
-  getCategoryStatus(category) {
-    if (this.ctg.hasOwnProperty(category)) {
-      return this.ctg[category].active;
-    }
   }
 
   getCtgColor(ctg) {
@@ -735,36 +570,51 @@ class Store {
    */
   updateCtg(newName, newColor, oldName) {
     let entries = Object.entries(this.ctg);
-    let hasColor = newColor !== null;
-    let count = 0;
-    let length = entries.length;
-
-    const isNumeric = (n) => !isNaN(parseFloat(n)) && isFinite(n);
-    if (isNumeric(newName)) {
-      newName = "category " + newName;
+    const hasColor = newColor !== null;
+    const length = entries.length;
+    if (!Number.isNaN(parseFloat(newName)) && Number.isFinite(newName)) {
+      newName = `category ${newName}`;
     }
 
-    for (let [key, value] of entries) {
-      count++;
-      if (count === 1) {
-        // changing the default category;
+    // for (let [key, value] of entries) {
+    for (let i = 0; i < entries.length; i++) {
+      const key = entries[i][0];
+      if (i === 0) {
         if (oldName === key) {
-          entries[0][0] = newName;
+          entries[i][0] = newName;
           if (hasColor) {
-            entries[0][1].color = newColor;
+            entries[i][1].color = newColor;
           }
         }
       } else {
         if (oldName === key) {
-          entries[count - 1][0] = newName;
+          entries[i][0] = newName;
           if (hasColor) {
-            entries[count - 1][1].color = newColor;
+            entries[i][1].color = newColor;
           }
         }
       }
+      // count++;
+      // if (count === 1) {
+      //   // changing the default category;
+      //   if (oldName === key) {
+      //     entries[0][0] = newName;
+      //     if (hasColor) {
+      //       entries[0][1].color = newColor;
+      //     }
+      //   }
+      // } else {
+      //   if (oldName === key) {
+      //     entries[count - 1][0] = newName;
+      //     if (hasColor) {
+      //       entries[count - 1][1].color = newColor;
+      //     }
+      //   }
+      // }
     }
+
     if (entries.length !== length) {
-      console.error("something went wrong with category name/color change");
+      console.error('something went wrong with category name/color change');
       return;
     } else {
       this.ctg = Object.fromEntries(entries);
@@ -778,16 +628,6 @@ class Store {
   /*  KEYBOARD SHORTCUT MANAGEMENT */
   getShortcuts() {
     return this.keyboardShortcuts;
-  }
-
-  setShortCut(shortcut) {
-    const keys = Object.keys(this.getShortcuts());
-    let idx = keys.indexOf(shortcut);
-    if (idx > -1) {
-      return `Shortcut (${shortcut}) is already in use`;
-    } else {
-      return;
-    }
   }
 
   setShortcutsStatus(status) {
@@ -831,7 +671,7 @@ class Store {
       return;
     } else {
       this.activeOverlay = new Set(
-        [...this.activeOverlay].filter((o) => o !== overlay)
+        [...this.activeOverlay].filter((o) => o !== overlay),
       );
       return;
     }
@@ -849,45 +689,12 @@ class Store {
   /* ************************ */
   /*  JSON UPLOAD & DOWNLOAD */
   validateUserUpload(userUpload) {
-    const keys = Object.keys(userUpload);
-    let message = {};
-    if (keys.length > localStoreKeyNames.length) {
-      message.err1 = "invalid number of keys (too many)";
-    }
-
-    for (let i = 0; i < keys.length; i++) {
-      if (!localStoreKeyNames.includes(keys[i])) {
-        let errname = "err" + Object.keys(message).length;
-        message[errname] = "invalid key: " + keys[i];
-      }
-    }
-
-    if (Object.keys(message).length > 0) {
-      return message;
-    } else {
-      return true;
-    }
+    console.log(userUpload);
+    return true;
   }
 
   setUserUpload(userUpload) {
-    const validation = this.validateUserUpload(userUpload);
-    let validated;
-    if (validation === true) {
-      localStorage.clear();
-      validated = true;
-      for (const [key, value] of Object.entries(userUpload)) {
-        localStorage.setItem(key, value);
-      }
-    } else {
-      return validation;
-    }
-    if (validated) {
-      const refresh = localStorage.getItem("refresh");
-      if (refresh === null) {
-        window.location.reload();
-        window.localStorage.setItem("refresh", "1");
-      }
-    }
+    this.userUpload = userUpload;
   }
 
   getUserUpload() {
@@ -929,7 +736,7 @@ class Store {
   }
 
   setResetPreviousViewCallback(callback) {
-    this.handleRenders.calendars["previous"].reset = callback;
+    this.handleRenders.calendars['previous'].reset = callback;
   }
 
   setRenderCategoriesCallback(callback) {
@@ -941,7 +748,7 @@ class Store {
   }
 
   getResetPreviousViewCallback() {
-    return this.handleRenders.calendars["previous"].reset;
+    return this.handleRenders.calendars['previous'].reset;
   }
 
   getResetDatepickerCallback() {
@@ -996,5 +803,5 @@ class Store {
   /* ************************************ */
 }
 
-// single
-export default new Store();
+const store = new Store();
+export default store;

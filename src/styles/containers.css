@@ -23,17 +23,11 @@
 }
 
 .transition--left {
-  -webkit-animation: swipe-left 200ms ease-out;
   animation: swipe-left 200ms ease-out;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
 }
 
 .transition--right {
-  -webkit-animation: swipe-right 200ms ease-out;
   animation: swipe-right 200ms ease-out;
-  -webkit-animation-fill-mode: forwards;
-  animation-fill-mode: forwards;
 }
 
 .collapse-view {
@@ -124,8 +118,7 @@
 .listview {
   height: 100%;
   width: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden scroll;
 }
 
 .listview::-webkit-scrollbar-thumb {

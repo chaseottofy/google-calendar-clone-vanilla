@@ -1,21 +1,21 @@
 /**
- * 
- * @param {callback} func 
- * @param {number} limit 
- * @returns strict debounce 
+ *
+ * @param {callback} func
+ * @param {number} limit
+ * @returns strict debounce
  */
 function debounce(func, limit) {
   let timeoutId;
-  return function (...args) {
+  return function(...args) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func.apply(this, args), limit);
   };
 }
 /**
- * 
- * @param {*} e 
- * @param {*} element 
- * 
+ *
+ * @param {*} e
+ * @param {*} element
+ *
  * With the exception of popup modals, all events in the app
  * are delegated from their parent element.
  */
@@ -24,11 +24,14 @@ function getClosest(e, element) {
 }
 
 function hextorgba(hex, alpha) {
-  let r = 0, g = 0, b = 0, a = alpha;
-  r = "0x" + hex[1] + hex[2];
-  g = "0x" + hex[3] + hex[4];
-  b = "0x" + hex[5] + hex[6];
-  return "rgba(" + +r + "," + +g + "," + +b + "," + a + ")";
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  let a = alpha;
+  r = '0x' + hex[1] + hex[2];
+  g = '0x' + hex[3] + hex[4];
+  b = '0x' + hex[5] + hex[6];
+  return 'rgba(' + +r + ',' + +g + ',' + +b + ',' + a + ')';
 }
 
 function generateId() {
@@ -36,17 +39,19 @@ function generateId() {
 }
 
 const throttle = (fn, wait) => {
-  let inThrottle, lastFn, lastTime;
-  return function () {
-    const context = this,
-      args = arguments;
+  let inThrottle;
+  let lastFn;
+  let lastTime;
+  return function() {
+    const context = this;
+    const args = arguments;
     if (!inThrottle) {
       fn.apply(context, args);
       lastTime = Date.now();
       inThrottle = true;
     } else {
       clearTimeout(lastFn);
-      lastFn = setTimeout(function () {
+      lastFn = setTimeout(function() {
         if (Date.now() - lastTime >= wait) {
           fn.apply(context, args);
           lastTime = Date.now();
@@ -56,68 +61,54 @@ const throttle = (fn, wait) => {
   };
 };
 
-
 function setTheme(context) {
-  const appBody = document.querySelector(".body");
-  const colorSchemeMeta = document.getElementsByName("color-scheme")[0];
+  const appBody = document.querySelector('.body');
+  const colorSchemeMeta = document.getElementsByName('color-scheme')[0];
   const currentScheme = context.getColorScheme();
-  const hasLightMode = appBody.classList.contains("light-mode");
-  const hasContrastMode = appBody.classList.contains("contrast-mode");
+  const hasLightMode = appBody.classList.contains('light-mode');
+  const hasContrastMode = appBody.classList.contains('contrast-mode');
 
   const setColorSchema = () => {
-    if (currentScheme === "light" && hasLightMode && !hasContrastMode) {
-      return;
-    } else if (currentScheme === "dark" && !hasLightMode && !hasContrastMode) {
-      return;
-    } else if (currentScheme === "contrast" && hasContrastMode && !hasLightMode) {
+    if (
+      (currentScheme === 'light' && hasLightMode && !hasContrastMode) ||
+      (currentScheme === 'dark' && !hasLightMode && !hasContrastMode) ||
+      (currentScheme === 'contrast' && hasContrastMode && !hasLightMode)
+    ) {
       return;
     }
 
     const setlight = () => {
-      context.setColorScheme("light");
-      colorSchemeMeta.setAttribute("content", "light");
-      appBody.classList.remove("contrast-mode");
-      appBody.classList.add("light-mode");
+      context.setColorScheme('light');
+      colorSchemeMeta.setAttribute('content', 'light');
+      appBody.classList.remove('contrast-mode');
+      appBody.classList.add('light-mode');
     };
 
     const setdark = () => {
-      context.setColorScheme("dark");
-      colorSchemeMeta.setAttribute("content", "dark light");
-      appBody.classList.remove("light-mode");
-      appBody.classList.remove("contrast-mode");
+      context.setColorScheme('dark');
+      colorSchemeMeta.setAttribute('content', 'dark light');
+      appBody.classList.remove('light-mode');
+      appBody.classList.remove('contrast-mode');
     };
 
     const setcontrast = () => {
-      context.setColorScheme("contrast");
-      colorSchemeMeta.setAttribute("content", "dark");
-      appBody.classList.remove("light-mode");
-      appBody.classList.add("contrast-mode");
+      context.setColorScheme('contrast');
+      colorSchemeMeta.setAttribute('content', 'dark');
+      appBody.classList.remove('light-mode');
+      appBody.classList.add('contrast-mode');
     };
 
-    if (currentScheme === "light") {
-      setlight();
-      return;
-    }
-
-    if (currentScheme === "contrast") {
-      setcontrast();
-      return;
-    }
-
-    if (currentScheme === "dark") {
-      setdark();
-      return;
-    }
+    if (currentScheme === 'light') setlight();
+    else if (currentScheme === 'contrast') setcontrast();
+    else if (currentScheme === 'dark') setdark();
   };
   setColorSchema();
 }
 
-
-
 /**
- * 
- * @param {number} popupWidth 
- * @param {number} popupHeight 
+ *
+ * @param {number} popupWidth
+ * @param {number} popupHeight
  * @param {array} coords [x: e.clientX, y: e.clientY]
  * @param {array} windowCoords [x: window.innerWidth, y: window.innerHeight]
  * @param {boolean} center should popup be centered ?
@@ -147,9 +138,8 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
 }
 
 function isNumeric(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
+  return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
 }
-
 
 export default debounce;
 export {
@@ -159,5 +149,5 @@ export {
   throttle,
   setTheme,
   placePopup,
-  isNumeric
-}; 
+  isNumeric,
+};

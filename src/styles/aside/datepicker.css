@@ -5,7 +5,7 @@
   background: var(--black1);
   z-index: 1020;
   padding: 4px 14px 9px 14px;
-  box-shadow: rgba(48, 52, 54, 0.3) 0px 1px 3px 0px, rgba(48, 52, 54, 0.15) 0px 4px 8px 3px;
+  box-shadow: rgba(48, 52, 54, 0.3) 0 1px 3px 0, rgba(48, 52, 54, 0.15) 0 4px 8px 3px;
   border-radius: 8px;
 }
 
@@ -99,8 +99,7 @@
   height: 48px;
   grid-template-columns: 32px 1fr 32px;
   grid-template-rows: 1fr;
-  align-items: center;
-  justify-items: center;
+  place-items: center center;
   margin: 0 auto;
   padding: 8px 16px 0 16px;
 }
@@ -116,6 +115,7 @@
   border-radius: 50%;
   transition: all 100ms ease-in-out;
 }
+
 .yearpicker-prev svg,
 .yearpicker-next svg {
   width: 22px;
@@ -143,8 +143,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(4, 1fr);
-  row-gap: 8px;
-  column-gap: 4px;
+  gap: 8px 4px;
   padding: 6px 2px 12px 2px;
   user-select:none;
 }
@@ -156,7 +155,6 @@
   font-size: 11px;
   font-weight: 400;
   color: var(--offwhite2);
-  cursor: pointer;
   transition: all 100ms ease-in-out;
   cursor: pointer;
   border-radius: 4px;
@@ -175,6 +173,7 @@
 .monthpicker__active-month:hover {
   background: var(--black1);
 }
+
 /* END MONTH/YEAR PICKER */
 
 

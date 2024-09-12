@@ -1,32 +1,31 @@
 export default {
   labels: {
     monthsLong: [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
+      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
     ],
     monthsShortLower: [
-      'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'
+      'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec',
     ],
     monthsLongLower: [
-      'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'
+      'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december',
     ],
     monthsShort: [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
     ],
     weekdaysLong: [
-      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+      'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday',
     ],
     weekdaysShort: [
-      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
+      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
     ],
     weekdaysNarrow: [
-      'S', 'M', 'T', 'W', 'T', 'F', 'S'
+      'S', 'M', 'T', 'W', 'T', 'F', 'S',
     ],
-
+    numbers: [
+      'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+      'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen',
+    ],
   },
-
-  /*
-    - the following are colors for calendar categories
-  */
   colors: {
     red: {
       1: '#DF2A79',
@@ -37,7 +36,6 @@ export default {
       6: '#690000',
       7: '#460000',
     },
-
     orange: {
       1: '#EE756A',
       2: '#E84334',
@@ -47,7 +45,6 @@ export default {
       6: '#6B350C',
       7: '#402007',
     },
-
     green: {
       1: '#1E9E98',
       2: '#1A8A84',
@@ -57,7 +54,6 @@ export default {
       6: '#09312F',
       7: '#072726',
     },
-
     blue: {
       1: '#14489A',
       2: '#125ab8',
@@ -67,7 +63,6 @@ export default {
       6: '#1B3375',
       7: '#142555',
     },
-
     purple: {
       1: '#42338B',
       2: '#513FAB',
@@ -77,7 +72,6 @@ export default {
       6: '#342650',
       7: '#271D3C',
     },
-
     grey: {
       1: '#858F93',
       2: '#4D5458',

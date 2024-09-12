@@ -40,8 +40,8 @@
   background: var(--mediumgrey1)
 }
 
-.menu:hover:after,
-.menu:focus-visible:after {
+.menu:hover::after,
+.menu:focus-visible::after {
   background: var(--mediumgrey1);
   border-radius: 2px;
   content: attr(data-tooltip);
@@ -57,8 +57,8 @@
 }
 
 .logo,
-.menu:hover:after,
-.menu:focus-visible:after {
+.menu:hover::after,
+.menu:focus-visible::after {
   align-items: center;
   display: flex;
   justify-content: center;
@@ -71,7 +71,7 @@
   width: 42px;
 }
 
-.logo:after {
+.logo::after {
   font-family: var(--primaryFont);
   align-items: center;
   color: #1d75f1;
@@ -171,12 +171,12 @@
   background: var(--mediumgrey1);
 }
 
-.btn-today:hover:after,
-.next:hover:after,
-.prev:hover:after,
-.btn-today:focus-visible:after,
-.next:focus-visible:after,
-.prev:focus-visible:after {
+.btn-today:hover::after,
+.next:hover::after,
+.prev:hover::after,
+.btn-today:focus-visible::after,
+.next:focus-visible::after,
+.prev:focus-visible::after {
   font-family: var(--primaryFont) !important;
   align-items: center;
   background: var(--mediumgrey1);
@@ -197,10 +197,10 @@
   z-index: 2000;
 }
 
-.next:hover:after,
-.prev:hover:after,
-.next:focus-visible:after,
-.prev:focus-visible:after {
+.next:hover::after,
+.prev:hover::after,
+.next:focus-visible::after,
+.prev:focus-visible::after {
   width: 70px;
 }
 
@@ -281,8 +281,8 @@
   transform: scale(0.9);
 }
 
-.h-search:hover:after,
-.settings:hover:after {
+.h-search:hover::after,
+.settings:hover::after {
   align-items: center;
   background: var(--mediumgrey1);
   border-radius: 2px;
@@ -314,7 +314,6 @@
 }
 
 .select__modal {
-  -webkit-appearance: none;
   appearance: none;
   border: var(--bordergrey);
   border-radius: var(--borderradius);
@@ -452,15 +451,18 @@
 
   .logo,
   .logo svg,
-  .logo:after {
+  .logo::after {
     height: 36px;
     width: 36px
   }
 
-  .logo:after {
+  .logo::after {
     font-size: 12px;
+
     /* line-height: 36px; */
+
     /* text-align: center; */
+
     /* text-indent: -.5px */
   }
 
@@ -511,15 +513,17 @@
 
   .logo,
   .logo svg,
-  .logo:after {
+  .logo::after {
     height: 32px;
     width: 32px
   }
 
-  .logo:after {
+  .logo::after {
     font-size: 10px;
+
     /* letter-spacing: -.5px; */
     line-height: 32px;
+
     /* text-indent: 0 */
   }
 
