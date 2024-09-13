@@ -14,10 +14,7 @@ const ctgErrMsg = document.querySelector('.ctg-input--err');
 export default function createCategoryForm(store, selectedCategory, editing, resetParent) {
   const colorObject = store.getColors();
   const colors = Object.values(colorObject);
-  console.log(colors);
-
   const checkIcon = createCheckIcon('var(--taskcolor)');
-
   const formhelper = new CatFormHelper(
     selectedCategory.name,
     selectedCategory.color,
@@ -39,10 +36,8 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function createPickerOptions(currentColor) {
-    // console.log(currentColor)
     colorPickerOptions.innerText = '';
     for (const color of colors) {
-      console.log(color);
       for (const key in color) {
         colorPickerOptions.append(
           createColorOption(color[key], currentColor),
@@ -54,7 +49,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   function handleColorSelection(e, current) {
     const target = e.target;
     const color = target.getAttribute('data-color-hex');
-    console.log(current);
     if (color === current) return;
 
     const colorOptions = document.querySelectorAll('.color-picker--option');

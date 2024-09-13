@@ -251,7 +251,6 @@ export default function getSidebarSubMenu(store, context) {
     if (fromicon) {
       animationsSwitchBtn.checked = status;
     }
-    console.log(status);
     appBody.setAttribute('data-disable-transitions', !status);
   }
 

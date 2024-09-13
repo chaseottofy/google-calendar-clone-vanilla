@@ -55,7 +55,7 @@ class Store {
 
     this.keyboardShortcuts = defautlKeyboardShortcuts;
     this.keyboardShortcutsStatus = true;
-    this.animationStatus = true;
+    this.animationStatus = false;
   }
 
   getInitStore() {
@@ -644,7 +644,11 @@ class Store {
 
   getAnimationStatus() {
     const status = Store.getAnimationStatus();
-    return status !== null ? status : true;
+    if (status === null) {
+      this.animationStatus = false;
+      storage.setItem('animationStatus', JSON.stringify(false));
+    }
+    return this.animationStatus;
   }
 
   setAnimationStatus(status) {
