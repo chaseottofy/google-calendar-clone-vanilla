@@ -223,10 +223,9 @@
   height: 36px;
   width: auto;
   min-width: 120px;
-  /* width: 120px; */
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color.2s ease-in-out;
+  transition: background-color 200ms ease-in-out;
 }
 
 .delete-popup__cancel {

@@ -1,14 +1,17 @@
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 // const BundelAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // "analyze": "webpack --profile --json > stats.json"
+// const postcssPresetEnv = require('postcss-preset-env');
+// const autoprefixer = require('autoprefixer');
 const TerserPlugin = require('terser-webpack-plugin');
-const path = require('path');
 
 module.exports = (env, argv) => {
   const { mode } = argv;
+  const isDev = mode === 'development';
   const config = {
     entry: './src/index.js',
     mode: mode,
@@ -21,7 +24,7 @@ module.exports = (env, argv) => {
       hot: true,
       compress: true,
     },
-    devtool: mode === 'development' ? 'source-map' : false,
+    devtool: isDev ? 'source-map' : false,
     module: {
       rules: [
         {
@@ -35,7 +38,7 @@ module.exports = (env, argv) => {
           use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
-          test: /\.(woff|woff2)$/i,
+          test: /\.woff2?$/i,
           type: 'asset/resource',
         },
         {
@@ -46,9 +49,14 @@ module.exports = (env, argv) => {
     },
 
     plugins: [
-      // new BundelAnalyzerPlugin(),
+      new WebpackManifestPlugin(
+        {
+          fileName: 'manifest.json',
+          basePath: 'dist/',
+        },
+      ),
       new HtmlWebpackPlugin({
-        title: 'output management',
+        title: 'google-calendar-clone-vanilla',
         template: './src/index.html',
         favicon: './src/favicon.ico',
         filename: 'index.html',
@@ -60,32 +68,15 @@ module.exports = (env, argv) => {
         },
       }),
       new MiniCssExtractPlugin(),
-      new WebpackManifestPlugin(
-        {
-          fileName: 'manifest.json',
-          basePath: 'dist/',
-        },
-      ),
     ],
 
     optimization: {
-      minimize: mode === 'production',
+      minimize: !isDev,
       minimizer: [
         new TerserPlugin({
           extractComments: true,
         }),
-        new CssMinimizerPlugin({
-          minimizerOptions: [
-            {
-              preset: require.resolve('cssnano-preset-advanced'),
-            },
-          ],
-          minify: [
-            CssMinimizerPlugin.cssnanoMinify,
-            CssMinimizerPlugin.cleanCssMinify,
-          ],
-        }),
-        // new CssMinimizerPlugin(),
+        new CssMinimizerPlugin(),
       ],
     },
     output: {

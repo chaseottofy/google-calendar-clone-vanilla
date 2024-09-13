@@ -222,20 +222,17 @@ export default function renderViews(context, datepickerContext, store) {
       sbFooter.onmousedown = null;
       sbCategories.onmousedown = null;
       sbDatepicker.onclick = null;
-
-      // clear categories/datepicker content when inactive
       setTimeout(() => {
         sbDatepickerBody.innerText = '';
         sbCategoriesWrapper.innerText = '';
       }, 100);
-
       viewsContainer.classList.remove('container__calendars-sb-active');
       sidebar.classList.add('hide-sidebar');
       toggleForm.classList.remove('hide-toggle--form');
       dateTimeWrapper.classList.remove('datetime-inactive');
       dateTimeBtn.removeAttribute('tabindex');
       listviewBody.removeAttribute('style');
-
+      // clear categories/datepicker content when inactive
     } else {
       toggleForm.onclick = null;
       sbToggleForm.onclick = handleForm;

@@ -1,9 +1,7 @@
 /*! *************************************!*\
 // (CSS)
 /*!*************************************! */
-// <html>
 import './styles/root.css';
-// </html>
 // <header>
 import './styles/header.css';
 // </header>
@@ -36,7 +34,6 @@ import setAppDefaults from './config/appDefaults';
 import renderViews from './config/renderViews';
 import context, { datepickerContext } from './context/appContext';
 import store from './context/store';
-// </aside>
 
 /*! *************************************! */
 // check if local storage is available

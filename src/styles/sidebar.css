@@ -1,38 +1,3 @@
-.sidebar {
-  position: fixed;
-  left: 0;
-  height: calc(100% - 60px);
-  top: 60px;
-  width: 248px;
-  background-color: var(--black1);
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--black1);
-  overflow: hidden;
-  transform: translateX(0);
-  z-index: 901;
-  will-change: auto;
-}
-
-.sidebar-transition {
-  transition-duration: 250ms;
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
-}
-
-.hide-sidebar {
-  transform: translateX(-248px);
-  box-shadow: none !important;
-  user-select: none;
-}
-
-.sidebar--dragged-over {
-  opacity: .1;
-  user-select: none;
-  pointer-events: none;
-  transition: opacity 250ms cubic-bezier(.4, 0, .2, 1);
-}
-
 .sidebar-content--header {
   height: 64px;
   min-height: 56px;
@@ -74,7 +39,6 @@
   align-items: center;
   pointer-events: none;
   overflow: hidden;
-  transition: all 0.3s ease-in-out;
 }
 
 .sb-toggle-form-btn__content {
@@ -104,7 +68,6 @@
   border-radius: 18px;
   cursor: pointer;
   box-shadow: var(--box-shadow4);
-  transition: box-shadow 0.2s ease-in-out;
   margin-bottom: 4px;
 }
 
@@ -426,7 +389,6 @@
   font-family: var(--secondaryFont);
   font-weight: 400;
   cursor: pointer;
-  transition: color .2s ease-in-out;
   user-select: none;
 }
 
@@ -436,24 +398,4 @@
 
 .sb__terms-privacy-project div span:hover {
   color: var(--white1);
-}
-
-@media screen and (max-width: 840px) {
-  .sidebar {
-    box-shadow: var(--box-shadow-sbfixed);
-  }
-}
-
-@media screen and (max-width: 530px) {
-  .sidebar {
-    top: 53px;
-    height: calc(100% - 53px);
-  }
-}
-
-@media screen and (max-height: 470px) {
-  .sidebar {
-    top: 53px;
-    height: calc(100% - 53px);
-  }
 }

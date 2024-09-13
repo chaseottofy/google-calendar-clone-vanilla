@@ -49,7 +49,6 @@
   font-weight: 500;
   justify-content: center;
   user-select: none;
-  transition: background-color 200ms ease-in-out;
 }
 
 .dayview--header-day__number--today {

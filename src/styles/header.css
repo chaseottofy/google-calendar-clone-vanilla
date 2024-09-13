@@ -32,7 +32,7 @@
   height: 42px;
   justify-content: center;
   margin-left: 10px;
-  transition: background-color.2s ease-in-out;
+  transition: background-color 200ms ease-in-out;
   width: 42px;
 }
 

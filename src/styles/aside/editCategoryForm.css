@@ -170,7 +170,7 @@
   display: flex;
   height: 36px;
   justify-content: center;
-  transition: background-color.2s ease-in-out;
+  transition: background-color 200ms ease-in-out;
   width: 100%;
 }
 

@@ -3,8 +3,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local(''),
-    url('../google-sans-regular.woff2') format("woff2");
+  src: url('../assets/gsr.woff2') format("woff2");
 }
 
 @font-face {
@@ -12,24 +11,23 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: local(''), url('../google-sans-medium.woff2'), format("woff2");
+  src: url('../assets/gsm.woff2') format("woff2");
 }
 
 @font-face {
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: local('Roboto'), local('Roboto-Regular') url('../roboto-v30-latin-regular.woff2') format('woff2');
+  src: url('../assets/reg.woff2') format('woff2');
 }
 
 @font-face {
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: local('Roboto Medium'), local('Roboto-Medium'),
-    url('../roboto-v30-latin-500.woff2') format('woff2');
+  src: url('../assets/rfive.woff2') format('woff2');
 }
 
 :root {
