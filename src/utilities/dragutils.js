@@ -134,7 +134,7 @@ function handleOverlap(col, view, boxes) {
   // const baseClass = boxClasses[view];
   // const { base, ontop, prepend } = baseClass;
   // const { dataIdx: boxIdxAttr, dataId: boxIdAttr } = boxAttributes[view];
-  const { ontop } = boxClasses;
+  const { ontop } = boxClasses[view];
   const { dataId: boxIdAttr } = boxAttributes[view];
   const { leftCoord, widthCoord } = boxGrid;
 
@@ -144,7 +144,7 @@ function handleOverlap(col, view, boxes) {
   if (currBoxes.length === 0) return;
 
   const collisions = groupOverlapping(currBoxes);
-  for (const group of collisions) {
+  collisions.forEach((group, idx) => {
     for (let i = 0; i < group.length; i++) {
       const currBox = group[i];
       const { id } = currBox;
@@ -152,14 +152,16 @@ function handleOverlap(col, view, boxes) {
 
       const currIdx = i % widthCoord.length;
       boxElement.style.zIndex = i + 1;
-      if (i === 0) {
-        boxElement.classList.remove(ontop);
-      } else {
+      // if (i === 0) {
+      //   // boxElement.classList.remove(ontop);
+      // } else {
+      // }
+      if (i > 0) {
         boxElement.classList.add(ontop);
       }
       setBoxW(boxElement, currIdx, leftCoord, widthCoord);
     }
-  }
+  });
 }
 
 function setStylingForEvent(clause, wrapper, store) {

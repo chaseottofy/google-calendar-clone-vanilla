@@ -2,11 +2,11 @@
 
 demo: lightmode / weekview
 
-![screen](screenshots/screen_weekview.png)
+![screen](screenshots/wv1.png)
 
-demo: darkmode / monthview
+![screen](screenshots/mv1.png)
 
-![screen](screenshots/screen_month_dark.png)
+![screen](screenshots/dv1.png)
 
 Contact: ottofy@zohomail.com
 
