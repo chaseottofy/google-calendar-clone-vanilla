@@ -131,9 +131,11 @@ function groupOverlapping(tasks) {
 
 function handleOverlap(col, view, boxes) {
   const { boxClasses, boxAttributes, boxGrid } = identifiers;
-  const baseClass = boxClasses[view];
-  const { base, ontop, prepend } = baseClass;
-  const { dataIdx: boxIdxAttr, dataId: boxIdAttr } = boxAttributes[view];
+  // const baseClass = boxClasses[view];
+  // const { base, ontop, prepend } = baseClass;
+  // const { dataIdx: boxIdxAttr, dataId: boxIdAttr } = boxAttributes[view];
+  const { ontop } = boxClasses;
+  const { dataId: boxIdAttr } = boxAttributes[view];
   const { leftCoord, widthCoord } = boxGrid;
 
   const currBoxes = view === 'week'
@@ -158,21 +160,6 @@ function handleOverlap(col, view, boxes) {
       setBoxW(boxElement, currIdx, leftCoord, widthCoord);
     }
   }
-  // console.log(boxes.getBoxes(), 'here');
-  // const collisions = view === 'day'
-  //   ? boxes.checkForCollision()
-  //   : boxes.checkForCollision(col);
-
-  // for (let i = 0; i < collisions.length; i++) {
-  //   const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`);
-  //   const idx = i % widthCoord.length;
-  //   const identity = `${prepend}${numArr[idx]}`;
-  //   const identityClass = `${base} ${identity}`;
-
-  //   box.setAttribute('class', i === 0 ? identityClass : `${identityClass} ${ontop}`);
-  //   box.setAttribute(boxIdxAttr, identity);
-  //   setBoxW(box, idx, leftCoord, widthCoord);
-  // }
 }
 
 function setStylingForEvent(clause, wrapper, store) {

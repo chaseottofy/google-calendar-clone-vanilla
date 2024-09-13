@@ -335,6 +335,7 @@ svg {
 ::-webkit-scrollbar-thumb {
   background-color: var(--scrollerThumbBackground);
   border: var(--scrollerThumbBorder);
+
   /* border-radius: 20px; */
 }
 

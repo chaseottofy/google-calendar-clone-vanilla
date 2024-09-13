@@ -19,8 +19,10 @@
   width: 100%;
   max-width: 360px;
   height: auto;
+
   /* max-height: 520px; */
   max-height: min(520px, 90%);
+
   /*
   */
   z-index: 903;
