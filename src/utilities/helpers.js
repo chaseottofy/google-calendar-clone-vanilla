@@ -124,14 +124,14 @@ function placePopup(
   popupHeight,
   coords,
   windowCoords,
-  center,
-  targetWidth,
+  center = false,
+  targetWidth = 0,
 ) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;
   const [winW, winH] = windowCoords;
   let popupX;
-  if (center) {
+  if (center && targetWidth) {
     popupX = x - (popupW / 2) + (targetWidth / 2);
     if (popupWidth + x + 4 >= winW) {
       popupX = winW - popupW - 4;

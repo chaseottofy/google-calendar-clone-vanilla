@@ -10,7 +10,7 @@
   <meta name="description" content="personal calendar application">
   <meta name="keywords" content="vanilla, javascript, web application">
   <link rel="icon" href="./favicon.ico" type="image/x-icon" />
-  
+
   <title>Calendar</title>
 </head>
 
@@ -621,9 +621,9 @@
   </aside>
 
   <!-- options for header select element (pick view) -->
-  <aside class="change-view--wrapper toggle-options">
+  <aside class="change-view--wrapper toggle-options" data-view-option-active="month">
     <div class="change-view--options">
-      <div class="change-view--option">
+      <div class="change-view--option" data-view-option-active="month">
         <div class="view-option" data-view-option="day" data-view-key="D">Day</div>
         <div class="view-option" data-view-option="week" data-view-key="W">Week</div>
         <div class="view-option" data-view-option="month" data-view-key="M">Month</div>
@@ -653,12 +653,7 @@
 
       <input type="text" class="category__form-input" placeholder="Category Name" maxlength="20" minlength="1" id="ctgFormInput" required>
       <div class="color__picker">
-        <div class="color-picker__header">
-          <div class="color-picker__title">color</div>
-        </div>
-
         <div class="color-picker__options"></div>
-
       </div>
     </div>
 

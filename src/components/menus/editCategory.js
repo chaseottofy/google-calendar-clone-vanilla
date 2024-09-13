@@ -1,20 +1,14 @@
-// import locales from '../../locales/en';
 import CatFormHelper from '../../factory/categories';
-import { isNumeric, placePopup } from '../../utilities/helpers';
-import { createCheckIcon } from '../../utilities/svgs';
-// import adjustColorHue from '../../utilities/editcolors';
+import { isNumeric } from '../../utilities/helpers';
 
 const ctgform = document.querySelector('.category__form');
 const ctgformoverlay = document.querySelector('.category__form-overlay');
 const ctgformInput = document.querySelector('.category__form-input');
-const colorPickerTitle = document.querySelector('.color-picker__title');
 const colorPickerOptions = document.querySelector('.color-picker__options');
 const ctgErrMsg = document.querySelector('.ctg-input--err');
 
 export default function createCategoryForm(store, selectedCategory, editing, resetParent) {
-  const colorObject = store.getColors();
-  const colors = Object.values(colorObject);
-  const checkIcon = createCheckIcon('var(--taskcolor)');
+  const colors = Object.values(store.getColors());
   const formhelper = new CatFormHelper(
     selectedCategory.name,
     selectedCategory.color,
@@ -25,23 +19,19 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     colorOption.classList.add('color-picker--option');
     colorOption.style.backgroundColor = color;
     colorOption.setAttribute('data-color-hex', color);
-
     if (color === selected) {
-      colorOption.append(checkIcon);
       colorOption.classList.add('selected-color');
       formhelper.setColor(color);
     }
-
     return colorOption;
   }
 
   function createPickerOptions(currentColor) {
-    colorPickerOptions.innerText = '';
-    for (const color of colors) {
-      for (const key in color) {
-        colorPickerOptions.append(
-          createColorOption(color[key], currentColor),
-        );
+    if (colorPickerOptions.children.length === 0) {
+      for (const color of colors) {
+        for (const val of Object.values(color)) {
+          colorPickerOptions.append(createColorOption(val, currentColor));
+        }
       }
     }
   }
@@ -50,15 +40,10 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     const target = e.target;
     const color = target.getAttribute('data-color-hex');
     if (color === current) return;
-
-    const colorOptions = document.querySelectorAll('.color-picker--option');
-    for (const option of colorOptions) {
-      option.innerText = '';
-    }
-    target.append(checkIcon);
     document?.querySelector('.selected-color')?.classList.remove('selected-color');
     target.classList.add('selected-color');
-    colorPickerTitle.style.backgroundColor = color;
+    ctgformInput.style.border = `2px solid ${color}`;
+    e.target.blur();
     formhelper.setColor(color);
   }
 
@@ -73,13 +58,13 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
   function validateNewCategory(categoryName, color) {
     let trimName = categoryName.trim().replaceAll(/[^\d\sA-Za-z]+|\s{2,}/g, ' ').trim();
+    console.log(trimName);
 
     if (isNumeric(trimName)) {
       trimName = `category ${trimName}`;
     }
 
     const origName = formhelper.getOriginalName();
-
     let errormsg = false;
     if (trimName.length === 0) {
       formhelper.setErrMsg('Category name is required');
@@ -118,11 +103,11 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function closeCategoryForm() {
-
+    console.log(resetParent);
     if (resetParent !== null) {
       resetParent.removeAttribute('style');
     }
-    colorPickerOptions.innerText = '';
+    // colorPickerOptions.innerText = '';
     ctgform.classList.add('hide-ctg-form');
     ctgformoverlay.classList.add('hide-ctg-form');
     ctgformInput.value = '';
@@ -139,15 +124,11 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       if (!ctgErrMsg.classList.contains('hide-ctg-err')) {
         ctgErrMsg.classList.add('hide-ctg-err');
         ctgformInput.focus();
-        return;
       } else {
         closeCategoryForm();
-        return;
       }
-    }
-    if (val === 'enter') {
+    } else if (val === 'enter') {
       validateNewCategory(ctgformInput.value, formhelper.getColor());
-      return;
     }
   }
 
@@ -160,27 +141,18 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     if (resetParent !== null) {
       const rect = resetParent.getBoundingClientRect();
       const getright = Number.parseInt(rect.right);
-      const gettop = Number.parseInt(rect.top);
-      const [x, y] = placePopup(
-        280,
-        400,
-        [getright - 20, gettop - 28],
-        [window.innerWidth, window.innerHeight],
-        false,
-        null,
-      );
-      ctgform.setAttribute('style', `left:${x}px;top:${y}px;`);
+      ctgform.setAttribute('style', `left:${getright}px;top:0;margin-top:auto;`);
     } else {
-      ctgform.setAttribute('style', 'left:5%;top:5%;right:5%;margin:auto;');
+      ctgform.setAttribute('style', 'inset:5%;margin:auto;');
     }
 
     ctgErrMsg.classList.add('hide-ctg-err');
-    colorPickerTitle.style.backgroundColor = formhelper.getColor();
+    ctgformInput.style.border = `2px solid ${formhelper.getColor()}`;
     setTimeout(() => {
       if (isEditing) {
         ctgformInput.value = formhelper.getName();
       } else {
-        ctgformInput.placeholder = 'Create new category';
+        ctgformInput.placeholder = 'create new category...';
       }
       ctgformInput.focus();
     }, 4);
@@ -202,6 +174,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
     if (colorOption) {
       handleColorSelection(e, formhelper.getColor());
+      ctgformInput.focus();
       return;
     }
 

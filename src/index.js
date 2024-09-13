@@ -38,3 +38,6 @@ import { setTheme } from './utilities/helpers';
 /*! *************************************! */
 setTheme(context, store);
 renderViews(context, datepickerContext, store);
+
+// simulate
+// document.querySelector('.sbch-plus').click()

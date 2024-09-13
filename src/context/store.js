@@ -10,7 +10,10 @@ class Store {
 
     this.userUpload = {};
 
-    this.colors = locales.colorsFour;
+    this.colors = locales.colorsMutedMed;
+    // this.colors = adjustColorHue(locales.colorsFour, 250);
+    // this.colors = adjustColorHue(locales.colorsMuted, 140);
+    // this.colors = adjustColorHue(locales.colorsFour, 180);
 
     this.ctg = this.getInitCtg();
 
@@ -417,7 +420,6 @@ class Store {
       const entryDate = new Date(entry.start);
       const month = entryDate.getMonth();
       const day = entryDate.getDate();
-
       if (!grouped[month]) {
         grouped[month] = {};
       }
@@ -425,7 +427,6 @@ class Store {
       if (!grouped[month][day]) {
         grouped[month][day] = [];
       }
-
       grouped[month][day].push(entry);
     }
 
@@ -454,6 +455,7 @@ class Store {
   }
 
   getDefaultCtg() {
+    console.log(this.ctg);
     return Object.entries(this.ctg)[0];
   }
 

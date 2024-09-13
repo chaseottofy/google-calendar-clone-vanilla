@@ -18,7 +18,7 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url('../assets/reg.woff2') format('woff2');
 }
 
@@ -26,7 +26,7 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
+  font-display: block;
   src: url('../assets/rfive.woff2') format('woff2');
 }
 
@@ -335,7 +335,7 @@ svg {
 ::-webkit-scrollbar-thumb {
   background-color: var(--scrollerThumbBackground);
   border: var(--scrollerThumbBorder);
-  border-radius: 20px;
+  /* border-radius: 20px; */
 }
 
 ::-webkit-scrollbar-thumb:hover {

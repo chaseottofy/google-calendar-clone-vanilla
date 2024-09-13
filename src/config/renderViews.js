@@ -14,6 +14,45 @@ import {
 } from '../utilities/helpers';
 import setViews from './setViews';
 
+class DataAttributeHandler {
+  constructor() {
+    this.prefix = 'data-';
+  }
+
+  // Query select an attribute when given a value and return the element with that value
+  querySelector(attribute, value) {
+    const selector = `[${this.prefix}${attribute}="${value}"]`;
+    return document.querySelector(selector);
+  }
+
+  // Query select attribute linked to only one element (no value given)
+  querySelectorUnique(attribute) {
+    const selector = `[${this.prefix}${attribute}]`;
+    return document.querySelector(selector);
+  }
+
+  // Query select and return all elements with a given attribute
+  querySelectorAll(attribute) {
+    const selector = `[${this.prefix}${attribute}]`;
+    return document.querySelectorAll(selector);
+  }
+
+  // Set attribute value
+  setAttribute(element, attribute, value) {
+    element.setAttribute(`${this.prefix}${attribute}`, value);
+  }
+
+  // Toggle attribute value
+  toggleAttribute(element, attribute, value1, value2) {
+    const currentValue = element.getAttribute(`${this.prefix}${attribute}`);
+    const newValue = currentValue === value1 ? value2 : value1;
+    this.setAttribute(element, attribute, newValue);
+    return newValue;
+  }
+}
+
+const attrHandler = new DataAttributeHandler();
+
 const header = document.querySelector('.h__container');
 const headerLogo = document.querySelector('.logo');
 
@@ -249,67 +288,35 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
-  function handleBtnPrev() {
-    switch (context.getComponent()) {
-      case 'day': {
-        handleTransition(
-          document.querySelector('.dayview--header-day__number'),
-          'right',
-          getPreviousDay,
-        );
-        break;
-      }
-      case 'week': {
-        handleTransition(
-          document.querySelector('.weekview--header'),
-          'right',
-          getPreviousWeek,
-        );
-        break;
-      }
-      case 'month': {
-        handleTransition(monthwrapper, 'right', getPreviousMonth);
-        break;
-      }
-      case 'year': {
-        handleTransition(yearwrapper, 'right', getPreviousYear);
-        break;
-      }
-      default: {
-        break;
-      }
-    }
-  }
-
-  function handleBtnNext() {
-    switch (context.getComponent()) {
-      case 'day': {
-        handleTransition(
-          document.querySelector('.dayview--header-day__number'),
-          'left',
-          getNextDay,
-        );
-        break;
-      }
-      case 'week': {
-        handleTransition(
-          document.querySelector('.weekview--header'),
-          'left',
-          getNextWeek,
-        );
-        break;
-      }
-      case 'month': {
-        handleTransition(monthwrapper, 'left', getNextMonth);
-        break;
-      }
-      case 'year': {
-        handleTransition(yearwrapper, 'left', getNextYear);
-        break;
-      }
-      default: {
-        break;
-      }
+  function handleBtnNavigation(direction) {
+    const isNext = direction === 'next';
+    const transitionDirection = isNext ? 'left' : 'right';
+    const navigationConfig = {
+      day: {
+        element: () => document.querySelector('.dayview--header-day__number'),
+        action: isNext ? getNextDay : getPreviousDay,
+      },
+      week: {
+        element: () => document.querySelector('.weekview--header'),
+        action: isNext ? getNextWeek : getPreviousWeek,
+      },
+      month: {
+        element: () => monthwrapper,
+        action: isNext ? getNextMonth : getPreviousMonth,
+      },
+      year: {
+        element: () => yearwrapper,
+        action: isNext ? getNextYear : getPreviousYear,
+      },
+    };
+    const component = context.getComponent();
+    const config = navigationConfig[component];
+    if (config) {
+      handleTransition(
+        typeof config.element === 'function' ? config.element() : config.element,
+        transitionDirection,
+        config.action,
+      );
     }
   }
 
@@ -319,23 +326,9 @@ export default function renderViews(context, datepickerContext, store) {
     datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
     const rect = e.target.getBoundingClientRect();
     const newDatepickerLeft = Number.parseInt(rect.left);
-    // convert rect left into a percentage so that it scales with window resize
     const perc = Number.parseInt((newDatepickerLeft / window.innerWidth) * 100);
     datepicker.setAttribute('style', `left:${perc}%;top:12px;`);
     setDatepicker(context, store, datepickerContext, 'header');
-
-  }
-
-  function setOptionStyle(option) {
-    const views = ['day', 'week', 'month', 'year', 'list'];
-    const activeIndex = views.indexOf(option);
-    for (let i = 0; i < options.length; i++) {
-      if (i === activeIndex) {
-        options[i].classList.add('change-view--option__active');
-      } else {
-        options[i].classList.remove('change-view--option__active');
-      }
-    }
   }
 
   function closeOptionsModal() {
@@ -348,6 +341,7 @@ export default function renderViews(context, datepickerContext, store) {
 
   function renderOption(option, initialRender) {
     const comp = context.getComponent();
+    const optionsList = ['day', 'week', 'month', 'year', 'list'];
     if (option === 'week' || option === 'day') {
       collapsebtn.onclick = handleCollapse;
       collapsebtn.classList.remove('hide-cbt');
@@ -360,8 +354,17 @@ export default function renderViews(context, datepickerContext, store) {
     closeOptionsModal();
     context.setComponent(option);
     fullRender(option);
-    setOptionStyle(option);
-    // week datepicker is the only one that has any stylistic difference
+    console.log(option);
+    optionswrapper.setAttribute('data-view-option-active', option);
+    // console.log(document.querySelector(`.view-option[data-view-option="${option}"]`));
+    // for (const opt of options) {
+    //   opt.classList.remove('view-option--active');
+    //   console.log(opt, option)
+    //   if (option === opt.getAttribute('data-view-option')) {
+    //     opt.classList.add('view-option--active');
+    //   }
+    // }
+    optionswrapper.setAttribute('data-view-option-active', option);
     if (comp || option === 'week') {
       renderSidebarDatepicker();
     }
@@ -374,11 +377,7 @@ export default function renderViews(context, datepickerContext, store) {
     selectOverlay.style.display = 'block';
     optionswrapper.classList.remove('toggle-options');
     optionswrapper.classList.add('toggle-animate');
-    const setOption = (e) => {
-      const option = e.target.getAttribute('data-view-option');
-      renderOption(option);
-    };
-
+    const setOption = (e) => renderOption(e.target.getAttribute('data-view-option'));
     optionswrapper.onclick = setOption;
     selectOverlay.onclick = closeOptionsModal;
   }
@@ -407,12 +406,14 @@ export default function renderViews(context, datepickerContext, store) {
     }
 
     if (btnPrev) {
-      handleBtnPrev();
+      // handleBtnPrev();
+      handleBtnNavigation('prev');
       return;
     }
 
     if (btnNext) {
-      handleBtnNext();
+      // handleBtnNext();
+      handleBtnNavigation('next');
       return;
     }
 
@@ -505,13 +506,15 @@ export default function renderViews(context, datepickerContext, store) {
 
       // (day/week) prev month
       case 'p': {
-        handleBtnPrev();
+        // handleBtnPrev();
+        handleBtnNavigation('prev');
         break;
       }
 
       // (day/week) next month
       case 'n': {
-        handleBtnNext();
+        // handleBtnNext();
+        handleBtnNavigation('next');
         break;
       }
 

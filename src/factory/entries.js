@@ -255,6 +255,7 @@ class Day {
 
   checkForCollision() {
     const bxs = this.getBoxes();
+    // console.log(bxs);
     const overlaps = []; // a list to store the overlapping entries
     // entries.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
     for (let i = 0; i < bxs.length; i++) {

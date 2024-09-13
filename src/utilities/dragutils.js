@@ -60,26 +60,27 @@ const identifiers = {
       prepentwo: 'data-dv-',
     },
   },
+
   boxGrid: {
-    week: [
-      '0.00', '20.00',
-      '45.00', '15.00',
-      '50.00', '10.00',
-      '50.00', '25.00',
-      '55.00', '55.00',
-      '70.00', '85.00',
-      '5.00', '30.00',
-      '55.00',
-    ],
-    day: [
-      '0.00', '15.00',
-      '30.00', '45.00',
-      '60.00', '75.00',
+    leftCoord: [
+      '0.00', '5.00',
       '10.00', '25.00',
-      '40.00', '55.00',
-      '70.00', '85.00',
-      '5.00', '30.00',
-      '55.00',
+      '55.00', '70.00',
+      '5.00', '10.00',
+      '25.00', '55.00',
+      '80.00', '15.00',
+      '5.00', '25.00',
+      '65.00',
+    ],
+    widthCoord: [
+      '100.00', '95.00',
+      '90.00', '75.00',
+      '45.00', '30.00',
+      '45.00', '55.00',
+      '75.00', '45.00',
+      '20.00', '45.00',
+      '30.00', '50.00',
+      '25.00',
     ],
   },
   styles: {
@@ -91,31 +92,87 @@ const identifiers = {
   },
 };
 
-function setBoxW(box, ind, data) {
-  const curr = Number.parseFloat(data[ind]);
-  box.style.left = ind % 4 === 0 ? '0%' : `${curr}%`;
-  box.style.width = `${Number.parseFloat(100 - curr - 3)}%`;
+function setBoxW(box, ind, data, offset) {
+  box.style.left = `${Number.parseFloat(data[ind])}%`;
+  box.style.width = `${Number.parseFloat(offset[ind])}%`;
+}
+
+function groupOverlapping(tasks) {
+  tasks.sort((a, b) => a.coordinates.y - b.coordinates.y);
+  let groups = [];
+  let currentGroup = [];
+  function isOverlapping(task1, task2) {
+    let bottom1 = task1.coordinates.y + task1.coordinates.h;
+    let bottom2 = task2.coordinates.y + task2.coordinates.h;
+    return (task1.coordinates.y <= task2.coordinates.y && bottom1 > task2.coordinates.y) ||
+      (task2.coordinates.y <= task1.coordinates.y && bottom2 > task1.coordinates.y);
+  }
+
+  for (let task of tasks) {
+    if (currentGroup.length === 0) {
+      currentGroup.push(task);
+    } else {
+      let overlapsWithAny = currentGroup.some((groupTask) => isOverlapping(groupTask, task));
+
+      if (overlapsWithAny) {
+        currentGroup.push(task);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [task];
+      }
+    }
+  }
+
+  if (currentGroup.length > 0) {
+    groups.push(currentGroup);
+  }
+  return groups;
 }
 
 function handleOverlap(col, view, boxes) {
-  const { numbers: numArr } = locales.labels;
-  const collisions = view === 'day' ? boxes.checkForCollision() : boxes.checkForCollision(col);
   const { boxClasses, boxAttributes, boxGrid } = identifiers;
   const baseClass = boxClasses[view];
   const { base, ontop, prepend } = baseClass;
   const { dataIdx: boxIdxAttr, dataId: boxIdAttr } = boxAttributes[view];
-  const grid = boxGrid[view];
+  const { leftCoord, widthCoord } = boxGrid;
 
-  for (let i = 0; i < collisions.length; i++) {
-    const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`);
-    const idx = i % 15;
-    const identity = `${prepend}${numArr[idx]}`;
-    const identityClass = `${base} ${identity}`;
+  const currBoxes = view === 'week'
+    ? boxes.getBoxesByColumn(col)
+    : boxes.getBoxes();
+  if (currBoxes.length === 0) return;
 
-    box.setAttribute('class', i === 0 ? identityClass : `${identityClass} ${ontop}`);
-    box.setAttribute(boxIdxAttr, identity);
-    setBoxW(box, idx, grid);
+  const collisions = groupOverlapping(currBoxes);
+  for (const group of collisions) {
+    for (let i = 0; i < group.length; i++) {
+      const currBox = group[i];
+      const { id } = currBox;
+      const boxElement = document.querySelector(`[${boxIdAttr}="${id}"]`);
+
+      const currIdx = i % widthCoord.length;
+      boxElement.style.zIndex = i + 1;
+      if (i === 0) {
+        boxElement.classList.remove(ontop);
+      } else {
+        boxElement.classList.add(ontop);
+      }
+      setBoxW(boxElement, currIdx, leftCoord, widthCoord);
+    }
   }
+  // console.log(boxes.getBoxes(), 'here');
+  // const collisions = view === 'day'
+  //   ? boxes.checkForCollision()
+  //   : boxes.checkForCollision(col);
+
+  // for (let i = 0; i < collisions.length; i++) {
+  //   const box = document.querySelector(`[${boxIdAttr}="${collisions[i].id}"]`);
+  //   const idx = i % widthCoord.length;
+  //   const identity = `${prepend}${numArr[idx]}`;
+  //   const identityClass = `${base} ${identity}`;
+
+  //   box.setAttribute('class', i === 0 ? identityClass : `${identityClass} ${ontop}`);
+  //   box.setAttribute(boxIdxAttr, identity);
+  //   setBoxW(box, idx, leftCoord, widthCoord);
+  // }
 }
 
 function setStylingForEvent(clause, wrapper, store) {

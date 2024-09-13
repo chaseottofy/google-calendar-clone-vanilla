@@ -341,7 +341,7 @@
   overflow: hidden;
   position: absolute;
   user-select: none;
-  z-index: 3;
+  /* z-index: 3; */
   color: var(--taskcolor) !important;
   transition-duration: 200ms;
   transition-property: left, width;
