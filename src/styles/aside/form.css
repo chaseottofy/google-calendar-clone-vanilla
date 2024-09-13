@@ -155,7 +155,7 @@
 
 .form--body__description-input,
 .form--body__title-input {
-  transition-duration: 250ms;
+  transition-duration: 150ms;
   transition-property: border-bottom;
   transition-timing-function: cubic-bezier(.33, 1, .68, 1)
 }
@@ -573,7 +573,7 @@
 
 .form-error__submit-btn {
   background-color: var(--red2);
-  transition: all .2s ease-in-out
+  transition: all 100ms ease-in-out
 }
 
 .form-body-xs {

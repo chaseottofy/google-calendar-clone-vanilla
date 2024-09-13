@@ -136,8 +136,11 @@ class Context {
     return Context.getLocalComponent() || 'month';
   }
 
+  // I have a single page app but id like to change the url when the component changes, is this a bad approach? if not, write a function that will update the url
+  // I am getting a 'GET' error when I refresh the page since the url doesn't actually exist
   setComponent(component) {
     this.component = component;
+    window.location.hash = component;
     Context.setLocalComponent(component);
   }
 

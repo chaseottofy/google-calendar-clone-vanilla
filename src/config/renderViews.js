@@ -638,6 +638,26 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
+  function initURL() {
+    const pages = new Set(['list', 'year', 'month', 'week', 'day']);
+    const handlePopstate = () => {
+      const page = window.location.hash.slice(1);
+      if (pages.has(page)) {
+        if (context.getComponent() !== page) {
+          renderOption(page);
+        }
+      } else {
+        console.log('ran current view');
+        const currentView = context.getComponent();
+        window.location.hash = currentView;
+      }
+    };
+
+    window.addEventListener('hashchange', handlePopstate);
+
+    document.addEventListener('DOMContentLoaded', handlePopstate);
+  }
+
   const appinit = () => {
     /** ********************** */
     // render initial view and set initial attributes
@@ -658,6 +678,7 @@ export default function renderViews(context, datepickerContext, store) {
     // establish global event listeners
     header.onclick = throttle(handleHeaderDelegation, 150);
     document.addEventListener('keydown', handleGlobalKeydown);
+    initURL();
   };
   appinit();
 }

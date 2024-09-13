@@ -25,14 +25,15 @@
   max-width: 920px;
   overflow: hidden;
   position: absolute;
-  transition: all 200ms ease-in-out;
+  transition: all 300ms ease-in-out;
   width: auto;
   z-index: 1041
 }
 
 .hide-sidebar-sub-menu,
 .hide-tai {
-  display: none
+  display: none;
+  /* color: var(--black1); */
 }
 
 .close-sub-menu,
