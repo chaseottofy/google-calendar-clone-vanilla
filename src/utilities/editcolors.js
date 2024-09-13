@@ -64,6 +64,7 @@ function adjustColorHue(colorObject, hueShift) {
     }
   }
 
+  console.log(newColorObject);
   return newColorObject;
 }
 

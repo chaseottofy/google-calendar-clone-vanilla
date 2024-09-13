@@ -30,13 +30,11 @@ import './styles/aside/entryOptions.css';
 import './styles/aside/info.css';
 import './styles/aside/shortcuts.css';
 
-import setAppDefaults from './config/appDefaults';
 import renderViews from './config/renderViews';
 import context, { datepickerContext } from './context/appContext';
 import store from './context/store';
+import { setTheme } from './utilities/helpers';
 
 /*! *************************************! */
-// check if local storage is available
-// if ()
-setAppDefaults(context, store);
+setTheme(context, store);
 renderViews(context, datepickerContext, store);

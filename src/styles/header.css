@@ -1,14 +1,3 @@
-.header {
-  background-color: var(--black1);
-  height: 64px;
-  overflow: visible;
-  transition: height .2s ease-in-out;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  z-index: 197;
-}
-
 .h__container {
   flex-direction: row;
   height: 100%;
@@ -37,15 +26,14 @@
 }
 
 .menu:hover {
-  background-color: var(--mediumgrey1)
+  background-color: var(--black0)
 }
 
-.menu:hover::after,
-.menu:focus-visible::after {
-  background-color: var(--mediumgrey1);
-  border-radius: 2px;
+.menu::after {
+  background-color: var(--mediumgrey2);
+  border-radius: 4px;
   content: attr(data-tooltip);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 400;
   height: 25px;
   left: 90%;
@@ -53,7 +41,9 @@
   top: 60%;
   transform: translate(-25%, 80%);
   width: 88px;
-  z-index: 1000;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
 }
 
 .logo,
@@ -124,6 +114,7 @@
   position: relative;
   font-size: 14px;
   letter-spacing: 0.18px;
+  border: 1px solid var(--black2);
 }
 
 .group-right {
@@ -168,20 +159,22 @@
 
 .next:hover,
 .prev:hover {
-  background-color: var(--mediumgrey1);
+  background-color: var(--black0);
 }
 
-.btn-today:hover::after,
-.next:hover::after,
-.prev:hover::after,
-.btn-today:focus-visible::after,
-.next:focus-visible::after,
-.prev:focus-visible::after {
+.btn-today:hover {
+  background-color: var(--black0);
+}
+
+.btn-today::after,
+.next::after,
+.prev::after {
   font-family: var(--primaryFont) !important;
   align-items: center;
-  background-color: var(--mediumgrey1);
-  border-radius: 2px;
+  background-color: var(--mediumgrey2);
+  border-radius: 4px;
   color: var(--white1);
+  filter: brightness(1.2);
   content: attr(data-tooltip);
   display: flex;
   font-size: 11px;
@@ -194,7 +187,9 @@
   top: 60%;
   transform: translate(-50%, 80%);
   width: 138px;
-  z-index: 2000;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
 }
 
 .next:hover::after,
@@ -281,11 +276,11 @@
   transform: scale(0.9);
 }
 
-.h-search:hover::after,
-.settings:hover::after {
+.h-search::after,
+.settings::after {
   align-items: center;
-  background-color: var(--mediumgrey1);
-  border-radius: 2px;
+  background-color: var(--mediumgrey2);
+  border-radius: 4px;
   color: var(--white1);
   content: attr(data-tooltip);
   display: flex;
@@ -298,7 +293,25 @@
   top: 50%;
   transform: translate(-50%, 80%);
   width: 60px;
-  z-index: 1000
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+}
+
+.menu:hover::after,
+.menu:focus-visible::after,
+.btn-today:hover::after,
+.next:hover::after,
+.prev:hover::after,
+.btn-today:focus-visible::after,
+.next:focus-visible::after,
+.prev:focus-visible::after,
+.h-search:hover::after,
+.settings:hover::after,
+.h-search:focus-visible::after,
+.settings:focus-visible::after {
+  opacity: 1;
+  z-index: 2000;
 }
 
 .select-wrapper {
@@ -315,7 +328,7 @@
 
 .select__modal {
   appearance: none;
-  border: var(--bordergrey);
+  border: 1px solid var(--black2);
   border-radius: var(--borderradius);
   color: var(--white2);
   cursor: pointer;
@@ -344,7 +357,7 @@
 }
 
 .selection--active {
-  background-color: var(--mediumgrey1)
+  background-color: var(--black3)
 }
 
 @media screen and (max-width: 840px) {
@@ -439,10 +452,6 @@
 }
 
 @media screen and (max-width:530px) {
-  .header {
-    height: 54px
-  }
-
   .h-col-1 {
     height: 32px
   }
@@ -456,8 +465,11 @@
 
   .logo::after {
     font-size: 12px;
+
     /* line-height: 36px; */
+
     /* text-align: center; */
+
     /* text-indent: -.5px */
   }
 
@@ -515,8 +527,10 @@
 
   .logo::after {
     font-size: 10px;
+
     /* letter-spacing: -.5px; */
     line-height: 32px;
+
     /* text-indent: 0 */
   }
 
@@ -552,11 +566,5 @@
     content: attr(data-value);
     color: var(--white2);
     font-size: 10px !important;
-  }
-}
-
-@media screen and (max-height:470px) {
-  .header {
-    height: 54px
   }
 }

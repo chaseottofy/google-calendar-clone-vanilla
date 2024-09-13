@@ -128,14 +128,6 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     const timepickerTimesContainer = document.createElement('div');
     timepickerTimesContainer.classList.add('timepicker-times__container');
-
-    console.log({
-      coords: coords,
-      currentTime: currentTime,
-      end: end,
-      endLimit: endLimit,
-    });
-
     let hours = [
       12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
       12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,

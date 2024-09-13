@@ -160,7 +160,6 @@ export default function setListView(context, store, datepickerContext) {
    * @param {HTMLElement} cell element that was clicked
    */
   function getRgContextMenu(cell) {
-    console.log(cell);
     const id = cell.getAttribute('data-rgcell-id');
     cell.classList.add('rowgroup--cell-active');
     const entry = store.getEntry(id);
@@ -244,15 +243,11 @@ export default function setListView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetListview);
 
     let activeEnt = store.getActiveEntries();
-    console.log(activeEnt);
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = 'No Entries to Display';
     } else {
 
       let entries = store.sortBy(activeEnt, 'start', 'desc');
-      console.log(entries);
-      // console.log(entries)
-      // console.log(activeEnt)
       let groupedEntries = entries.reduce((acc, curr) => {
         const date = new Date(curr.start);
         const [year, month, day] = getdatearray(date);
@@ -272,10 +267,6 @@ export default function setListView(context, store, datepickerContext) {
         acc[datestring].push(curr);
         return acc;
       }, {});
-      // console.log(groupedEntries)
-
-      // set the header title to the first date with entries that is not in the past and the last date with entries
-      // if no entries are in the future, set the header title to "Schedule Clear";
       let keys = Object.keys(groupedEntries);
       const length = keys.length;
       if (length === 0) {

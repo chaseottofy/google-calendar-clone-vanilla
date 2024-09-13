@@ -227,6 +227,7 @@ class Context {
   }
   /* ************** */
 
+  // is it possible to check if local storage has been changed manunally in dev tools?
   /* ************** */
   /* GETTERS */
   getGmt() {

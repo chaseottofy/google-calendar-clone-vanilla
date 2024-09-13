@@ -15,9 +15,13 @@
   bottom: 2%;
   display: flex;
   flex-direction: column;
-  width: 280px;
+
+  /* width: 340px; */
+  min-width: 280px;
+  width: 100%;
+  max-width: 360px;
   height: auto;
-  max-height: 352px;
+  max-height: 560px;
   z-index: 903;
   background-color: var(--black1);
   box-shadow: var(--box-shadow1);
@@ -35,23 +39,29 @@
   width: 100%;
   height: auto;
   position: relative;
-  padding: 20px 12px 20px 12px;
-  overflow: hidden auto;
+  padding: 12px;
+
+  /* padding: 20px 12px 20px 12px; */
+  overflow: hidden scroll;
 }
 
 .category__form-input {
   margin-bottom: 14px;
   background-color: var(--black3);
-  border: none;
-  border-bottom: 2px solid var(--mediumgrey1);
-  color: var(--white2);
-  font-size: 16px;
+
+  /* border: none; */
+  border: 1px solid var(--black2);
+
+  /* border-bottom: 1px solid var(--mediumgrey1); */
+  color: var(--white1);
+  border-radius: 2px;
+  font-size: 14px;
   font-weight: 400;
   height: 42px;
   min-height: 42px;
   line-height: 42px;
   width: 100%;
-  padding: 0 4px;
+  padding: 0 8px;
   z-index: 1;
   transition-duration: 250ms;
   transition-property: border-bottom;
@@ -65,7 +75,7 @@
 }
 
 .category__form-input:focus {
-  border-bottom: 2px solid var(--primary2);
+  border-color: var(--mediumgrey2);
 }
 
 .category__form-input::placeholder {
@@ -74,12 +84,14 @@
 
 .ctg-input--err {
   position: absolute;
-  top: 19px;
+  top: 12px;
+
+  /* opacity: .5; */
   background-color: var(--black000);
   border: none;
   border-bottom: 2px solid var(--red1);
   color: var(--white4);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   height: 43px;
   min-height: 43px;
@@ -87,7 +99,7 @@
   line-height: 42px;
   width: calc(100% - 22px);
   z-index: 2;
-  padding-left: 4px;
+  padding-left: 10px;
   cursor: pointer;
 }
 
@@ -107,21 +119,21 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 242px;
+  height: 100%;
 }
 
 .color-picker__header {
   display: flex;
   justify-content: center;
   height: 30px;
-  padding: 2px 8px 8px 8px;
+  padding: 2px 8px 16px 8px;
   align-items: center;
   color: var(--taskcolor);
 }
 
 .color-picker__title {
-  font-size: 14px;
-  line-height: 26px;
+  font-size: 13px;
+  line-height: 28px;
   padding: 0 16px;
   text-align: center;
   border-radius: 2px;
@@ -132,24 +144,32 @@
 
 .color-picker__options {
   display: grid;
-  height: 170px;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  grid-gap: 8px;
-  padding: 8px 8px 0 6px;
+  height: 100%;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
   justify-items: center;
 }
 
 .color-picker--option {
-  width: 22px;
-  height: 22px;
-  border-radius: 16px;
+  width: 100%;
+  height: 32px;
   cursor: pointer;
   border: 2px solid transparent;
 }
 
-.color-selected {
-  box-shadow: var(--box-shadow1);
+.color-picker--option:hover {
+  border: 2px dotted var(--white1);
+}
+
+.selected-color {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.selected-color svg {
+  height: 22px;
+  width: 22px;
 }
 
 /* footer */
@@ -157,8 +177,9 @@
   display: flex;
   justify-content: center;
   margin-top: auto;
+  padding: 8px 0;
   width: 100%;
-  height: 36px;
+  height: 48px;
 }
 
 .category__form--cancel,
@@ -176,7 +197,7 @@
 
 .category__form--cancel {
   color: var(--white2);
-  background-color: var(--black2);
+  background-color: var(--black0);
 }
 
 .category__form--cancel:hover {
@@ -185,7 +206,7 @@
 }
 
 .category__form--submit {
-  background-color: var(--primary2);
+  background-color: var(--black2);
   color: var(--taskcolor0);
 }
 
@@ -226,7 +247,7 @@
   font-weight: 400;
   color: var(--white3);
   cursor: pointer;
-  transition: background-color150ms ease-in-out;
+  transition: background-color 150ms ease-in-out;
 }
 
 .option__open-ctg-edit,
@@ -241,10 +262,13 @@
 }
 
 /* end popup box */
-@media screen and (max-width: 530px) {
+@media screen and (max-width: 640px) {
   .category__form {
-    right: 2% !important;
-    left: 2% !important;
+    /* right: 2% !important; */
+
+    /* left: 2% !important; */
+    inset: 0 !important;
     margin: auto !important;
+    max-height: 80% !important;
   }
 }

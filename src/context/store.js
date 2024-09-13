@@ -2,7 +2,6 @@ import Entry from '../factory/entries';
 import locales from '../locales/en';
 import defautlKeyboardShortcuts from '../locales/kbDefault';
 import { compareDates, testDate } from '../utilities/dateutils';
-import adjustColorHue from '../utilities/editcolors';
 import storage from '../utilities/storage';
 
 class Store {
@@ -11,7 +10,7 @@ class Store {
 
     this.userUpload = {};
 
-    this.colors = adjustColorHue(locales.colors, 340);
+    this.colors = locales.colorsFour;
 
     this.ctg = this.getInitCtg();
 
@@ -687,19 +686,11 @@ class Store {
 
   /* ************************ */
   /*  JSON UPLOAD & DOWNLOAD */
-  validateUserUpload(userUpload) {
-    console.log(userUpload);
-    return true;
-  }
-
   setUserUpload(userUpload) {
     storage.setUploadedData(userUpload);
     window.location.reload();
   }
 
-  getUserUpload() {
-    return this.userUpload;
-  }
   /* ************************ */
 
   /* ******************************************* */

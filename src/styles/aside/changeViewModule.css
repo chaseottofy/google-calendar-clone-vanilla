@@ -15,11 +15,11 @@
   height: auto;
   width: 30%;
   min-width: 200px;
-  max-width: 200px;
+  max-width: 220px;
   position: absolute;
   z-index: 1002;
   background-color: var(--black1);
-  box-shadow: var(--box-shadow1);
+  box-shadow: var(--box-shadow7);
   padding: 8px 0;
 }
 
@@ -52,21 +52,25 @@
   padding: 0 14px;
   cursor: pointer;
   user-select: none;
-  font-weight: 500;
-  font-size: 15px;
+
+  /* font-weight: 500; */
+  font-size: 13px;
 }
 
 .change-view--option__active {
-  color: var(--primarylight1);
+  color: var(--white1);
+  background-color:var(--black0);
 }
 
 .view-option:hover {
-  background-color: var(--mediumgrey1);
+  background-color: var(--black2);
+
 }
 
 .view-option::after {
   content: attr(data-view-key);
   padding-right: 8px;
+  filter:brightness(.8);
 }
 
 @media screen and (max-width: 530px) {

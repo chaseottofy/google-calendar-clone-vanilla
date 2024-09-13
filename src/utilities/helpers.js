@@ -60,63 +60,53 @@ const throttle = (fn, wait) => {
   };
 };
 
-function setTheme(context) {
+function setTheme(context, store) {
   const appBody = document.querySelector('.body');
   const colorSchemeMeta = document.getElementsByName('color-scheme')[0];
   const currentScheme = context.getColorScheme();
   const hasLightMode = appBody.classList.contains('light-mode');
   const hasContrastMode = appBody.classList.contains('contrast-mode');
+  const prevDT = store.getAnimationStatus();
+  appBody.setAttribute('data-disable-transitions', true);
+  if (
+    (currentScheme === 'light' && hasLightMode && !hasContrastMode) ||
+    (currentScheme === 'dark' && !hasLightMode && !hasContrastMode) ||
+    (currentScheme === 'contrast' && hasContrastMode && !hasLightMode)
+  ) {
+    setTimeout(() => {
+      appBody.setAttribute('data-disable-transitions', prevDT);
+    }, 350);
+    return;
+  }
 
-  const setColorSchema = () => {
-    if (
-      (currentScheme === 'light' && hasLightMode && !hasContrastMode) ||
-      (currentScheme === 'dark' && !hasLightMode && !hasContrastMode) ||
-      (currentScheme === 'contrast' && hasContrastMode && !hasLightMode)
-    ) {
-      return;
-    }
-
-    const setlight = () => {
-      context.setColorScheme('light');
-      colorSchemeMeta.setAttribute('content', 'light');
-      appBody.classList.remove('contrast-mode');
-      appBody.classList.add('light-mode');
-    };
-
-    const setdark = () => {
-      context.setColorScheme('dark');
-      colorSchemeMeta.setAttribute('content', 'dark light');
-      appBody.classList.remove('light-mode');
-      appBody.classList.remove('contrast-mode');
-    };
-
-    const setcontrast = () => {
-      context.setColorScheme('contrast');
-      colorSchemeMeta.setAttribute('content', 'dark');
-      appBody.classList.remove('light-mode');
-      appBody.classList.add('contrast-mode');
-    };
-
-    switch (currentScheme) {
-      case 'light': {
-        setlight();
-        break;
-      }
-      case 'contrast': {
-        setcontrast();
-        break;
-      }
-      case 'dark': {
-        setdark(); // default
-        break;
-      }
-      default: {
-        setdark();
-        break;
-      }
-    }
+  const setUpTheme = (theme, content, className) => {
+    appBody.setAttribute('data-disable-transitions', true);
+    context.setColorScheme(theme);
+    colorSchemeMeta.setAttribute('content', content);
+    appBody.setAttribute('class', className);
+    setTimeout(() => {
+      appBody.setAttribute('data-disable-transitions', prevDT);
+    }, 350);
   };
-  setColorSchema();
+
+  switch (currentScheme) {
+    case 'light': {
+      setUpTheme('light', 'light', 'body light-mode');
+      break;
+    }
+    case 'contrast': {
+      setUpTheme('contrast', 'dark', 'body contrast-mode');
+      break;
+    }
+    case 'dark': {
+      setUpTheme('dark', 'dark light', 'body');
+      break;
+    }
+    default: {
+      setUpTheme('dark', 'dark light', 'body');
+      break;
+    }
+  }
 }
 
 /**

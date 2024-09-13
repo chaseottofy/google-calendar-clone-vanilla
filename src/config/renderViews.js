@@ -7,11 +7,12 @@ import handleSidebarCategories from '../components/menus/sidebarCategories';
 import setSidebarDatepicker from '../components/menus/sidebarDatepicker';
 import handleSidebarFooter from '../components/menus/sidebarFooter';
 import getSidebarSubMenu from '../components/menus/sidebarSubMenu';
-import { getClosest, throttle } from '../utilities/helpers';
+import {
+  getClosest,
+  setTheme,
+  throttle,
+} from '../utilities/helpers';
 import setViews from './setViews';
-
-const appBody = document.querySelector('.body');
-const colorSchemeMeta = document.getElementsByName('color-scheme')[0];
 
 const header = document.querySelector('.h__container');
 const headerLogo = document.querySelector('.logo');
@@ -48,39 +49,6 @@ const listviewBody = document.querySelector('.listview__body');
 const collapsebtn = document.querySelector('.collapse-view');
 
 export default function renderViews(context, datepickerContext, store) {
-
-  function setColorScheme() {
-    const setlight = () => {
-      context.setColorScheme('light');
-      colorSchemeMeta.setAttribute('content', 'light');
-      appBody.classList.add('light-mode');
-      appBody.classList.remove('contrast-mode');
-    };
-
-    const setdark = () => {
-      context.setColorScheme('dark');
-      colorSchemeMeta.setAttribute('content', 'dark light');
-      appBody.classList.remove('light-mode');
-      appBody.classList.remove('contrast-mode');
-    };
-
-    const setcontrast = () => {
-      context.setColorScheme('contrast');
-      colorSchemeMeta.setAttribute('content', 'dark');
-      appBody.classList.remove('light-mode');
-      appBody.classList.add('contrast-mode');
-    };
-
-    const currentScheme = context.getColorScheme();
-    if (currentScheme === 'light') {
-      setdark();
-    } else if (currentScheme === 'dark') {
-      setcontrast();
-    } else {
-      setlight();
-    }
-  }
-
   function fullRender(component) {
     setViews(component, context, store, datepickerContext);
   }
@@ -380,7 +348,6 @@ export default function renderViews(context, datepickerContext, store) {
 
   function renderOption(option, initialRender) {
     const comp = context.getComponent();
-    // console.log(comp, option)
     if (option === 'week' || option === 'day') {
       collapsebtn.onclick = handleCollapse;
       collapsebtn.classList.remove('hide-cbt');
@@ -569,7 +536,10 @@ export default function renderViews(context, datepickerContext, store) {
 
       // toggle between light/dark mode
       case '0': {
-        setColorScheme();
+        const currentScheme = context.getColorScheme();
+        const schemes = ['light', 'dark', 'contrast'];
+        context.setColorScheme(schemes[(schemes.indexOf(currentScheme) + 1) % 3]);
+        setTheme(context, store);
         break;
       }
 
@@ -647,7 +617,6 @@ export default function renderViews(context, datepickerContext, store) {
           renderOption(page);
         }
       } else {
-        console.log('ran current view');
         const currentView = context.getComponent();
         window.location.hash = currentView;
       }

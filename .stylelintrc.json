@@ -6,7 +6,7 @@
     "stylelint-high-performance-animation"
   ],
   "rules": {
-    "plugin/no-low-performance-animation-properties": true,
+    "plugin/no-low-performance-animation-properties": null,
     "block-no-empty": true,
     "custom-property-pattern": null,
     "selector-class-pattern": null,

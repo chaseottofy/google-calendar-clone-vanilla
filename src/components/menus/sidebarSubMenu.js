@@ -88,7 +88,6 @@ export default function getSidebarSubMenu(store, context) {
     proceedBtn.textContent = 'Proceed';
 
     btns.append(cancelBtn, proceedBtn);
-    console.log(popup);
     popup.append(
       subtitle,
       subtitle2,
@@ -150,7 +149,6 @@ export default function getSidebarSubMenu(store, context) {
     // const json = storage.getAllData();
     const json = JSON.stringify(storage.getAllData(), null, 2);
     const [totalEntries, totalCategories] = store.getStoreStats();
-    console.log(json, totalEntries, totalCategories);
     const filename = `ENT_${totalEntries}_CAT_${totalCategories}_${createTimestamp()}`;
     const blob = new Blob([json], { type: 'application/json' });
     const href = URL.createObjectURL(blob);
@@ -205,7 +203,7 @@ export default function getSidebarSubMenu(store, context) {
       return;
     }
     context.setColorScheme(value);
-    setTheme(context);
+    setTheme(context, store);
   }
 
   function openKbShortcutMenu() {
@@ -253,11 +251,8 @@ export default function getSidebarSubMenu(store, context) {
     if (fromicon) {
       animationsSwitchBtn.checked = status;
     }
-    if (status) {
-      appBody.classList.remove('disable-transitions');
-    } else {
-      appBody.classList.add('disable-transitions');
-    }
+    console.log(status);
+    appBody.setAttribute('data-disable-transitions', !status);
   }
 
   function delegateSubMenuEvents(e) {

@@ -88,6 +88,7 @@
   justify-content: center;
   cursor: pointer;
   border-radius: 50%;
+
   /* transition: all 100ms ease-in-out; */
 }
 
@@ -296,7 +297,9 @@
 
 .sbdatepicker__body--datename-selected {
   border: 2px solid var(--primarylight2) !important;
+
   /* background-color: var(--primary3); */
+
   /* color: var(--taskcolor0); */
 }
 

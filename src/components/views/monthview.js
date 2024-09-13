@@ -861,38 +861,11 @@ export default function setMonthView(context, store, datepickerContext) {
     }
   }
 
-  // event listener is added & removed @ ./setViews.js
-  // function getMonthviewResize() {
-  //   let lastquery = boxquery.getFlag();
-  //   console.log('ran')
-  //   boxquery.updateFlag();
-  //   // run once per query change
-  //   if (lastquery === boxquery.getFlag()) return;
-  //   const boxes = document.querySelectorAll(".monthview--box");
-  //   const querytop = boxquery.getTop();
-  //   const queryHeight = boxquery.getHeight();
-  //   const prevtop = boxquery.getPrevTop(querytop);
-  //   boxes.forEach(box => {
-  //     // always set height
-  //     box.style.height = `${queryHeight}px`;
-  //     let currenttop = parseInt(box.style.top);
-  //     if (currenttop === 0) {
-  //       return;
-  //     } else {
-  //       // get previous query top to find index of curren top then calc
-  //       let idx = currenttop / prevtop;
-  //       box.style.top = `${idx * querytop}px`;
-  //     }
-  //   });
-  // }
-
   const initMonth = () => {
     populateCells();
     monthWrapper.onmousedown = delegateMonthEvents;
     monthWrapper.onclick = delegateNewBox;
     store.setResetPreviousViewCallback(resetMonthview);
-    // const handleMVResize = debounce(getMonthviewResize, 40);
-    // store.setResizeHandle("month", handleMVResize);
   };
 
   initMonth();

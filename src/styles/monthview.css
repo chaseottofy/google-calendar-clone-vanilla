@@ -184,7 +184,7 @@
   align-items: center;
   border-radius: 4px 0 0 4px;
   font-family: var(--primaryFont);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
@@ -220,6 +220,7 @@
   z-index: 1000;
   pointer-events: none;
   opacity: 0.8;
+
   /* overflow:hidden; */
 }
 
@@ -426,7 +427,7 @@
   }
 
   .monthview--title {
-    font-size: 9px;
+    font-size: 10px;
   }
 }
 

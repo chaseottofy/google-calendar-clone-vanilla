@@ -12,10 +12,9 @@ const colorPickerOptions = document.querySelector('.color-picker__options');
 const ctgErrMsg = document.querySelector('.ctg-input--err');
 
 export default function createCategoryForm(store, selectedCategory, editing, resetParent) {
-  // const { colors } = locales;
-  // const colors = Object.values(adjustColorHue(locales.colors, 40));
   const colorObject = store.getColors();
   const colors = Object.values(colorObject);
+  console.log(colors);
 
   const checkIcon = createCheckIcon('var(--taskcolor)');
 
@@ -32,6 +31,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
     if (color === selected) {
       colorOption.append(checkIcon);
+      colorOption.classList.add('selected-color');
       formhelper.setColor(color);
     }
 
@@ -39,11 +39,13 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function createPickerOptions(currentColor) {
+    // console.log(currentColor)
     colorPickerOptions.innerText = '';
     for (const color of colors) {
-      for (let i = 1; i < 8; i++) {
+      console.log(color);
+      for (const key in color) {
         colorPickerOptions.append(
-          createColorOption(color[i], currentColor),
+          createColorOption(color[key], currentColor),
         );
       }
     }
@@ -52,7 +54,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   function handleColorSelection(e, current) {
     const target = e.target;
     const color = target.getAttribute('data-color-hex');
-
+    console.log(current);
     if (color === current) return;
 
     const colorOptions = document.querySelectorAll('.color-picker--option');
@@ -60,6 +62,8 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       option.innerText = '';
     }
     target.append(checkIcon);
+    document?.querySelector('.selected-color')?.classList.remove('selected-color');
+    target.classList.add('selected-color');
     colorPickerTitle.style.backgroundColor = color;
     formhelper.setColor(color);
   }
@@ -165,7 +169,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
       const gettop = Number.parseInt(rect.top);
       const [x, y] = placePopup(
         280,
-        352,
+        400,
         [getright - 20, gettop - 28],
         [window.innerWidth, window.innerHeight],
         false,

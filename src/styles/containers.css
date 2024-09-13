@@ -43,6 +43,17 @@
   display: block;
 }
 
+.header {
+  background-color: var(--black1);
+  height: 64px;
+  overflow: visible;
+  transition: height .2s ease-in-out;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 197;
+}
+
 .main {
   width: 100%;
   height: calc(100% - 64px);
@@ -60,7 +71,8 @@
   background-color: var(--black1);
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--black1);
+
+  /* border-top: 1px solid var(--mediumgrey1); */
   overflow: hidden;
   -webkit-box-flex: 0;
   flex: none;
@@ -139,6 +151,13 @@
   overflow: hidden !important;
 }
 
+.container__calendars-sb-active .monthview::before {
+  opacity: 0;
+  background-color: transparent;
+  z-index: 10000;
+  border-right: none;
+}
+
 .weekview {
   height: 100%;
   width: 100%;
@@ -154,8 +173,8 @@
 
   .sidebar {
     box-shadow: var(--box-shadow-sbfixed);
-    height: calc(100% - 60px);
-    top: 60px;
+    height: calc(100% - 64px);
+    top: 64px;
     position: fixed !important;
   }
 }
@@ -173,6 +192,10 @@
 }
 
 @media screen and (max-width: 530px) {
+  .header {
+    height: 54px
+  }
+
   .main {
     height: calc(100% - 54px);
   }
@@ -182,12 +205,12 @@
   }
 
   .sidebar {
-    top: 53px;
-    height: calc(100% - 53px);
+    top: 54px;
+    height: calc(100% - 54px);
   }
 }
 
-@media (max-height: 470px) and (max-width: 530px) {
+/* @media (max-height: 470px){
   .main {
     height: calc(100% - 54px);
   }
@@ -197,12 +220,12 @@
   }
 
   .sidebar {
-    height: calc(100% - 53px);
-    top: 53px;
+    height: calc(100% - 54px);
+    top: 54px;
   }
-}
+} */
 
-@media (max-height: 470px) and (min-width: 529px) {
+/* @media (max-height: 470px) and (min-width: 529px) {
   .main {
     height: calc(100% - 54px);
   }
@@ -210,4 +233,9 @@
   .collapse-view {
     top: 47px;
   }
-}
+
+  .sidebar {
+    height: calc(100% - 54px);
+    top: 54px;
+  }
+} */

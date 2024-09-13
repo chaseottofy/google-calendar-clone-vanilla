@@ -15,7 +15,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -23,7 +23,7 @@
 }
 
 @font-face {
-  font-family: 'Roboto';
+  font-family: Roboto;
   font-style: normal;
   font-weight: 500;
   font-display: swap;
@@ -101,6 +101,8 @@
     rgba(83, 88, 95, 0.14) 0px 1px 2px -1px,
     rgba(0, 0, 0, 0.2) 0px 1px 10px 0px,
     rgba(83, 88, 95, 0.1) 0px 4px 5px 0px;
+  --box-shadow7:
+    rgba(0, 0, 0, 0.2) 0px 3px 5px -1px, rgba(0, 0, 0, 0.14) 0px 6px 10px 0px, rgba(0, 0, 0, 0.12) 0px 1px 18px 0px;
   --box-shadow2-hover:
     rgba(60, 64, 67, 0.302) 0px 4px 4px 0px,
     rgba(60, 64, 67, 0.149) 0px 8px 10px 4px;
@@ -116,6 +118,7 @@
   --box-shadow-sbfixed:
     rgba(0, 0, 0, .3) 4px 6px 6px 0;
   --tr-1: color, opacity, background-color;
+
   /* --tr-1: color, opacity, background-color; */
 }
 
@@ -161,12 +164,12 @@ textarea {
   font-family: var(--primaryFont);
 }
 
-.preload * {
+[data-disable-transitions="true"] * {
+  animation: none !important;
   transition: none !important;
   transition-duration: none !important;
   transition-property: none !important;
   transition-timing-function: none !important;
-  animation: none !important;
 }
 
 .disable-transitions * {
