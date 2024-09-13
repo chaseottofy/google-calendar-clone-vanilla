@@ -4,6 +4,23 @@ class LocalStorageHandler {
     this.memoryStorage = new Map();
   }
 
+  setUploadedData(data) {
+    this.clear();
+    for (const key in data) {
+      this.setItem(key, data[key]);
+    }
+  }
+
+  // get all data
+  getAllData() {
+    const data = {};
+    for (let i = 0; i < this.length; i++) {
+      const key = this.key(i);
+      data[key] = this.getItem(key);
+    }
+    return data;
+  }
+
   checkLocalStorageAvailability() {
     try {
       localStorage.setItem('test', 'test');

@@ -304,9 +304,9 @@ function formatEntryOptionsDate(date1, date2) {
 function createTimestamp() {
   const { monthsShort: monthNames } = locales;
   const date = new Date();
-  const month = monthNames[date.getMonth()].toUpperCase();
+  // const month = monthNames[date.getMonth()].toUpperCase();
   const day = Number.parseInt(date.getDate());
-  return `${month}${day}`;
+  return `${day}`;
 }
 
 function longerThanDay(date1, date2) {

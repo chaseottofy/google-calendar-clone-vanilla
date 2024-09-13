@@ -7,19 +7,13 @@ import storage from '../utilities/storage';
 
 class Store {
   constructor() {
-    this.store = storage.getItem('store')
-      ? JSON.parse(storage.getItem('store'))
-      : [];
+    this.store = this.getInitStore();
 
     this.userUpload = {};
 
     this.colors = adjustColorHue(locales.colors, 340);
 
-    this.ctg = storage.getItem('ctg')
-      ? JSON.parse(storage.getItem('ctg'))
-      : {
-        default: { color: this.colors.blue[4], active: true },
-      };
+    this.ctg = this.getInitCtg();
 
     this.activeOverlay = new Set();
 
@@ -65,8 +59,18 @@ class Store {
     this.animationStatus = true;
   }
 
-  initStore() {
-    console.log(typeof Storage);
+  getInitStore() {
+    return storage.getItem('store')
+      ? JSON.parse(storage.getItem('store'))
+      : [];
+  }
+
+  getInitCtg() {
+    return storage.getItem('ctg')
+      ? JSON.parse(storage.getItem('ctg'))
+      : {
+        default: { color: this.colors.blue[4], active: true },
+      };
   }
 
   setStoreForTesting(store) {
@@ -689,7 +693,8 @@ class Store {
   }
 
   setUserUpload(userUpload) {
-    this.userUpload = userUpload;
+    storage.setUploadedData(userUpload);
+    window.location.reload();
   }
 
   getUserUpload() {

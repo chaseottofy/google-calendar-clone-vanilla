@@ -147,8 +147,10 @@ export default function getSidebarSubMenu(store, context) {
 
   // reconfigure the following to use `Blob#text()` instead of `FileReader`
   function getJSONDownload() {
-    const json = JSON.stringify(storage);
+    // const json = storage.getAllData();
+    const json = JSON.stringify(storage.getAllData(), null, 2);
     const [totalEntries, totalCategories] = store.getStoreStats();
+    console.log(json, totalEntries, totalCategories);
     const filename = `ENT_${totalEntries}_CAT_${totalCategories}_${createTimestamp()}`;
     const blob = new Blob([json], { type: 'application/json' });
     const href = URL.createObjectURL(blob);

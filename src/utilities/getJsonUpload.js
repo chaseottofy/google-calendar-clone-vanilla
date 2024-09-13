@@ -13,7 +13,7 @@ export default async function getJSONUpload(store, closingFunction) {
 
         const text = await targetFile.text();
         const json = JSON.parse(text);
-
+        console.log('JSON:', json);
         store.setUserUpload(json);
         closingFunction();
         resolve(json);
