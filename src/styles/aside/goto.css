@@ -12,7 +12,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparent;
+  background-color: transparent;
   z-index: 1040;
 }
 
@@ -23,7 +23,7 @@
   width: auto;
   max-width: 420px;
   height: 200px;
-  background: var(--black1);
+  background-color: var(--black1);
   border-radius: 8px;
   z-index: 1041;
   display: flex;
@@ -33,13 +33,12 @@
   box-shadow: var(--box-shadow1);
 }
 
-
 .hide-gotodate {
-  display:none;
+  display: none;
 }
 
 .go-to__header {
-  display:flex;
+  display: flex;
   flex-direction: column;
   height: 140px;
 }
@@ -54,7 +53,7 @@
 }
 
 .go-to-subtitle {
-  display:flex;
+  display: flex;
   align-items: center;
   height: 42px;
   width: 100%;
@@ -72,7 +71,6 @@
   text-align: center;
 }
 
-
 /* input */
 .go-to__body {
   display: flex;
@@ -83,7 +81,7 @@
 
 .go-to-input {
   margin-bottom: 14px;
-  background: var(--black2);
+  background-color: var(--black2);
   border: none;
   border-bottom: 2px solid var(--mediumgrey2);
   color: var(--white4);
@@ -102,7 +100,7 @@
 
 .goto-err {
   border-bottom: 2px solid var(--red1);
-  background: var(--black0);
+  background-color: var(--black0);
   color: var(--white4);
 }
 
@@ -118,7 +116,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: var(--black000);
+  background-color: var(--black000);
   border: none;
   border-bottom: 2px solid var(--red1);
   color: var(--taskcolor);
@@ -129,19 +127,19 @@
   width: 100%;
   padding: 0 4px;
   z-index: 2;
-  cursor:pointer;
+  cursor: pointer;
   transition-duration: 250ms;
   transition-property: border-bottom;
   transition-timing-function: cubic-bezier(.33, 1, .68, 1);
 }
 
 .go-to-err:hover {
-  background: var(--black2);
+  background-color: var(--black2);
 }
 
 /* submit and cancel buttons */
 .go-to__footer {
-  display:flex;
+  display: flex;
   justify-content: flex-end;
   align-items: center;
   height: 100px;
@@ -166,14 +164,14 @@
 }
 
 .submit-go-to {
-  background: var(--primary2);
+  background-color: var(--primary2);
   color: var(--taskcolor);
   border: 1px solid transparent;
   margin-left: 12px;
 }
 
 .submit-err {
-  background: transparent;
+  background-color: transparent;
   border: 1px solid var(--red2);
 }
 

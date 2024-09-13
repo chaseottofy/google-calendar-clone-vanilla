@@ -1,8 +1,8 @@
+import setSidebarDatepicker from '../../components/menus/sidebarDatepicker';
 import setViews from '../../config/setViews';
 import locales from '../../locales/en';
-import { getClosest } from '../../utilities/helpers';
 import { getDateFromAttribute } from '../../utilities/dateutils';
-import setSidebarDatepicker from '../../components/menus/sidebarDatepicker';
+import { getClosest } from '../../utilities/helpers';
 
 const yearviewGrid = document.querySelector('.calendar__yearview');
 const sidebar = document.querySelector('.sidebar');
@@ -22,9 +22,9 @@ export default function setYearView(context, store, datepickerContext) {
     let entries = store.getGroupedYearEntries(store.getYearEntries(year));
     for (let i = 0; i < 12; i++) {
       if (entries[i]) {
-        yearviewGrid.appendChild(createMonthCell(year, i, entries[i]));
+        yearviewGrid.append(createMonthCell(year, i, entries[i]));
       } else {
-        yearviewGrid.appendChild(createMonthCell(year, i, []));
+        yearviewGrid.append(createMonthCell(year, i, []));
       }
     }
 
@@ -67,18 +67,18 @@ export default function setYearView(context, store, datepickerContext) {
     const cellHeaderWeekDayNames = document.createElement('div');
     cellHeaderWeekDayNames.classList.add('yv-monthcell__header--weekdays');
 
-    labels.weekdaysNarrow.forEach((el) => {
+    for (const el of labels.weekdaysNarrow) {
       const weekday = document.createElement('div');
       weekday.classList.add('yv-monthcell__header--weekday');
       weekday.textContent = el;
-      cellHeaderWeekDayNames.appendChild(weekday);
-    });
+      cellHeaderWeekDayNames.append(weekday);
+    }
 
     const cellBody = document.createElement('div');
     cellBody.classList.add('yv-monthcell__body');
 
     function populateMonths() {
-      let prevmonthstart = daysInPrevMonth - firstDayOfMonth;
+      const prevmonthstart = daysInPrevMonth - firstDayOfMonth;
 
       const createyvcell = (day, classname, nyear, nmonth, current) => {
         const daywrapper = document.createElement('div');
@@ -111,7 +111,7 @@ export default function setYearView(context, store, datepickerContext) {
       };
 
       for (let i = prevmonthstart; i < daysInPrevMonth; i++) {
-        cellBody.appendChild(createyvcell(
+        cellBody.append(createyvcell(
           i + 1,
           'yvmb-prevnext',
           prevmonth.getFullYear(),
@@ -121,7 +121,7 @@ export default function setYearView(context, store, datepickerContext) {
       }
 
       for (let i = 0; i < daysInMonth; i++) {
-        cellBody.appendChild(createyvcell(
+        cellBody.append(createyvcell(
           i + 1,
           null,
           currentMonth.getFullYear(),
@@ -166,7 +166,7 @@ export default function setYearView(context, store, datepickerContext) {
     if (currentmonth) {
       setTimeout(() => {
         yearviewGrid.scrollTo({
-          top: parseInt(currentmonth.offsetTop) - 100,
+          top: Number.parseInt(currentmonth.offsetTop) - 100,
           behavior: 'instant',
         });
       }, 4);

@@ -1,4 +1,4 @@
-let n = 40;
+const n = 40;
 export default n;
 
 const createStatusIcon = () => {
@@ -40,7 +40,7 @@ const createEditIcon = () => {
   icon.setAttribute('fill', 'var(--white3)');
   const pathone = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   pathone.setAttribute('d', 'M10 16q-.625 0-1.062-.438Q8.5 15.125 8.5 14.5t.438-1.062Q9.375 13 10 13t1.062.438q.438.437.438 1.062t-.438 1.062Q10.625 16 10 16Zm0-4.5q-.625 0-1.062-.438Q8.5 10.625 8.5 10t.438-1.062Q9.375 8.5 10 8.5t1.062.438q.438.437.438 1.062t-.438 1.062q-.437.438-1.062.438ZM10 7q-.625 0-1.062-.438Q8.5 6.125 8.5 5.5t.438-1.062Q9.375 4 10 4t1.062.438q.438.437.438 1.062t-.438 1.062Q10.625 7 10 7Z');
-  icon.appendChild(pathone);
+  icon.append(pathone);
   return icon;
 };
 
@@ -56,7 +56,7 @@ const createPencilIcon = (fill) => {
   }
   const pathone = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   pathone.setAttribute('d', 'M20.41 4.94l-1.35-1.35c-.78-.78-2.05-.78-2.83 0L3 16.82V21h4.18L20.41 7.77c.79-.78.79-2.05 0-2.83zm-14 14.12L5 19v-1.36l9.82-9.82 1.41 1.41-9.82 9.83z');
-  icon.appendChild(pathone);
+  icon.append(pathone);
   return icon;
 };
 
@@ -89,7 +89,7 @@ const createCloseIcon = (fill) => {
   }
   const pathone = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   pathone.setAttribute('d', 'M6.062 15 5 13.938 8.938 10 5 6.062 6.062 5 10 8.938 13.938 5 15 6.062 11.062 10 15 13.938 13.938 15 10 11.062Z');
-  icon.appendChild(pathone);
+  icon.append(pathone);
   return icon;
 };
 
@@ -143,7 +143,7 @@ const createCaretRightIcon = (fill) => {
   }
   const pathone = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   pathone.setAttribute('d', 'm6 18.167-1.583-1.584L11 10 4.417 3.417 6 1.833 14.167 10Z');
-  icon.appendChild(pathone);
+  icon.append(pathone);
   return icon;
 };
 
@@ -178,7 +178,7 @@ const createCheckBoxIcon = (fill) => {
   }
   const pathone = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   pathone.setAttribute('d', 'm10.6 16.2 7.05-7.05-1.4-1.4-5.65 5.65-2.85-2.85-1.4 1.4ZM5 21q-.825 0-1.413-.587Q3 19.825 3 19V5q0-.825.587-1.413Q4.175 3 5 3h14q.825 0 1.413.587Q21 4.175 21 5v14q0 .825-.587 1.413Q19.825 21 19 21Zm0-2h14V5H5v14ZM5 5v14V5Z');
-  icon.appendChild(pathone);
+  icon.append(pathone);
   return icon;
 };
 
@@ -193,7 +193,7 @@ const createMeatballVertIcon = (fill) => {
   }
   const pathone = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   pathone.setAttribute('d', 'M6 14q-.825 0-1.412-.588Q4 12.825 4 12t.588-1.413Q5.175 10 6 10t1.412.587Q8 11.175 8 12q0 .825-.588 1.412Q6.825 14 6 14Zm6 0q-.825 0-1.412-.588Q10 12.825 10 12t.588-1.413Q11.175 10 12 10t1.413.587Q14 11.175 14 12q0 .825-.587 1.412Q12.825 14 12 14Zm6 0q-.825 0-1.413-.588Q16 12.825 16 12t.587-1.413Q17.175 10 18 10q.825 0 1.413.587Q20 11.175 20 12q0 .825-.587 1.412Q18.825 14 18 14Z');
-  icon.appendChild(pathone);
+  icon.append(pathone);
   return icon;
 };
 
@@ -218,17 +218,17 @@ const createExpandDownIcon = (fill) => {
 };
 
 export {
-  createStatusIcon,
-  createCategoryIcon,
-  createEditIcon,
-  createPencilIcon,
-  createTrashIcon,
-  createCloseIcon,
   createCaretDownIcon,
-  createCaretUpIcon,
   createCaretRightIcon,
-  createCheckIcon,
+  createCaretUpIcon,
+  createCategoryIcon,
   createCheckBoxIcon,
-  createMeatballVertIcon,
+  createCheckIcon,
+  createCloseIcon,
+  createEditIcon,
   createExpandDownIcon,
+  createMeatballVertIcon,
+  createPencilIcon,
+  createStatusIcon,
+  createTrashIcon,
 };

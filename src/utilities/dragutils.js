@@ -1,5 +1,5 @@
-import calcTime from './timeutils';
 import locales from '../locales/en';
+import calcTime from './timeutils';
 /**
  * For a full explanation see readme @grid-engines
  *
@@ -87,8 +87,6 @@ const identifiers = {
       left: '0%',
       height: '12.5px',
       width: '97%',
-      // width: 'calc((100% - 4px) * 1)',
-      // left: 'calc((100% - 0px) * 0 + 0px)',
     },
   },
 };
@@ -125,7 +123,7 @@ function setStylingForEvent(clause, wrapper, store) {
   const resizeoverlay = document.querySelector('.resize-overlay');
 
   switch (clause) {
-    case 'dragstart':
+    case 'dragstart': {
       // make sidebar slightly see through if it is open and the user is dragging or resizing (screens smaller than 840px);
       if (!sidebar.classList.contains('hide-sidebar')) {
         if (wrapper.offsetLeft === 0) {
@@ -135,36 +133,39 @@ function setStylingForEvent(clause, wrapper, store) {
       store.addActiveOverlay('hide-resize-overlay');
       resizeoverlay.classList.remove('hide-resize-overlay');
       break;
-    case 'dragend':
+    }
+    case 'dragend': {
       store.removeActiveOverlay('hide-resize-overlay');
       sidebar.classList.remove('sidebar--dragged-over');
       resizeoverlay.classList.add('hide-resize-overlay');
       document.body.style.cursor = 'default';
       break;
-    default:
+    }
+    default: {
       break;
+    }
   }
 }
 
 function updateBoxCoordinates(box, view, boxes) {
-  let [id, y, h] = identifiers.boxAttributes[view].updatecoord.map((x) => {
+  const [id, y, h] = identifiers.boxAttributes[view].updatecoord.map((x) => {
     return box.getAttribute(x);
   });
-  let x = view === 'week' ? box.getAttribute('data-box-col') : 1;
+  const x = view === 'week' ? box.getAttribute('data-box-col') : 1;
   boxes.updateCoordinates(id, {
-    x: parseInt(x),
-    y: parseInt(y),
-    h: parseInt(h),
-    e: parseInt(y) + parseInt(h),
+    x: Number.parseInt(x),
+    y: Number.parseInt(y),
+    h: Number.parseInt(h),
+    e: Number.parseInt(y) + Number.parseInt(h),
   });
 }
 
 function setBoxTimeAttributes(box, view) {
   let start = +box.style.top.split('px')[0];
   start = start >= 0 ? start / 12.5 : 0;
-  let length = +box.style.height.split('px')[0] / 12.5;
-  let end = start + length;
-  let prepend = identifiers.boxAttributes[view].prepend;
+  const length = +box.style.height.split('px')[0] / 12.5;
+  const end = start + length;
+  const prepend = identifiers.boxAttributes[view].prepend;
   box.setAttribute(`${prepend}start-time`, start);
   box.setAttribute(`${prepend}time-intervals`, length);
   box.setAttribute(`${prepend}end-time`, end);
@@ -189,13 +190,13 @@ function createBox(col, entry, view, color) {
   const entryTitle = document.createElement('div');
   entryTitle.classList.add(`${baseClass}-title`);
   entryTitle.textContent = entry.title;
-  boxheader.appendChild(entryTitle);
+  boxheader.append(entryTitle);
 
   const boxcontent = document.createElement('div');
   boxcontent.classList.add(`${baseClass}__content`);
   const entryTime = document.createElement('span');
   entryTime.classList.add(`${baseClass}-time`);
-  boxcontent.appendChild(entryTime);
+  boxcontent.append(entryTime);
 
   const resizehandleS = document.createElement('div');
   resizehandleS.classList.add(`${baseClass}-resize-s`);
@@ -219,7 +220,7 @@ function createBox(col, entry, view, color) {
   box.setAttribute(`${attrPrepend}box-id`, entry.id);
   box.setAttribute(`${attrPrepend}box-category`, entry.category);
   box.append(boxheader, boxcontent, resizehandleS);
-  col.appendChild(box);
+  col.append(box);
 }
 
 function createTemporaryBox(box, col, hasSibling, view) {
@@ -228,7 +229,7 @@ function createTemporaryBox(box, col, hasSibling, view) {
   if (hasSibling) {
     col.insertBefore(clone, box.nextElementSibling);
   } else {
-    col.appendChild(clone);
+    col.append(clone);
   }
 }
 
@@ -250,13 +251,13 @@ function createTempBoxHeader(view) {
   boxheader.classList.add(`${baseClass}__header`);
   boxtitle.classList.add(`${baseClass}-title`);
   boxtitle.textContent = '(no title)';
-  boxheader.appendChild(boxtitle);
+  boxheader.append(boxtitle);
   return boxheader;
 }
 
 function startEndDefault(y) {
-  let tempstarthour = Math.floor((y / 12.5) / 4);
-  let tempstartmin = Math.floor((y / 12.5) % 4) * 15;
+  const tempstarthour = Math.floor((y / 12.5) / 4);
+  const tempstartmin = Math.floor((y / 12.5) % 4) * 15;
   return [
     tempstarthour,
     tempstartmin,
@@ -274,7 +275,7 @@ function calcNewMinuteFromCoords(h, y) {
 }
 
 function calcDateOnClick(date, start, length) {
-  let [startDate, endDate] = [new Date(date), new Date(date)];
+  const [startDate, endDate] = [new Date(date), new Date(date)];
   startDate.setHours(Math.floor(+start / 4));
   startDate.setMinutes((+start * 15) % 60);
   endDate.setHours(Math.floor((start + length) / 4));
@@ -299,18 +300,18 @@ function resetOriginalBox(box, boxorig) {
 
 export default handleOverlap;
 export {
-  setStylingForEvent,
-  updateBoxCoordinates,
-  setBoxTimeAttributes,
-  createBox,
-  createTemporaryBox,
-  getBoxDefaultStyle,
-  resetStyleOnClick,
-  createTempBoxHeader,
-  startEndDefault,
+  calcDateOnClick,
   calcNewHourFromCoords,
   calcNewMinuteFromCoords,
-  calcDateOnClick,
+  createBox,
+  createTempBoxHeader,
+  createTemporaryBox,
+  getBoxDefaultStyle,
   getOriginalBoxObject,
   resetOriginalBox,
+  resetStyleOnClick,
+  setBoxTimeAttributes,
+  setStylingForEvent,
+  startEndDefault,
+  updateBoxCoordinates,
 };

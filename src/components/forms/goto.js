@@ -1,5 +1,5 @@
-import locales from '../../locales/en';
 import setViews from '../../config/setViews';
+import locales from '../../locales/en';
 import setSidebarDatepicker from '../menus/sidebarDatepicker';
 
 const gotoOverlay = document.querySelector('.go-to-date-overlay');
@@ -10,74 +10,38 @@ const cancelGoto = document.querySelector('.cancel-go-to');
 const submitGoto = document.querySelector('.submit-go-to');
 export default function createGoTo(context, store, datepickerContext) {
   const { labels } = locales;
-  const {
-    monthsShortLower: monthsArray,
-    monthsLongLower: monthsArrayLong,
-  } = labels;
+  const { monthsShortLower: monthsArray } = labels;
 
-  function validateDate(date) {
-    let arr;
-    let haserr = false;
+  function validateDate(dateString) {
+    const formatMMDDYYYY = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+    const formatMonDDYYYY = /^(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})\s+(\d{4})$/i;
+    const matchMMDDYYYY = dateString.match(formatMMDDYYYY);
+    const matchMonDDYYYY = dateString.match(formatMonDDYYYY);
+    let month; let day; let year;
 
-    // accepts two formats: DD/MM/YYYY or jan 1 2021
-    if (date.includes('/')) {
-      arr = date.split('/');
+    if (matchMMDDYYYY) {
+      // Format: mm/dd/yyyy
+      [, month, day, year] = matchMMDDYYYY;
+      month = Number.parseInt(month, 10) - 1;
+      day = Number.parseInt(day, 10);
+      year = Number.parseInt(year, 10);
+    } else if (matchMonDDYYYY) {
+      const [, monthStr, dayStr, yearStr] = matchMonDDYYYY;
+      month = monthsArray.indexOf(monthStr.toLowerCase());
+      day = Number.parseInt(dayStr, 10);
+      year = Number.parseInt(yearStr, 10);
     } else {
-      arr = date.split(' ');
+      // If the string doesn't match either format
+      return false;
     }
 
-    if (arr.length !== 3) {
-      haserr = true;
+    // Create a new Date object and validate the date
+    const date = new Date(year, month, day);
+    // Check if the date is valid
+    if (date.getFullYear() !== year || date.getMonth() !== month || date.getDate() !== day) {
+      return false;
     }
-
-    // convert string year/month/day to int
-    // convert 'jan' to 0 || 'january' to 0
-    const [month, day, year] = arr.map((vdate, idx) => {
-      let dateInt = parseInt(vdate);
-      let tempMonth = null; // in case of month string
-
-      if (Number.isNaN(dateInt)) {
-        if (date.length > 3) {
-          tempMonth = monthsArrayLong.indexOf(vdate.toLowerCase());
-        } else {
-          tempMonth = monthsArray.indexOf(vdate.toLowerCase());
-        }
-      }
-
-      if (idx === 0 && tempMonth === null) {
-        dateInt -= 1;
-        if (dateInt === -1) {
-          dateInt = 0;
-        }
-      }
-
-      if (tempMonth === -1) {
-        haserr = true;
-      }
-
-      // check if year is valid
-      // if user inputs value less than 100, assume they mean 2000s
-      // do not allow year greater than 2100 or less than 1901
-      if (idx === 2) {
-        if (dateInt < 100) {
-          dateInt += 2000;
-        } else if (dateInt > 2100) {
-          haserr = true;
-        } else if (dateInt > 100 && dateInt < 1901) {
-          haserr = true;
-        }
-      }
-
-      return tempMonth === null ? dateInt : tempMonth;
-    });
-
-    // form date object and check if valid
-    const dateObj = new Date(year, month, day);
-    if (dateObj.toString() === 'Invalid Date') {
-      haserr = true;
-    }
-
-    return haserr ? false : dateObj;
+    return date;
   }
 
   function removeError() {
@@ -91,7 +55,7 @@ export default function createGoTo(context, store, datepickerContext) {
   }
 
   function handleGoTo() {
-    const newdate = validateDate(gotoInput.value);
+    const newdate = validateDate(gotoInput.value.toLowerCase());
     if (newdate instanceof Date) {
       context.setDate(
         newdate.getFullYear(),

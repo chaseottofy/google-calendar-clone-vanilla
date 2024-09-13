@@ -24,7 +24,7 @@ export default function handleShortCutsModal(store) {
         keyone.classList.add('key-full');
       }
       keyone.textContent = key.toUpperCase();
-      shortcutKey.appendChild(keyone);
+      shortcutKey.append(keyone);
     }
 
     const shortcutDescription = document.createElement('div');
@@ -53,7 +53,7 @@ export default function handleShortCutsModal(store) {
   }
 
   function closeShortcutsOnKeydown(e) {
-    let inp = e.key.toLowerCase();
+    const inp = e.key.toLowerCase();
     if (inp === 'escape' || inp === '/' || inp === '?') {
       handleShortcutsModalClose();
     }
@@ -81,7 +81,7 @@ export default function handleShortCutsModal(store) {
     const shortcuts = store.getShortcuts();
     for (let i = 0; i < Object.values(shortcuts).length; i++) {
       const value = Object.values(shortcuts)[i];
-      shortcutsModalContent.appendChild(createShortcut(
+      shortcutsModalContent.append(createShortcut(
         value.shortcut,
         value.action,
       ));

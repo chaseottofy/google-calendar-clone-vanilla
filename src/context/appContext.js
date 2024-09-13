@@ -1,5 +1,6 @@
-import { compareDates } from '../utilities/dateutils';
 import locales from '../locales/en';
+import { compareDates } from '../utilities/dateutils';
+import storage from '../utilities/storage';
 
 class Context {
   constructor() {
@@ -19,131 +20,92 @@ class Context {
     this.week = this.getWeek();
   }
 
-  setDateDefaults() {
-    if (localStorage.getItem('yearSelected') === null) {
-      if (this.yearSelected === undefined) {
-        this.yearSelected = this.date.getFullYear();
-      }
-      Context.setLocalYear(this.yearSelected);
-    }
-
-    if (localStorage.getItem('monthSelected') === null) {
-      if (this.monthSelected === undefined) {
-        this.monthSelected = this.date.getMonth();
-      }
-      Context.setLocalMonth(this.monthSelected);
-    }
-
-    if (localStorage.getItem('daySelected') === null) {
-      if (this.daySelected === undefined) {
-        this.daySelected = this.date.getDate();
-      }
-      Context.setLocalDay(this.daySelected);
-    }
-
-    if (localStorage.getItem('dateSelected') === null) {
-      if (this.dateSelected === undefined) {
-        this.dateSelected = 1;
-      }
-      Context.setLocalDateSelected(this.dateSelected);
-    }
-  }
-
-  setSchemaDefaults() {
-    if (localStorage.getItem('colorScheme') === null) {
-      if (this.colorScheme === undefined) {
-        this.colorScheme = 'dark';
-      }
-      Context.setLocalColorScheme(this.colorScheme);
-    }
-
-    if (localStorage.getItem('component') === null) {
-      if (this.component === undefined) {
-        this.component = 'month';
-      }
-      Context.setLocalComponent(this.component);
-    }
-
-    if (localStorage.getItem('sidebarState') === null) {
-      if (this.sidebarState === undefined) {
-        this.sidebarState = 'hide';
-      }
-      Context.setLocalSidebarState(this.sidebarState);
-    }
-  }
-
   setDefaults() {
-    this.setSchemaDefaults();
-    this.setDateDefaults();
+    const schemaBase = {
+      yearSelected: [this.date.getFullYear(), Context.setLocalYear],
+      monthSelected: [this.date.getMonth(), Context.setLocalMonth],
+      daySelected: [this.date.getDate(), Context.setLocalDay],
+      dateSelected: [1, Context.setLocalDateSelected],
+      colorScheme: ['dark', Context.setLocalColorScheme],
+      component: ['month', Context.setLocalComponent],
+      sidebarState: ['hide', Context.setLocalSidebarState],
+    };
+    for (const [key, value] of Object.entries(schemaBase)) {
+      if (storage.getItem(key) === null) {
+        const [schemaValue, setter] = value;
+        if (this[key] === undefined) this[key] = schemaValue;
+        setter(this[key]);
+      }
+    }
   }
 
   /* **************************************** */
   /* LOCAL STATE MANAGEMENT */
   static getLocalDay() {
-    return +localStorage.getItem('daySelected') === undefined ? 1 : +localStorage.getItem('daySelected');
+    return +storage.getItem('daySelected') === undefined ? 1 : +storage.getItem('daySelected');
   }
 
   static getLocalMonth() {
-    return +localStorage.getItem('monthSelected') === undefined ? 1 : +localStorage.getItem('monthSelected');
+    return +storage.getItem('monthSelected') === undefined ? 1 : +storage.getItem('monthSelected');
   }
 
   static getLocalYear() {
-    return +localStorage.getItem('yearSelected') === undefined ? 1 : +localStorage.getItem('yearSelected');
+    return +storage.getItem('yearSelected') === undefined ? 1 : +storage.getItem('yearSelected');
   }
 
   static getLocalDateSelected() {
-    return +localStorage.getItem('dateSelected');
+    return +storage.getItem('dateSelected');
   }
 
   static getLocalComponent() {
-    return localStorage.getItem('component');
+    return storage.getItem('component');
   }
 
   static getLocalColorScheme() {
-    return localStorage.getItem('colorScheme');
+    return storage.getItem('colorScheme');
   }
 
   static getLocalSidebarState() {
-    return localStorage.getItem('sidebarState');
+    return storage.getItem('sidebarState');
   }
 
   static setLocalDay(day) {
-    localStorage.setItem('daySelected', day);
+    storage.setItem('daySelected', day);
   }
 
   static setLocalMonth(month) {
-    localStorage.setItem('monthSelected', month);
+    storage.setItem('monthSelected', month);
   }
 
   static setLocalYear(year) {
-    localStorage.setItem('yearSelected', year);
+    storage.setItem('yearSelected', year);
   }
 
   static setLocalDateSelected(date) {
-    localStorage.setItem('dateSelected', date);
+    storage.setItem('dateSelected', date);
   }
 
   static setLocalComponent(component) {
-    localStorage.setItem('component', component);
+    storage.setItem('component', component);
   }
 
   static setLocalSidebarState(state) {
-    localStorage.setItem('sidebarState', state);
+    storage.setItem('sidebarState', state);
   }
 
   static setLocalColorScheme(colorScheme) {
-    localStorage.setItem('colorScheme', colorScheme);
+    storage.setItem('colorScheme', colorScheme);
   }
   /* **************************************** */
 
   /* **************************************** */
   /* TESTING -- DEV ONLY */
   getAllMethodNames() {
-    return Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(
-      (method) => {
-        return method !== 'constructor' && method !== 'getStoreStats';
-      },
-    );
+    return Object.getOwnPropertyNames(
+      Object.getPrototypeOf(this),
+    ).filter((method) => {
+      return method !== 'constructor' && method !== 'getStoreStats';
+    });
   }
 
   /* **************************************** */
@@ -299,7 +261,7 @@ class Context {
   }
 
   getWeek() {
-    let tempdate = this.getDate();
+    const tempdate = this.getDate();
     tempdate.setDate(tempdate.getDate() - tempdate.getDay());
     return tempdate;
   }
@@ -309,8 +271,8 @@ class Context {
   }
 
   getWeekArray() {
-    let week = this.getWeek();
-    let weekArray = [];
+    const week = this.getWeek();
+    const weekArray = [];
     for (let i = 0; i < 7; i++) {
       if (i < 6) {
         weekArray.push(new Date(week.getFullYear(), week.getMonth(), week.getDate() + i));
@@ -323,9 +285,9 @@ class Context {
 
   getWeekRange() {
     const { labels } = locales;
-    let weekArray = this.getWeekArray();
-    let [m1, m2] = [weekArray[0].getMonth(), weekArray[6].getMonth()];
-    let [d1, d2] = [weekArray[0].getDate(), weekArray[6].getDate()];
+    const weekArray = this.getWeekArray();
+    const [m1, m2] = [weekArray[0].getMonth(), weekArray[6].getMonth()];
+    const [d1, d2] = [weekArray[0].getDate(), weekArray[6].getDate()];
 
     if (m1 === m2) {
       return `${labels.monthsShort[m1]} ${d1} – ${d2}, ${weekArray[0].getFullYear()}`;
@@ -337,10 +299,10 @@ class Context {
   // ** not in use **
   getWeekNumber() {
     // returns week index 1 - 52
-    let d = new Date(Date.UTC(this.getYear(), this.getMonth(), this.getDay()));
+    const d = new Date(Date.UTC(this.getYear(), this.getMonth(), this.getDay()));
     d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-    let yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d - yearStart) / 86_400_000) + 1) / 7);
   }
 
   getMonthName() {
@@ -357,8 +319,8 @@ class Context {
   }
 
   getMonthArrayStart() {
-    let monthArrayStart = [];
-    let [year, month] = [this.getYear(), this.getMonth()];
+    const monthArrayStart = [];
+    const [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
       monthArrayStart.push(new Date(year, month, 0 - i));
     }
@@ -370,8 +332,8 @@ class Context {
   }
 
   getMonthArrayEnd(handleFourWeeks) {
-    let monthArrayEnd = [];
-    let [year, month] = [this.getYear(), this.getMonth()];
+    const monthArrayEnd = [];
+    const [year, month] = [this.getYear(), this.getMonth()];
 
     if (handleFourWeeks) {
       for (let i = 1; i < 8; i++) {
@@ -387,10 +349,10 @@ class Context {
   }
 
   getMonthArray() {
-    let monthArray = [];
-    let start = this.getMonthArrayStart();
-    let daysInMonth = this.getDaysInMonth();
-    let [year, month] = [this.getYear(), this.getMonth()];
+    const monthArray = [];
+    const start = this.getMonthArrayStart();
+    const daysInMonth = this.getDaysInMonth();
+    const [year, month] = [this.getYear(), this.getMonth()];
     let end = this.getMonthArrayEnd();
 
     for (let i = start.length - 1; i >= 0; i--) {
@@ -401,7 +363,7 @@ class Context {
       monthArray.push(new Date(year, month, i));
     }
 
-    monthArray[monthArray.length - 1].setHours(23, 59, 59, 999);
+    monthArray.at(-1).setHours(23, 59, 59, 999);
 
     if (monthArray.length === 28 && end.length < 7) {
       end = this.getMonthArrayEnd(true);
@@ -452,67 +414,69 @@ class DatepickerContext {
   }
 
   setDefaults() {
-    if (localStorage.getItem('pickerYearSelected') === null) {
-      if (this.yearSelected === undefined) {
-        this.yearSelected = this.date.getFullYear();
+    const schemaBase = {
+      pickerYearSelected: [
+        this.yearSelected,
+        this.date.getFullYear(),
+        DatepickerContext.setLocalPickerYear,
+      ],
+      pickerMonthSelected: [
+        this.monthSelected,
+        this.date.getMonth(),
+        DatepickerContext.setLocalPickerMonth,
+      ],
+      pickerDaySelected: [
+        this.daySelected,
+        this.date.getDate(),
+        DatepickerContext.setLocalPickerDay,
+      ],
+      pickerDateSelected: [
+        this.dateSelected,
+        this.date.getDate(),
+        DatepickerContext.setLocalPickerDateSelected,
+      ],
+    };
+    for (const [key, value] of Object.entries(schemaBase)) {
+      if (storage.getItem(key) === null) {
+        const [defaultVar, defaultValue, setter] = value;
+        if (this[defaultVar] === undefined) this[defaultVar] = defaultValue;
+        setter(defaultVar);
       }
-      DatepickerContext.setLocalPickerYear(this.yearSelected);
-    }
-
-    if (localStorage.getItem('pickerMonthSelected') === null) {
-      if (this.monthSelected === undefined) {
-        this.monthSelected = this.date.getMonth();
-      }
-      DatepickerContext.setLocalPickerMonth(this.monthSelected);
-    }
-
-    if (localStorage.getItem('pickerDaySelected') === null) {
-      if (this.daySelected === undefined) {
-        this.daySelected = this.date.getDate();
-      }
-      DatepickerContext.setLocalPickerDay(this.daySelected);
-    }
-
-    if (localStorage.getItem('pickerDateSelected') === null) {
-      if (this.dateSelected === undefined) {
-        this.dateSelected = this.date.getDate();
-      }
-      DatepickerContext.setLocalPickerDateSelected(this.dateSelected);
     }
   }
 
   /* **************************************** */
   /* LOCAL STATE MANAGEMENT */
   static getLocalPickerDay() {
-    return +localStorage.getItem('pickerDaySelected');
+    return +storage.getItem('pickerDaySelected');
   }
 
   static getLocalPickerMonth() {
-    return +localStorage.getItem('pickerMonthSelected');
+    return +storage.getItem('pickerMonthSelected');
   }
 
   static getLocalPickerYear() {
-    return +localStorage.getItem('pickerYearSelected');
+    return +storage.getItem('pickerYearSelected');
   }
 
   static getLocalPickerDateSelected() {
-    return +localStorage.getItem('pickerDateSelected');
+    return +storage.getItem('pickerDateSelected');
   }
 
   static setLocalPickerDay(day) {
-    localStorage.setItem('pickerDaySelected', day);
+    storage.setItem('pickerDaySelected', day);
   }
 
   static setLocalPickerMonth(month) {
-    localStorage.setItem('pickerMonthSelected', month);
+    storage.setItem('pickerMonthSelected', month);
   }
 
   static setLocalPickerYear(year) {
-    localStorage.setItem('pickerYearSelected', year);
+    storage.setItem('pickerYearSelected', year);
   }
 
   static setLocalPickerDateSelected(date) {
-    localStorage.setItem('pickerDateSelected', date);
+    storage.setItem('pickerDateSelected', date);
   }
 
   /* **************************************** */
@@ -595,8 +559,8 @@ class DatepickerContext {
   }
 
   getMonthArrayStart() {
-    let monthArrayStart = [];
-    let [year, month] = [this.getYear(), this.getMonth()];
+    const monthArrayStart = [];
+    const [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
       monthArrayStart.push(new Date(year, month, 0 - i));
     }
@@ -608,8 +572,8 @@ class DatepickerContext {
   }
 
   getMonthArrayEnd() {
-    let monthArrayEnd = [];
-    let [year, month] = [this.getYear(), this.getMonth()];
+    const monthArrayEnd = [];
+    const [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 1; i < 7 - this.getMonthArrayEndDay(); i++) {
       monthArrayEnd.push(new Date(year, +month + 1, i));
     }
@@ -617,19 +581,19 @@ class DatepickerContext {
   }
 
   getMonthArray() {
-    let monthArray = [];
+    const monthArray = [];
 
-    let start = this.getMonthArrayStart();
+    const start = this.getMonthArrayStart();
     for (let i = start.length - 1; i >= 0; i--) {
       monthArray.push(start[i]);
     }
 
-    let [year, month] = [this.getYear(), this.getMonth()];
+    const [year, month] = [this.getYear(), this.getMonth()];
     for (let i = 1; i <= this.getDaysInMonth(); i++) {
       monthArray.push(new Date(year, month, i));
     }
 
-    let end = this.getMonthArrayEnd();
+    const end = this.getMonthArrayEnd();
     for (let i = 0; i < end.length; i++) {
       if (i === end.length - 1) {
         end[i].setHours(23, 59, 59, 999);

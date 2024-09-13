@@ -1,9 +1,8 @@
+import store from '../../context/store';
+import { getClosest } from '../../utilities/helpers';
 import {
   createCloseIcon,
 } from '../../utilities/svgs';
-
-import { getClosest } from '../../utilities/helpers';
-import store from '../../context/store';
 
 const toast = document.querySelector('.toast');
 /**
@@ -33,14 +32,14 @@ export default function createToast(message, undoCallback) {
 
     const closeIconWrapper = document.createElement('div');
     closeIconWrapper.classList.add('close-toast-icon-wrapper');
-    closeIconWrapper.appendChild(createCloseIcon('var(--white4)'));
+    closeIconWrapper.append(createCloseIcon('var(--white4)'));
 
     const undoToastWrapper = document.createElement('div');
     undoToastWrapper.classList.add('undo-toast-wrapper');
     const undoToastMessage = document.createElement('div');
     undoToastMessage.classList.add('undo-toast-message');
     undoToastMessage.textContent = 'Undo';
-    undoToastWrapper.appendChild(undoToastMessage);
+    undoToastWrapper.append(undoToastMessage);
 
     function delegateToast(e) {
       // if e.target is not in the toast, remove the toast

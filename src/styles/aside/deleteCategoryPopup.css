@@ -1,5 +1,5 @@
 .popup-delete-ctg__overlay {
-  background: rgba(0, 0, 0, .4);
+  background-color: rgba(0, 0, 0, .4);
   height: 100%;
   left: 0;
   position: absolute;
@@ -9,7 +9,7 @@
 }
 
 .popup-delete-ctg {
-  background: var(--black0);
+  background-color: var(--black0);
   border-radius: 12px;
   inset: 5% 5% 5% 5%;
   display: flex;
@@ -40,7 +40,7 @@
 }
 
 .popup-delete-ctg__title {
-  background: var(--black000);
+  background-color: var(--black000);
   font-size: 20px;
   font-weight: 500;
   width: max-content;
@@ -85,8 +85,7 @@
   padding: 0 8px;
   position: relative;
   width: 100%;
-
-  /* transition: background 100ms ease-in-out; */
+  /* transition: background-color100ms ease-in-out; */
 }
 
 input[type="radio"] {
@@ -156,7 +155,7 @@ input[type="radio"] {
 }
 
 .popup-delete-ctg__btn--cancel {
-  background: var(--black2);
+  background-color: var(--black2);
   border: 1px solid var(--black000);
   color: var(--taskcolor);
 }
@@ -181,13 +180,12 @@ input[type="radio"] {
 }
 
 .popup-delete-ctg__btn--proceed {
-  background: var(--black3);
+  background-color: var(--black3);
   border: 1px solid var(--darkgrey1);
-
 }
 
 .popup-delete-ctg__btn--proceed:hover {
-  background: var(--red1);
+  background-color: var(--red1);
   color: var(--taskcolor0);
 }
 

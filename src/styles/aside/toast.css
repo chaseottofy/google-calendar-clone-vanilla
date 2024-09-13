@@ -14,7 +14,7 @@
   right: 0;
   margin: 0 auto;
   width: 284px;
-  background: #141617;
+  background-color: #141617;
   display: flex;
   align-items: center;
   box-shadow: var(--box-shadow1);
@@ -52,29 +52,29 @@
 }
 
 .undo-toast-wrapper {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:24px;
-  width:48px;
-  cursor:pointer;
-  border-radius:4px;
-  margin-left:auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 48px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: auto;
 }
 
 .undo-toast-wrapper:hover {
-  background: #0f2c4f;
+  background-color: #0f2c4f;
 }
 
 .undo-toast-message {
   color: var(--primarylight2);
   font-weight: 500;
-  font-size:13px;
-  line-height:24px;
-  text-align:center;
+  font-size: 13px;
+  line-height: 24px;
+  text-align: center;
   padding: 0 2px;
-  user-select:none;
-  pointer-events:none;
+  user-select: none;
+  pointer-events: none;
 }
 
 .close-toast-icon-wrapper {
@@ -94,5 +94,5 @@
 }
 
 .close-toast-icon-wrapper:hover {
-  background: #1f2223;
+  background-color: #1f2223;
 }

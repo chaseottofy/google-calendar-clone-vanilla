@@ -1,5 +1,5 @@
 .header {
-  background: var(--black1);
+  background-color: var(--black1);
   height: 64px;
   overflow: visible;
   transition: height .2s ease-in-out;
@@ -32,17 +32,17 @@
   height: 42px;
   justify-content: center;
   margin-left: 10px;
-  transition: background .2s ease-in-out;
+  transition: background-color.2s ease-in-out;
   width: 42px;
 }
 
 .menu:hover {
-  background: var(--mediumgrey1)
+  background-color: var(--mediumgrey1)
 }
 
 .menu:hover::after,
 .menu:focus-visible::after {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
   border-radius: 2px;
   content: attr(data-tooltip);
   font-size: 12px;
@@ -168,7 +168,7 @@
 
 .next:hover,
 .prev:hover {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
 }
 
 .btn-today:hover::after,
@@ -179,7 +179,7 @@
 .prev:focus-visible::after {
   font-family: var(--primaryFont) !important;
   align-items: center;
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
   border-radius: 2px;
   color: var(--white1);
   content: attr(data-tooltip);
@@ -242,7 +242,7 @@
 }
 
 .datetime-wrapper:hover {
-  background: var(--black0)
+  background-color: var(--black0)
 }
 
 .datetime-inactive {
@@ -284,7 +284,7 @@
 .h-search:hover::after,
 .settings:hover::after {
   align-items: center;
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
   border-radius: 2px;
   color: var(--white1);
   content: attr(data-tooltip);
@@ -340,13 +340,12 @@
 }
 
 .select__modal:hover {
-  background: var(--black0);
+  background-color: var(--black0);
 }
 
 .selection--active {
-  background: var(--mediumgrey1)
+  background-color: var(--mediumgrey1)
 }
-
 
 @media screen and (max-width: 840px) {
   .header-title {
@@ -359,7 +358,6 @@
     display: none;
   }
 }
-
 
 @media screen and (max-width:735px) {
   .menu {
@@ -458,11 +456,8 @@
 
   .logo::after {
     font-size: 12px;
-
     /* line-height: 36px; */
-
     /* text-align: center; */
-
     /* text-indent: -.5px */
   }
 
@@ -520,10 +515,8 @@
 
   .logo::after {
     font-size: 10px;
-
     /* letter-spacing: -.5px; */
     line-height: 32px;
-
     /* text-indent: 0 */
   }
 
@@ -536,7 +529,6 @@
     margin-right: 6px;
     margin-left: 6px;
   }
-
 
   .datetime-wrapper {
     margin: 0;

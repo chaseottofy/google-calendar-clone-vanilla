@@ -1,20 +1,24 @@
 import Entry from '../factory/entries';
-import { testDate, compareDates } from '../utilities/dateutils';
 import locales from '../locales/en';
 import defautlKeyboardShortcuts from '../locales/kbDefault';
+import { compareDates, testDate } from '../utilities/dateutils';
+import adjustColorHue from '../utilities/editcolors';
+import storage from '../utilities/storage';
 
 class Store {
   constructor() {
-    this.store = localStorage.getItem('store')
-      ? JSON.parse(localStorage.getItem('store'))
+    this.store = storage.getItem('store')
+      ? JSON.parse(storage.getItem('store'))
       : [];
 
     this.userUpload = {};
 
-    this.ctg = localStorage.getItem('ctg')
-      ? JSON.parse(localStorage.getItem('ctg'))
+    this.colors = adjustColorHue(locales.colors, 340);
+
+    this.ctg = storage.getItem('ctg')
+      ? JSON.parse(storage.getItem('ctg'))
       : {
-        default: { color: locales.colors.blue[4], active: true },
+        default: { color: this.colors.blue[4], active: true },
       };
 
     this.activeOverlay = new Set();
@@ -61,6 +65,10 @@ class Store {
     this.animationStatus = true;
   }
 
+  initStore() {
+    console.log(typeof Storage);
+  }
+
   setStoreForTesting(store) {
     this.store = store;
     Store.setStore(this.store);
@@ -81,46 +89,50 @@ class Store {
   /* ************************* */
   /* LOCAL STORAGE MANAGEMENT */
   static getStore() {
-    return JSON.parse(localStorage.getItem('store')) || [];
+    return JSON.parse(storage.getItem('store')) || [];
   }
 
   static getActiveStore() {
-    return JSON.parse(localStorage.getItem('activeStore')) || [];
+    return JSON.parse(storage.getItem('activeStore')) || [];
   }
 
   static getCtg() {
-    return JSON.parse(localStorage.getItem('ctg')) || [];
+    return JSON.parse(storage.getItem('ctg')) || [];
   }
 
   static getShortcutsStatus() {
-    return JSON.parse(localStorage.getItem('keyboardShortcutsStatus'));
+    return JSON.parse(storage.getItem('keyboardShortcutsStatus'));
   }
 
   static getAnimationStatus() {
-    return JSON.parse(localStorage.getItem('animationStatus'));
+    return JSON.parse(storage.getItem('animationStatus'));
   }
 
   // *******************
   static setStore(store) {
-    localStorage.setItem('store', JSON.stringify(store));
+    storage.setItem('store', JSON.stringify(store));
   }
 
   static setActiveStore(activeStore) {
-    localStorage.setItem('activeStore', JSON.stringify(activeStore));
+    storage.setItem('activeStore', JSON.stringify(activeStore));
   }
 
   static setCtg(ctg) {
-    localStorage.setItem('ctg', JSON.stringify(ctg));
+    storage.setItem('ctg', JSON.stringify(ctg));
   }
 
   static setShortcutsStatus(status) {
-    localStorage.setItem('keyboardShortcutsStatus', JSON.stringify(status));
+    storage.setItem('keyboardShortcutsStatus', JSON.stringify(status));
   }
 
   static setAnimationStatus(status) {
-    localStorage.setItem('animationStatus', JSON.stringify(status));
+    storage.setItem('animationStatus', JSON.stringify(status));
   }
+
   /* ************************* */
+  getColors() {
+    return this.colors;
+  }
 
   /* ************** */
   /* essential crud (entries) - create, read, update, delete */
@@ -143,7 +155,7 @@ class Store {
     const active = this.getActiveCategories();
     if (active.length === 0) return [];
     const activeEntries = this.store.filter((entry) => {
-      return active ? active.indexOf(entry.category) > -1 : [];
+      return active ? active.includes(entry.category) : [];
     });
     return activeEntries;
   }
@@ -168,11 +180,11 @@ class Store {
   }
 
   getLastEntryId() {
-    return this.store[this.store.length - 1].id;
+    return this.store.at(-1).id;
   }
 
   compareEntries(entry1, entry2) {
-    for (let key in entry1) {
+    for (const key in entry1) {
       if (key === 'id' || key === 'coordinates') continue;
 
       if (key === 'end' || key === 'start') {
@@ -224,7 +236,7 @@ class Store {
    */
   getFirstAndLastEntry() {
     const sorted = this.sortBy(this.getActiveEntries(), 'start', 'desc');
-    return sorted === undefined ? [0, 0] : [sorted[0].start, sorted[sorted.length - 1].end];
+    return sorted === undefined ? [0, 0] : [sorted[0].start, sorted.at(-1).end];
   }
   /* **************************** */
 
@@ -238,10 +250,10 @@ class Store {
   generateCoordinates(start, end) {
     [start, end] = [testDate(start), testDate(end)];
 
-    let startMin = start.getHours() * 4 + Math.floor(start.getMinutes() / 15);
-    let endMin = end.getHours() * 4 + Math.floor(end.getMinutes() / 15);
-    let height = endMin - startMin;
-    let total = startMin + height;
+    const startMin = start.getHours() * 4 + Math.floor(start.getMinutes() / 15);
+    const endMin = end.getHours() * 4 + Math.floor(end.getMinutes() / 15);
+    const height = endMin - startMin;
+    const total = startMin + height;
 
     if (!compareDates(start, end)) {
       return {
@@ -261,16 +273,16 @@ class Store {
   }
 
   getDayEntries(day) {
-    let activeEntries = this.getActiveEntries();
-    let boxes = {
+    const activeEntries = this.getActiveEntries();
+    const boxes = {
       allDay: [], // entries that start on one day and end on another
       day: [], // entries that start and end on same day
     };
 
     if (activeEntries.length === 0) return boxes;
 
-    let dayEntries = activeEntries.filter((entry) => {
-      let entryDate = new Date(entry.start);
+    const dayEntries = activeEntries.filter((entry) => {
+      const entryDate = new Date(entry.start);
       const [y, m, d] = [
         entryDate.getFullYear(),
         entryDate.getMonth(),
@@ -281,7 +293,7 @@ class Store {
       );
     });
 
-    dayEntries.forEach((entry) => {
+    for (const entry of dayEntries) {
       entry.coordinates = this.generateCoordinates(
         new Date(entry.start),
         new Date(entry.end),
@@ -292,16 +304,16 @@ class Store {
       } else {
         boxes.day.push(entry);
       }
-    });
+    }
     return boxes;
   }
 
   getDayEntriesArray(targetDate) {
-    let activeEntries = this.getActiveEntries();
+    const activeEntries = this.getActiveEntries();
     if (activeEntries.length === 0) return [];
 
     return activeEntries.filter((entry) => {
-      let entryDate = new Date(entry.start);
+      const entryDate = new Date(entry.start);
       const [y, m, d] = [
         entryDate.getFullYear(),
         entryDate.getMonth(),
@@ -316,40 +328,40 @@ class Store {
   }
 
   getMonthEntries(montharr) {
-    let activeEntries = this.getActiveEntries();
+    const activeEntries = this.getActiveEntries();
     if (activeEntries.length === 0) return [];
 
     return activeEntries.filter((entry) => {
-      let entryDate = new Date(entry.start);
+      const entryDate = new Date(entry.start);
       return (
-        entryDate >= montharr[0] && entryDate <= montharr[montharr.length - 1]
+        entryDate >= montharr[0] && entryDate <= montharr.at(-1)
       );
     });
   }
 
   getMonthEntryDates(montharr) {
-    let entries = this.getMonthEntries(montharr);
-    let grouped = {};
-    entries.forEach((entry) => {
-      let entryDate = new Date(entry.start);
+    const entries = this.getMonthEntries(montharr);
+    const grouped = {};
+    for (const entry of entries) {
+      const entryDate = new Date(entry.start);
       const [y, m, d] = [
         entryDate.getFullYear(),
         entryDate.getMonth(),
         entryDate.getDate(),
       ];
-      let key = `${y}-${m}-${d}`;
+      const key = `${y}-${m}-${d}`;
       if (!grouped[key]) {
         grouped[key] = [];
       }
       grouped[key].push(entry);
-    });
+    }
     return Object.keys(grouped);
   }
 
   getGroupedMonthEntries(entries) {
     return entries.reduce((acc, entry) => {
-      let tempDate = new Date(entry.start);
-      let day = tempDate.getDate();
+      const tempDate = new Date(entry.start);
+      const day = tempDate.getDate();
       if (!acc[day]) {
         acc[day] = [];
       }
@@ -359,20 +371,20 @@ class Store {
   }
 
   getWeekEntries(week) {
-    let activeEntries = this.getActiveEntries();
-    let [start, end] = [week[0], week[6]];
-    let boxes = {
+    const activeEntries = this.getActiveEntries();
+    const [start, end] = [week[0], week[6]];
+    const boxes = {
       allDay: [], // entries that start on one day and end on another
       day: [], // entries that start and end on same day
     };
 
     if (activeEntries.length === 0) return boxes;
-    let entries = activeEntries.filter((entry) => {
-      let entryDate = new Date(entry.start);
+    const entries = activeEntries.filter((entry) => {
+      const entryDate = new Date(entry.start);
       return entryDate >= start && entryDate <= end;
     });
 
-    entries.forEach((entry) => {
+    for (const entry of entries) {
       entry.coordinates = this.generateCoordinates(
         new Date(entry.start),
         new Date(entry.end),
@@ -383,13 +395,13 @@ class Store {
       } else {
         boxes.day.push(entry);
       }
-    });
+    }
 
     return boxes;
   }
 
   getYearEntries(year) {
-    let activeEntries = this.getActiveEntries();
+    const activeEntries = this.getActiveEntries();
     if (activeEntries.length === 0) return [];
     return activeEntries.filter(
       (entry) => new Date(entry.start).getFullYear() === year,
@@ -397,11 +409,11 @@ class Store {
   }
 
   getGroupedYearEntries(yearentries) {
-    let grouped = {};
-    yearentries.forEach((entry) => {
-      let entryDate = new Date(entry.start);
-      let month = entryDate.getMonth();
-      let day = entryDate.getDate();
+    const grouped = {};
+    for (const entry of yearentries) {
+      const entryDate = new Date(entry.start);
+      const month = entryDate.getMonth();
+      const day = entryDate.getDate();
 
       if (!grouped[month]) {
         grouped[month] = {};
@@ -412,7 +424,7 @@ class Store {
       }
 
       grouped[month][day].push(entry);
-    });
+    }
 
     return grouped;
   }
@@ -443,7 +455,7 @@ class Store {
   }
 
   getFirstActiveCategory() {
-    for (let [key, value] of Object.entries(this.ctg)) {
+    for (const [key, value] of Object.entries(this.ctg)) {
       if (value.active) {
         return key;
       }
@@ -452,7 +464,7 @@ class Store {
   }
 
   getFirstActiveCategoryKeyPair() {
-    for (let [key, value] of Object.entries(this.ctg)) {
+    for (const [key, value] of Object.entries(this.ctg)) {
       if (value.active) {
         return [key, value.color];
       }
@@ -492,7 +504,7 @@ class Store {
 
   hasCtg(categoryName) {
     let hasctg = false;
-    for (let key in this.ctg) {
+    for (const key in this.ctg) {
       if (key.toLowerCase() === categoryName.toLowerCase()) {
         hasctg = true;
       }
@@ -507,11 +519,11 @@ class Store {
    */
   moveCategoryEntriesToNewCategory(category, newCategory, newName) {
     if (this.hasCtg(category) || newName === true) {
-      this.store.forEach((entry) => {
+      for (const entry of this.store) {
         if (entry.category === category) {
           entry.category = newCategory;
         }
-      });
+      }
       Store.setStore(this.store);
     }
     this.deleteCategory(category);
@@ -533,7 +545,7 @@ class Store {
   }
 
   setAllCategoryStatusExcept(category, status) {
-    for (let key in this.ctg) {
+    for (const key in this.ctg) {
       if (key !== category) {
         this.ctg[key].active = status;
       } else {
@@ -569,10 +581,10 @@ class Store {
    * @desc note that 'value' of [key, value] is necessary to segment the object, even if it is not directly referenced
    */
   updateCtg(newName, newColor, oldName) {
-    let entries = Object.entries(this.ctg);
+    const entries = Object.entries(this.ctg);
     const hasColor = newColor !== null;
     const length = entries.length;
-    if (!Number.isNaN(parseFloat(newName)) && Number.isFinite(newName)) {
+    if (!Number.isNaN(Number.parseFloat(newName)) && Number.isFinite(newName)) {
       newName = `category ${newName}`;
     }
 
@@ -594,23 +606,6 @@ class Store {
           }
         }
       }
-      // count++;
-      // if (count === 1) {
-      //   // changing the default category;
-      //   if (oldName === key) {
-      //     entries[0][0] = newName;
-      //     if (hasColor) {
-      //       entries[0][1].color = newColor;
-      //     }
-      //   }
-      // } else {
-      //   if (oldName === key) {
-      //     entries[count - 1][0] = newName;
-      //     if (hasColor) {
-      //       entries[count - 1][1].color = newColor;
-      //     }
-      //   }
-      // }
     }
 
     if (entries.length !== length) {

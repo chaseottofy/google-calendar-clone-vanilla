@@ -37,9 +37,11 @@
   width: 26px;
   height: 26px;
   border-radius: 50%;
-  background: var(--black1);
+  background-color: var(--black1);
   cursor: pointer;
   z-Index: 902;
+  /* filter: hue-rotate(0.42turn); */
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,7 +83,7 @@
   height: calc(100% - 64px);
   overflow: hidden;
   display: flex;
-  background: var(--black1);
+  background-color: var(--black1);
 }
 
 .container__calendars {
@@ -135,7 +137,6 @@
   min-width: 580px;
   overflow-y: hidden;
 }
-
 
 @media screen and (max-width: 840px) {
   .container__calendars {

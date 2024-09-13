@@ -1,5 +1,5 @@
-import { formatTime, formatStartEndTimes } from './timeutils';
 import locales from '../locales/en';
+import { formatStartEndTimes, formatTime } from './timeutils';
 
 function toCustomISO(date) {
   const pad = (num) => { return num < 10 ? `0${num}` : num; };
@@ -48,7 +48,7 @@ function formatDateForDisplay(date) {
   let minutes = date.getMinutes();
   hours = hours < 10 ? `0${hours}` : hours;
   minutes = minutes < 10 ? `0${minutes}` : minutes;
-  let hm = `${hours}:${minutes}`;
+  const hm = `${hours}:${minutes}`;
   return `${month} ${day} ${date.getFullYear()}, (${hm}) `;
 }
 
@@ -58,10 +58,10 @@ function compareDates(date1, date2) {
 }
 
 function formatDuration(seconds) {
-  let time = { year: 31536000, day: 86400, hour: 3600 };
-  let res = [];
+  const time = { year: 31_536_000, day: 86_400, hour: 3600 };
+  const res = [];
   if (seconds === 0) return 'now';
-  for (let key in time) {
+  for (const key in time) {
     if (seconds >= time[key]) {
       let val = Math.floor(seconds / time[key]);
       res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
@@ -72,10 +72,10 @@ function formatDuration(seconds) {
 }
 
 function formatDurationHourMin(seconds) {
-  let time = { hour: 3600, minute: 60 };
-  let res = [];
+  const time = { hour: 3600, minute: 60 };
+  const res = [];
   if (seconds === 0) return 'now';
-  for (let key in time) {
+  for (const key in time) {
     if (seconds >= time[key]) {
       let val = Math.floor(seconds / time[key]);
       res.push(val += val > 1 ? ' ' + key + 's' : ' ' + key);
@@ -134,7 +134,7 @@ function formatStartEndTime(start, end) {
   endmin = endmin % 15 === 0 ? endmin : endmin + (15 - (endmin % 15));
   startmin = startmin % 15 === 0 ? startmin : startmin + (15 - (startmin % 15));
   let starttime = formatTime(start.getHours(), startmin);
-  let endtime = formatTime(end.getHours(), endmin);
+  const endtime = formatTime(end.getHours(), endmin);
   if (starttime.slice(-2) === endtime.slice(-2)) {
     starttime = starttime.slice(0, -2);
   }
@@ -168,16 +168,16 @@ function isDate(value) {
 function getDateFromAttribute(target, attribute, view) {
   return target.getAttribute(attribute).split('-').map((x, i) => {
     if (view === 'month') {
-      return i === 1 ? parseInt(x) - 1 : parseInt(x);
+      return i === 1 ? Number.parseInt(x) - 1 : Number.parseInt(x);
     } else {
-      return parseInt(x);
+      return Number.parseInt(x);
     }
   });
 }
 
 function getTimeFromAttribute(target, attribute) {
   return target.getAttribute(attribute).split(':').map((x) => {
-    return parseInt(x);
+    return Number.parseInt(x);
   });
 }
 
@@ -187,8 +187,8 @@ function getDateTimeFormatted(date, hour, minute) {
     date.getFullYear(),
     date.getMonth(),
     date.getDate(),
-    parseInt(hour),
-    parseInt(minute),
+    Number.parseInt(hour),
+    Number.parseInt(minute),
     1,
     1,
   );
@@ -203,14 +203,14 @@ function getTempDates(tempdate, hours, minutes) {
 }
 
 function generateTempStartEnd(data) {
-  let tempdate = new Date();
+  const tempdate = new Date();
 
   const [year, month, day] = data;
-  let startDate = new Date(year, month, day);
+  const startDate = new Date(year, month, day);
   startDate.setHours(tempdate.getHours());
   startDate.setMinutes(0);
 
-  let endDate = new Date(startDate);
+  const endDate = new Date(startDate);
   endDate.setHours(tempdate.getHours());
   endDate.setMinutes(30);
 
@@ -234,7 +234,7 @@ function getFormDateObject(start, end) {
 
 function sortDates(dates, dir) {
   return dates.sort((a, b) => {
-    let [date1, date2] = [new Date(a), new Date(b)];
+    const [date1, date2] = [new Date(a), new Date(b)];
     if (dir === 'asc') {
       return date1 - date2;
     } else {
@@ -249,14 +249,14 @@ function getDurationSeconds(date1, date2) {
 
 function formatEntryOptionsDate(date1, date2) {
   const { labels } = locales;
-  let [y1, y2] = [date1.getFullYear(), date2.getFullYear()];
-  let [m1, m2] = [date1.getMonth(), date2.getMonth()];
-  let [d1, d2] = [date1.getDate(), date2.getDate()];
-  let [h1, h2] = [date1.getHours(), date2.getHours()];
-  let [min1, min2] = [date1.getMinutes(), date2.getMinutes()];
+  const [y1, y2] = [date1.getFullYear(), date2.getFullYear()];
+  const [m1, m2] = [date1.getMonth(), date2.getMonth()];
+  const [d1, d2] = [date1.getDate(), date2.getDate()];
+  const [h1, h2] = [date1.getHours(), date2.getHours()];
+  const [min1, min2] = [date1.getMinutes(), date2.getMinutes()];
 
   let useTempDate = false;
-  let tempdateone = new Date();
+  const tempdateone = new Date();
   if (isBeforeDate(date1, tempdateone)) {
     useTempDate = true;
   }
@@ -266,16 +266,16 @@ function formatEntryOptionsDate(date1, date2) {
     if (m1 === m2) {
       if (d1 === d2) {
         // === year, month, day
-        let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
-        let durationTime = formatDurationHourMin(duration);
+        const duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
+        const durationTime = formatDurationHourMin(duration);
         return {
           date: `${labels.monthsLong[m1]} ${d1}, ${y1} (${formatStartEndTimes([h1, h2], [min1, min2])})`,
           time: durationTime,
         };
       } else {
         // === year, month
-        let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
-        let durationTime = formatDuration(duration);
+        const duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
+        const durationTime = formatDuration(duration);
         return {
           date: `${labels.monthsLong[m1]} ${d1} – ${d2}, ${y1}`,
           time: durationTime,
@@ -283,8 +283,8 @@ function formatEntryOptionsDate(date1, date2) {
       }
     } else {
       // === year
-      let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
-      let durationTime = formatDuration(duration);
+      const duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
+      const durationTime = formatDuration(duration);
       return {
         date: `${labels.monthsShort[m1]} ${d1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
         time: durationTime,
@@ -292,8 +292,8 @@ function formatEntryOptionsDate(date1, date2) {
     }
   } else {
     // different year --- return full date
-    let duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
-    let durationTime = formatDuration(duration);
+    const duration = getDurationSeconds(useTempDate ? tempdateone : date1, date2);
+    const durationTime = formatDuration(duration);
     return {
       date: `${labels.monthsShort[m1]} ${d1}, ${y1} – ${labels.monthsShort[m2]} ${d2}, ${y2}`,
       time: durationTime,
@@ -305,48 +305,52 @@ function createTimestamp() {
   const { monthsShort: monthNames } = locales;
   const date = new Date();
   const month = monthNames[date.getMonth()].toUpperCase();
-  const day = parseInt(date.getDate());
+  const day = Number.parseInt(date.getDate());
   return `${month}${day}`;
 }
 
 function longerThanDay(date1, date2) {
-  return getDurationSeconds(date1, date2) > 86400;
+  return getDurationSeconds(date1, date2) > 86_400;
 }
 
 function getDayOrdinal(day) {
   if (day > 3 && day < 21) return 'th';
   switch (day % 10) {
-    case 1: return 'st';
-    case 2: return 'nd';
-    case 3: return 'rd';
-    default: return 'th';
+    case 1: { return 'st';
+    }
+    case 2: { return 'nd';
+    }
+    case 3: { return 'rd';
+    }
+    default: { return 'th';
+    }
   }
 }
 
 export {
-  testDate,
-  getDateFormatted,
-  getDateForStore,
-  getdatearray,
-  formatDateForDisplay,
-  formatDuration,
   compareDates,
   createDateFromFormattedString,
+  createTimestamp,
+  formatDateForDisplay,
+  formatDuration,
+  formatEntryOptionsDate,
   formatStartEndDate,
   formatStartEndTime,
+  generateTempStartEnd,
+  getdatearray,
+  getDateFormatted,
+  getDateForStore,
+  getDateFromAttribute,
+  getDateTimeFormatted,
+  getDayOrdinal,
   getDuration,
+  getDurationSeconds,
+  getFormDateObject,
+  getTempDates,
+  getTimeFromAttribute,
   isBeforeDate,
   isDate,
-  getDateFromAttribute,
-  getTimeFromAttribute,
-  getDateTimeFormatted,
-  getTempDates,
-  generateTempStartEnd,
-  getFormDateObject,
-  sortDates,
-  formatEntryOptionsDate,
-  getDurationSeconds,
-  createTimestamp,
   longerThanDay,
-  getDayOrdinal,
+  sortDates,
+  testDate,
 };

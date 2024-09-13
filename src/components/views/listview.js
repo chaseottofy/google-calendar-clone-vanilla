@@ -1,20 +1,20 @@
-import getEntryOptionModal from '../menus/entryOptions';
 import setViews from '../../config/setViews';
-import FormSetup from '../forms/setForm';
-import fullFormConfig from '../forms/formUtils';
+import locales from '../../locales/en';
+import {
+  formatStartEndDate,
+  getdatearray,
+  getDateFromAttribute,
+  getFormDateObject,
+  longerThanDay,
+} from '../../utilities/dateutils';
 import {
   getClosest,
   hextorgba,
 } from '../../utilities/helpers';
-import {
-  getdatearray,
-  getFormDateObject,
-  getDateFromAttribute,
-  longerThanDay,
-  formatStartEndDate,
-} from '../../utilities/dateutils';
 import { formatStartEndTimes } from '../../utilities/timeutils';
-import locales from '../../locales/en';
+import fullFormConfig from '../forms/formUtils';
+import FormSetup from '../forms/setForm';
+import getEntryOptionModal from '../menus/entryOptions';
 
 const dateTimeTitle = document.querySelector('.datetime-content--title');
 const listview = document.querySelector('.listview');
@@ -24,7 +24,7 @@ export default function setListView(context, store, datepickerContext) {
   const { labels } = locales;
   let monthNames = labels.monthsShort.map((x) => x.toUpperCase());
   let weekDayNames = labels.weekdaysShort.map((x) => x.toUpperCase());
-  let [todayYear, todayMonth, todayDay] = getdatearray(new Date());
+  const [todayYear, todayMonth, todayDay] = getdatearray(new Date());
   /** ************************************* */
 
   /**
@@ -36,10 +36,10 @@ export default function setListView(context, store, datepickerContext) {
   function createRowGroups(entries) {
     // use count to check for first rowgroup
     let count = 1;
-    for (let [key, value] of Object.entries(entries)) {
+    for (const [key, value] of Object.entries(entries)) {
 
       const tempdate = new Date(
-        key.split('-').map((x) => parseInt(x, 10)),
+        key.split('-').map((x) => Number.parseInt(x, 10)),
       );
       // {mumber} month, {number} day of month, {number} day of week
       const [month, day, dow] = [
@@ -68,14 +68,14 @@ export default function setListView(context, store, datepickerContext) {
 
       const rgContent = document.createElement('div');
       rgContent.classList.add('rowgroup-content');
-      value.forEach((entry) => {
+      for (const entry of value) {
         rgContent.append(createRowGroupCell(entry));
-      });
+      }
 
       const rg = document.createElement('div');
       rg.classList.add('listview__rowgroup');
       rg.append(rgheader, rgContent);
-      listviewBody.appendChild(rg);
+      listviewBody.append(rg);
     }
   }
 
@@ -170,8 +170,8 @@ export default function setListView(context, store, datepickerContext) {
 
     const rect = cell.getBoundingClientRect();
     const height = cell.offsetHeight;
-    const rectTop = parseInt(rect.top) + height;
-    const rectLeft = parseInt(rect.left);
+    const rectTop = Number.parseInt(rect.top) + height;
+    const rectLeft = Number.parseInt(rect.left);
     const modalHeight = 165;
 
     let y = rectTop + 12;
@@ -206,7 +206,7 @@ export default function setListView(context, store, datepickerContext) {
    * @desc switch to day view and set date to clicked day
    */
   function setDayViewLV(target) {
-    let [year, month, day] = getDateFromAttribute(target, 'data-rgheader-date', 'month');
+    const [year, month, day] = getDateFromAttribute(target, 'data-rgheader-date', 'month');
     context.setDate(year, month, day);
     context.setDateSelected(day);
     if (context.getSidebarState() === 'open') {
@@ -244,12 +244,13 @@ export default function setListView(context, store, datepickerContext) {
     store.setResetPreviousViewCallback(resetListview);
 
     let activeEnt = store.getActiveEntries();
+    console.log(activeEnt);
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = 'No Entries to Display';
-      return;
     } else {
 
       let entries = store.sortBy(activeEnt, 'start', 'desc');
+      console.log(entries);
       // console.log(entries)
       // console.log(activeEnt)
       let groupedEntries = entries.reduce((acc, curr) => {
@@ -281,7 +282,7 @@ export default function setListView(context, store, datepickerContext) {
         dateTimeTitle.textContent = 'Schedule Clear';
       } else {
         // true will slice the year at last two digits if two years are displayed at the same time;
-        const earliestDate = new Date(keys[0].split('-').map((x) => parseInt(x)));
+        const earliestDate = new Date(keys[0].split('-').map((x) => Number.parseInt(x)));
 
         context.setDate(
           earliestDate.getFullYear(),

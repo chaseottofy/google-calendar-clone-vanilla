@@ -1,3 +1,4 @@
+import copyToClipboard from '../../utilities/copyToClipboard';
 import { getClosest } from '../../utilities/helpers';
 
 const sidebarFooter = document.querySelector('.sb__info');
@@ -11,7 +12,6 @@ const infopopupTitle = document.querySelector('.sbip-title');
 const infopopupBody = document.querySelector('.sbip-content');
 
 export default function handleSidebarFooter(store) {
-
   const infoContent = {
     notes: {
       title: 'Breakdown of project & current status',
@@ -75,6 +75,7 @@ export default function handleSidebarFooter(store) {
     const projectNotes = getClosest(e, '.sb__project-notes');
     const privacy = getClosest(e, '.sb__privacy');
     const terms = getClosest(e, '.sb__terms');
+    const emailButton = getClosest(e, '.sbl-email');
 
     if (projectNotes) {
       openInfoPopup('notes');
@@ -88,6 +89,11 @@ export default function handleSidebarFooter(store) {
 
     if (terms) {
       openInfoPopup('terms');
+      return;
+    }
+
+    if (emailButton) {
+      copyToClipboard('ottofy@zohomail.com');
       return;
     }
   }

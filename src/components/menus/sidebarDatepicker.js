@@ -1,5 +1,5 @@
-import { getDateForStore } from '../../utilities/dateutils';
 import setViews from '../../config/setViews';
+import { getDateForStore } from '../../utilities/dateutils';
 import { getClosest } from '../../utilities/helpers';
 
 const sbdatepicker = document.querySelector('.datepicker-sidebar');
@@ -92,8 +92,8 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
         datename.classList.remove('sbdatepicker__body--datename-entries');
       }
 
-      cell.appendChild(datename);
-      sbdatepickerBody.appendChild(cell);
+      cell.append(datename);
+      sbdatepickerBody.append(cell);
     }
   }
 
@@ -125,9 +125,9 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
   function renderSelectedDay(e, d) {
     context.setDateSelected(d);
     const selected = document.querySelectorAll('.sbdatepicker__body--datename-selected');
-    selected.forEach((x) => {
+    for (const x of selected) {
       x.classList.remove('sbdatepicker__body--datename-selected');
-    });
+    }
     e.target.setAttribute('class', 'sbdatepicker__body--datename');
     e.target.classList.add('sbdatepicker__body--datename-selected');
   }
@@ -160,7 +160,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
    */
   function setNewDate(e) {
     const target = e.target;
-    let [y, m, d] = target.getAttribute('data-datepicker-date').split('-').map((x) => parseInt(x));
+    const [y, m, d] = target.getAttribute('data-datepicker-date').split('-').map((x) => Number.parseInt(x));
 
     const component = context.getComponent();
 
@@ -242,13 +242,13 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
 
     if (!init && newmonth === datepickerContext.getMonth()) return;
     datepickerContext.setMonth(newmonth);
-    sbmonthpickerMonths.forEach((month, idx) => {
+    for (const [idx, month] of sbmonthpickerMonths.entries()) {
       if (idx === newmonth) {
         month.classList.add('monthpicker__active-month');
       } else {
         month.classList.remove('monthpicker__active-month');
       }
-    });
+    }
   }
 
   function yearpickerSetYear(increment, init) {
@@ -257,7 +257,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
       return;
     }
 
-    const newyear = parseInt(datepickerContext.getYear()) + increment;
+    const newyear = Number.parseInt(datepickerContext.getYear()) + increment;
     if (newyear == +datepickerContext.getYear()) return;
     datepickerContext.setYear(newyear);
     sbyearpickerTitle.textContent = newyear;
@@ -314,7 +314,7 @@ export default function setSidebarDatepicker(context, store, datepickerContext) 
     }
 
     if (mpMonth) {
-      const newmonth = parseInt(e.target.getAttribute('data-sbdp-month'));
+      const newmonth = Number.parseInt(e.target.getAttribute('data-sbdp-month'));
       monthpickerSetMonth(newmonth, false);
       return;
     }

@@ -1,9 +1,13 @@
 {
   "extends": [
-    "stylelint-config-standard",
-    "stylelint-config-recommended"
+    "stylelint-config-standard"
+  ],
+  "plugins": [
+    "stylelint-high-performance-animation"
   ],
   "rules": {
+    "plugin/no-low-performance-animation-properties": true,
+    "block-no-empty": true,
     "custom-property-pattern": null,
     "selector-class-pattern": null,
     "media-feature-range-notation": null,

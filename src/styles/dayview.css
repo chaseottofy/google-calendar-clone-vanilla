@@ -49,14 +49,13 @@
   font-weight: 500;
   justify-content: center;
   user-select: none;
-  transition: background .2s ease-in-out;
+  transition: background-color 200ms ease-in-out;
 }
 
 .dayview--header-day__number--today {
-  background: var(--primary1);
+  background-color: var(--primary1);
   color: var(--taskcolor);
 }
-
 
 .dv-info-day-wrapper {
   display: flex;
@@ -130,21 +129,20 @@
   filter: brightness(1.2);
 }
 
-
 .dv--ontop__more {
   cursor: pointer;
-  background: var(--black0);
+  background-color: var(--black0);
   color: var(--offwhite1);
   font-size: 12px;
   padding-left: 8px;
-  display:flex;
+  display: flex;
   align-items: center;
   height: 100%;
-  width: 100%; 
+  width: 100%;
 }
 
 .dv--ontop__more:hover {
-  background: var(--black000);
+  background-color: var(--black000);
 }
 
 .dv--morepopup__overlay {
@@ -154,14 +152,14 @@
   left: 0;
   top: 0;
   z-index: 979;
-  background: transparent;
+  background-color: transparent;
 }
 
 .dv--morepopup {
-  display:flex;
+  display: flex;
   flex-direction: column;
   position: absolute;
-  background: var(--black1);
+  background-color: var(--black1);
   box-shadow: var(--box-shadow3);
   width: calc(100% - 64px);
   bottom: 2%;
@@ -169,14 +167,14 @@
   max-height: 400px;
   border-radius: 6px;
   padding: 0 2px 8px 6px;
-  overflow:hidden;
+  overflow: hidden;
   z-index: 980;
 }
 
 .dv--morepopup__header {
   height: 48px;
   width: 100%;
-  display:flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   padding-right: 12px;
@@ -203,7 +201,7 @@
 }
 
 .dv--morepopup__close:hover {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
 }
 
 .dv--morepopup__body {
@@ -211,7 +209,7 @@
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 2px 4px;
   height: auto;
-  overflow:hidden scroll;
+  overflow: hidden scroll;
   width: 100%;
 }
 
@@ -250,14 +248,8 @@
   filter: brightness(1.1);
 }
 
-
-
-
-
-
-
 .dv--ontop__grid {
-  display:flex;
+  display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -297,7 +289,7 @@
 }
 
 .dvsg-fill {
-  background: var(--black1)
+  background-color: var(--black1)
 }
 
 .dayview--side-grid {
@@ -305,7 +297,7 @@
   min-height: 1250px;
   max-height: 1250px;
   display: grid;
-  background: var(--black1);
+  background-color: var(--black1);
   grid-template-columns: 1fr;
   grid-template-rows: repeat(25, 1fr);
   width: 36px;
@@ -358,12 +350,6 @@
   padding: 0 2px;
 }
 
-/* .tempbox-tra {
-  transition-duration: 500ms;
-  transition-property: height, top !important;
-  transition-timing-function: ease-in-out;
-} */
-
 .dv-box__header {
   font-size: 12px;
   font-weight: 500;
@@ -382,7 +368,6 @@
 .dv-box__content {
   flex-direction: column;
   font-size: 10px;
-
 }
 
 .dv-box-title {
@@ -404,7 +389,7 @@
 }
 
 .dv-box-resize-s {
-  background: rgba(17, 20, 21, .6);
+  background-color: rgba(17, 20, 21, .6);
   border-radius: 4px;
   bottom: 0;
   cursor: ns-resize;
@@ -431,7 +416,7 @@
 
 .dv-box-ontop {
   border: 1px solid var(--black1);
-  box-shadow:none;
+  box-shadow: none;
   z-index: 3;
 }
 
@@ -529,20 +514,21 @@
 }
 
 .dayview--footer {
-  background: var(--black1);
+  background-color: var(--black1);
   position: relative;
   user-select: none;
   width: 100%;
   z-index: 899;
 }
 
-
 .dvh-collapse {
   transform: scaleY(0);
   height: 0;
   min-height: 0;
   opacity: 0;
-  transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
+  transition-property: transform, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
 }
 
 @media screen and (max-width: 640px) {
@@ -573,7 +559,7 @@
 
   .dv--morepopup {
     left: 1% !important;
-    right: 1% !important; 
+    right: 1% !important;
     margin: 0 auto;
     max-height: 320px !important;
   }

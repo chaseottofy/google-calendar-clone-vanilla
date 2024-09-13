@@ -1,37 +1,8 @@
-import locales from '../../locales/en';
-import { createCheckIcon } from '../../utilities/svgs';
+// import locales from '../../locales/en';
+import CatFormHelper from '../../factory/categories';
 import { isNumeric, placePopup } from '../../utilities/helpers';
-
-class CatFormHelper {
-  constructor(catname, catcolor) {
-    this.catname = catname;
-    this.catcolor = catcolor;
-    this.errMsg = '';
-    this.prevColorIdx = catcolor;
-    this.originalName = catname;
-    this.originalColor = catcolor;
-  }
-
-  setName(name) { this.catname = name; }
-
-  setColor(color) { this.catcolor = color; }
-
-  setPrevColor(color) { this.prevColorIdx = color; }
-
-  getName() { return this.catname; }
-
-  getColor() { return this.catcolor; }
-
-  prevColor() { return this.prevColorIdx; }
-
-  setErrMsg(msg) { this.errMsg = msg; }
-
-  getErrMsg() { return this.errMsg; }
-
-  getOriginalName() { return this.originalName; }
-
-  getOriginalColor() { return this.originalColor; }
-}
+import { createCheckIcon } from '../../utilities/svgs';
+// import adjustColorHue from '../../utilities/editcolors';
 
 const ctgform = document.querySelector('.category__form');
 const ctgformoverlay = document.querySelector('.category__form-overlay');
@@ -41,8 +12,12 @@ const colorPickerOptions = document.querySelector('.color-picker__options');
 const ctgErrMsg = document.querySelector('.ctg-input--err');
 
 export default function createCategoryForm(store, selectedCategory, editing, resetParent) {
+  // const { colors } = locales;
+  // const colors = Object.values(adjustColorHue(locales.colors, 40));
+  const colorObject = store.getColors();
+  const colors = Object.values(colorObject);
+
   const checkIcon = createCheckIcon('var(--taskcolor)');
-  const colors = Object.values(locales.colors);
 
   const formhelper = new CatFormHelper(
     selectedCategory.name,
@@ -65,13 +40,13 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
   function createPickerOptions(currentColor) {
     colorPickerOptions.innerText = '';
-    colors.forEach((color) => {
+    for (const color of colors) {
       for (let i = 1; i < 8; i++) {
         colorPickerOptions.append(
           createColorOption(color[i], currentColor),
         );
       }
-    });
+    }
   }
 
   function handleColorSelection(e, current) {
@@ -81,11 +56,11 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     if (color === current) return;
 
     const colorOptions = document.querySelectorAll('.color-picker--option');
-    colorOptions.forEach((option) => {
+    for (const option of colorOptions) {
       option.innerText = '';
-    });
-    target.appendChild(checkIcon);
-    colorPickerTitle.style.background = color;
+    }
+    target.append(checkIcon);
+    colorPickerTitle.style.backgroundColor = color;
     formhelper.setColor(color);
   }
 
@@ -99,7 +74,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function validateNewCategory(categoryName, color) {
-    let trimName = categoryName.trim().replace(/[^a-zA-Z0-9\s]+|\s{2,}/g, ' ').trim();
+    let trimName = categoryName.trim().replaceAll(/[^\d\sA-Za-z]+|\s{2,}/g, ' ').trim();
 
     if (isNumeric(trimName)) {
       trimName = `category ${trimName}`;
@@ -108,7 +83,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     const origName = formhelper.getOriginalName();
 
     let errormsg = false;
-    if (trimName.length < 1) {
+    if (trimName.length === 0) {
       formhelper.setErrMsg('Category name is required');
       errormsg = true;
     } else if (store.hasCtg(trimName)) {
@@ -145,6 +120,7 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function closeCategoryForm() {
+
     if (resetParent !== null) {
       resetParent.removeAttribute('style');
     }
@@ -185,8 +161,8 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
     if (resetParent !== null) {
       const rect = resetParent.getBoundingClientRect();
-      const getright = parseInt(rect.right);
-      const gettop = parseInt(rect.top);
+      const getright = Number.parseInt(rect.right);
+      const gettop = Number.parseInt(rect.top);
       const [x, y] = placePopup(
         280,
         352,

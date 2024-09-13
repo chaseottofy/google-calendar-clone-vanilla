@@ -1,10 +1,9 @@
 import setViews from '../../config/setViews';
-import { getClosest } from '../../utilities/helpers';
-
 import {
-  formatEntryOptionsDate,
   compareDates,
+  formatEntryOptionsDate,
 } from '../../utilities/dateutils';
+import { getClosest } from '../../utilities/helpers';
 
 const entryOptionsOverlay = document.querySelector('.entry__options--overlay');
 const entryOptionsWrapper = document.querySelector('.entry__options');
@@ -79,15 +78,15 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
   }
 
   function closeEntryOptions() {
-    [
+    for (const el of [
       entryOptionsDateHeader,
       entryOptionsTimeHeader,
       entryOptionTitle,
       entryOptionDescription,
       entryOptionCategory,
-    ].forEach((el) => {
+    ]) {
       el.innerText = '';
-    });
+    }
 
     entryOptionsWrapper.classList.add('entry__options--hidden');
     entryOptionsOverlay.classList.add('entry__options--hidden');
@@ -114,9 +113,9 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
     entryOptionsDateHeader.textContent = getDateTime.date;
     if (getDateTime.time !== null) {
       if (getDateTime.time === undefined) {
-        let tempdate = new Date();
-        let secondsDiff = tempdate.getTime() - end.getTime();
-        let daysSince = Math.floor(secondsDiff / (1000 * 60 * 60 * 24));
+        const tempdate = new Date();
+        const secondsDiff = tempdate.getTime() - end.getTime();
+        const daysSince = Math.floor(secondsDiff / (1000 * 60 * 60 * 24));
         let timeheadertitle;
 
         /**
@@ -127,8 +126,8 @@ export default function getEntryOptionModal(context, store, entry, datepickerCon
          * If the entry is yet to start, display how long until it is scheduled to start
          */
         if (daysSince === 0) {
-          let hourSince = Math.floor(secondsDiff / (1000 * 60 * 60));
-          let minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60));
+          const hourSince = Math.floor(secondsDiff / (1000 * 60 * 60));
+          const minSince = Math.floor((secondsDiff - (hourSince * 1000 * 60 * 60)) / (1000 * 60));
           if (hourSince === 0) {
             if (minSince === 1) {
               timeheadertitle = `ended ${minSince} minute ago`;

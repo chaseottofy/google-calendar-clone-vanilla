@@ -117,6 +117,8 @@
     rgba(0, 0, 0, 0.2) inset 3px 3px 4px -1px;
   --box-shadow-sbfixed:
     rgba(0, 0, 0, .3) 4px 6px 6px 0;
+  --tr-1: color, opacity, background-color;
+  /* --tr-1: color, opacity, background-color; */
 }
 
 *,
@@ -136,7 +138,7 @@ html {
 .body {
   font-family: var(--primaryFont);
   font-weight: 400;
-  background: var(--black1);
+  background-color: var(--black1);
   color: var(--white1);
   height: 100vh;
   overflow: hidden;
@@ -163,6 +165,10 @@ textarea {
 
 .preload * {
   transition: none !important;
+  transition-duration: none !important;
+  transition-property: none !important;
+  transition-timing-function: none !important;
+  animation: none !important;
 }
 
 .disable-transitions * {
@@ -257,7 +263,7 @@ textarea {
 
 select,
 button {
-  background: var(--black1);
+  background-color: var(--black1);
   padding: none;
   border: none;
 }
@@ -275,7 +281,7 @@ form > button {
 
 button:focus-visible {
   outline: 2px solid var(--primary1);
-  background: var(--black0);
+  background-color: var(--black0);
 }
 
 input[type="search"],
@@ -316,7 +322,7 @@ svg {
 }
 
 ::selection {
-  background: var(--primary1) !important;
+  background-color: var(--primary1) !important;
   color: var(--taskcolor0) !important;
 }
 
@@ -326,15 +332,15 @@ svg {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollerThumbBackground);
+  background-color: var(--scrollerThumbBackground);
   border: var(--scrollerThumbBorder);
   border-radius: 20px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollerThumbBackgroundHover);
+  background-color: var(--scrollerThumbBackgroundHover);
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--scrollerTrackBackground);
+  background-color: var(--scrollerTrackBackground);
 }

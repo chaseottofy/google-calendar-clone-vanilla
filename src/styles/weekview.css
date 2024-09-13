@@ -6,7 +6,7 @@
 }
 
 .weekview__top::-webkit-scrollbar-track {
-  background: var(--black1);
+  background-color: var(--black1);
 }
 
 .weekview--header {
@@ -64,7 +64,7 @@
 }
 
 .weekview--header-day__number:hover {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
 }
 
 .wvh--selected {
@@ -72,12 +72,12 @@
 }
 
 .wvh--today {
-  background: var(--primary1);
+  background-color: var(--primary1);
   color: var(--taskcolor0) !important;
 }
 
 .wvh--today:hover {
-  background: var(--primarylight1);
+  background-color: var(--primarylight1);
 }
 
 .weekview--allday-module {
@@ -105,7 +105,7 @@
 }
 
 .weekview--allday-module::-webkit-scrollbar-track {
-  background: var(--black1);
+  background-color: var(--black1);
 }
 
 .allday--col {
@@ -128,7 +128,7 @@
 }
 
 .allday__cell:hover {
-  background: var(--black2);
+  background-color: var(--black2);
 }
 
 .wv-ad--taskicons {
@@ -166,7 +166,7 @@
 
 .wv-ad--cellexpand {
   pointer-events: none;
-  background: transparent;
+  background-color: transparent;
   height: 100%;
   width: 18px;
   display: flex;
@@ -186,7 +186,7 @@
   box-shadow:
     rgba(60, 64, 67, 0.3) 0 1px 2px 0,
     rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
-  background: var(--black0);
+  background-color: var(--black0);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -195,7 +195,7 @@
 }
 
 .allday-modal__cell--open {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
 }
 
 .allday-modal__header {
@@ -224,7 +224,7 @@
 }
 
 .close-allday-modal:hover {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
 }
 
 .allday-modal__content {
@@ -237,7 +237,7 @@
 }
 
 .allday-modal__content::-webkit-scrollbar-track {
-  background: transparent;
+  background-color: transparent;
 }
 
 .allday-modal__content::-webkit-scrollbar {
@@ -246,7 +246,7 @@
 
 .allday-modal__content::-webkit-scrollbar-thumb {
   border: 4px solid transparent;
-  background: var(--white2);
+  background-color: var(--white2);
 }
 
 .allday-modal__cell {
@@ -274,12 +274,12 @@
   width: 24px;
   margin-left: auto;
   cursor: pointer;
-  background: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   border-radius: 0 4px 4px 0;
 }
 
 .allday-modal__cell-action-icons:hover {
-  background: rgba(0, 0, 0, .4);
+  background-color: rgba(0, 0, 0, .4);
   transition-duration: 150ms;
   transition-property: background;
   transition-timing-function: ease-in-out;
@@ -308,11 +308,6 @@
   padding-bottom: 6px;
 }
 
-
-
-
-
-
 /* grid */
 .weekview__grid {
   display: grid;
@@ -335,7 +330,7 @@
   grid-template-columns: 1fr;
   grid-template-rows: repeat(25, 1fr);
   width: 36px;
-  background: transparent;
+  background-color: transparent;
   z-index: 2;
   user-select: none;
   pointer-events: none;
@@ -361,7 +356,7 @@
   max-height: 1250px;
   display: grid;
   width: 100%;
-  background: var(--black1);
+  background-color: var(--black1);
   grid-template-columns: repeat(7, 1fr);
   background-size: calc(100% / 7) 4%;
   background-image:
@@ -474,14 +469,13 @@
   width: 100%;
   border-radius: 4px;
   cursor: ns-resize;
-  background: rgba(17, 20, 21, 0.8);
+  background-color: rgba(17, 20, 21, 0.8);
   opacity: 0;
 }
 
 .box-resize-s:hover {
   opacity: 1;
 }
-
 
 /*  Z INDICES */
 .box-one {
@@ -564,7 +558,6 @@
   z-index: 22;
 }
 
-
 .box-two:hover,
 .box-three:hover,
 .box-four:hover,
@@ -583,7 +576,7 @@
   width: 100%;
   height: 62.5px;
   margin-top: -62.5px;
-  background: var(--black1);
+  background-color: var(--black1);
   position: relative;
   z-index: 50;
   border-top: var(--borderdarkgrey);
@@ -601,7 +594,6 @@
   height: 100%;
 }
 
-
 @media screen and (max-width: 530px) {
   .allday__cell {
     justify-content: center;
@@ -613,11 +605,11 @@
   }
 
   .allday__cell--active {
-    background: var(--black0);
+    background-color: var(--black0);
   }
 
   .allday__cell--active:hover {
-    background: var(--primary3);
+    background-color: var(--primary3);
   }
 
   .allday-modal-subtitle {

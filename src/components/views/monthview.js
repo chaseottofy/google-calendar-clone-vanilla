@@ -1,38 +1,32 @@
 // rendering
 import setViews from '../../config/setViews';
-import setSidebarDatepicker from '../menus/sidebarDatepicker';
-import fullFormConfig from '../forms/formUtils';
-import FormSetup from '../forms/setForm';
-import getEntryOptionModal from '../menus/entryOptions';
-
 // Box query
 import MonthBoxQuery from '../../factory/queries';
-
+// naming
+import locales from '../../locales/en';
 // date utilities
 import {
-  getDateFormatted,
   compareDates,
   createDateFromFormattedString,
-  getDateFromAttribute,
-  getFormDateObject,
   generateTempStartEnd,
+  getDateFormatted,
+  getDateFromAttribute,
   getDurationSeconds,
+  getFormDateObject,
 } from '../../utilities/dateutils';
-
-import { createCloseIcon } from '../../utilities/svgs';
-
+// drag&drop / resize utilities
+import { setStylingForEvent } from '../../utilities/dragutils';
 // general utilities
 import {
   getClosest,
   hextorgba,
   placePopup,
 } from '../../utilities/helpers';
-
-// drag&drop / resize utilities
-import { setStylingForEvent } from '../../utilities/dragutils';
-
-// naming
-import locales from '../../locales/en';
+import { createCloseIcon } from '../../utilities/svgs';
+import fullFormConfig from '../forms/formUtils';
+import FormSetup from '../forms/setForm';
+import getEntryOptionModal from '../menus/entryOptions';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
 
 const resizeoverlay = document.querySelector('.resize-overlay');
 const sidebar = document.querySelector('.sidebar');
@@ -89,7 +83,7 @@ export default function setMonthView(context, store, datepickerContext) {
     const boxtitle = document.createElement('div');
     boxtitle.classList.add('monthview--title');
     boxtitle.textContent = title;
-    box.appendChild(boxtitle);
+    box.append(boxtitle);
     return box;
   }
 
@@ -105,8 +99,8 @@ export default function setMonthView(context, store, datepickerContext) {
 
     groupedTitle.textContent = `${count} more...`;
 
-    groupedDiv.appendChild(groupedTitle);
-    groupedBxs.appendChild(groupedDiv);
+    groupedDiv.append(groupedTitle);
+    groupedBxs.append(groupedDiv);
     return groupedBxs;
   }
 
@@ -156,7 +150,7 @@ export default function setMonthView(context, store, datepickerContext) {
     if (day.getMonth() === context.getMonth() && day.getDate() === context.getDateSelected()) {
       dayofmonth.classList.add('monthview--dayofmonth-selected');
     }
-    dayofmonth.appendChild(createCellHeader(cell, day));
+    dayofmonth.append(createCellHeader(cell, day));
 
     let toptotal = 0; // box.style.top = (box index) * boxquery.getTop()
 
@@ -167,30 +161,30 @@ export default function setMonthView(context, store, datepickerContext) {
 
       if (entry.length >= 6) {
         // automatically group if there are more than 6 entries on a day
-        cellContent.appendChild(createGroupedCell(cellDate, entry.length));
+        cellContent.append(createGroupedCell(cellDate, entry.length));
         cellContent.classList.add('monthview--daycontent-grouped');
 
       } else {
 
         // not grouped (less than 6 entries)
-        entry.forEach((el, nidx) => {
+        for (const [nidx, el] of entry.entries()) {
           if (compareDates(new Date(el.start), day)) {
             if (nidx > 0) {
               toptotal += boxquery.getTop();
             }
-            cellContent.appendChild(createBox(
+            cellContent.append(createBox(
               el.id, // entry id
               el.category, // backgroundColor
               toptotal, // style.top
               el.title, // entry title
             ));
           }
-        });
+        }
       }
     }
 
     cell.append(dayofmonth, cellContent);
-    monthWrapper.appendChild(cell);
+    monthWrapper.append(cell);
   }
 
   function resetMonthview() {
@@ -216,9 +210,9 @@ export default function setMonthView(context, store, datepickerContext) {
       return dayEntries !== undefined ? dayEntries : [];
     };
 
-    montharray.forEach((day, idx) => {
+    for (const [idx, day] of montharray.entries()) {
       createCell(day, idx, dayHasEntry(day), getDateFormatted(day));
-    });
+    }
 
     montharray = null;
     monthentries = null;
@@ -227,19 +221,19 @@ export default function setMonthView(context, store, datepickerContext) {
 
   function getCoordinatesFromCell(cell) {
     return cell.getAttribute('data-mv-coordinates').split(',').map((x) => {
-      return parseInt(x);
+      return Number.parseInt(x);
     });
   }
 
   function configureForStorage(newCell, clone) {
-    let [year, month, day] = getDateFromAttribute(newCell, 'data-mv-date', 'month');
+    const [year, month, day] = getDateFromAttribute(newCell, 'data-mv-date', 'month');
     const id = clone.getAttribute('data-monthview-id');
-    let tempEntry = store.getEntry(id);
+    const tempEntry = store.getEntry(id);
 
-    let [start, end] = [new Date(tempEntry.start), new Date(tempEntry.end)];
-    let tempdate = new Date(year, month, day);
-    let diff = getDurationSeconds(start, tempdate);
-    let endDay = end.getDate() + Math.floor(diff / 86400) + 1;
+    const [start, end] = [new Date(tempEntry.start), new Date(tempEntry.end)];
+    const tempdate = new Date(year, month, day);
+    const diff = getDurationSeconds(start, tempdate);
+    const endDay = end.getDate() + Math.floor(diff / 86_400) + 1;
 
     store.updateEntry(id, {
       start: new Date(year, month, day, start.getHours(), start.getMinutes()),
@@ -302,9 +296,9 @@ export default function setMonthView(context, store, datepickerContext) {
 
     // reset cell content to empty then append grouped cell
     content.innerText = '';
-    newGroupedCell.appendChild(groupedDiv);
-    groupedDiv.appendChild(groupedTitle);
-    content.appendChild(newGroupedCell);
+    newGroupedCell.append(groupedDiv);
+    groupedDiv.append(groupedTitle);
+    content.append(newGroupedCell);
     content.classList.add('monthview--daycontent-grouped');
     clone.remove();
   }
@@ -329,11 +323,11 @@ export default function setMonthView(context, store, datepickerContext) {
     clone.setAttribute('data-box-mvy', cellY);
 
     const cellRect = cell.getBoundingClientRect();
-    const cellWidth = parseFloat(cellRect.width.toFixed(2));
-    const cellHeight = parseFloat(cellRect.height.toFixed(2));
-    const wrapperLeft = parseInt(monthWrapper.offsetLeft);
+    const cellWidth = Number.parseFloat(cellRect.width.toFixed(2));
+    const cellHeight = Number.parseFloat(cellRect.height.toFixed(2));
+    const wrapperLeft = Number.parseInt(monthWrapper.offsetLeft);
     const boxRect = box.getBoundingClientRect();
-    const boxWidth = parseFloat(boxRect.width);
+    const boxWidth = Number.parseFloat(boxRect.width);
     const boxHeight = boxquery.getHeight();
 
     clone.style.top = `${parent.offsetTop}px`;
@@ -342,8 +336,8 @@ export default function setMonthView(context, store, datepickerContext) {
     clone.style.left = `${parent.offsetLeft}px`;
     clone.classList.add('hide-mv-clone');
 
-    let hasFiveWeeks = monthWrapper.classList.contains('five-weeks');
-    let [startcursorx, startcursory] = [e.clientX, e.clientY];
+    const hasFiveWeeks = monthWrapper.classList.contains('five-weeks');
+    const [startcursorx, startcursory] = [e.clientX, e.clientY];
     let [movedX, movedY] = [0, 0];
     let [lastX, lastY] = [cellX, cellY];
     let gaveStyles = false;
@@ -386,8 +380,8 @@ export default function setMonthView(context, store, datepickerContext) {
 
       // update new left position once
       if (lastX !== newX) {
-        let multX = (newX * cellWidth) + wrapperLeft;
-        clone.style.left = `${parseFloat(multX.toFixed(2))}px`;
+        const multX = (newX * cellWidth) + wrapperLeft;
+        clone.style.left = `${Number.parseFloat(multX.toFixed(2))}px`;
         lastX = newX;
       }
 
@@ -413,8 +407,8 @@ export default function setMonthView(context, store, datepickerContext) {
       // ensure new top position is only calculated if the cursor has moved
       // vertically across a cell border
       if (lastY !== newY) {
-        let multY = (newY * cellHeight) + monthWrapper.offsetTop + 16;
-        clone.style.top = `${parseFloat(multY.toFixed(2))}px`;
+        const multY = (newY * cellHeight) + monthWrapper.offsetTop + 16;
+        clone.style.top = `${Number.parseFloat(multY.toFixed(2))}px`;
         lastY = newY;
       }
 
@@ -503,7 +497,7 @@ export default function setMonthView(context, store, datepickerContext) {
           configClonedBoxForDrop(clone);
           box.remove();
           clone.classList.remove('hide-mv-clone');
-          newCellContent.appendChild(clone);
+          newCellContent.append(clone);
           configureForStorage(newCell, clone);
           renderSidebarDatepickerMonth();
         }
@@ -573,8 +567,8 @@ export default function setMonthView(context, store, datepickerContext) {
       modalEntryTitle.classList.add('more-modal-entry-title');
       modalEntryTitle.textContent = entry.title;
 
-      modalEntry.appendChild(modalEntryTitle);
-      modalContent.appendChild(modalEntry);
+      modalEntry.append(modalEntryTitle);
+      modalContent.append(modalEntry);
     }
     return modalContent;
   }
@@ -597,19 +591,19 @@ export default function setMonthView(context, store, datepickerContext) {
 
     const rect = parent.getBoundingClientRect();
     // let newleft = parseInt(rect.left);
-    let rectWidth = parseInt(rect.width);
+    const rectWidth = Number.parseInt(rect.width);
 
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       216,
       modalHeight,
-      [parseInt(rect.left), parseInt(rect.top)],
+      [Number.parseInt(rect.left), Number.parseInt(rect.top)],
       [window.innerWidth, window.innerHeight],
       true,
       rectWidth,
       // parseInt(rect.width)
     );
 
-    let maxH = +window.innerHeight - +y - 24;
+    const maxH = +window.innerHeight - +y - 24;
     modal.setAttribute('style', `top: ${y}px; left: ${x}px; width: 216px; height: ${modalHeight}px; min-height: 120px; max-height: ${maxH}px;`);
 
     const modalHeader = document.createElement('div');
@@ -629,13 +623,13 @@ export default function setMonthView(context, store, datepickerContext) {
 
     const modalHeaderClose = document.createElement('div');
     modalHeaderClose.classList.add('more-modal-header-close');
-    modalHeaderClose.appendChild(createCloseIcon('var(--white3)'));
+    modalHeaderClose.append(createCloseIcon('var(--white3)'));
     modalHeaderClose.setAttribute('data-tooltip', 'Close');
 
     modalHeaderTitle.append(modalHeaderClose, dowspan, daynspan);
-    modalHeader.appendChild(modalHeaderTitle);
+    modalHeader.append(modalHeaderTitle);
     modal.append(modalHeader, createMoreModalBox(moreModalEntries)); // entries
-    monthWrapper.appendChild(modal);
+    monthWrapper.append(modal);
 
     // open day view (number click)
     daynspan.addEventListener('click', () => {
@@ -652,7 +646,7 @@ export default function setMonthView(context, store, datepickerContext) {
 
   function dragOutOfModal(e) {
     const targetModal = document.querySelector('.more-modal');
-    const targetCellIdx = parseInt(targetModal.getAttribute('data-mv-modal'));
+    const targetCellIdx = Number.parseInt(targetModal.getAttribute('data-mv-modal'));
     const targetCell = document.querySelector(`[data-mv-idx="${targetCellIdx}"]`);
 
     const cloned = e.target.cloneNode(true);
@@ -661,11 +655,11 @@ export default function setMonthView(context, store, datepickerContext) {
     cloned.style.top = `${boxquery.getTop()}px`;
     cloned.style.left = '0px';
     cloned.style.width = '100%';
-    targetCell.lastChild.appendChild(cloned);
+    targetCell.lastChild.append(cloned);
 
     // update title of more modal to reflect one less entry
     const moreModal = targetCell.lastChild.firstChild;
-    const newLength = parseInt(moreModal.getAttribute('data-mvgrouped-length')) - 1;
+    const newLength = Number.parseInt(moreModal.getAttribute('data-mvgrouped-length')) - 1;
 
     if (newLength < 1) {
       targetCell.lastChild.classList.remove('monthview--daycontent-grouped');
@@ -720,10 +714,10 @@ export default function setMonthView(context, store, datepickerContext) {
     cell.style.backgroundColor = offsetColor;
 
     const rect = cell.getBoundingClientRect();
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       360,
       165,
-      [parseInt(rect.left), parseInt(rect.top)],
+      [Number.parseInt(rect.left), Number.parseInt(rect.top)],
       [window.innerWidth, window.innerHeight],
     );
     // *** config & open form ***
@@ -761,7 +755,7 @@ export default function setMonthView(context, store, datepickerContext) {
       cellWrapper.insertBefore(tempBox, cellWrapper.children[0]);
       resetCellOnDrop(cellWrapper.children, false);
     } else {
-      cellWrapper.appendChild(tempBox);
+      cellWrapper.append(tempBox);
     }
   }
 
@@ -778,11 +772,11 @@ export default function setMonthView(context, store, datepickerContext) {
       let tempctg;
       let color;
       if (store.getActiveCategories().length === 0) {
-        let tempdefaultctg = store.getDefaultCtg();
+        const tempdefaultctg = store.getDefaultCtg();
         tempctg = tempdefaultctg[0];
         color = tempdefaultctg[1].color;
       } else {
-        let tempcurrentctg = store.getFirstActiveCategoryKeyPair();
+        const tempcurrentctg = store.getFirstActiveCategoryKeyPair();
         tempctg = tempcurrentctg[0];
         color = tempcurrentctg[1];
       }
@@ -801,8 +795,8 @@ export default function setMonthView(context, store, datepickerContext) {
       fullFormConfig.setFormDatepickerDate(context, datepickerContext, start);
       fullFormConfig.getConfig(setup.getSetup());
       fullFormConfig.setFormStyle(
-        parseInt(rect.right),
-        parseInt(rect.top),
+        Number.parseInt(rect.right),
+        Number.parseInt(rect.top),
         false,
         null,
       );

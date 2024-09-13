@@ -1,7 +1,7 @@
 .form-modal-overlay,
 .form-overlay {
   position: absolute;
-  background: transparent;
+  background-color: transparent;
   height: 100%;
   width: 100%;
 }
@@ -19,7 +19,7 @@
 }
 
 .entries__form {
-  background: var(--black1);
+  background-color: var(--black1);
   border-radius: 8px;
   box-shadow: var(--box-shadow1);
   display: flex;
@@ -47,14 +47,14 @@
 .hide-form {
   transform: scale(0.9);
   user-select: none;
-  pointer-events:none;
+  pointer-events: none;
   opacity: 0;
   z-index: -1;
 }
 
 .entries__form--header {
   align-items: center;
-  background: var(--darkgrey4);
+  background-color: var(--darkgrey4);
   border-radius: 8px 8px 0 0;
   cursor: move;
   display: flex;
@@ -82,7 +82,7 @@
 }
 
 .form--header__icon-close:hover::before {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
   border-radius: var(--borderradius);
   color: var(--white1);
   content: attr(data-tooltip);
@@ -117,13 +117,12 @@
 }
 
 .entries__form--body::-webkit-scrollbar-track {
-  background: transparent;
+  background-color: transparent;
 }
 
 .entries__form--body::-webkit-scrollbar-thumb {
   width: 14px;
 }
-
 
 .form--body__description,
 .form--body__title {
@@ -144,7 +143,7 @@
 }
 
 .form--body__title-input {
-  background: var(--black1);
+  background-color: var(--black1);
   border: none;
   border-bottom: 2px solid var(--mediumgrey2);
   color: var(--white1);
@@ -167,7 +166,7 @@
 
 .form--body__description-input {
   word-wrap: break-word;
-  background: var(--darkgrey4);
+  background-color: var(--darkgrey4);
   border: none;
   border-bottom: 2px solid transparent;
   border-radius: var(--borderradius);
@@ -252,7 +251,7 @@
 .form--body-start__date:hover,
 .form--body-end__time:hover,
 .form--body-start__time:hover {
-  background: var(--black0)
+  background-color: var(--black0)
 }
 
 .active-form-date {
@@ -292,12 +291,12 @@
 .form--body-end__time-minute:hover,
 .form--body-start__time-hour:hover,
 .form--body-start__time-minute:hover {
-  background: var(--black0)
+  background-color: var(--black0)
 }
 
 .active-form-time {
   border-bottom: 2px solid var(--primary2);
-  background: var(--black0);
+  background-color: var(--black0);
 }
 
 .form--body-time__br {
@@ -311,7 +310,7 @@
 
 .form-br {
   align-items: center;
-  background: var(--darkgrey2);
+  background-color: var(--darkgrey2);
   display: flex;
   height: 2px;
   margin: 0 4px;
@@ -324,12 +323,12 @@
 }
 
 .close-options-floating__btn {
-  position:absolute;
+  position: absolute;
   left: 206px;
   height: 30px;
   width: 30px;
   box-shadow: var(--box-shadow1);
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
@@ -339,7 +338,7 @@
 }
 
 .close-options-floating__btn:hover {
-  background: rgba(0,0,0,.2);
+  background-color: rgba(0, 0, 0, .2);
 }
 
 .form--body__category-modal--wrapper {
@@ -365,7 +364,7 @@
 }
 
 .form--body__category-modal--wrapper::-webkit-scrollbar-track {
-  background: var(--black1);
+  background-color: var(--black1);
 }
 
 .form--body__category-modal--wrapper::-webkit-scrollbar-thumb {
@@ -436,7 +435,7 @@
 }
 
 .form--body__category-modal {
-  background: var(--black2)
+  background-color: var(--black2)
 }
 
 .hide-form-category-modal {
@@ -489,7 +488,7 @@
 
 .entries__form--footer {
   align-items: center;
-  background: transparent;
+  background-color: transparent;
   display: flex;
   height: 52px;
   min-height: 52px;
@@ -512,7 +511,7 @@
   display: flex;
   height: 36px;
   justify-content: center;
-  transition: background 150ms ease-in-out;
+  transition: background-color150ms ease-in-out;
   width: 80px;
   font-size: 14px;
 }
@@ -524,12 +523,12 @@
 }
 
 .form--footer__button-save {
-  background: var(--primary2);
+  background-color: var(--primary2);
   color: var(--taskcolor0)
 }
 
 .form--footer__button-cancel:hover {
-  background: var(--darkgrey4);
+  background-color: var(--darkgrey4);
   color: var(--white1);
 }
 
@@ -553,7 +552,7 @@
 .form-input-error::after,
 .form-input-error__custom-input::after {
   align-items: center;
-  background: var(--black0);
+  background-color: var(--black0);
   border-bottom: 1px solid var(--red2);
   color: var(--white2);
   content: attr(data-form-error-message);
@@ -573,7 +572,7 @@
 }
 
 .form-error__submit-btn {
-  background: var(--red2);
+  background-color: var(--red2);
   transition: all .2s ease-in-out
 }
 
@@ -601,7 +600,7 @@
   }
 
   .form-header--dragarea {
-    pointer-events:none;
+    pointer-events: none;
   }
 
   .entries__form--body {
@@ -628,12 +627,12 @@
 
 @media screen and (max-width: 500px) {
   .form-header--dragarea {
-    cursor:default;
+    cursor: default;
   }
 }
 
 @media screen and (max-height: 500px) {
   .form-header--dragarea {
-    cursor:default;
+    cursor: default;
   }
 }

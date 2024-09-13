@@ -1,5 +1,7 @@
-import { getClosest, setTheme } from '../../utilities/helpers';
 import { createTimestamp } from '../../utilities/dateutils';
+import getJSONUpload from '../../utilities/getJsonUpload';
+import { getClosest, setTheme } from '../../utilities/helpers';
+import storage from '../../utilities/storage';
 import handleShortCutsModal from './shortcutsModal';
 
 const sidebarSubMenuOverlay = document.querySelector('.sidebar-sub-menu__overlay');
@@ -143,30 +145,9 @@ export default function getSidebarSubMenu(store, context) {
     // closeSubMenuBtn.onclick = closeSubMenu;
   }
 
-  function getJSONUpload() {
-    const file = document.createElement('input');
-    file.type = 'file';
-    file.accept = 'application/json';
-    file.onchange = (e) => {
-      const targfile = e.target.files[0];
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        const json = JSON.parse(e.target.result);
-        store.setUserUpload(json);
-        closeSubMenu();
-      };
-      reader.readAsText(targfile);
-      reader = null;
-    };
-    document.body.appendChild(file);
-    file.click();
-    document.body.removeChild(file);
-    closeSubMenu();
-    return;
-  }
-
+  // reconfigure the following to use `Blob#text()` instead of `FileReader`
   function getJSONDownload() {
-    const json = JSON.stringify(localStorage);
+    const json = JSON.stringify(storage);
     const [totalEntries, totalCategories] = store.getStoreStats();
     const filename = `ENT_${totalEntries}_CAT_${totalCategories}_${createTimestamp()}`;
     const blob = new Blob([json], { type: 'application/json' });
@@ -174,10 +155,10 @@ export default function getSidebarSubMenu(store, context) {
     const link = document.createElement('a');
     link.href = href;
     link.download = filename + '.json';
-    document.body.appendChild(link);
+    document.body.append(link);
     link.click();
     URL.revokeObjectURL(href);
-    document.body.removeChild(link);
+    link.remove();
   }
 
   function removePopup() {
@@ -191,13 +172,10 @@ export default function getSidebarSubMenu(store, context) {
   function handleCalendarJSON(action) {
     if (action === 'download') {
       getJSONDownload();
-      return;
-    }
-
-    if (action === 'upload') {
+    } else {
       // create popup to warn user that they are about to overwrite all calendar data
       const popup = createUploadConfirmationPopup();
-      document.body.appendChild(popup);
+      document.body.append(popup);
       sidebarSubMenuOverlay.classList.add('sub-overlay-vis');
       // cancel will close popup but keep open sidebar sub menu
       // "Escape" key will also close popup but keep open sidebar sub menu
@@ -205,7 +183,13 @@ export default function getSidebarSubMenu(store, context) {
       const cancelBtn = popup.querySelector('.sb-sub-popup-btn--cancel');
       const proceedBtn = popup.querySelector('.sb-sub-popup-btn--proceed');
       cancelBtn.onclick = removePopup;
-      proceedBtn.onclick = getJSONUpload;
+      proceedBtn.onclick = () => getJSONUpload(store, closeSubMenu)
+        .then((json) => {
+          console.log('JSON upload successful:', json);
+        })
+        .catch((error) => {
+          console.error('JSON upload failed:', error);
+        });
     }
   }
 

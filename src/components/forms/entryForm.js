@@ -1,29 +1,25 @@
 // render methods
 import setViews from '../../config/setViews';
-import setDatepicker from '../menus/datepicker';
-import setSidebarDatepicker from '../menus/sidebarDatepicker';
 import locales from '../../locales/en';
-
-// svgs
-import { createCheckIcon } from '../../utilities/svgs';
-
-// popups confirmation
-import createToast from '../toastPopups/toast';
-
+// date / time helpers
+import {
+  getDateForStore,
+  getDateFromAttribute,
+  isBeforeDate,
+  isDate,
+} from '../../utilities/dateutils';
 // event helpers
 import {
   getClosest,
   placePopup,
   throttle,
 } from '../../utilities/helpers';
-
-// date / time helpers
-import {
-  getDateForStore,
-  isBeforeDate,
-  isDate,
-  getDateFromAttribute,
-} from '../../utilities/dateutils';
+// svgs
+import { createCheckIcon } from '../../utilities/svgs';
+import setDatepicker from '../menus/datepicker';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
+// popups confirmation
+import createToast from '../toastPopups/toast';
 
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
@@ -89,14 +85,14 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function setEndDateToNextDay() {
     const { labels } = locales;
-    const startCurrentDate = startDateInput.getAttribute('data-form-date').split('-').map((x) => parseInt(x));
-    let nextDay = new Date(
+    const startCurrentDate = startDateInput.getAttribute('data-form-date').split('-').map((x) => Number.parseInt(x));
+    const nextDay = new Date(
       startCurrentDate[0],
       startCurrentDate[1],
       startCurrentDate[2] + 1,
     );
-    let nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`;
-    let nextDayTitle = labels.monthsShort[nextDay.getMonth()] + ' ' + nextDay.getDate() + ', ' + nextDay.getFullYear();
+    const nextDayString = `${nextDay.getFullYear()}-${nextDay.getMonth()}-${nextDay.getDate()}`;
+    const nextDayTitle = labels.monthsShort[nextDay.getMonth()] + ' ' + nextDay.getDate() + ', ' + nextDay.getFullYear();
 
     endDateInput.setAttribute('data-form-date', nextDayString);
     endDateInput.textContent = nextDayTitle;
@@ -105,17 +101,17 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function setEndDateToNextHour() {
-    const startCurrentTime = startTimeInput.getAttribute('data-form-time').split(':').map((x) => parseInt(x));
+    const startCurrentTime = startTimeInput.getAttribute('data-form-time').split(':').map((x) => Number.parseInt(x));
 
-    let [newh, newm] = [
+    const [newh, newm] = [
       startCurrentTime[0] < 23 ? startCurrentTime[0] + 1 : 23,
       startCurrentTime[0] < 23 ? startCurrentTime[1] : 45,
     ];
 
-    let nextHour = new Date(0, 0, 0, newh, newm);
-    let md = nextHour.getHours() > 12 ? 'pm' : 'am';
-    let nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`;
-    let nextHourTitle = `${+nextHour.getHours() % 12}:${+nextHour.getMinutes() == 0 ? '00' : nextHour.getMinutes()}${md}`;
+    const nextHour = new Date(0, 0, 0, newh, newm);
+    const md = nextHour.getHours() > 12 ? 'pm' : 'am';
+    const nextHourString = `${nextHour.getHours()}:${nextHour.getMinutes()}`;
+    const nextHourTitle = `${+nextHour.getHours() % 12}:${+nextHour.getMinutes() == 0 ? '00' : nextHour.getMinutes()}${md}`;
 
     endTimeInput.setAttribute('data-form-time', nextHourString);
     endTimeInput.textContent = nextHourTitle;
@@ -133,6 +129,13 @@ export default function setEntryForm(context, store, datepickerContext) {
     const timepickerTimesContainer = document.createElement('div');
     timepickerTimesContainer.classList.add('timepicker-times__container');
 
+    console.log({
+      coords: coords,
+      currentTime: currentTime,
+      end: end,
+      endLimit: endLimit,
+    });
+
     let hours = [
       12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
       12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11,
@@ -141,21 +144,21 @@ export default function setEntryForm(context, store, datepickerContext) {
       'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am', 'am',
       'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm', 'pm',
     ];
-    let minutes = ['00', '15', '30', '45'];
+    const minutes = ['00', '15', '30', '45'];
     let [currenthour, currentmin] = currentTime.split(':').map((x) => {
-      return parseInt(x);
+      return Number.parseInt(x);
     });
 
-    let currentmd = currenthour > 12 ? 'pm' : 'am';
+    const currentmd = currenthour > 12 ? 'pm' : 'am';
 
-    let isSameDay = (
+    const isSameDay = (
       startDateInput.getAttribute('data-form-date') === endDateInput.getAttribute('data-form-date')
     );
-    let shouldTestReset = end && currenthour === 23 && currentmin === 45;
+    const shouldTestReset = end && currenthour === 23 && currentmin === 45;
     if (currenthour > 12) currenthour -= 12;
 
     if (endLimit !== null && isSameDay) {
-      let [h, m] = endLimit.split(':').map((x) => parseInt(x));
+      let [h, m] = endLimit.split(':').map((x) => Number.parseInt(x));
       if (shouldTestReset) {
         if (h === 23 && m >= 15) {
           setEndDateToNextDay();
@@ -173,15 +176,15 @@ export default function setEntryForm(context, store, datepickerContext) {
           m = m.slice(-1);
         }
       } else {
-        hours = hours.slice(+h + 1, hours.length);
-        md = md.slice(+h + 1, md.length);
+        hours = hours.slice(+h + 1);
+        md = md.slice(+h + 1);
       }
     }
 
     let count = 0;
     let si;
-    hours.forEach((hour, houridx) => {
-      minutes.forEach((min) => {
+    for (const [houridx, hour] of hours.entries()) {
+      for (const min of minutes) {
         const timepickerTime = document.createElement('div');
         timepickerTime.classList.add('timepicker-time');
         let attr;
@@ -215,20 +218,20 @@ export default function setEntryForm(context, store, datepickerContext) {
           }
         }
 
-        timepickerTimesContainer.appendChild(timepickerTime);
-      });
-    });
+        timepickerTimesContainer.append(timepickerTime);
+      }
+    }
 
     function setnewtime(e) {
       const time = e.target.textContent;
-      let attr = e.target.getAttribute('data-tp-time');
+      const attr = e.target.getAttribute('data-tp-time');
 
       if (!end) {
         startTimeInput.textContent = time;
         startTimeInput.setAttribute('data-form-time', attr);
 
-        let [testhour, testminute] = attr.split(':').map((x) => +x);
-        let [endTestHour, endTestMinute] = endTimeInput.getAttribute('data-form-time').split(':').map((x) => parseInt(x));
+        const [testhour, testminute] = attr.split(':').map((x) => +x);
+        const [endTestHour, endTestMinute] = endTimeInput.getAttribute('data-form-time').split(':').map((x) => Number.parseInt(x));
 
         if (isSameDay) {
           if (testhour === 23 && testminute === 45) {
@@ -253,7 +256,7 @@ export default function setEntryForm(context, store, datepickerContext) {
       }
     };
 
-    timepicker.appendChild(timepickerTimesContainer);
+    timepicker.append(timepickerTimesContainer);
     const [x, y] = coords;
     timepicker.setAttribute('style', `top:${y}px; left:${x}px;`);
     document.body.prepend(timepickerOverlay, timepicker);
@@ -261,7 +264,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     timepickerTimesContainer.onclick = delegateNewTime;
     if (!end) {
       if (si > 0) {
-        timepicker.scrollTo(0, parseInt(si * 40) - 40);
+        timepicker.scrollTo(0, Number.parseInt(si * 40) - 40);
       } else {
         timepicker.scrollTo(0, 0);
       }
@@ -298,9 +301,9 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     const [y, m, d] = getDateFromAttribute(e.target, 'data-form-date');
     const rect = e.target.getBoundingClientRect();
-    const datepickerLeft = parseInt(rect.left);
-    const bott = parseInt(rect.bottom);
-    let datepickerTop = parseInt(rect.top);
+    const datepickerLeft = Number.parseInt(rect.left);
+    const bott = Number.parseInt(rect.bottom);
+    let datepickerTop = Number.parseInt(rect.top);
 
     if (type === 'end') {
       datepickerTop -= 40;
@@ -315,11 +318,11 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function getDateFormatViaAttr(dateAttr) {
-    return new Date(...dateAttr.split('-').map((x) => parseInt(x)));
+    return new Date(...dateAttr.split('-').map((x) => Number.parseInt(x)));
   }
 
   function getTimeFormatViaAttr(timeAttr) {
-    return timeAttr.split(':').map((x) => parseInt(x));
+    return timeAttr.split(':').map((x) => Number.parseInt(x));
   }
 
   function getDateTimeFormatted(dateAttr, timeAttr) {
@@ -330,15 +333,15 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function configDatesForStore() {
-    let startDateAttr = startDateInput.getAttribute('data-form-date');
-    let startDate = getDateFormatViaAttr(startDateAttr);
-    let startTimeAttr = startTimeInput.getAttribute('data-form-time');
-    let [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr);
+    const startDateAttr = startDateInput.getAttribute('data-form-date');
+    const startDate = getDateFormatViaAttr(startDateAttr);
+    const startTimeAttr = startTimeInput.getAttribute('data-form-time');
+    const [starthour, startminute] = getTimeFormatViaAttr(startTimeAttr);
 
-    let endDateAttr = endDateInput.getAttribute('data-form-date');
-    let endDate = getDateFormatViaAttr(endDateAttr);
-    let endTimeAttr = endTimeInput.getAttribute('data-form-time');
-    let [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr);
+    const endDateAttr = endDateInput.getAttribute('data-form-date');
+    const endDate = getDateFormatViaAttr(endDateAttr);
+    const endTimeAttr = endTimeInput.getAttribute('data-form-time');
+    const [endhour, endminute] = getTimeFormatViaAttr(endTimeAttr);
 
     return [
       getDateTimeFormatted(startDate, [starthour, startminute]),
@@ -359,7 +362,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     /* ************************ */
     /*  TITLE VALIDATION CHECK */
     if (typeof title === 'string') {
-      const titlecheck = title.trim().replace(/[^a-zA-Z0-9\s_-]+|\s{2,}/g, ' ');
+      const titlecheck = title.trim().replaceAll(/[^\s\w-]+|\s{2,}/g, ' ');
       if (titlecheck.length > 50) {
         status.title = 'Title must be Less than 50 characters';
         status.valid = false;
@@ -404,9 +407,9 @@ export default function setEntryForm(context, store, datepickerContext) {
     }
     /* ************* */
     /*  congregate any errors  */
-    let errors = {};
+    const errors = {};
     let hasErrors;
-    for (let key in status) {
+    for (const key in status) {
       if (status[key] !== true) {
         errors[key] = status[key];
         hasErrors = true;
@@ -460,7 +463,7 @@ export default function setEntryForm(context, store, datepickerContext) {
       submitbtn: 'form-error__submit-btn',
     };
 
-    for (let key in errorMessages) {
+    for (const key in errorMessages) {
       if (components[key]) {
         if (key === 'title' || key === 'description') {
           components[key].parentElement.setAttribute(err.inputAttr, errorMessages[key]);
@@ -507,10 +510,10 @@ export default function setEntryForm(context, store, datepickerContext) {
   function clearAllErrors() {
     const inputErrElements = document?.querySelectorAll('.form-input-error');
     if (inputErrElements) {
-      inputErrElements.forEach((el) => {
+      for (const el of inputErrElements) {
         el.classList.remove('form-input-error');
         el.removeAttribute('data-form-error-message');
-      });
+      }
     }
   }
 
@@ -601,8 +604,7 @@ export default function setEntryForm(context, store, datepickerContext) {
       // submission : edit
       if (formSubmitButton.getAttribute('data-form-action') === 'edit') {
         const id = formSubmitButton.getAttribute('data-form-entry-id');
-        const entryBefore = JSON.parse(JSON.stringify(store.getEntry(id)));
-
+        const entryBefore = structuredClone(store.getEntry(id));
         store.updateEntry(
           id,
           {
@@ -651,7 +653,8 @@ export default function setEntryForm(context, store, datepickerContext) {
   function createCategoryOptions(parent, ctgopts) {
     const currentCategory = categoryModalWrapper.getAttribute('data-form-category');
 
-    ctgopts.forEach(([key, value]) => {
+    // I keep seeing that forEach is slower than for of loop, is this true?
+    for (const [key, value] of ctgopts) {
       const color = value.color;
       const categoryWrapper = document.createElement('div');
       categoryWrapper.classList.add('category-modal--category');
@@ -673,7 +676,7 @@ export default function setEntryForm(context, store, datepickerContext) {
         const checkIcon = createCheckIcon('var(--white4)');
         const checkIconWrapper = document.createElement('div');
         checkIconWrapper.classList.add('category-modal--category-check');
-        checkIconWrapper.appendChild(checkIcon);
+        checkIconWrapper.append(checkIcon);
 
         categoryWrapper.append(
           categoryDisplayColor,
@@ -685,8 +688,8 @@ export default function setEntryForm(context, store, datepickerContext) {
         categoryWrapper.append(categoryDisplayColor, categoryTitle);
       }
 
-      parent.appendChild(categoryWrapper);
-    });
+      parent.append(categoryWrapper);
+    }
   }
 
   function openCategoryModal(e, ctgmodal) {
@@ -728,8 +731,8 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     // get current left / top form position
     const [currleft, currtop] = [
-      parseInt(rect.left),
-      parseInt(rect.top),
+      Number.parseInt(rect.left),
+      Number.parseInt(rect.top),
     ];
 
     entriesFormWrapper.style.margin = '0';
@@ -746,7 +749,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     const [winH, winW] = [window.innerHeight, window.innerWidth];
 
     function mousemove(e) {
-      let [leftAfter, topAfter] = [
+      const [leftAfter, topAfter] = [
         leftBefore - e.clientX, topBefore - e.clientY,
       ];
 
@@ -790,10 +793,10 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   function handleTimepickerSetup(target) {
     const rect = target.getBoundingClientRect();
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       180,
       200,
-      [parseInt(rect.left), parseInt(rect.top)],
+      [Number.parseInt(rect.left), Number.parseInt(rect.top)],
       [window.innerWidth, window.innerHeight],
       false,
     );
@@ -1017,7 +1020,7 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function setInitialFormCategory() {
-    let [categoryTitle, categoryColor] = getDefaultCategory();
+    const [categoryTitle, categoryColor] = getDefaultCategory();
     categoryModalWrapper.setAttribute('data-form-category', categoryTitle);
 
     selectedCategoryWrapper.style.backgroundColor = categoryColor;

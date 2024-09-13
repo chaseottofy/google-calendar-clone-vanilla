@@ -30,7 +30,7 @@ class FormConfig {
     if (!centerOffset) {
       centerOffset = null;
     }
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       this.form.offsetWidth,
       this.form.offsetHeight,
       [eX, eY],
@@ -52,9 +52,9 @@ class FormConfig {
   }
 
   configFormTitleDescriptionInput(title, description) {
-    this.formTitleDescription.forEach((input, idx) => {
+    for (const [idx, input] of this.formTitleDescription.entries()) {
       input.firstElementChild.value = [title, description][idx];
-    });
+    }
   }
 
   /**

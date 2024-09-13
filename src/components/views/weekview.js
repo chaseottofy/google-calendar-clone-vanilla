@@ -1,40 +1,36 @@
 import setViews from '../../config/setViews';
-import setSidebarDatepicker from '../menus/sidebarDatepicker';
+import { Week } from '../../factory/entries';
+import locales from '../../locales/en';
+import {
+  formatStartEndDate,
+  getDateFromAttribute,
+  getDayOrdinal,
+  getFormDateObject,
+  getTempDates,
+} from '../../utilities/dateutils';
+import handleOverlap, {
+  createBox,
+  createTempBoxHeader,
+  createTemporaryBox,
+  getBoxDefaultStyle,
+  getOriginalBoxObject,
+  resetStyleOnClick,
+  setBoxTimeAttributes,
+  setStylingForEvent,
+  startEndDefault,
+  updateBoxCoordinates,
+} from '../../utilities/dragutils';
+import { getClosest, placePopup } from '../../utilities/helpers';
+import {
+  createCloseIcon,
+  createExpandDownIcon,
+  createMeatballVertIcon,
+} from '../../utilities/svgs';
+import calcTime, { formatTime } from '../../utilities/timeutils';
 import fullFormConfig from '../forms/formUtils';
 import FormSetup from '../forms/setForm';
 import getEntryOptionModal from '../menus/entryOptions';
-import { Week } from '../../factory/entries';
-import locales from '../../locales/en';
-import calcTime, { formatTime } from '../../utilities/timeutils';
-
-import {
-  createCloseIcon,
-  createMeatballVertIcon,
-  createExpandDownIcon,
-} from '../../utilities/svgs';
-
-import {
-  formatStartEndDate,
-  getTempDates,
-  getFormDateObject,
-  getDateFromAttribute,
-  getDayOrdinal,
-} from '../../utilities/dateutils';
-
-import handleOverlap, {
-  setStylingForEvent,
-  updateBoxCoordinates,
-  setBoxTimeAttributes,
-  createBox,
-  createTemporaryBox,
-  getBoxDefaultStyle,
-  resetStyleOnClick,
-  createTempBoxHeader,
-  startEndDefault,
-  getOriginalBoxObject,
-} from '../../utilities/dragutils';
-
-import { getClosest, placePopup } from '../../utilities/helpers';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
 
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
@@ -55,12 +51,12 @@ const cols = document.querySelectorAll('.week--col');
 
 export default function setWeekView(context, store, datepickerContext) {
   const weekArray = context.getWeekArray();
-  let entries = store.getWeekEntries(weekArray);
-  let boxes = new Week(entries.day, entries.allDay);
+  const entries = store.getWeekEntries(weekArray);
+  const boxes = new Week(entries.day, entries.allDay);
   let firstY = null;
 
   function setDayView(e) {
-    let [yr, mo, da] = getDateFromAttribute(e.target, 'data-weekview-date');
+    const [yr, mo, da] = getDateFromAttribute(e.target, 'data-weekview-date');
     context.setDate(yr, mo, da);
     context.setDateSelected(da);
     context.setComponent('day');
@@ -86,7 +82,7 @@ export default function setWeekView(context, store, datepickerContext) {
       const wvSideGridCell = document.createElement('span');
       wvSideGridCell.classList.add('sidegrid-cell');
       wvSideGridCell.textContent = `${hour} ${md}`;
-      weekviewSideGrid.appendChild(wvSideGridCell);
+      weekviewSideGrid.append(wvSideGridCell);
     }
   }
 
@@ -94,13 +90,13 @@ export default function setWeekView(context, store, datepickerContext) {
     document.querySelector('.wv-gmt').textContent = `UTC ${context.getGmt()}`;
     let hasToday;
     let hasSelected;
-    let dayNumbers = [];
-    let ymd = [];
+    const dayNumbers = [];
+    const ymd = [];
     const today = context.getToday();
-    let [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
+    const [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
 
-    weekArray.forEach((day) => {
-      let [y, m, d] = [
+    for (const day of weekArray) {
+      const [y, m, d] = [
         day.getFullYear(),
         day.getMonth(),
         day.getDate(),
@@ -116,9 +112,9 @@ export default function setWeekView(context, store, datepickerContext) {
       if (d === td && m === tm && y === ty) {
         hasToday = d;
       }
-    });
+    }
 
-    dayNumbers.forEach((num, idx) => {
+    for (const [idx, num] of dayNumbers.entries()) {
       if (num === hasSelected) {
         weekviewHeaderDayNumber[idx].classList.add('wvh--selected');
       } else {
@@ -134,7 +130,7 @@ export default function setWeekView(context, store, datepickerContext) {
       weekviewHeaderDayNumber[idx].textContent = num;
       weekviewHeaderDayNumber[idx].setAttribute('data-weekview-date', ymd[idx]);
       topCols[idx].setAttribute('data-wvtop-day', num);
-    });
+    }
   }
 
   function renderSidebarDatepickerWeek() {
@@ -145,26 +141,25 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   function resetWeekviewBoxes() {
-    cols.forEach((col) => { col.innerText = ''; });
-    topCols.forEach((col) => { col.innerText = ''; });
+    for (const col of cols) { col.innerText = ''; }
+    for (const col of topCols) { col.innerText = ''; }
     main.onmousedown = null;
     weekviewHeader.onclick = null;
     weekviewSideGrid.innerText = '';
   }
 
   function renderBoxes() {
-    cols.forEach((col) => { col.innerText = ''; });
-    topCols.forEach((col) => { col.innerText = ''; });
+    for (const col of cols) { col.innerText = ''; }
+    for (const col of topCols) { col.innerText = ''; }
 
-    boxes.getBoxes().forEach((entry) => {
+    for (const entry of boxes.getBoxes()) {
       const y = entry.coordinates.y;
       if (firstY === null || y < firstY) {
         firstY = y;
       }
-      // firstY == null || y < firstY ? (firstY = y) : null;
       const col = cols[+entry.coordinates.x];
       createBox(col, entry, 'week', store.getCtgColor(entry.category));
-    });
+    }
 
     const boxt = boxes.getBoxesTopLengths();
     for (const k in boxt) {
@@ -184,17 +179,17 @@ export default function setWeekView(context, store, datepickerContext) {
     const icon = document.createElement('div');
     icon.classList.add('wv-ad--taskicon');
     icon.style.backgroundColor = '#6F0C2B';
-    taskicons.appendChild(icon);
+    taskicons.append(icon);
 
     const celltitle = document.createElement('div');
     celltitle.classList.add('wv-ad--celltitle');
     celltitle.textContent = `${len} more`;
     const cellexpand = document.createElement('div');
     cellexpand.classList.add('wv-ad--cellexpand');
-    cellexpand.appendChild(createExpandDownIcon('var(--white3)'));
+    cellexpand.append(createExpandDownIcon('var(--white3)'));
 
     cell.append(taskicons, celltitle, cellexpand);
-    col.appendChild(cell);
+    col.append(cell);
   }
 
   function createAllDayModalCell(entry, idx) {
@@ -223,15 +218,15 @@ export default function setWeekView(context, store, datepickerContext) {
     cellcategoryTitle.textContent = 'category: ' + entry.category;
 
     cellcontent.append(celltitle, cellcategoryTitle, cellendDate);
-    cellIcons.appendChild(createMeatballVertIcon('var(--taskcolor'));
+    cellIcons.append(createMeatballVertIcon('var(--taskcolor'));
     cell.append(cellcontent, cellIcons);
     return cell;
   }
 
   function createAllDayModal(e, col, adentries, idx, cell) {
     const { labels } = locales;
-    let dayofweek = labels.weekdaysLong[idx];
-    let daynumber = col.getAttribute('data-wvtop-day');
+    const dayofweek = labels.weekdaysLong[idx];
+    const daynumber = col.getAttribute('data-wvtop-day');
 
     const modal = document.createElement('div');
     modal.classList.add('allday-modal');
@@ -239,15 +234,15 @@ export default function setWeekView(context, store, datepickerContext) {
     const rect = col.getBoundingClientRect();
     let entriesoffset;
     if (adentries.length < 4) {
-      entriesoffset = parseInt(55 * adentries.length) + 60;
+      entriesoffset = Number.parseInt(55 * adentries.length) + 60;
     } else {
-      entriesoffset = parseInt(55 * 4) + 60;
+      entriesoffset = Number.parseInt(55 * 4) + 60;
     }
 
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       240,
       entriesoffset,
-      [parseInt(rect.left), parseInt(rect.top) + 24],
+      [Number.parseInt(rect.left), Number.parseInt(rect.top) + 24],
       [window.innerWidth, window.innerHeight],
       true,
       Math.floor((window.innerWidth - 36 - weekviewGrid.offsetLeft) / 7),
@@ -270,7 +265,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const closeAlldayModalBtn = document.createElement('div');
     closeAlldayModalBtn.classList.add('close-allday-modal');
-    closeAlldayModalBtn.appendChild(createCloseIcon('var(--white4'));
+    closeAlldayModalBtn.append(createCloseIcon('var(--white4'));
 
     const modalcontent = document.createElement('div');
     modalcontent.classList.add('allday-modal__content');
@@ -292,9 +287,9 @@ export default function setWeekView(context, store, datepickerContext) {
       cell.classList.remove('allday-modal__cell--open');
     }
 
-    adentries.forEach((entry, nidx) => {
-      modalcontent.appendChild(createAllDayModalCell(entry, nidx));
-    });
+    for (const [nidx, entry] of adentries.entries()) {
+      modalcontent.append(createAllDayModalCell(entry, nidx));
+    }
 
     function delegateAllDayModal(e) {
       const getCloseAdBtn = getClosest(e, '.close-allday-modal');
@@ -328,8 +323,8 @@ export default function setWeekView(context, store, datepickerContext) {
     const col = cell.parentElement;
     cell.classList.add('allday-modal__cell--open');
     cell.firstChild.firstChild.style.backgroundColor = '#01635b';
-    const colidx = parseInt(col.getAttribute('data-allday-column'));
-    let colentries = boxes.getBoxesByColumnTop(colidx);
+    const colidx = Number.parseInt(col.getAttribute('data-allday-column'));
+    const colentries = boxes.getBoxesByColumnTop(colidx);
     if (colentries.length > 0) {
       createAllDayModal(e, col, colentries, colidx, cell);
       resizeoverlay.classList.remove('hide-resize-overlay');
@@ -375,10 +370,10 @@ export default function setWeekView(context, store, datepickerContext) {
     const start = entry.start;
     const color = store.getCtgColor(entry.category);
     const targetrect = e.target.getBoundingClientRect();
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       400,
       165,
-      [parseInt(targetrect.right), (e.clientY) + 28],
+      [Number.parseInt(targetrect.right), (e.clientY) + 28],
       [window.innerWidth, window.innerHeight],
     );
 
@@ -410,8 +405,8 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const startTop = +box.style.top.split('px')[0];
     const boxHeight = +box.style.height.split('px')[0];
-    let startCursorY = e.pageY - weekviewGrid.offsetTop;
-    let tempstartY = e.pageY;
+    const startCursorY = e.pageY - weekviewGrid.offsetTop;
+    const tempstartY = e.pageY;
     let startCursorX = e.pageX;
     let [sX, sY] = [0, 0];
     let hasStyles = false;
@@ -437,7 +432,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
       const headerOffset = weekviewGrid.offsetTop;
       const currentCursorY = e.pageY - headerOffset;
-      let newOffsetY = currentCursorY - startCursorY;
+      const newOffsetY = currentCursorY - startCursorY;
       let newTop = Math.round((newOffsetY + startTop) / 12.5) * 12.5;
 
       if (newTop < 0 || currentCursorY < 0) {
@@ -454,20 +449,20 @@ export default function setWeekView(context, store, datepickerContext) {
       let rightColX;
 
       if (+currentColumn - 1 >= 0) {
-        leftColX = parseInt(getcol(currentColumn - 1).getBoundingClientRect().right);
+        leftColX = Number.parseInt(getcol(currentColumn - 1).getBoundingClientRect().right);
       } else {
         leftColX = null;
       }
 
       if (+currentColumn + 1 < cols.length) {
-        rightColX = parseInt(getcol(+currentColumn + 1).getBoundingClientRect().left);
+        rightColX = Number.parseInt(getcol(+currentColumn + 1).getBoundingClientRect().left);
       } else {
         rightColX = null;
       }
 
       if (direction === 'right' && rightColX !== null) {
         if (e.pageX >= rightColX) {
-          getcol(+currentColumn + 1).appendChild(box);
+          getcol(+currentColumn + 1).append(box);
           startCursorX = e.pageX;
           currentColumn = +currentColumn + 1;
           box.setAttribute('data-box-col', +currentColumn);
@@ -476,7 +471,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
       if (direction === 'left' && leftColX !== null) {
         if (e.pageX <= leftColX) {
-          getcol(+currentColumn - 1).appendChild(box);
+          getcol(+currentColumn - 1).append(box);
           startCursorX = e.pageX;
           currentColumn = +currentColumn - 1;
           box.setAttribute('data-box-col', +currentColumn);
@@ -501,10 +496,10 @@ export default function setWeekView(context, store, datepickerContext) {
         const start = entry.start;
         const color = box.style.backgroundColor;
         const rect = box.getBoundingClientRect();
-        let [x, y] = placePopup(
+        const [x, y] = placePopup(
           400,
           165,
-          [parseInt(rect.left), parseInt(rect.top) + 56],
+          [Number.parseInt(rect.left), Number.parseInt(rect.top) + 56],
           [window.innerWidth, window.innerHeight],
           false,
         );
@@ -549,7 +544,7 @@ export default function setWeekView(context, store, datepickerContext) {
           renderSidebarDatepickerWeek();
         }
         // check if new position overlaps with other boxes and handle
-        let droppedCol = +box.getAttribute('data-box-col');
+        const droppedCol = +box.getAttribute('data-box-col');
         if (boxes.getBoxesByColumn(droppedCol).length > 1) {
           handleOverlap(droppedCol, 'week', boxes);
         } else {
@@ -577,7 +572,7 @@ export default function setWeekView(context, store, datepickerContext) {
     box.setAttribute('data-box-col', currentColumn);
 
     let boxhasOnTop = false;
-    let boxorig = getOriginalBoxObject(box);
+    const boxorig = getOriginalBoxObject(box);
     if (box.classList.contains('box-ontop')) {
       boxhasOnTop = true;
       resetStyleOnClick('week', box);
@@ -589,7 +584,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     const mousemove = (e) => {
       const headerOffset = weekviewGrid.offsetTop;
-      let amountScrolled = Math.abs(parseInt(container.getBoundingClientRect().top));
+      let amountScrolled = Math.abs(Number.parseInt(container.getBoundingClientRect().top));
       if (amountScrolled == headerOffset) {
         amountScrolled -= headerOffset;
       } else if (container.getBoundingClientRect().top > 0) {
@@ -603,7 +598,7 @@ export default function setWeekView(context, store, datepickerContext) {
       if (newHeight <= 12.5) {
         box.style.height = '12.5px';
         return;
-      } else if (newHeight + parseInt(box.style.top) > 1188) {
+      } else if (newHeight + Number.parseInt(box.style.top) > 1188) {
         return;
       } else {
         box.style.height = `${newHeight}px`;
@@ -629,7 +624,7 @@ export default function setWeekView(context, store, datepickerContext) {
         box.children[1].children[0].textContent = time;
         updateBoxCoordinates(box, 'week', boxes);
 
-        let droppedCol = +box.getAttribute('data-box-col');
+        const droppedCol = +box.getAttribute('data-box-col');
         if (boxes.getBoxesByColumn(droppedCol).length > 1) {
           handleOverlap(droppedCol, 'week', boxes);
         }
@@ -654,7 +649,7 @@ export default function setWeekView(context, store, datepickerContext) {
     setStylingForEvent('dragstart', main, store);
     document.body.style.cursor = 'move';
     const [tempcategory, color] = store.getFirstActiveCategoryKeyPair();
-    const colIdx = parseInt(e.target.getAttribute('data-column-index'));
+    const colIdx = Number.parseInt(e.target.getAttribute('data-column-index'));
 
     const box = document.createElement('div');
     box.setAttribute('class', 'box box-dragging temp-week-box');
@@ -669,18 +664,18 @@ export default function setWeekView(context, store, datepickerContext) {
     boxtimeend.classList.add('box-time');
 
     const headerOffset = +weekviewGrid.offsetTop;
-    const scrolled = parseInt(weekviewGrid.scrollTop);
+    const scrolled = Number.parseInt(weekviewGrid.scrollTop);
     const startCursorY = e.pageY - weekviewGrid.offsetTop;
 
-    let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
+    const y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
     box.setAttribute('style', getBoxDefaultStyle(y, color));
 
-    let coords = { y: +y / 12.5, x: colIdx, h: 1, e: 2 };
+    const coords = { y: +y / 12.5, x: colIdx, h: 1, e: 2 };
     let [starthour, startmin, endhour, endmin] = startEndDefault(y);
 
     function mousemove(e) {
       const currentCursorY = e.pageY - headerOffset;
-      let newOffsetY = currentCursorY - startCursorY;
+      const newOffsetY = currentCursorY - startCursorY;
       let newHeight = Math.round((newOffsetY) / 12.5) * 12.5;
 
       if (newHeight <= 12.5) { newHeight = 12.5; }
@@ -699,7 +694,7 @@ export default function setWeekView(context, store, datepickerContext) {
 
     boxcontent.append(boxtime, boxtimeend);
     box.append(boxheader, boxcontent);
-    e.target.appendChild(box);
+    e.target.append(box);
 
     function mouseup() {
       const datesData = getTempDates(
@@ -758,19 +753,15 @@ export default function setWeekView(context, store, datepickerContext) {
   function renderDataForGrid() {
     renderBoxes();
     const colsToCheck = boxes.getColumnsWithMultipleBoxes();
-    colsToCheck.forEach((col) => handleOverlap(col, 'week', boxes));
+    for (const col of colsToCheck) handleOverlap(col, 'week', boxes);
   }
 
-  /*
-
-  */
   function delegateWvHeader(e) {
     const getHeaderDayNumber = getClosest(e, '.weekview--header-day__number');
     if (getHeaderDayNumber) {
       setDayView(e);
       return;
     }
-
   }
 
   const initWeek = () => {

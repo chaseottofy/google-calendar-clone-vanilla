@@ -5,7 +5,7 @@
   top: 68px;
   width: 44px;
   height: 44px;
-  background: transparent;
+  background-color: transparent;
   border-radius: 50%;
   justify-content: center;
   align-items: center;
@@ -18,8 +18,8 @@
 }
 
 .toggle-form:focus-visible {
-  outline:none;
-  background: var(--mediumgrey1);
+  outline: none;
+  background-color: var(--mediumgrey1);
   box-shadow: var(--box-shadow2-hover);
 }
 
@@ -31,11 +31,11 @@
 }
 
 .hide-toggle--form .toggle-form-btn {
-  user-select:none;
+  user-select: none;
 }
 
 .toggle-form:hover {
-  background: var(--black1);
+  background-color: var(--black1);
   box-shadow: var(--box-shadow2-hover);
 }
 
@@ -79,7 +79,6 @@
 .close-toggle--fixed {
   z-index: -1 !important;
 }
-
 
 @media screen and (max-width: 530px) {
   .toggle-form {

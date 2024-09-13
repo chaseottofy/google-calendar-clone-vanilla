@@ -51,7 +51,7 @@
 
 .cell-current {
   box-shadow: var(--box-shadow3);
-  border:none;
+  border: none;
 }
 
 .yvmht-current {
@@ -68,7 +68,7 @@
   height: 32px;
 }
 
-.yv-monthcell__header--weekdays>div {
+.yv-monthcell__header--weekdays > div {
   height: 22px;
   width: 100%;
   display: flex;
@@ -88,7 +88,6 @@
   margin: 0 auto;
   height: 100%;
   width: 100%;
-
   /* padding-bottom: 8px; */
 }
 
@@ -109,11 +108,11 @@
 .yvmb-prevnext {
   color: var(--offwhite1);
   border-radius: 0 !important;
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .yvmb-today {
-  background: var(--primary2) !important;
+  background-color: var(--primary2) !important;
   color: var(--taskcolor0) !important;
 }
 
@@ -123,16 +122,16 @@
 
 .yvmb-has-entry {
   color: var(--primarylight1);
-  background: var(--black0);
+  background-color: var(--black0);
 }
 
 .yvmb-selected {
   color: var(--taskcolor0);
-  background: var(--primary3) !important;
+  background-color: var(--primary3) !important;
 }
 
 .yv-monthcell__body--day-wrapper:hover {
-  background: var(--darkgrey2);
+  background-color: var(--darkgrey2);
   color: var(--taskcolor0);
 }
 

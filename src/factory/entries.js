@@ -87,7 +87,7 @@ class Week {
 
   getBoxesTopLengths() {
     return this.getBoxesTop().reduce((a, c) => {
-      let start = new Date(c.start);
+      const start = new Date(c.start);
       if (a[start.getDay()]) {
         a[start.getDay()]++;
       } else {
@@ -98,8 +98,8 @@ class Week {
   }
 
   getColumnsWithMultipleBoxes() {
-    let temp = {};
-    let columns = [];
+    const temp = {};
+    const columns = [];
     for (const box of this.boxes) {
       if (temp[box.coordinates.x]) {
         temp[box.coordinates.x]++;
@@ -127,7 +127,7 @@ class Week {
 
   checkForCollision(col) {
     const bxs = this.getBoxesByColumn(col);
-    let overlaps = []; // a list to store the overlapping entries
+    const overlaps = []; // a list to store the overlapping entries
     for (let i = 0; i < bxs.length; i++) {
       for (let j = i + 1; j < bxs.length; j++) {
         const e1 = bxs[i];
@@ -148,9 +148,9 @@ class Week {
   updateStore(store, id, weekArray) {
     const boxEntry = this.getBox(id);
     const coords = boxEntry.coordinates;
-    let boxstart = +coords.y * 15;
-    let boxend = +coords.e * 15;
-    let day = weekArray[+coords.x];
+    const boxstart = +coords.y * 15;
+    const boxend = +coords.e * 15;
+    const day = weekArray[+coords.x];
 
     const startDate = new Date(day);
     const starthours = Math.floor(boxstart / 60);
@@ -220,7 +220,7 @@ class Day {
 
   getBoxesTopLengths() {
     return this.getBoxesTop().reduce((a, c) => {
-      let start = new Date(c.start);
+      const start = new Date(c.start);
       if (a[start.getDay()]) {
         a[start.getDay()]++;
       } else {
@@ -244,7 +244,7 @@ class Day {
 
   sortByY(bxs) {
     return bxs.sort((a, b) => {
-      let diff = +a.coordinates.y - +b.coordinates.y;
+      const diff = +a.coordinates.y - +b.coordinates.y;
       if (diff === 0) {
         return +a.coordinates.e - +b.coordinates.e;
       } else {
@@ -255,7 +255,7 @@ class Day {
 
   checkForCollision() {
     const bxs = this.getBoxes();
-    let overlaps = []; // a list to store the overlapping entries
+    const overlaps = []; // a list to store the overlapping entries
     // entries.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
     for (let i = 0; i < bxs.length; i++) {
       for (let j = i + 1; j < bxs.length; j++) {
@@ -277,8 +277,8 @@ class Day {
   updateStore(store, id) {
     const boxEntry = this.getBox(id);
     const coords = boxEntry.coordinates;
-    let boxstart = +coords.y * 15;
-    let boxend = +coords.e * 15;
+    const boxstart = +coords.y * 15;
+    const boxend = +coords.e * 15;
 
     const startDate = new Date(boxEntry.start);
     const starthours = Math.floor(boxstart / 60);
@@ -305,6 +305,6 @@ class Day {
 
 export {
   CoordinateEntry,
-  Week,
   Day,
+  Week,
 };

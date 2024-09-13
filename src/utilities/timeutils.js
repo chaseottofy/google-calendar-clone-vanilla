@@ -27,18 +27,13 @@ function formatTime(hours, minutes) {
 }
 
 function formatStartEndTimes(hours, minutes) {
-  let [startHours, endHours] = hours;
-  let [startMinutes, endMinutes] = minutes;
-
-  let [start, end] = [
-    formatTime(startHours, startMinutes),
-    formatTime(endHours, endMinutes),
-  ];
-
+  const [startHours, endHours] = hours;
+  const [startMinutes, endMinutes] = minutes;
+  let start = formatTime(startHours, startMinutes);
+  const end = formatTime(endHours, endMinutes);
   if (start.slice(-2) === end.slice(-2)) {
     start = start.slice(0, -2);
   }
-
   return `${start} – ${end}`;
 }
 
@@ -47,14 +42,14 @@ function configMinutesForStore(minutes) {
 }
 
 function calcTime(start, length) {
-  let startHours = Math.floor(+start / 4);
-  let startMinutes = (+start * 15) % 60;
+  const startHours = Math.floor(+start / 4);
+  const startMinutes = (+start * 15) % 60;
 
-  let endHours = Math.floor((start + length) / 4);
-  let endMinutes = ((start + length) * 15) % 60;
+  const endHours = Math.floor((start + length) / 4);
+  const endMinutes = ((start + length) * 15) % 60;
 
   let startingtime = formatTime(startHours, startMinutes);
-  let endingtime = formatTime(endHours, endMinutes);
+  const endingtime = formatTime(endHours, endMinutes);
 
   if (startingtime.slice(-2) === endingtime.slice(-2)) {
     startingtime = startingtime.slice(0, -2);
@@ -65,10 +60,10 @@ function calcTime(start, length) {
 }
 
 function compareTimes(time1, time2) {
-  let [hours1, minutes1] = time1.split(':');
-  let [hours2, minutes2] = time2.split(':');
+  const [hours1, minutes1] = time1.split(':');
+  const [hours2, minutes2] = time2.split(':');
   // get time difference in minutes
-  let diff = (hours2 - hours1) * 60 + (minutes2 - minutes1);
+  const diff = (hours2 - hours1) * 60 + (minutes2 - minutes1);
   let closest;
 
   // if diff is negative, return the next closest time difference in 15 minute interval
@@ -83,8 +78,8 @@ function compareTimes(time1, time2) {
 
 export default calcTime;
 export {
+  compareTimes,
   configMinutesForStore,
   formatStartEndTimes,
   formatTime,
-  compareTimes,
 };

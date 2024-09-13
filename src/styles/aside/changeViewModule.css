@@ -1,7 +1,7 @@
 .change-view--overlay {
   display: block;
   position: absolute;
-  background: transparent;
+  background-color: transparent;
   top: 0;
   right: 0;
   width: 100%;
@@ -18,7 +18,7 @@
   max-width: 200px;
   position: absolute;
   z-index: 1002;
-  background: var(--black1);
+  background-color: var(--black1);
   box-shadow: var(--box-shadow1);
   padding: 8px 0;
 }
@@ -34,8 +34,8 @@
 }
 
 .change-view--options {
-  width: auto!important;
-  min-width: auto!important;
+  width: auto !important;
+  min-width: auto !important;
   height: auto;
 }
 
@@ -47,7 +47,7 @@
   justify-content: space-between;
   width: 100%;
   min-height: 44px;
-  background: var(--black1);
+  background-color: var(--black1);
   color: var(--white2);
   padding: 0 14px;
   cursor: pointer;
@@ -61,7 +61,7 @@
 }
 
 .view-option:hover {
-  background: var(--mediumgrey1);
+  background-color: var(--mediumgrey1);
 }
 
 .view-option::after {

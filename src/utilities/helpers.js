@@ -27,7 +27,7 @@ function hextorgba(hex, alpha) {
   let r = 0;
   let g = 0;
   let b = 0;
-  let a = alpha;
+  const a = alpha;
   r = '0x' + hex[1] + hex[2];
   g = '0x' + hex[3] + hex[4];
   b = '0x' + hex[5] + hex[6];
@@ -35,25 +35,24 @@ function hextorgba(hex, alpha) {
 }
 
 function generateId() {
-  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
 const throttle = (fn, wait) => {
   let inThrottle;
   let lastFn;
   let lastTime;
-  return function() {
-    const context = this;
-    const args = arguments;
+
+  return function throttled(...args) {
     if (!inThrottle) {
-      fn.apply(context, args);
+      fn.apply(this, args);
       lastTime = Date.now();
       inThrottle = true;
     } else {
       clearTimeout(lastFn);
-      lastFn = setTimeout(function() {
+      lastFn = setTimeout(() => {
         if (Date.now() - lastTime >= wait) {
-          fn.apply(context, args);
+          fn.apply(this, args);
           lastTime = Date.now();
         }
       }, Math.max(wait - (Date.now() - lastTime), 0));
@@ -98,9 +97,24 @@ function setTheme(context) {
       appBody.classList.add('contrast-mode');
     };
 
-    if (currentScheme === 'light') setlight();
-    else if (currentScheme === 'contrast') setcontrast();
-    else if (currentScheme === 'dark') setdark();
+    switch (currentScheme) {
+      case 'light': {
+        setlight();
+        break;
+      }
+      case 'contrast': {
+        setcontrast();
+        break;
+      }
+      case 'dark': {
+        setdark(); // default
+        break;
+      }
+      default: {
+        setdark();
+        break;
+      }
+    }
   };
   setColorSchema();
 }
@@ -115,11 +129,17 @@ function setTheme(context) {
  * @param {number} targetWidth if center is true, targetWidth required to center
  * @returns [left position, top position];
  */
-function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targetWidth) {
+function placePopup(
+  popupWidth,
+  popupHeight,
+  coords,
+  windowCoords,
+  center,
+  targetWidth,
+) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;
   const [winW, winH] = windowCoords;
-
   let popupX;
   if (center) {
     popupX = x - (popupW / 2) + (targetWidth / 2);
@@ -131,23 +151,22 @@ function placePopup(popupWidth, popupHeight, coords, windowCoords, center, targe
   }
 
   let popupY = y + popupH > winH ? winH - popupH - 6 : y;
-
   if (popupX < 0) popupX = Math.abs(popupX);
   if (popupY < 0) popupY = 56;
   return [popupX, popupY];
 }
 
 function isNumeric(n) {
-  return !Number.isNaN(parseFloat(n)) && Number.isFinite(n);
+  return !Number.isNaN(Number.parseFloat(n)) && Number.isFinite(n);
 }
 
 export default debounce;
 export {
+  generateId,
   getClosest,
   hextorgba,
-  generateId,
-  throttle,
-  setTheme,
-  placePopup,
   isNumeric,
+  placePopup,
+  setTheme,
+  throttle,
 };

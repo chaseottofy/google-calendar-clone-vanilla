@@ -1,39 +1,32 @@
+import { Day } from '../../factory/entries';
+import locales from '../../locales/en';
+import {
+  formatEntryOptionsDate,
+  formatStartEndTime,
+  getFormDateObject,
+  getTempDates,
+} from '../../utilities/dateutils';
+import handleOverlap, {
+  calcNewHourFromCoords,
+  calcNewMinuteFromCoords,
+  createBox,
+  createTempBoxHeader,
+  createTemporaryBox,
+  getBoxDefaultStyle,
+  getOriginalBoxObject,
+  resetOriginalBox,
+  resetStyleOnClick,
+  setBoxTimeAttributes,
+  setStylingForEvent,
+  startEndDefault,
+  updateBoxCoordinates,
+} from '../../utilities/dragutils';
+import { getClosest, placePopup } from '../../utilities/helpers';
+import { createCloseIcon } from '../../utilities/svgs';
+import calcTime, { formatTime } from '../../utilities/timeutils';
 import fullFormConfig from '../forms/formUtils';
 import FormSetup from '../forms/setForm';
 import getEntryOptionModal from '../menus/entryOptions';
-
-import { Day } from '../../factory/entries';
-
-import calcTime, { formatTime } from '../../utilities/timeutils';
-
-import {
-  formatStartEndTime,
-  getTempDates,
-  getFormDateObject,
-  formatEntryOptionsDate,
-} from '../../utilities/dateutils';
-
-import { createCloseIcon } from '../../utilities/svgs';
-
-import handleOverlap, {
-  setStylingForEvent,
-  updateBoxCoordinates,
-  setBoxTimeAttributes,
-  createBox,
-  createTemporaryBox,
-  getBoxDefaultStyle,
-  resetStyleOnClick,
-  createTempBoxHeader,
-  startEndDefault,
-  calcNewHourFromCoords,
-  calcNewMinuteFromCoords,
-  getOriginalBoxObject,
-  resetOriginalBox,
-} from '../../utilities/dragutils';
-
-import { getClosest, placePopup } from '../../utilities/helpers';
-
-import locales from '../../locales/en';
 
 // day view header (row 1)
 const dvHeaderDayNumber = document.querySelector('.dayview--header-day__title');
@@ -63,7 +56,7 @@ export default function setDayView(context, store, datepickerContext) {
     let longest = 0;
     let shortest = 100;
     for (let i = 0; i < bxs.length; i++) {
-      let [tempshort, templong] = [bxs[i].coordinates.y, bxs[i].coordinates.e];
+      const [tempshort, templong] = [bxs[i].coordinates.y, bxs[i].coordinates.e];
       if (templong > longest) {
         longest = templong;
       }
@@ -71,9 +64,9 @@ export default function setDayView(context, store, datepickerContext) {
         shortest = tempshort;
       }
     }
-    let [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)];
-    let [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15];
-    let [tempdate1, tempdate2] = [
+    const [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)];
+    const [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15];
+    const [tempdate1, tempdate2] = [
       new Date(bxs[0].start),
       new Date(bxs[0].start),
     ];
@@ -85,7 +78,7 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   function getDayviewHeaderEntryCount() {
-    let allboxes = boxes.getAllBoxes();
+    const allboxes = boxes.getAllBoxes();
     if (allboxes.length === 0) {
       return 'no entries';
     }
@@ -169,14 +162,14 @@ export default function setDayView(context, store, datepickerContext) {
       const dvSideGridCell = document.createElement('span');
       dvSideGridCell.classList.add('dv-sidegrid--cell');
       dvSideGridCell.textContent = `${hour} ${md}`;
-      dvSideGridWrapper.appendChild(dvSideGridCell);
+      dvSideGridWrapper.append(dvSideGridCell);
     }
   }
 
   function configHeader() {
-    [dvHeaderDayNumber, dvHeaderDayOfWeek, dvHeaderInfo].forEach((el) => {
+    for (const el of [dvHeaderDayNumber, dvHeaderDayOfWeek, dvHeaderInfo]) {
       el.innerText = '';
-    });
+    }
 
     let gmtOffset = new Date().getTimezoneOffset() / 60;
     if (gmtOffset < 0) {
@@ -184,7 +177,7 @@ export default function setDayView(context, store, datepickerContext) {
     }
 
     document.querySelector('.dv-gmt').textContent = `UTC ${context.getGmt()}`;
-    let day = context.getDay();
+    const day = context.getDay();
     dvHeaderDayOfWeek.textContent = day;
 
     if (context.isToday()) {
@@ -226,7 +219,7 @@ export default function setDayView(context, store, datepickerContext) {
     morepopupTitle.textContent = 'Events spanning multiple days';
     const morepopupClose = document.createElement('span');
     morepopupClose.classList.add('dv--morepopup__close');
-    morepopupClose.appendChild(createCloseIcon('var(--white3)'));
+    morepopupClose.append(createCloseIcon('var(--white3)'));
     morepopupHeader.append(morepopupTitle, morepopupClose);
     const morepopupBody = document.createElement('div');
     morepopupBody.classList.add('dv--morepopup__body');
@@ -258,10 +251,10 @@ export default function setDayView(context, store, datepickerContext) {
       return morepopupEntry;
     };
 
-    entr.forEach((entry) => {
+    for (const entry of entr) {
       const morepopupEntry = createMorePopupEntry(entry);
-      morepopupBody.appendChild(morepopupEntry);
-    });
+      morepopupBody.append(morepopupEntry);
+    }
 
     const closemp = () => {
       morepopupoverlay.remove();
@@ -307,10 +300,10 @@ export default function setDayView(context, store, datepickerContext) {
     const color = store.getCtgColor(entry.category);
     const rect = target.getBoundingClientRect();
 
-    let [x, y] = placePopup(
+    const [x, y] = placePopup(
       400,
       165,
-      [parseInt(rect.left), parseInt(rect.top) + 24],
+      [Number.parseInt(rect.left), Number.parseInt(rect.top) + 24],
       [window.innerWidth, window.innerHeight],
       false,
     );
@@ -337,15 +330,15 @@ export default function setDayView(context, store, datepickerContext) {
   function createStackableEntriesOnTop(entr) {
     const dvOnTopGrid = document.createElement('div');
     dvOnTopGrid.classList.add('dayview--ontop__grid');
-    entr.forEach((ent) => {
+    for (const ent of entr) {
       const dvOnTopEntry = document.createElement('div');
       dvOnTopEntry.classList.add('dayview--ontop__grid-item');
       dvOnTopEntry.textContent = ent.title;
       dvOnTopEntry.style.backgroundColor = store.getCtgColor(ent.category);
       dvOnTopEntry.setAttribute('data-sdvt-id', ent.id);
-      dvOnTopGrid.appendChild(dvOnTopEntry);
-    });
-    dvOnTop.appendChild(dvOnTopGrid);
+      dvOnTopGrid.append(dvOnTopEntry);
+    }
+    dvOnTop.append(dvOnTopGrid);
   }
 
   function createDvTop(entr) {
@@ -356,7 +349,7 @@ export default function setDayView(context, store, datepickerContext) {
       const moremessage = document.createElement('div');
       moremessage.classList.add('dv--ontop__more');
       moremessage.textContent = `${entr.length} more...`;
-      dvOnTop.appendChild(moremessage);
+      dvOnTop.append(moremessage);
       return;
     } else {
       createStackableEntriesOnTop(entr);
@@ -367,7 +360,7 @@ export default function setDayView(context, store, datepickerContext) {
     dvMainGrid.innerText = '';
     dvOnTop.innerText = '';
     createDvTop(boxes.getBoxesTop());
-    boxes.getBoxes().forEach((entry) => {
+    for (const entry of boxes.getBoxes()) {
       const y = entry.coordinates.y;
       if (firstY === null || y < firstY) {
         firstY = y;
@@ -378,7 +371,7 @@ export default function setDayView(context, store, datepickerContext) {
         'day', // current view
         store.getCtgColor(entry.category), // background color
       );
-    });
+    }
   }
 
   /** RESIZE NORTH/SOUTH */
@@ -396,12 +389,12 @@ export default function setDayView(context, store, datepickerContext) {
 
     box.classList.add('dv-box-resizing');
     const boxTop = box.offsetTop;
-    const headerOffset = parseInt(dvGrid.offsetTop);
+    const headerOffset = Number.parseInt(dvGrid.offsetTop);
     createTemporaryBox(box, col, boxhasOnTop, 'day');
 
-    let amountScrolled = parseInt(dvGrid.scrollTop);
+    const amountScrolled = Number.parseInt(dvGrid.scrollTop);
     const mousemove = (e) => {
-      let newHeight = Math.round((e.pageY + amountScrolled - boxTop - headerOffset) / 12.5)
+      const newHeight = Math.round((e.pageY + amountScrolled - boxTop - headerOffset) / 12.5)
         * 12.5;
 
       if (newHeight <= 12.5) {
@@ -458,9 +451,9 @@ export default function setDayView(context, store, datepickerContext) {
 
     const startTop = +box.style.top.split('px')[0];
     const boxHeight = +box.style.height.split('px')[0];
-    const startCursorY = e.pageY - parseInt(dvGrid.offsetTop);
+    const startCursorY = e.pageY - Number.parseInt(dvGrid.offsetTop);
     const headerOffset = +dvGrid.getBoundingClientRect().top.toFixed(2);
-    let [tempX, tempY] = [e.pageX, e.pageY];
+    const [tempX, tempY] = [e.pageX, e.pageY];
     let [sX, sY] = [0, 0];
     let hasStyles = false;
 
@@ -484,7 +477,7 @@ export default function setDayView(context, store, datepickerContext) {
       }
 
       const currentCursorY = e.pageY - headerOffset;
-      let newOffsetY = currentCursorY - startCursorY;
+      const newOffsetY = currentCursorY - startCursorY;
       let newTop = Math.round((newOffsetY + startTop) / 12.5) * 12.5;
       if (newTop < 0 || currentCursorY < 0) {
         newTop = 0;
@@ -512,10 +505,10 @@ export default function setDayView(context, store, datepickerContext) {
         const color = box.style.backgroundColor;
         const rect = box.getBoundingClientRect();
 
-        let [x, y] = placePopup(
+        const [x, y] = placePopup(
           400,
           165,
-          [parseInt(rect.left) + 32, parseInt(rect.top) + 32],
+          [Number.parseInt(rect.left) + 32, Number.parseInt(rect.top) + 32],
           [window.innerWidth, window.innerHeight],
           false,
         );
@@ -623,14 +616,14 @@ export default function setDayView(context, store, datepickerContext) {
     boxtime.classList.add('dv-box-time');
     boxtimeend.classList.add('dv-box-time');
 
-    const headerOffset = parseInt(dvGrid.offsetTop);
-    const scrolled = parseInt(dvGrid.scrollTop);
+    const headerOffset = Number.parseInt(dvGrid.offsetTop);
+    const scrolled = Number.parseInt(dvGrid.scrollTop);
     const startCursorY = e.pageY - headerOffset;
 
-    let y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
+    const y = Math.round((startCursorY + Math.abs(scrolled)) / 12.5) * 12.5;
     box.setAttribute('style', getBoxDefaultStyle(y, color));
 
-    let coords = { y: +y / 12.5, x: 1, h: 1, e: 2 };
+    const coords = { y: +y / 12.5, x: 1, h: 1, e: 2 };
     let [starthour, startmin, endhour, endmin] = startEndDefault(y);
     let movedY = 0;
 
@@ -659,7 +652,7 @@ export default function setDayView(context, store, datepickerContext) {
     // append content to temporary box
     boxcontent.append(boxtime, boxtimeend);
     box.append(boxheader, boxcontent);
-    e.target.appendChild(box);
+    e.target.append(box);
 
     function mouseup() {
       if (movedY <= 20) {
@@ -753,7 +746,7 @@ export default function setDayView(context, store, datepickerContext) {
 
   function handleScrollToOnInit() {
     if (firstY !== null) {
-      let settop = +firstY * 12.5;
+      const settop = +firstY * 12.5;
       setTimeout(() => {
         dvGrid.scrollTo({
           top: settop,

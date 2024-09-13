@@ -3,7 +3,7 @@ import locales from '../../locales/en';
 export default function setHeader(context, component) {
   const { labels } = locales;
   const { weekdaysLong, monthsLong } = labels;
-  let temp = new Date();
+  const temp = new Date();
   const btntoday = document.querySelector('.btn-today');
   btntoday.setAttribute(
     'data-tooltip',
@@ -38,36 +38,42 @@ export default function setHeader(context, component) {
   };
 
   switch (component) {
-    case 'day':
+    case 'day': {
       configHeader(
         '1px solid transparent',
         `${context.getMonthName()} ${context.getDay()}, ${context.getYear()}`,
       );
       setHeaderAttributes('day');
       break;
-    case 'week':
+    }
+    case 'week': {
       configHeader('1px solid transparent', context.getWeekRange());
       setHeaderAttributes('week');
       break;
-    case 'month':
+    }
+    case 'month': {
       configHeader(
         '1px solid transparent',
         `${context.getMonthName()} ${context.getYear()}`,
       );
       setHeaderAttributes('month');
       break;
-    case 'year':
+    }
+    case 'year': {
       configHeader('1px solid transparent', context.getYear());
       setHeaderAttributes('year');
       break;
-    case 'list':
+    }
+    case 'list': {
       setHeaderAttributes('list');
       header.style.borderBottom = '1px solid var(--mediumgrey1)';
       prevnext.setAttribute('style', 'pointer-events:none;');
       // prevnext.setAttribute("style", "opacity: 0; pointer-events:none;");
       datetimeWrapper.classList.add('datetime-inactive');
       break;
-    default:
+    }
+    default: {
       break;
+    }
   }
 }

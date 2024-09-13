@@ -1,9 +1,9 @@
 import setHeader from '../components/menus/header';
-import setYearView from '../components/views/yearview';
-import setMonthView from '../components/views/monthview';
-import setWeekView from '../components/views/weekview';
 import setDayView from '../components/views/dayview';
 import setListView from '../components/views/listview';
+import setMonthView from '../components/views/monthview';
+import setWeekView from '../components/views/weekview';
+import setYearView from '../components/views/yearview';
 // import setListView from "../components/views/listview"
 
 const yearComponent = document.querySelector('.yearview');
@@ -34,30 +34,32 @@ export default function setViews(component, context, store, datepickerContext) {
 
     // only the month view relies on a resize listener
     // more info provided @readme > monthview > box queries
-    views.forEach((view) => {
+    for (const view of views) {
       view.classList.add('hide-view');
       // if (view !== monthComponent) {
       //   window.onresize = null;
       // }
-    });
+    }
   }
   // window.removeEventListener("resize", store.getResizeHandle("month"));
 
   function initView(comp) {
     switch (comp) {
-      case 'day':
+      case 'day': {
         context.setComponent(comp);
         setHeader(context, comp);
         setDayView(context, store, datepickerContext);
         dayComponent.classList.remove('hide-view');
         break;
-      case 'week':
+      }
+      case 'week': {
         context.setComponent(comp);
         setHeader(context, comp);
         setWeekView(context, store, datepickerContext);
         weekComponent.classList.remove('hide-view');
         break;
-      case 'month':
+      }
+      case 'month': {
         context.setComponent(comp);
         setHeader(context, comp);
         setMonthView(context, store, datepickerContext);
@@ -65,24 +67,28 @@ export default function setViews(component, context, store, datepickerContext) {
         // window.onresize = store.getResizeHandle("month");
         // window.addEventListener("resize", store.getResizeHandle("month"));
         break;
-      case 'year':
+      }
+      case 'year': {
         context.setComponent(comp);
         setHeader(context, comp);
         setYearView(context, store, datepickerContext);
         yearComponent.classList.remove('hide-view');
         break;
-      case 'list':
+      }
+      case 'list': {
         context.setComponent(comp);
         setHeader(context, comp, store);
         setListView(context, store, datepickerContext);
         listComponent.classList.remove('hide-view');
         break;
-      default:
+      }
+      default: {
         context.setComponent('month');
         setHeader(context, 'month');
         setMonthView(context, store, datepickerContext);
         monthComponent.classList.remove('hide-view');
         break;
+      }
     }
   }
 

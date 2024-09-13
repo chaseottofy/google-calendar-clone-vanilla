@@ -5,23 +5,23 @@
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background: var(--black1);
+  background-color: var(--black1);
   border-left: var(--bordergrey);
   transition-duration: 0.3s;
   transition-property: margin-left, width;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .listview__rowgroup {
   border-bottom: var(--bordergrey);
-  display:flex;
+  display: flex;
   width: 100%;
   height: auto;
   flex-direction: row;
 }
 
 .rowgroup-header {
-  display:flex;
+  display: flex;
   align-items: center;
   height: 36px;
   width: 120px;
@@ -34,7 +34,7 @@
   height: 34px;
   width: 34px;
   border-radius: 50%;
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -43,19 +43,19 @@
 }
 
 .top-datenumber {
-  background: var(--primary1);
+  background-color: var(--primary1);
   color: var(--taskcolor);
 }
 
 .rowgroup--header__datenumber:hover {
-  background: var(--black2);
+  background-color: var(--black2);
 }
 
 .rowgroup--header__monthdow {
   font-size: 11px;
   margin-left: 6px;
   margin-top: 17px;
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   letter-spacing: 0.8px;
@@ -71,7 +71,7 @@
 }
 
 .rowgroup-content {
-  display:flex;
+  display: flex;
   align-items: center;
   height: auto;
   flex-direction: column;
@@ -81,7 +81,7 @@
 }
 
 .rowgroup--cell {
-  display:flex;
+  display: flex;
   align-items: center;
   width: calc(100% - 8px);
   padding-left: 10px;
@@ -90,12 +90,12 @@
   min-height: 36px;
   margin-right: auto;
   margin-top: 8px;
-  overflow:hidden;
+  overflow: hidden;
   border-radius: 32px;
 }
 
 .rowgroup--cell:hover {
-  background: var(--black2);
+  background-color: var(--black2);
 }
 
 .rowgroup--cell-active {
@@ -141,11 +141,10 @@
 .rowgroup--cell__color,
 .rowgroup--cell__time,
 .rowgroup--cell__title {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 /* queries */
-
 @media screen and (max-width: 840px) {
   .listview__body {
     margin-left: 62px !important;

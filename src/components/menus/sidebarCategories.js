@@ -1,18 +1,15 @@
 import setViews from '../../config/setViews';
-import setSidebarDatepicker from '../menus/sidebarDatepicker';
-
-import {
-  createCheckIcon,
-  createEditIcon,
-  createCloseIcon,
-  createTrashIcon,
-} from '../../utilities/svgs';
-
 import {
   getClosest,
   placePopup,
 } from '../../utilities/helpers';
-
+import {
+  createCheckIcon,
+  createCloseIcon,
+  createEditIcon,
+  createTrashIcon,
+} from '../../utilities/svgs';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
 import createCategoryForm from './editCategory';
 
 const sidebarColTwo = document.querySelector('.sb__categories');
@@ -38,7 +35,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     const ctg = store.getAllCtg();
     const keys = Object.keys(ctg);
     for (let i = 0; i < keys.length; i++) {
-      let [ctgname, color, status] = [
+      const [ctgname, color, status] = [
         keys[i],
         ctg[keys[i]].color,
         ctg[keys[i]].active,
@@ -75,8 +72,8 @@ export default function handleSidebarCategories(context, store, datepickerContex
     }
 
     checkbox.style.border = `2px solid ${ctgcolor}`;
-    checkbox.appendChild(checkIcon);
-    checkboxWrapper.appendChild(checkbox);
+    checkbox.append(checkIcon);
+    checkboxWrapper.append(checkbox);
 
     const label = document.createElement('span');
     label.classList.add('sbch-form--item__label');
@@ -98,14 +95,14 @@ export default function handleSidebarCategories(context, store, datepickerContex
     if (ctgname.toLowerCase() === defaultCtg) {
       editicon.classList.add('sbch-col--actions__edit-icon--immutable');
     } else {
-      deleteicon.appendChild(createCloseIcon('var(--white2)'));
-      coltwo.appendChild(deleteicon);
+      deleteicon.append(createCloseIcon('var(--white2)'));
+      coltwo.append(deleteicon);
     }
 
-    editicon.appendChild(createEditIcon('var(--white2)'));
-    coltwo.appendChild(editicon);
+    editicon.append(createEditIcon('var(--white2)'));
+    coltwo.append(editicon);
     row.append(colone, coltwo);
-    categoriesContainer.appendChild(row);
+    categoriesContainer.append(row);
   }
 
   function handleCategoryModalToggle() {
@@ -157,7 +154,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     popupCategoryStats.textContent = `(${categoryLength} total ${ord} in this category)`;
     /* **************************** */
     popupHeader.append(popupTitle, popupCategoryStats);
-    popupBox.appendChild(popupHeader);
+    popupBox.append(popupHeader);
 
     // category has entries -- provide options to move entries to another category or delete them
     // const setChecked = (inp) => {
@@ -193,7 +190,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
           const option = document.createElement('option');
           option.value = categoryNames[i];
           option.textContent = categoryNames[i];
-          optionMoveSelect.appendChild(option);
+          optionMoveSelect.append(option);
         }
       }
       optionMove.append(optionMoveTitle, optionMoveSelect);
@@ -221,11 +218,11 @@ export default function handleSidebarCategories(context, store, datepickerContex
           return;
         } else {
           e.target.closest('.popup-delete-ctg__options').querySelector('input').checked = true;
-          document.querySelectorAll('.popup-delete-ctg__options').forEach((el) => {
+          for (const el of document.querySelectorAll('.popup-delete-ctg__options')) {
             // el.style.backgroundColor = "transparent";
             el.setAttribute('style', `background-color: transparent; border: 2px solid ${ctgcolor};`);
             el.classList.remove('popup-delete-act');
-          });
+          }
           // popup-delete-act
           e.target.closest('.popup-delete-ctg__options').setAttribute('style', `background-color: ${offsetColor}; border: 2px solid ${ctgcolor};`);
 
@@ -237,7 +234,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       optionsWrapperTwo.append(optionRemoveRadio, optionRemove);
 
       popupBody.append(optionsWrapperOne, optionsWrapperTwo);
-      popupBox.appendChild(popupBody);
+      popupBox.append(popupBody);
       optionsWrapperOne.onclick = handleWrapperClick;
       optionsWrapperTwo.onclick = handleWrapperClick;
     }
@@ -255,7 +252,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     btnproceed.textContent = 'proceed';
     /* **************************** */
     popupFooter.append(btncancel, btnproceed);
-    popupBox.appendChild(popupFooter);
+    popupBox.append(popupFooter);
     document.body.append(popupBoxOverlay, popupBox);
 
     // EVENT LISTENERS
@@ -297,10 +294,10 @@ export default function handleSidebarCategories(context, store, datepickerContex
   }
 
   function handleCategorySelection(e) {
-    let checkbox = e.target.children[0].children[0];
-    let status = checkbox.getAttribute('data-sbch-checked');
-    let cat = checkbox.getAttribute('data-sbch-category');
-    let color = store.getCtgColor(cat);
+    const checkbox = e.target.children[0].children[0];
+    const status = checkbox.getAttribute('data-sbch-checked');
+    const cat = checkbox.getAttribute('data-sbch-category');
+    const color = store.getCtgColor(cat);
     if (status === 'true') {
       checkbox.setAttribute('data-sbch-checked', 'false');
       store.setCategoryStatus(cat, false);
@@ -318,13 +315,16 @@ export default function handleSidebarCategories(context, store, datepickerContex
 
   function openCategoryOptionsMenu(e, data) {
     const [targetCtg, targetElement] = data;
-    let [x, y] = placePopup(
-      192,
-      128,
-      [
-        e.clientX,
-        parseInt(targetElement.getBoundingClientRect().top) - 8,
-      ],
+    const popupWidth = 192;
+    const popupHeight = 128;
+    const popupCoords = [
+      e.clientX,
+      Number.parseInt(targetElement.getBoundingClientRect().top) - 8,
+    ];
+    const [x, y] = placePopup(
+      popupWidth,
+      popupHeight,
+      popupCoords,
       [window.innerWidth, window.innerHeight],
       false,
       null,
@@ -435,7 +435,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
     if (ctgPlus) {
       const targetcat = {
         name: 'new category',
-        color: '#2C52BA',
+        color: store.getDefaultCtg()[1].color,
       };
       createCategoryForm(store, targetcat, false, e.target);
       return;
@@ -448,6 +448,7 @@ export default function handleSidebarCategories(context, store, datepickerContex
       renderCategories();
       updateComponent();
     };
+
     store.setRenderCategoriesCallback(fullCtgRender);
     sidebarColTwo.onmousedown = delegateCategoryEvents;
   };

@@ -1,14 +1,14 @@
-import setViews from './setViews';
-import setDatepicker from '../components/menus/datepicker';
-import setSidebarDatepicker from '../components/menus/sidebarDatepicker';
-import handleSidebarCategories from '../components/menus/sidebarCategories';
-import { getClosest, throttle } from '../utilities/helpers';
 import setEntryForm from '../components/forms/entryForm';
-import handleSidebarFooter from '../components/menus/sidebarFooter';
-import handleShortCutsModal from '../components/menus/shortcutsModal';
-import getSidebarSubMenu from '../components/menus/sidebarSubMenu';
 import createGoTo from '../components/forms/goto';
+import setDatepicker from '../components/menus/datepicker';
 import createCategoryForm from '../components/menus/editCategory';
+import handleShortCutsModal from '../components/menus/shortcutsModal';
+import handleSidebarCategories from '../components/menus/sidebarCategories';
+import setSidebarDatepicker from '../components/menus/sidebarDatepicker';
+import handleSidebarFooter from '../components/menus/sidebarFooter';
+import getSidebarSubMenu from '../components/menus/sidebarSubMenu';
+import { getClosest, throttle } from '../utilities/helpers';
+import setViews from './setViews';
 
 const appBody = document.querySelector('.body');
 const colorSchemeMeta = document.getElementsByName('color-scheme')[0];
@@ -272,7 +272,7 @@ export default function renderViews(context, datepickerContext, store) {
 
   function handleBtnToday() {
     if (!context.isToday() && context.getComponent() !== 'list') {
-      let tempdate = new Date();
+      const tempdate = new Date();
       context.setDate(
         tempdate.getFullYear(),
         tempdate.getMonth(),
@@ -286,55 +286,65 @@ export default function renderViews(context, datepickerContext, store) {
 
   function handleBtnPrev() {
     switch (context.getComponent()) {
-      case 'day':
+      case 'day': {
         handleTransition(
           document.querySelector('.dayview--header-day__number'),
           'right',
           getPreviousDay,
         );
         break;
-      case 'week':
+      }
+      case 'week': {
         handleTransition(
           document.querySelector('.weekview--header'),
           'right',
           getPreviousWeek,
         );
         break;
-      case 'month':
+      }
+      case 'month': {
         handleTransition(monthwrapper, 'right', getPreviousMonth);
         break;
-      case 'year':
+      }
+      case 'year': {
         handleTransition(yearwrapper, 'right', getPreviousYear);
         break;
-      default:
+      }
+      default: {
         break;
+      }
     }
   }
 
   function handleBtnNext() {
     switch (context.getComponent()) {
-      case 'day':
+      case 'day': {
         handleTransition(
           document.querySelector('.dayview--header-day__number'),
           'left',
           getNextDay,
         );
         break;
-      case 'week':
+      }
+      case 'week': {
         handleTransition(
           document.querySelector('.weekview--header'),
           'left',
           getNextWeek,
         );
         break;
-      case 'month':
+      }
+      case 'month': {
         handleTransition(monthwrapper, 'left', getNextMonth);
         break;
-      case 'year':
+      }
+      case 'year': {
         handleTransition(yearwrapper, 'left', getNextYear);
         break;
-      default:
+      }
+      default: {
         break;
+      }
     }
   }
 
@@ -343,9 +353,9 @@ export default function renderViews(context, datepickerContext, store) {
     datepickeroverlay.classList.remove('hide-datepicker-overlay');
     datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
     const rect = e.target.getBoundingClientRect();
-    const newDatepickerLeft = parseInt(rect.left);
+    const newDatepickerLeft = Number.parseInt(rect.left);
     // convert rect left into a percentage so that it scales with window resize
-    const perc = parseInt((newDatepickerLeft / window.innerWidth) * 100);
+    const perc = Number.parseInt((newDatepickerLeft / window.innerWidth) * 100);
     datepicker.setAttribute('style', `left:${perc}%;top:12px;`);
     setDatepicker(context, store, datepickerContext, 'header');
 
@@ -404,6 +414,7 @@ export default function renderViews(context, datepickerContext, store) {
       const option = e.target.getAttribute('data-view-option');
       renderOption(option);
     };
+
     optionswrapper.onclick = setOption;
     selectOverlay.onclick = closeOptionsModal;
   }
@@ -476,96 +487,118 @@ export default function renderViews(context, datepickerContext, store) {
     switch (e.key.toLowerCase()) {
       // switch to day view
       case 'd':
-      case '1':
+      case '1': {
         renderOption('day');
         break;
+      }
 
       // switch to week view
       case 'w':
-      case '2':
+      case '2': {
         renderOption('week');
         break;
+      }
 
       // switch to month view
       case 'm':
-      case '3':
+      case '3': {
         renderOption('month');
         break;
+      }
 
       // switch to year view
       case 'y':
-      case '4':
+      case '4': {
         renderOption('year');
         break;
+      }
 
       // switch to list view
       case 'l':
-      case '5':
+      case '5': {
         renderOption('list');
         break;
+      }
 
       // toggle sidebar open/close
-      case 's':
+      case 's': {
         context.toggleSidebarState();
         handleBtnMainMenu();
         break;
+      }
 
       // toggle form open (close with escape)
-      case 'f':
+      case 'f': {
         handleForm();
         break;
+      }
 
       // open "views" menu
-      case 'v':
+      case 'v': {
         toggleChangeview(e);
         break;
+      }
 
       // (day/week) prev month
-      case 'p':
+      case 'p': {
         handleBtnPrev();
         break;
+      }
 
       // (day/week) next month
-      case 'n':
+      case 'n': {
         handleBtnNext();
         break;
+      }
 
       // set date to today
-      case 't':
+      case 't': {
         handleBtnToday();
         break;
+      }
 
       // open submenu
-      case 'a':
+      case 'a': {
         handleToggleSubmenu();
         break;
+      }
 
       // open keyboard shortcuts modal
       case '?':
-      case '/':
+      case '/': {
         handleShortCutsModal(store);
         break;
+      }
 
       // toggle between light/dark mode
-      case '0':
+      case '0': {
         setColorScheme();
         break;
+      }
 
       // opens search modal
-      case 'g':
+      case 'g': {
         createGoTo(context, store, datepickerContext);
         break;
+      }
 
       // create new category
-      case '+':
+      case '+': {
+        const sidebarState = context.getSidebarState();
+        if (sidebarState === 'hide') {
+          context.toggleSidebarState();
+          handleBtnMainMenu();
+        }
         createCategoryForm(store, {
           name: 'new category',
-          color: '#2C52BA',
+          color: store.getDefaultCtg()[1].color,
         }, false, null);
         break;
+      }
 
-      default:
+      default: {
         break;
+      }
     }
   }
 
