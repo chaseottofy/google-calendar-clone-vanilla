@@ -137,9 +137,11 @@ class Context {
   }
 
   setComponent(component) {
-    this.component = component;
-    window.location.hash = component;
-    Context.setLocalComponent(component);
+    if (this.component !== component) {
+      this.component = component;
+      window.location.hash = component;
+      Context.setLocalComponent(component);
+    }
   }
 
   getSidebarState() {

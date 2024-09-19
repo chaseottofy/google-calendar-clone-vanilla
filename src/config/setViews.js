@@ -1,87 +1,88 @@
 import setHeader from '../components/menus/header';
-import setDayView from '../components/views/dayview';
-import setListView from '../components/views/listview';
-import setMonthView from '../components/views/monthview';
-import setWeekView from '../components/views/weekview';
-import setYearView from '../components/views/yearview';
-// import setListView from "../components/views/listview"
+const setDayView = () => import('../components/views/dayview').then(module => module.default);
+const setListView = () => import('../components/views/listview').then(module => module.default);
+const setMonthView = () => import('../components/views/monthview').then(module => module.default);
+const setWeekView = () => import('../components/views/weekview').then(module => module.default);
+const setYearView = () => import('../components/views/yearview').then(module => module.default);
 
-const yearComponent = document.querySelector('.yearview');
-const monthComponent = document.querySelector('.monthview');
-const weekComponent = document.querySelector('.weekview');
-const dayComponent = document.querySelector('.dayview');
-const listComponent = document.querySelector('.listview');
+const views = {
+  year: document.querySelector('.yearview'),
+  month: document.querySelector('.monthview'),
+  week: document.querySelector('.weekview'),
+  day: document.querySelector('.dayview'),
+  list: document.querySelector('.listview'),
+};
 
+// const cssImports = {
+//   year: () => loadCSS('./styles/yearview.css'),
+//   month: () => loadCSS('./styles/monthview.css'),
+//   week: () => loadCSS('./styles/weekview.css'),
+//   day: () => loadCSS('./styles/dayview.css'),
+//   list: () => loadCSS('./styles/listview.css'),
+// }
+
+const viewsKeys = ['year', 'month', 'week', 'day', 'list'];
 let [prev1, prev2] = [null, null];
-export default function setViews(component, context, store, datepickerContext) {
+export default function setViews(
+  component,
+  context,
+  store,
+  datepickerContext,
+) {
   prev1 = prev2;
   prev2 = component;
 
   function hideViews() {
-    const views = [
-      yearComponent,
-      monthComponent,
-      weekComponent,
-      dayComponent,
-      listComponent,
-    ];
-
-    // reset previous view after switching to a new view
     const resetPrevView = store.getResetPreviousViewCallback();
+    console.log(resetPrevView, prev1, prev2);
     if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
       resetPrevView();
     }
 
-    for (const view of views) {
-      view.classList.add('hide-view');
+    for (const key of viewsKeys) {
+      if (key !== component) {
+        views[key].classList.add('hide-view');
+      }
     }
   }
-  // window.removeEventListener("resize", store.getResizeHandle("month"));
 
-  function initView(comp) {
+  async function initView(comp) {
+    // if (cssImports[comp]) {
+    //   await cssImports[comp]();
+    // }
+    context.setComponent(comp);
+    setHeader(context, comp);
+    views[comp].classList.remove('hide-view');
+
     switch (comp) {
       case 'day': {
-        context.setComponent(comp);
-        setHeader(context, comp);
-        setDayView(context, store, datepickerContext);
-        dayComponent.classList.remove('hide-view');
+        const dayViewModule = await setDayView();
+        dayViewModule(context, store, datepickerContext);
         break;
       }
       case 'week': {
-        context.setComponent(comp);
-        setHeader(context, comp);
-        setWeekView(context, store, datepickerContext);
-        weekComponent.classList.remove('hide-view');
+        const weekViewModule = await setWeekView();
+        weekViewModule(context, store, datepickerContext);
         break;
       }
       case 'month': {
-        context.setComponent(comp);
-        setHeader(context, comp);
-        setMonthView(context, store, datepickerContext);
-        monthComponent.classList.remove('hide-view');
-        // window.onresize = store.getResizeHandle("month");
-        // window.addEventListener("resize", store.getResizeHandle("month"));
+        const monthViewModule = await setMonthView();
+        monthViewModule(context, store, datepickerContext);
         break;
       }
       case 'year': {
-        context.setComponent(comp);
-        setHeader(context, comp);
-        setYearView(context, store, datepickerContext);
-        yearComponent.classList.remove('hide-view');
+        const yearViewModule = await setYearView();
+        yearViewModule(context, store, datepickerContext);
         break;
       }
       case 'list': {
-        context.setComponent(comp);
-        setHeader(context, comp, store);
-        setListView(context, store, datepickerContext);
-        listComponent.classList.remove('hide-view');
+        const listViewModule = await setListView();
+        listViewModule(context, store, datepickerContext);
         break;
       }
       default: {
-        context.setComponent('month');
-        setHeader(context, 'month');
-        setMonthView(context, store, datepickerContext);
-        monthComponent.classList.remove('hide-view');
+        // setMonthView(context, store, datepickerContext);
+        // monthComponent.classList.remove('hide-view');
         break;
       }
     }

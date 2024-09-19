@@ -11,9 +11,6 @@ class Store {
     this.userUpload = {};
 
     this.colors = locales.colorsMutedMed;
-    // this.colors = adjustColorHue(locales.colorsFour, 250);
-    // this.colors = adjustColorHue(locales.colorsMuted, 140);
-    // this.colors = adjustColorHue(locales.colorsFour, 180);
 
     this.ctg = this.getInitCtg();
 

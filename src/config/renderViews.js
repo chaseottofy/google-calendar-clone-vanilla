@@ -47,9 +47,15 @@ const listviewBody = document.querySelector('.listview__body');
 
 const collapsebtn = document.querySelector('.collapse-view');
 
-export default function renderViews(context, datepickerContext, store) {
-  function fullRender(component) {
+export default function renderViews(context, datepickerContext, store, cssImports) {
+  async function fullRender(component) {
+    if (cssImports[component]) {
+      await cssImports[component]();
+    }
     setViews(component, context, store, datepickerContext);
+    // if (cssImports[component]) {
+    //   await cssImports[component]();
+    // }
   }
 
   function setInitialAttributes() {
