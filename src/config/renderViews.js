@@ -173,7 +173,7 @@ export default function renderViews(context, datepickerContext, store) {
 
   // define a means for opening the form then provide it to the store so that it can be accessed by other components
   async function handleForm() {
-    
+
     setEntryForm(context, store, datepickerContext);
     form.setAttribute('style', 'top:5%;left:5%;right:5%;bottom:5%;margin:auto;');
     form.classList.remove('hide-form');
@@ -205,9 +205,8 @@ export default function renderViews(context, datepickerContext, store) {
     if (currentSidebarState !== 'hide') {
       await import('../styles/sidebar.css').then(() => {
         console.log('sidebar loaded');
-      })
+      });
     }
-
 
     if (currentSidebarState === 'hide') {
       toggleForm.onclick = handleForm;

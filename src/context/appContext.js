@@ -67,7 +67,7 @@ class Context {
 
   static getLocalSidebarState() {
     return this.sidebarState;
-    return storage.getItem('sidebarState');
+    // return storage.getItem('sidebarState');
   }
 
   static setLocalDay(day) {
@@ -148,7 +148,7 @@ class Context {
 
   getSidebarState() {
     return this.sidebarState || 'hide';
-    return Context.getLocalSidebarState() || 'hide';
+    // return Context.getLocalSidebarState() || 'hide';
   }
   /* **************************************** */
 

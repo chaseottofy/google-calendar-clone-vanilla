@@ -33,7 +33,7 @@ const sidebar = document.querySelector('.sidebar');
 const monthWrapper = document.querySelector('.monthview--calendar');
 
 export default function setMonthView(context, store, datepickerContext) {
-  
+
   const boxquery = new MonthBoxQuery(
     window.innerWidth <= 530 || window.innerHeight <= 470,
   );

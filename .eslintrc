@@ -79,7 +79,8 @@
     "unicorn/prefer-module": "off",
     "unicorn/prefer-ternary": "off",
     "unicorn/prevent-abbreviations": "off",
-    "unicorn/no-array-for-each": "off"
+    "unicorn/no-array-for-each": "off",
+    "unicorn/prefer-top-level-await":"off"
   }
 }
 // "unicorn/no-array-for-each": "off",

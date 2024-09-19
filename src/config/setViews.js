@@ -43,7 +43,7 @@ export default function setViews(
 
   function hideViews() {
     const resetPrevView = store.getResetPreviousViewCallback();
-    
+
     if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
       resetPrevView();
     }
