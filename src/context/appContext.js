@@ -28,7 +28,7 @@ class Context {
       dateSelected: [1, Context.setLocalDateSelected],
       colorScheme: ['dark', Context.setLocalColorScheme],
       component: ['month', Context.setLocalComponent],
-      sidebarState: ['hide', Context.setLocalSidebarState],
+      // sidebarState: ['hide', Context.setLocalSidebarState],
     };
     for (const [key, value] of Object.entries(schemaBase)) {
       if (storage.getItem(key) === null) {
@@ -66,7 +66,8 @@ class Context {
   }
 
   static getLocalSidebarState() {
-    return storage.getItem('sidebarState');
+    return this.sidebarState;
+    // return storage.getItem('sidebarState');
   }
 
   static setLocalDay(day) {
@@ -90,7 +91,8 @@ class Context {
   }
 
   static setLocalSidebarState(state) {
-    storage.setItem('sidebarState', state);
+    this.sidebarState = state;
+    // storage.setItem('sidebarState', state);
   }
 
   static setLocalColorScheme(colorScheme) {

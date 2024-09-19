@@ -1,0 +1,62 @@
+.form-modal-overlay,
+.form-overlay {
+  position: absolute;
+  background-color: transparent;
+  height: 100%;
+  width: 100%;
+}
+
+.form-overlay {
+  top: 0;
+  left: 0;
+  z-index: 1010;
+}
+
+.form-modal-overlay {
+  top: 36px;
+  right: 16px;
+  z-index: 1201;
+}
+
+.hide-form-overlay {
+  display: none;
+}
+
+.entries__form {
+  background-color: var(--black1);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow1);
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  min-height: 200px;
+  max-height: 420px;
+  min-width: 300px;
+  max-width: 500px;
+  width: auto;
+  overflow: hidden;
+  position: absolute;
+  z-index: 1011;
+  transform: scale(1);
+  opacity: 1;
+  transition-duration: 200ms;
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
+}
+
+.hide-form {
+  transform: scale(0.8);
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+  display: none;
+}
+
+@media screen and (max-width:640px) {
+  .entries__form {
+    inset: 5% 2% 5% 2% !important;
+    margin: auto !important;
+    min-width: 180px !important;
+  }
+}

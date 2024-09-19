@@ -1,15 +1,3 @@
-/* .monthview__top {
-  border-top: 1px solid var(--mediumgrey1);
-  display: flex;
-  justify-content: space-between;
-  height: 12px;
-  align-items: center;
-  text-align: center;
-  width: 100%;
-  background-color: grey;
-  min-width: 100%;
-} */
-
 .monthview__top-weekname {
   font-weight: 500;
   display: flex;
@@ -24,18 +12,6 @@
   pointer-events: none;
   border-left: var(--bordergrey);
 }
-
-/* .monthview--calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(6, 1fr);
-  height: calc(100% - 12px);
-  width: 100%;
-} */
-
-/* .five-weeks {
-  grid-template-rows: repeat(5, 1fr);
-} */
 
 .monthview--day {
   display: grid;

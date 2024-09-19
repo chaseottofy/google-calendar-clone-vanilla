@@ -24,6 +24,7 @@ import setDatepicker from '../menus/datepicker';
 import setSidebarDatepicker from '../menus/sidebarDatepicker';
 // popups confirmation
 import createToast from '../toastPopups/toast';
+// import './styles/aside/form.css';
 
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
@@ -62,13 +63,13 @@ const selectedCategoryTitle = document.querySelector('.form--body__category-moda
 
 // reset / save btns
 const formSubmitButton = document.querySelector('.form--footer__button-save');
-
+// const hasCSS = false
 export default function setEntryForm(context, store, datepickerContext) {
+
   const currDate = context.getDate();
   let categories;
   let activeCategories;
   let currentComponent;
-  // let [year, month, day] = [null, null, null];
   let [year, day] = [
     currDate.getFullYear(),
     currDate.getDate(),
@@ -958,5 +959,22 @@ export default function setEntryForm(context, store, datepickerContext) {
     categoryModalIcon.firstElementChild.setAttribute('fill', categoryColor);
   }
 
-  setFormInitialValues();
+  async function initForm() {
+    if (entriesFormWrapper.getAttribute('data-has-css') === 'false') {
+      entriesFormWrapper.style.display = 'none';
+      await import('../../styles/aside/form.css').then(() => {
+        entriesFormWrapper.setAttribute('data-has-css', 'true');
+        setFormInitialValues();
+        // entriesFormWrapper.style.display = 'block';
+        // console.log('form css loaded');
+      }).then(() => {
+        entriesFormWrapper.style.display = 'block';
+      });
+    } else {
+      setFormInitialValues();
+    }
+  }
+
+  initForm();
+  // setFormInitialValues();
 }

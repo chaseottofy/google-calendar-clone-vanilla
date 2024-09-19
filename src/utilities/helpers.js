@@ -75,7 +75,7 @@ function setTheme(context, store) {
   ) {
     setTimeout(() => {
       appBody.setAttribute('data-disable-transitions', prevDT);
-    }, 350);
+    }, 500);
     return;
   }
 

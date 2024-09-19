@@ -2,9 +2,10 @@
 // (CSS)
 /*!*************************************! */
 import './styles/root.css';
-import './styles/header.css';
 import './styles/containers.css';
+import './styles/header.css';
 import './styles/sidebar.css';
+import './styles/asideContainers.css';
 import './styles/sbdatepicker.css';
 import './styles/aside/datepicker.css';
 import './styles/aside/toast.css';
@@ -13,7 +14,7 @@ import './styles/aside/toggleForm.css';
 import './styles/aside/sidebarSubMenu.css';
 import './styles/aside/changeViewModule.css';
 import './styles/aside/editCategoryForm.css';
-import './styles/aside/form.css';
+// import './styles/aside/form.css';
 import './styles/aside/timepicker.css';
 import './styles/aside/deleteCategoryPopup.css';
 import './styles/aside/entryOptions.css';

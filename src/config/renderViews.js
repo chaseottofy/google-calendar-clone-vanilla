@@ -1,4 +1,4 @@
-import setEntryForm from '../components/forms/entryForm';
+// import setEntryForm from '../components/forms/entryForm';
 import createGoTo from '../components/forms/goto';
 import setDatepicker from '../components/menus/datepicker';
 import createCategoryForm from '../components/menus/editCategory';
@@ -168,12 +168,14 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   // define a means for opening the form then provide it to the store so that it can be accessed by other components
-  function handleForm() {
-    setEntryForm(context, store, datepickerContext);
+  async function handleForm() {
     form.setAttribute('style', 'top:5%;left:5%;right:5%;bottom:5%;margin:auto;');
     form.classList.remove('hide-form');
     formOverlay.classList.remove('hide-form-overlay');
     store.addActiveOverlay('hide-form-overlay');
+
+    const formModule = await import('../components/forms/entryForm').then((module) => module.default);
+    formModule(context, store, datepickerContext);
   }
 
   // the submenu (meatball menu) adjacent to "create" button in sidebar
@@ -210,6 +212,7 @@ export default function renderViews(context, datepickerContext, store) {
       // btntoday.classList.remove('datetime-inactive');
       // dateTimeBtn.classList.remove('datetime-list');
 
+      prevnext.removeAttribute('tabindex');
       dateTimeBtn.removeAttribute('tabindex');
       listviewBody.removeAttribute('style');
       // clear categories/datepicker content when inactive
@@ -232,7 +235,7 @@ export default function renderViews(context, datepickerContext, store) {
       // prevnext.classList.add('datetime-inactive');
       // btntoday.classList.add('datetime-inactive');
       // dateTimeBtn.classList.add('datetime-list');
-
+      prevnext.setAttribute('tabindex', '-1');
       dateTimeBtn.setAttribute('tabindex', '-1');
 
       /**
@@ -369,13 +372,11 @@ export default function renderViews(context, datepickerContext, store) {
     }
 
     if (btnPrev) {
-      // handleBtnPrev();
       handleBtnNavigation('prev');
       return;
     }
 
     if (btnNext) {
-      // handleBtnNext();
       handleBtnNavigation('next');
       return;
     }
@@ -574,6 +575,11 @@ export default function renderViews(context, datepickerContext, store) {
     }
   }
 
+  /**
+   * @function initURL
+   * listens for changes to hash in URL, updates if manually changed
+   * - allows for a Single page app like this to allow for back/forward navigation
+   */
   function initURL() {
     const pages = new Set(['list', 'year', 'month', 'week', 'day']);
     const handlePopstate = () => {

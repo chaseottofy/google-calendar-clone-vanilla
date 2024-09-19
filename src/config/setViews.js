@@ -40,7 +40,6 @@ export default function setViews(
 ) {
   prev1 = prev2;
   prev2 = component;
-
   function hideViews() {
     const resetPrevView = store.getResetPreviousViewCallback();
     if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
@@ -67,6 +66,7 @@ export default function setViews(
     viewModule(context, store, datepickerContext);
     view.classList.remove('hide-view');
   }
+
   hideViews();
   document.title = context.getMonthName();
   initView(component);
