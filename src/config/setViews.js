@@ -1,9 +1,10 @@
 import setHeader from '../components/menus/header';
-const setDayView = () => import('../components/views/dayview').then(module => module.default);
-const setListView = () => import('../components/views/listview').then(module => module.default);
-const setMonthView = () => import('../components/views/monthview').then(module => module.default);
-const setWeekView = () => import('../components/views/weekview').then(module => module.default);
-const setYearView = () => import('../components/views/yearview').then(module => module.default);
+
+const setDayView = () => import('../components/views/dayview').then((module) => module.default);
+const setListView = () => import('../components/views/listview').then((module) => module.default);
+const setMonthView = () => import('../components/views/monthview').then((module) => module.default);
+const setWeekView = () => import('../components/views/weekview').then((module) => module.default);
+const setYearView = () => import('../components/views/yearview').then((module) => module.default);
 
 const views = {
   year: document.querySelector('.yearview'),
@@ -12,14 +13,6 @@ const views = {
   day: document.querySelector('.dayview'),
   list: document.querySelector('.listview'),
 };
-
-// const cssImports = {
-//   year: () => loadCSS('./styles/yearview.css'),
-//   month: () => loadCSS('./styles/monthview.css'),
-//   week: () => loadCSS('./styles/weekview.css'),
-//   day: () => loadCSS('./styles/dayview.css'),
-//   list: () => loadCSS('./styles/listview.css'),
-// }
 
 const viewsKeys = ['year', 'month', 'week', 'day', 'list'];
 let [prev1, prev2] = [null, null];
@@ -47,9 +40,6 @@ export default function setViews(
   }
 
   async function initView(comp) {
-    // if (cssImports[comp]) {
-    //   await cssImports[comp]();
-    // }
     context.setComponent(comp);
     setHeader(context, comp);
     views[comp].classList.remove('hide-view');

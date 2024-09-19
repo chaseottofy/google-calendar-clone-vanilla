@@ -1,4 +1,4 @@
-export function loadCSS(url) {
+export default function loadCSS(url) {
   return new Promise((resolve, reject) => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
