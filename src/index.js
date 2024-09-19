@@ -18,7 +18,6 @@ const cssImports = {
 // import './styles/weekview.css';
 // import './styles/dayview.css';
 // import './styles/listview.css';
-
 // Promise.all([
 //   loadCSS('./styles/sidebar.css'),
 //   loadCSS('./styles/sbdatepicker.css'),
