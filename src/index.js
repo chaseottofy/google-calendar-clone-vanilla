@@ -1,7 +1,6 @@
 /*! *************************************!*\
 // (CSS)
 /*!*************************************! */
-// I'm not currently using CSS modules, so all of my styles are imported in the root of the project and are global. Is there a workaround for this without using CSS modules?
 // import { loadCSS } from './utilities/cssLoader';
 import './styles/root.css';
 import './styles/header.css';
@@ -13,11 +12,6 @@ const cssImports = {
   week: () => import('./styles/weekview.css').then(() => console.log('weekview.css loaded')),
   day: () => import('./styles/dayview.css').then(() => console.log('dayview.css loaded')),
   list: () => import('./styles/listview.css').then(() => console.log('listview.css loaded')),
-  // year: () => loadCSS('./styles/yearview.css'),
-  // month: () => loadCSS('./styles/monthview.css'),
-  // week: () => loadCSS('./styles/weekview.css'),
-  // day: () => loadCSS('./styles/dayview.css'),
-  // list: () => loadCSS('./styles/listview.css'),
 };
 // import './styles/yearview.css';
 // import './styles/monthview.css';
