@@ -67,7 +67,7 @@ class Context {
 
   static getLocalSidebarState() {
     return this.sidebarState;
-    // return storage.getItem('sidebarState');
+    return storage.getItem('sidebarState');
   }
 
   static setLocalDay(day) {
@@ -91,8 +91,8 @@ class Context {
   }
 
   static setLocalSidebarState(state) {
-    this.sidebarState = state;
-    // storage.setItem('sidebarState', state);
+    // this.sidebarState = state;
+    storage.setItem('sidebarState', state);
   }
 
   static setLocalColorScheme(colorScheme) {
@@ -128,7 +128,7 @@ class Context {
 
   toggleSidebarState() {
     this.sidebarState = this.getSidebarState() === 'open' ? 'hide' : 'open';
-    Context.setLocalSidebarState(this.sidebarState);
+    // Context.setLocalSidebarState(this.sidebarState);
   }
   /* **************************************** */
 
@@ -147,6 +147,7 @@ class Context {
   }
 
   getSidebarState() {
+    return this.sidebarState || 'hide';
     return Context.getLocalSidebarState() || 'hide';
   }
   /* **************************************** */

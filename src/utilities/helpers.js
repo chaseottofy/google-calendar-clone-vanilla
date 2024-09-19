@@ -67,7 +67,7 @@ function setTheme(context, store) {
   const hasLightMode = appBody.classList.contains('light-mode');
   const hasContrastMode = appBody.classList.contains('contrast-mode');
   const prevDT = store.getAnimationStatus();
-  appBody.setAttribute('data-disable-transitions', true);
+  // appBody.setAttribute('data-disable-transitions', true);
   if (
     (currentScheme === 'light' && hasLightMode && !hasContrastMode) ||
     (currentScheme === 'dark' && !hasLightMode && !hasContrastMode) ||
@@ -75,7 +75,7 @@ function setTheme(context, store) {
   ) {
     setTimeout(() => {
       appBody.setAttribute('data-disable-transitions', prevDT);
-    }, 500);
+    }, 2000);
     return;
   }
 

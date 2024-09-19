@@ -265,6 +265,7 @@ function getFormDateObject(start, end) {
     return minval;
   };
 
+  // console.log([getDateForStore(start), getDateForStore(end)]);
   return {
     dateObj: [start, end],
     minutes: [setmin(start), setmin(end)],

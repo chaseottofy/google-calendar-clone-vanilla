@@ -2,7 +2,7 @@
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url('../assets/gsr.woff2') format("woff2");
 }
 
@@ -10,7 +10,7 @@
   font-family: "Google Sans";
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
+  font-display: block;
   src: url('../assets/gsm.woff2') format("woff2");
 }
 
@@ -18,7 +18,7 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: 400;
-  font-display: swap;
+  font-display: block;
   src: url('../assets/reg.woff2') format('woff2');
 }
 
@@ -26,7 +26,7 @@
   font-family: Roboto;
   font-style: normal;
   font-weight: 500;
-  font-display: swap;
+  font-display: block;
   src: url('../assets/rfive.woff2') format('woff2');
 }
 
@@ -168,12 +168,14 @@ textarea {
   font-family: var(--primaryFont);
 }
 
-[data-disable-transitions="true"] * {
+body[data-disable-transitions="true"] * {
   animation: none !important;
   transition: none !important;
   transition-duration: none !important;
   transition-property: none !important;
   transition-timing-function: none !important;
+  will-change: none !important;
+
 }
 
 .disable-transitions * {

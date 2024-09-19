@@ -46,13 +46,14 @@
 .header {
   background-color: var(--black1);
   height: 64px;
+  
   min-height: 64px !important;
   overflow: visible;
-  /* transition: height .2s ease-in-out; */
   width: 100%;
   display: flex;
   align-items: center;
   z-index: 197;
+  /* border-bottom: 1px solid var(--mediumgrey2); */
 }
 
 .main {
@@ -61,46 +62,6 @@
   overflow: hidden;
   display: flex;
   background-color: var(--black1);
-}
-[data-disable-transitions="true"] .sidebar {
-  display:none;
-}
-.sidebar {
-  position: relative;
-  left: 0;
-  height: 100%;
-  width: 248px;
-  min-width: 248px;
-  background-color: var(--black1);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  -webkit-box-flex: 0;
-  flex: none;
-  z-index: 901;
-  will-change: margin-left;
-  transform-origin: 0 0;
-}
-
-.sidebar-transition {
-  transform: none;
-  transition-duration: 300ms;
-  transition-delay: 0ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.hide-sidebar {
-  margin-left: -248px;
-  box-shadow: none !important;
-  user-select: none;
-  /* opacity: 0; */
-}
-
-.sidebar--dragged-over {
-  opacity: .1;
-  user-select: none;
-  pointer-events: none;
-  transition: opacity 150ms cubic-bezier(.4, 0, .2, 1);
 }
 
 .container__calendars {
@@ -195,13 +156,6 @@
     width: 100% !important;
     margin-left: 0 !important;
   }
-
-  .sidebar {
-    box-shadow: var(--box-shadow-sbfixed);
-    height: calc(100% - 64px);
-    top: 64px;
-    position: fixed !important;
-  }
 }
 
 @media screen and (max-width: 740px) {
@@ -228,10 +182,5 @@
 
   .collapse-view {
     top: 45px;
-  }
-
-  .sidebar {
-    top: 54px;
-    height: calc(100% - 54px);
   }
 }

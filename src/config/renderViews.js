@@ -1,4 +1,4 @@
-// import setEntryForm from '../components/forms/entryForm';
+import setEntryForm from '../components/forms/entryForm';
 import createGoTo from '../components/forms/goto';
 import setDatepicker from '../components/menus/datepicker';
 import createCategoryForm from '../components/menus/editCategory';
@@ -48,8 +48,12 @@ const listviewBody = document.querySelector('.listview__body');
 
 const collapsebtn = document.querySelector('.collapse-view');
 
+// const dynamicImport = {
+//   form: () => import('../components/forms/entryForm').then((module) => module.default),
+// }
+
 export default function renderViews(context, datepickerContext, store) {
-  async function fullRender(component) {
+  function fullRender(component) {
     // if (cssImports[component]) {
     //   await cssImports[component]();
     // }
@@ -169,13 +173,21 @@ export default function renderViews(context, datepickerContext, store) {
 
   // define a means for opening the form then provide it to the store so that it can be accessed by other components
   async function handleForm() {
+    
+    setEntryForm(context, store, datepickerContext);
     form.setAttribute('style', 'top:5%;left:5%;right:5%;bottom:5%;margin:auto;');
     form.classList.remove('hide-form');
     formOverlay.classList.remove('hide-form-overlay');
     store.addActiveOverlay('hide-form-overlay');
 
-    const formModule = await import('../components/forms/entryForm').then((module) => module.default);
-    formModule(context, store, datepickerContext);
+    // const formModule = await dynamicImport.form();
+    // formModule(context, store, datepickerContext);
+    // console.log(context, 'renderviews')
+
+    // formModule(context, store, datepickerContext);
+    // const formModule = () => import('../components/forms/entryForm').then((module) => module.default);
+    // console.log(context);
+    // formModule(context, store, datepickerContext);
   }
 
   // the submenu (meatball menu) adjacent to "create" button in sidebar
@@ -188,8 +200,14 @@ export default function renderViews(context, datepickerContext, store) {
   // sidebar state (open / closed) is stored locally and will persist across sessions
   // triggers via "s" keypress or by clicking on the hamburger menu icon
   // will also trigger in instances where the user tries to create a new entry on a blank day but no categories are selected.
-  function handleBtnMainMenu() {
+  async function handleBtnMainMenu() {
     const currentSidebarState = context.getSidebarState();
+    if (currentSidebarState !== 'hide') {
+      await import('../styles/sidebar.css').then(() => {
+        console.log('sidebar loaded');
+      })
+    }
+
 
     if (currentSidebarState === 'hide') {
       toggleForm.onclick = handleForm;
@@ -608,6 +626,14 @@ export default function renderViews(context, datepickerContext, store) {
 
     /** ********************** */
     // supply callbacks to store for opening form and sidebar
+    // store.setRenderFormCallback(async() => {
+    //   await dynamicImport.form().then((module) => module(context, store, datepickerContext)).then(() => {
+    //     form.classList.remove('hide-form');
+    //     formOverlay.classList.remove('hide-form-overlay');
+    //     store.addActiveOverlay('hide-form-overlay');
+    //   }).catch((err) => console.error(err));
+    //   // handleForm
+    // });
     store.setRenderFormCallback(handleForm);
     const ensureSidebarIsOpen = () => {
       context.setSidebarState('open');

@@ -22,9 +22,7 @@ import {
 import { createCheckIcon } from '../../utilities/svgs';
 import setDatepicker from '../menus/datepicker';
 import setSidebarDatepicker from '../menus/sidebarDatepicker';
-// popups confirmation
 import createToast from '../toastPopups/toast';
-// import './styles/aside/form.css';
 
 // main app sidebar
 const sidebar = document.querySelector('.sidebar');
@@ -65,15 +63,10 @@ const selectedCategoryTitle = document.querySelector('.form--body__category-moda
 const formSubmitButton = document.querySelector('.form--footer__button-save');
 // const hasCSS = false
 export default function setEntryForm(context, store, datepickerContext) {
-
-  const currDate = context.getDate();
   let categories;
   let activeCategories;
   let currentComponent;
-  let [year, day] = [
-    currDate.getFullYear(),
-    currDate.getDate(),
-  ];
+  let [year, day] = [null, null, null];
 
   function closetimepicker() {
     const timep = document?.querySelector('.timepicker');
@@ -882,10 +875,11 @@ export default function setEntryForm(context, store, datepickerContext) {
   }
 
   function setFormInitialValues() {
-    // variable setup
     categories = Object.entries(store.getAllCtg());
     activeCategories = store.getActiveCategoriesKeyPair();
     currentComponent = context.getComponent();
+    year = context.getYear();
+    day = context.getDay();
     // ****************************************** //
     // title / description
     descriptionInput.value = '';
@@ -901,7 +895,7 @@ export default function setEntryForm(context, store, datepickerContext) {
 
     // ****************************************** //
     // date picker setup
-    datepickerContext.setDateFromDateObj(currDate);
+    datepickerContext.setDate(context.getDate());
     context.setDateSelected(day);
 
     // ****************************************** //
@@ -914,7 +908,7 @@ export default function setEntryForm(context, store, datepickerContext) {
     endDateInput.setAttribute('data-form-date', getDateForStore(context.getDate()));
 
     // TIME : START/END
-    const tempdate = new Date();
+    const tempdate = context.getDate();
     let [th, tm] = [tempdate.getHours(), tempdate.getMinutes()];
     tm = tm % 15 !== 0 ? (Math.ceil(tm / 15) * 15) : tm;
     let [t1, t2] = getNextQuarterHour(th, tm);
@@ -952,7 +946,6 @@ export default function setEntryForm(context, store, datepickerContext) {
   function setInitialFormCategory() {
     const [categoryTitle, categoryColor] = getDefaultCategory();
     categoryModalWrapper.setAttribute('data-form-category', categoryTitle);
-
     selectedCategoryWrapper.style.backgroundColor = categoryColor;
     selectedCategoryTitle.textContent = categoryTitle;
     selectedCategoryColor.style.backgroundColor = categoryColor;
@@ -961,20 +954,13 @@ export default function setEntryForm(context, store, datepickerContext) {
 
   async function initForm() {
     if (entriesFormWrapper.getAttribute('data-has-css') === 'false') {
-      entriesFormWrapper.style.display = 'none';
+      setFormInitialValues();
       await import('../../styles/aside/form.css').then(() => {
         entriesFormWrapper.setAttribute('data-has-css', 'true');
-        setFormInitialValues();
-        // entriesFormWrapper.style.display = 'block';
-        // console.log('form css loaded');
-      }).then(() => {
-        entriesFormWrapper.style.display = 'block';
       });
     } else {
       setFormInitialValues();
     }
   }
-
   initForm();
-  // setFormInitialValues();
 }

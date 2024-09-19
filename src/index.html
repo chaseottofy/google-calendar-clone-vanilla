@@ -14,9 +14,9 @@
   <title>Calendar</title>
 </head>
 
-<body class="body" style="cursor: default;" data-disable-transitions>
+<body class="body" style="cursor: default;" data-disable-transitions="true">
   <!-- app header -- fixed -->
-  <header class="header">
+  <header class="header" style="border-bottom: 1px solid transparent">
     <div class="h__container">
 
       <div class="h-col-1">
@@ -74,7 +74,7 @@
           <div class="datetime-wrapper">
             <button class="datetime-content" aria-label="button" role="button">
               <div class="datetime-content--title">
-                January 2024
+                September 2024
               </div>
             </button>
           </div>
@@ -113,7 +113,7 @@
 
   <main class="main">
     <!-- hide-sidebar -->
-    <aside class="sidebar sidebar-transition hide-sidebar">
+    <aside class="sidebar sidebar-transition hide-sidebar" data-comp-loaded="false">
 
       <!-- sidebar header -->
       <div class="sidebar-content--header">
@@ -539,7 +539,7 @@
   </aside>
 
   <!-- MAIN APP FORM -->
-  <aside class="entries__form hide-form" style="top:0;left:0;bottom:0;right:0;margin:auto;max-width:450px;" data-has-css="false">
+  <aside class="entries__form hide-form" style="top:0;left:0;bottom:0;right:0;margin:auto;max-width: 450px;" data-has-css="false">
     <aside class="form-modal-overlay hide-form-overlay"></aside>
 
     <div class="entries__form--header">
@@ -1022,7 +1022,7 @@
   </aside>
 
   <!-- popup that appears after event edit/creation -->
-  <aside class="toast"></aside>
+  <aside class="toast" data-has-css="false"></aside>
 
 </body>
 

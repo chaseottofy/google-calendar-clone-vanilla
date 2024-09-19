@@ -23,7 +23,13 @@ export default function createToast(message, undoCallback) {
     store.removeActiveOverlay('toast');
   }
 
-  function initToast() {
+  async function initToast() {
+    if (toast.getAttribute('data-has-css') === 'false') {
+      await import('../../styles/aside/toast.css').then(() => {
+        toast.setAttribute('data-has-css', 'true');
+      });
+    }
+
     toast.innerText = '';
 
     const toastMessage = document.createElement('div');

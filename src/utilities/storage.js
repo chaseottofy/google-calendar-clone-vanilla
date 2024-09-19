@@ -82,6 +82,7 @@ class LocalStorageHandler {
         this.setServerStorage({ key, value });
       }
     } else {
+      // console.log(key, value)
       this.secondaryStorage.setItem(key, value);
     }
   }

@@ -40,8 +40,10 @@ export default function setViews(
 ) {
   prev1 = prev2;
   prev2 = component;
+
   function hideViews() {
     const resetPrevView = store.getResetPreviousViewCallback();
+    
     if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
       resetPrevView();
     }
@@ -58,12 +60,14 @@ export default function setViews(
     setHeader(context, comp);
     context.setComponent(comp);
 
+    const viewModule = await setView();
+    viewModule(context, store, datepickerContext);
+    console.log(context);
+
     if (!hasCSS.has(comp)) {
       await setCSS();
     }
 
-    const viewModule = await setView();
-    viewModule(context, store, datepickerContext);
     view.classList.remove('hide-view');
   }
 

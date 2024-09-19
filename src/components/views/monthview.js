@@ -33,12 +33,13 @@ const sidebar = document.querySelector('.sidebar');
 const monthWrapper = document.querySelector('.monthview--calendar');
 
 export default function setMonthView(context, store, datepickerContext) {
+  
   const boxquery = new MonthBoxQuery(
     window.innerWidth <= 530 || window.innerHeight <= 470,
   );
 
-  const contextMonth = context.getMonth();
-  const contextDateSelected = context.getDateSelected();
+  // const contextMonth = context.getMonth();
+  // const contextDateSelected = context.getDateSelected();
 
   function renderSidebarDatepickerMonth() {
     if (!sidebar.classList.contains('hide-sidebar')) {
@@ -118,7 +119,7 @@ export default function setMonthView(context, store, datepickerContext) {
      * case 3: cell represents today
      * case 4: cell represents days within current month
     * */
-    if (day.getMonth() !== contextMonth) {
+    if (day.getMonth() !== context.getMonth()) {
       daynumber.textContent = daynumberAndMonth;
       daynumber.classList.add('monthview--daynumber-prevnext');
     } else if (day.getDate() === 1) {
@@ -151,8 +152,8 @@ export default function setMonthView(context, store, datepickerContext) {
     cellContent.classList.add('monthview--daycontent');
 
     if (
-      day.getMonth() === contextMonth
-      && day.getDate() === contextDateSelected
+      day.getMonth() === context.getMonth()
+      && day.getDate() === context.getDateSelected()
     ) {
       dayofmonth.classList.add('monthview--dayofmonth-selected');
     }
@@ -770,9 +771,8 @@ export default function setMonthView(context, store, datepickerContext) {
       // get first active category & create temp box with its color
       const cell = cellWrapper.parentElement;
       const rect = cell.getBoundingClientRect();
-      const [start, end] = generateTempStartEnd(
-        getDateFromAttribute(cell, 'data-mv-date', 'month'),
-      );
+      const attrDate = getDateFromAttribute(cell, 'data-mv-date', 'month');
+      const [start, end] = generateTempStartEnd(attrDate);
 
       // handle case where no category is active
       let tempctg;

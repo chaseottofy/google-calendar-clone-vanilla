@@ -20,7 +20,7 @@ export default function setHeader(context, component) {
   const prevnext = document.querySelector('.prev-next');
 
   const configHeader = (borderstyle, componentTitle) => {
-    header.style.borderBottom = borderstyle;
+    // header.style.borderBottom = borderstyle;
     dateTimeTitle.textContent = componentTitle;
     prevnext.classList.remove('datetime-inactive');
     btntoday.classList.remove('datetime-inactive');
