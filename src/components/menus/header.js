@@ -22,7 +22,6 @@ export default function setHeader(context, component) {
   const configHeader = (borderstyle, componentTitle) => {
     header.style.borderBottom = borderstyle;
     dateTimeTitle.textContent = componentTitle;
-    // datetimeWrapper.classList.remove('datetime-inactive');
     prevnext.classList.remove('datetime-inactive');
     btntoday.classList.remove('datetime-inactive');
     datetimeWrapper.style.paddingRight = '0';

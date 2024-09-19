@@ -1,8 +1,8 @@
-import setSidebarDatepicker from '../../components/menus/sidebarDatepicker';
 import setViews from '../../config/setViews';
 import locales from '../../locales/en';
 import { getDateFromAttribute } from '../../utilities/dateutils';
 import { getClosest } from '../../utilities/helpers';
+import setSidebarDatepicker from '../menus/sidebarDatepicker';
 
 const yearviewGrid = document.querySelector('.calendar__yearview');
 const sidebar = document.querySelector('.sidebar');
@@ -81,7 +81,6 @@ export default function setYearView(context, store, datepickerContext) {
 
     function populateMonths() {
       const prevmonthstart = daysInPrevMonth - firstDayOfMonth;
-      // console.log(prevmonthstart);
 
       const createyvcell = (day, classname, nyear, nmonth, current) => {
         const daywrapper = document.createElement('div');
@@ -138,7 +137,6 @@ export default function setYearView(context, store, datepickerContext) {
           false,
         ));
       }
-      // console.log(cellBody.children.length)
     }
 
     cellHeader.append(cellHeaderRowOne, cellHeaderWeekDayNames);

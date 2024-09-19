@@ -31,7 +31,7 @@
     "guard-for-in": "off",
     "import/no-cycle": "off",
     "import/no-mutable-exports": "off",
-    "import/no-useless-path-segments": "off",
+    // "import/no-useless-path-segments": "off",
     "import/no-extraneous-dependencies": "off",
     "linebreak-style": "off",
     "max-classes-per-file": "off",

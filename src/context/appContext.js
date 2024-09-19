@@ -151,7 +151,6 @@ class Context {
 
   /* **************************************** */
   /* APPLICATION DATE HANDLING */
-  // set the current date for the following
   /* DAY, MONTH, YEAR, DATE, DAY_SELECTED */
   setDay(day) {
     this.daySelected = day;

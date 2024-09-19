@@ -41,8 +41,8 @@ class LocalStorageHandler {
 
   setUploadedData(data) {
     this.clear();
-    for (const key in data) {
-      this.setItem(key, data[key]);
+    for (const [key, value] of Object.entries(data)) {
+      this.setItem(key, value);
     }
   }
 
@@ -79,7 +79,6 @@ class LocalStorageHandler {
       if (this.sessionOnlyKeys.has(key)) {
         this.secondaryStorage.setItem(key, value);
       } else {
-        console.log(key, 'set server storage');
         this.setServerStorage({ key, value });
       }
     } else {

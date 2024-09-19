@@ -75,10 +75,13 @@
   --bordergrey: 1px solid var(--mediumgrey1);
   --borderdarkgrey: 1px solid var(--mediumgrey2);
   --borderradius: 4px;
-  --scrollerThumbBackground: rgb(43, 47, 49);
-  --scrollerThumbBorder: 4px solid var(--black1);
   --scrollerThumbBackgroundHover: #3b4042;
-  --scrollerTrackBackground: var(--black1);
+  /* --scrollerThumbBackground: rgb(43, 47, 49); */
+  /* --scrollerTrackBackground: var(--black1); */
+  /* --scrollerThumbBorder: 4px solid var(--black1); */
+  --scrollerThumbBorder: 4px solid rgb(48, 52, 54);
+  --scrollerThumbBackground: #454a4d;
+  --scrollerTrackBackground: #202324;
   --overlay1: rgba(0, 0, 0, 0.2);
   --overlay2: rgba(0, 0, 0, 0.5);
   --box-shadow1:
@@ -120,7 +123,6 @@
   --box-shadow-sbfixed:
     rgba(0, 0, 0, .3) 4px 6px 6px 0;
   --tr-1: color, opacity, background-color;
-
   /* --tr-1: color, opacity, background-color; */
 }
 
@@ -330,21 +332,18 @@ svg {
 }
 
 ::-webkit-scrollbar {
-  width: 20px;
-  height: 20px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--scrollerThumbBackground);
-  border: var(--scrollerThumbBorder);
-
-  /* border-radius: 20px; */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scrollerThumbBackgroundHover);
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-track {
   background-color: var(--scrollerTrackBackground);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollerThumbBackground);
+  border: 2px solid var(--scrollerTrackBackground);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }

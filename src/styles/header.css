@@ -114,7 +114,8 @@
   position: relative;
   font-size: 14px;
   letter-spacing: 0.18px;
-  border: 1px solid var(--black2);
+  /* border: 1px solid var(--black2); */
+  border: 1px solid var(--mediumgrey1);
 }
 
 .group-right {
@@ -243,7 +244,7 @@
 .datetime-inactive {
   pointer-events: none;
   user-select: none;
-  display:none;
+  display: none;
 }
 
 .datetime-inactive .datetime-wrapper {
@@ -269,7 +270,6 @@
 .datetime-inactive .btn-today {
   display:none;
 } */
-
 .menu,
 .settings,
 .h-search,
@@ -291,10 +291,6 @@
 .h-search {
   margin-top: 1px;
   margin-right: 3px;
-}
-
-.h-search svg {
-  transform: scale(0.9);
 }
 
 .h-search::after,
@@ -349,7 +345,7 @@
 
 .select__modal {
   appearance: none;
-  border: 1px solid var(--black2);
+  border: 1px solid var(--mediumgrey1);
   border-radius: var(--borderradius);
   color: var(--white2);
   cursor: pointer;
@@ -380,6 +376,12 @@
 
 .selection--active {
   background-color: var(--black3)
+}
+
+.prevnext-inactive {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 840px) {

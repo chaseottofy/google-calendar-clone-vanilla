@@ -161,6 +161,11 @@
 
 .monthview--daycontent::-webkit-scrollbar {
   width: 5px;
+  background-color: transparent;
+}
+
+.monthview--daycontent::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 
 .monthview--box {

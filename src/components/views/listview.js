@@ -110,7 +110,6 @@ export default function setListView(context, store, datepickerContext) {
     if (longerThanDay(start, end)) {
       let tempyear = 0;
       if (start.getFullYear() !== end.getFullYear()) {
-        console.log(start.getFullYear(), end.getFullYear());
         tempyear = +end.getFullYear() - 2000;
       }
       datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear > 0 ? tempyear : ''}`;

@@ -1,6 +1,61 @@
 import locales from '../locales/en';
 import { formatStartEndTimes, formatTime } from './timeutils';
 
+function getHourMinInts(time, delimiter = ':') {
+  return time.split(delimiter).map((x) => Number.parseInt(x));
+}
+
+function time1IsGreater(time1, time2) {
+  const [hours1, minutes1] = time1;
+  const [hours2, minutes2] = time2;
+
+  if (hours1 > hours2) return true;
+  if (hours1 === hours2) return minutes1 > minutes2;
+  return false;
+}
+
+function padTime(time) {
+  time = typeof time === 'number' ? time.toString() : time;
+  return time.padStart(2, '0');
+}
+
+function getHour12Time(hour, minute) {
+  if (minute >= 60) {
+    minute = 0;
+    hour += 1;
+  }
+
+  let amPm = hour < 12 ? 'am' : 'pm';
+  let hour12 = hour % 12 || 12;
+  let minuteStr = minute.toString().padStart(2, '0');
+  return `${hour12}:${minuteStr} ${amPm}`;
+}
+
+function getHour24Time(hour, minute) {
+  if (minute >= 60) {
+    minute = 0;
+    hour += 1;
+  }
+
+  let hour24 = hour % 24;
+  let minuteStr = minute.toString().padStart(2, '0');
+  return `${hour24}:${minuteStr}`;
+}
+
+function getNextQuarterHour(startHour, startMinute) {
+  if (startMinute >= 60) {
+    startMinute = 0;
+    startHour += 1;
+  } else if (startMinute % 15 !== 0) {
+    startMinute = Math.ceil(startMinute / 15) * 15;
+  }
+  let nextMinute = (startMinute + 15) % 60;
+  let nextHour = (startHour + Math.floor((startMinute + 15) / 60)) % 24;
+  const time12 = getHour12Time(nextHour, nextMinute);
+  const time24 = [nextHour, padTime(nextMinute)];
+  return [time12, time24];
+}
+
 function toCustomISO(date) {
   const pad = (num) => { return num < 10 ? `0${num}` : num; };
   return date.getFullYear()
@@ -309,13 +364,17 @@ function longerThanDay(date1, date2) {
 function getDayOrdinal(day) {
   if (day > 3 && day < 21) return 'th';
   switch (day % 10) {
-    case 1: { return 'st';
+    case 1: {
+      return 'st';
     }
-    case 2: { return 'nd';
+    case 2: {
+      return 'nd';
     }
-    case 3: { return 'rd';
+    case 3: {
+      return 'rd';
     }
-    default: { return 'th';
+    default: {
+      return 'th';
     }
   }
 }
@@ -339,11 +398,17 @@ export {
   getDuration,
   getDurationSeconds,
   getFormDateObject,
+  getHour12Time,
+  getHour24Time,
+  getHourMinInts,
+  getNextQuarterHour,
   getTempDates,
   isBeforeDate,
   isDate,
   longerThanDay,
+  padTime,
   sortDates,
   sortEndDateValues,
   testDate,
+  time1IsGreater,
 };

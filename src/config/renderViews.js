@@ -25,7 +25,7 @@ const form = document.querySelector('.entries__form');
 
 const datepicker = document.querySelector('.datepicker');
 const datepickeroverlay = document.querySelector('.datepicker-overlay');
-const btntoday = document.querySelector('.btn-today');
+// const btntoday = document.querySelector('.btn-today');
 const prevnext = document.querySelector('.prev-next');
 const dateTimeBtn = document.querySelector('.datetime-content');
 
@@ -193,9 +193,9 @@ export default function renderViews(context, datepickerContext, store) {
       toggleForm.onclick = handleForm;
       sbToggleForm.onclick = null;
       sbToggleSubBtn.onclick = null;
+      sbDatepicker.onclick = null;
       sbFooter.onmousedown = null;
       sbCategories.onmousedown = null;
-      sbDatepicker.onclick = null;
       setTimeout(() => {
         sbDatepickerBody.innerText = '';
         sbCategoriesWrapper.innerText = '';
@@ -203,9 +203,13 @@ export default function renderViews(context, datepickerContext, store) {
       viewsContainer.classList.remove('container__calendars-sb-active');
       sidebar.classList.add('hide-sidebar');
       toggleForm.classList.remove('hide-toggle--form');
-      prevnext.classList.remove('datetime-inactive');
-      btntoday.classList.remove('datetime-inactive');
-      dateTimeBtn.classList.remove('datetime-list');
+
+      prevnext.classList.remove('prevnext-inactive');
+      dateTimeBtn.classList.remove('prevnext-inactive');
+      // prevnext.classList.remove('datetime-inactive');
+      // btntoday.classList.remove('datetime-inactive');
+      // dateTimeBtn.classList.remove('datetime-list');
+
       dateTimeBtn.removeAttribute('tabindex');
       listviewBody.removeAttribute('style');
       // clear categories/datepicker content when inactive
@@ -222,9 +226,13 @@ export default function renderViews(context, datepickerContext, store) {
       viewsContainer.classList.add('container__calendars-sb-active');
       sidebar.classList.remove('hide-sidebar');
       toggleForm.classList.add('hide-toggle--form');
-      prevnext.classList.add('datetime-inactive');
-      btntoday.classList.add('datetime-inactive');
-      dateTimeBtn.classList.add('datetime-list');
+      prevnext.classList.add('prevnext-inactive');
+      dateTimeBtn.classList.add('prevnext-inactive');
+
+      // prevnext.classList.add('datetime-inactive');
+      // btntoday.classList.add('datetime-inactive');
+      // dateTimeBtn.classList.add('datetime-list');
+
       dateTimeBtn.setAttribute('tabindex', '-1');
 
       /**
@@ -246,15 +254,10 @@ export default function renderViews(context, datepickerContext, store) {
   }
 
   function handleBtnToday() {
-    if (!context.isToday() && context.getComponent() !== 'list') {
-      const tempdate = new Date();
-      context.setDate(
-        tempdate.getFullYear(),
-        tempdate.getMonth(),
-        tempdate.getDate(),
-      );
-
-      fullRender(context.getComponent());
+    const comp = context.getComponent();
+    if (!context.isToday() && comp !== 'list') {
+      context.setDateFromDateObj(new Date());
+      fullRender(comp);
       renderSidebarDatepicker();
     }
   }
@@ -294,7 +297,7 @@ export default function renderViews(context, datepickerContext, store) {
   function handleDatePickerBtn(e) {
     datepicker.classList.remove('hide-datepicker');
     datepickeroverlay.classList.remove('hide-datepicker-overlay');
-    datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+    datepickerContext.setDateFromDateObj(context.getDate());
     const rect = e.target.getBoundingClientRect();
     const newDatepickerLeft = Number.parseInt(rect.left);
     const perc = Number.parseInt((newDatepickerLeft / window.innerWidth) * 100);
@@ -312,7 +315,6 @@ export default function renderViews(context, datepickerContext, store) {
 
   function renderOption(option, initialRender) {
     const comp = context.getComponent();
-    // const optionsList = ['day', 'week', 'month', 'year', 'list'];
     if (option === 'week' || option === 'day') {
       collapsebtn.onclick = handleCollapse;
       collapsebtn.classList.remove('hide-cbt');

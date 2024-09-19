@@ -9,8 +9,8 @@ import {
   createEditIcon,
   createTrashIcon,
 } from '../../utilities/svgs';
-import setSidebarDatepicker from '../menus/sidebarDatepicker';
 import createCategoryForm from './editCategory';
+import setSidebarDatepicker from './sidebarDatepicker';
 
 const sidebarColTwo = document.querySelector('.sb__categories');
 const cWrapper = document.querySelector('.sb__categories--body');

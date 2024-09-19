@@ -8,7 +8,9 @@ const gotoInput = document.querySelector('.go-to-input');
 const inputErrMessage = document.querySelector('.go-to-err');
 const cancelGoto = document.querySelector('.cancel-go-to');
 const submitGoto = document.querySelector('.submit-go-to');
+
 export default function createGoTo(context, store, datepickerContext) {
+  const currDate = context.getDate();
   const { labels } = locales;
   const { monthsShortLower: monthsArray } = labels;
 
@@ -57,22 +59,16 @@ export default function createGoTo(context, store, datepickerContext) {
   function handleGoTo() {
     const newdate = validateDate(gotoInput.value.toLowerCase());
     if (newdate instanceof Date) {
-      context.setDate(
-        newdate.getFullYear(),
-        newdate.getMonth(),
-        newdate.getDate(),
-      );
-
+      context.setDateFromDateObj(newdate);
       context.setDateSelected(newdate.getDate());
       if (context.getSidebarState() !== 'hide') {
         setSidebarDatepicker(context, store, datepickerContext);
       }
 
-      let component = context.getComponent();
+      const component = context.getComponent();
       if (component === 'list') {
-        component = 'day';
+        context.setComponent('day');
       }
-
       closeGoTo();
       setViews(component, context, store, datepickerContext);
     } else {
@@ -108,11 +104,7 @@ export default function createGoTo(context, store, datepickerContext) {
   }
 
   function formatStart() {
-    const [year, month, day] = [
-      context.getYear(),
-      context.getMonth(),
-      context.getDay(),
-    ];
+    const [year, month, day] = [currDate.getFullYear(), currDate.getMonth(), currDate.getDate()];
     return `${monthsArray[month]} ${day} ${year}`;
   }
 

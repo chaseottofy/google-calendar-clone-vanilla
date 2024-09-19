@@ -104,7 +104,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
     if (resetParent !== null) {
       resetParent.removeAttribute('style');
     }
-    // colorPickerOptions.innerText = '';
     ctgform.classList.add('hide-ctg-form');
     ctgformoverlay.classList.add('hide-ctg-form');
     ctgformInput.value = '';

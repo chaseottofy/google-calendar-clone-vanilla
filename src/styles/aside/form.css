@@ -119,7 +119,6 @@
 .entries__form--body::-webkit-scrollbar-track {
   background-color: transparent;
 }
-
 .entries__form--body::-webkit-scrollbar-thumb {
   width: 14px;
 }
@@ -364,6 +363,7 @@
 }
 
 .form--body__category-modal--wrapper::-webkit-scrollbar-track {
+  /* background-color: transparent; */
   background-color: var(--black1);
 }
 
