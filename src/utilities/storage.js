@@ -1,7 +1,42 @@
+// const outer = () => {
+//   const inner = () => console.trace('inner');
+//   inner();
+// };
+
 class LocalStorageHandler {
   constructor() {
-    this.isLocalStorageAvailable = this.checkLocalStorageAvailability();
-    this.memoryStorage = new Map();
+    this.sessionOnlyKeys = new Set([
+      'animationStatus',
+      'dateSelected',
+      'daySelected',
+      'monthSelected',
+      'pickerYearSelected',
+      'pickerMonthSelected',
+      'pickerDateSelected',
+      'pickerDaySelected',
+      'yearSelected',
+      'colorScheme',
+      'pickerDaySelected',
+      'SidebarState',
+      'component',
+    ]);
+
+    this.cache = new Map();
+    this.secondaryStorage = this.localStorageAvailable()
+      ? localStorage
+      : this.cache;
+
+    this.serverStorageCache = new Map();
+    this.serverStorage = new Map();
+    this.hasServer = false;
+  }
+
+  setHasServer(value) {
+    this.hasServer = value;
+  }
+
+  getHasServer() {
+    return this.hasServer;
   }
 
   setUploadedData(data) {
@@ -11,7 +46,6 @@ class LocalStorageHandler {
     }
   }
 
-  // get all data
   getAllData() {
     const data = {};
     for (let i = 0; i < this.length; i++) {
@@ -21,7 +55,7 @@ class LocalStorageHandler {
     return data;
   }
 
-  checkLocalStorageAvailability() {
+  localStorageAvailable() {
     try {
       localStorage.setItem('test', 'test');
       localStorage.removeItem('test');
@@ -31,52 +65,67 @@ class LocalStorageHandler {
     }
   }
 
+  setServerStorage(data) {
+    this.serverStorage.set(data.key, data.value);
+    this.secondaryStorage.setItem(data.key, data.value);
+  }
+
+  getServerStorage(key) {
+    return this.serverStorage.get(key);
+  }
+
   setItem(key, value) {
-    if (this.isLocalStorageAvailable) {
-      localStorage.setItem(key, value);
+    if (this.hasServer) {
+      if (this.sessionOnlyKeys.has(key)) {
+        this.secondaryStorage.setItem(key, value);
+      } else {
+        console.log(key, 'set server storage');
+        this.setServerStorage({ key, value });
+      }
     } else {
-      this.memoryStorage.set(key, value);
+      this.secondaryStorage.setItem(key, value);
     }
   }
 
   getItem(key) {
-    if (this.isLocalStorageAvailable) {
-      return localStorage.getItem(key);
+    if (this.hasServer) {
+      if (this.sessionOnlyKeys.has(key)) {
+        return this.secondaryStorage.getItem(key) || null;
+      } else {
+        return this.getServerStorage(key) || this.secondaryStorage.getItem(key) || null;
+      }
     } else {
-      return this.memoryStorage.get(key) || null;
+      return this.secondaryStorage.getItem(key) || null;
     }
   }
 
   removeItem(key) {
-    if (this.isLocalStorageAvailable) {
-      localStorage.removeItem(key);
+    if (this.hasServer) {
+      if (this.sessionOnlyKeys.has(key)) {
+        this.secondaryStorage.removeItem(key);
+      } else {
+        this.serverStorage.delete(key);
+        this.secondaryStorage.removeItem(key);
+      }
     } else {
-      this.memoryStorage.delete(key);
+      this.secondaryStorage.removeItem(key);
     }
   }
 
   clear() {
-    if (this.isLocalStorageAvailable) {
-      localStorage.clear();
-    } else {
-      this.memoryStorage.clear();
-    }
+    this.secondaryStorage.clear();
   }
 
   key(index) {
-    if (this.isLocalStorageAvailable) {
-      return localStorage.key(index);
-    } else {
-      return [...this.memoryStorage.keys()][index] || null;
-    }
+    return this.secondaryStorage instanceof Map
+      ? [...this.secondaryStorage.keys()][index]
+      : this.secondaryStorage.key(index);
   }
 
   get length() {
-    if (this.isLocalStorageAvailable) {
-      return localStorage.length;
-    } else {
-      return this.memoryStorage.size;
-    }
+    return this.secondaryStorage instanceof Map
+      ? this.secondaryStorage.size
+      : this.secondaryStorage.length;
   }
 }
 

@@ -3,3 +3,7 @@ temp
 dist
 src/utilities/testing.js
 temp/t.txt
+scripts/
+src/scripts/
+db/
+db.json

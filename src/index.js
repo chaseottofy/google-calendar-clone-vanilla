@@ -35,9 +35,12 @@ import context, { datepickerContext } from './context/appContext';
 import store from './context/store';
 import { setTheme } from './utilities/helpers';
 
-/*! *************************************! */
+/* !*************************************! */
 setTheme(context, store);
 renderViews(context, datepickerContext, store);
 
-// simulate
-// document.querySelector('.sbch-plus').click()
+/*
+fetch('http://localhost:3001/store')
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+*/

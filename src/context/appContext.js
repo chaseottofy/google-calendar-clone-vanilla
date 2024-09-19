@@ -136,8 +136,6 @@ class Context {
     return Context.getLocalComponent() || 'month';
   }
 
-  // I have a single page app but id like to change the url when the component changes, is this a bad approach? if not, write a function that will update the url
-  // I am getting a 'GET' error when I refresh the page since the url doesn't actually exist
   setComponent(component) {
     this.component = component;
     window.location.hash = component;
@@ -172,6 +170,10 @@ class Context {
     this.setYear(year);
     this.setMonth(month);
     this.setDay(day);
+  }
+
+  setDateFromDateObj(dateObj) {
+    this.setDate(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
   }
 
   setDateSelected(date) {
@@ -235,7 +237,6 @@ class Context {
   }
 
   getDateSelected() {
-
     return +Context.getLocalDateSelected();
     // return +this.dateSelected;
   }
@@ -258,6 +259,10 @@ class Context {
 
   getDate() {
     return new Date(this.getYear(), this.getMonth(), this.getDay());
+  }
+
+  getDateArray() {
+    return [this.getYear(), this.getMonth(), this.getDay()];
   }
 
   getToday() {
@@ -318,34 +323,25 @@ class Context {
     return new Date(this.getYear(), this.getMonth() + 1, 0).getDate();
   }
 
-  getMonthArrayStartDay() {
-    return new Date(this.getYear(), this.getMonth(), 1).getDay();
-  }
-
-  getMonthArrayStart() {
+  getMonthArrayStart(year, month) {
     const monthArrayStart = [];
-    const [year, month] = [this.getYear(), this.getMonth()];
-    for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
+    const monthArrayStartDay = new Date(year, month, 1).getDay();
+    for (let i = 0; i < monthArrayStartDay; i++) {
       monthArrayStart.push(new Date(year, month, 0 - i));
     }
     return monthArrayStart;
   }
 
-  getMonthArrayEndDay() {
-    return new Date(this.getYear(), this.getMonth() + 1, 0).getDay();
-  }
-
-  getMonthArrayEnd(handleFourWeeks) {
+  getMonthArrayEnd(year, month, handleFourWeeks = false) {
     const monthArrayEnd = [];
-    const [year, month] = [this.getYear(), this.getMonth()];
-
     if (handleFourWeeks) {
       for (let i = 1; i < 8; i++) {
         monthArrayEnd.push(new Date(year, +month + 1, i));
       }
       return monthArrayEnd;
     } else {
-      for (let i = 1; i < 7 - this.getMonthArrayEndDay(); i++) {
+      const monthArrayEndDay = new Date(year, month + 1, 0).getDay();
+      for (let i = 1; i < 7 - monthArrayEndDay; i++) {
         monthArrayEnd.push(new Date(year, +month + 1, i));
       }
       return monthArrayEnd;
@@ -354,23 +350,25 @@ class Context {
 
   getMonthArray() {
     const monthArray = [];
-    const start = this.getMonthArrayStart();
-    const daysInMonth = this.getDaysInMonth();
-    const [year, month] = [this.getYear(), this.getMonth()];
-    let end = this.getMonthArrayEnd();
-
+    let temp = [this.getYear(), this.getMonth()];
+    let [year, month] = temp;
+    const start = this.getMonthArrayStart(year, month);
     for (let i = start.length - 1; i >= 0; i--) {
       monthArray.push(start[i]);
     }
 
+    [year, month] = temp;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
     for (let i = 1; i <= daysInMonth; i++) {
       monthArray.push(new Date(year, month, i));
     }
 
     monthArray.at(-1).setHours(23, 59, 59, 999);
-
+    [year, month] = temp;
+    let end = this.getMonthArrayEnd(year, month);
     if (monthArray.length === 28 && end.length < 7) {
-      end = this.getMonthArrayEnd(true);
+      const last = monthArray.at(-1);
+      end = this.getMonthArrayEnd(last.getFullYear(), last.getMonth(), true);
     }
 
     for (let i = 0; i < end.length; i++) {
@@ -379,7 +377,6 @@ class Context {
       }
       monthArray.push(end[i]);
     }
-
     return monthArray;
   }
 
@@ -511,6 +508,18 @@ class DatepickerContext {
     this.setDay(day);
   }
 
+  setDateFromDateObj(dateObj) {
+    this.setDate(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+  }
+
+  resetDate() {
+    this.setDate(
+      this.date.getFullYear(),
+      this.date.getMonth(),
+      this.date.getDate(),
+    );
+  }
+
   /* ************** */
   setPrevMonth() {
     const prevMonth = new Date(this.getYear(), this.getMonth() - 1, this.getDay());
@@ -558,27 +567,19 @@ class DatepickerContext {
     return new Date(this.getYear(), this.getMonth() + 1, 0).getDate();
   }
 
-  getMonthArrayStartDay() {
-    return new Date(this.getYear(), this.getMonth(), 1).getDay();
-  }
-
-  getMonthArrayStart() {
+  getMonthArrayStart(year, month) {
     const monthArrayStart = [];
-    const [year, month] = [this.getYear(), this.getMonth()];
-    for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
+    const monthArrayStartDay = new Date(year, month, 1).getDay();
+    for (let i = 0; i < monthArrayStartDay; i++) {
       monthArrayStart.push(new Date(year, month, 0 - i));
     }
     return monthArrayStart;
   }
 
-  getMonthArrayEndDay() {
-    return new Date(this.getYear(), this.getMonth() + 1, 0).getDay();
-  }
-
-  getMonthArrayEnd() {
+  getMonthArrayEnd(year, month) {
     const monthArrayEnd = [];
-    const [year, month] = [this.getYear(), this.getMonth()];
-    for (let i = 1; i < 7 - this.getMonthArrayEndDay(); i++) {
+    const monthArrayEndDay = new Date(year, month + 1, 0).getDay();
+    for (let i = 1; i < 7 - monthArrayEndDay; i++) {
       monthArrayEnd.push(new Date(year, +month + 1, i));
     }
     return monthArrayEnd;
@@ -586,18 +587,19 @@ class DatepickerContext {
 
   getMonthArray() {
     const monthArray = [];
-
-    const start = this.getMonthArrayStart();
+    let temp = [this.getYear(), this.getMonth()];
+    let [year, month] = temp;
+    const start = this.getMonthArrayStart(year, month);
     for (let i = start.length - 1; i >= 0; i--) {
       monthArray.push(start[i]);
     }
 
-    const [year, month] = [this.getYear(), this.getMonth()];
+    [year, month] = temp;
     for (let i = 1; i <= this.getDaysInMonth(); i++) {
       monthArray.push(new Date(year, month, i));
     }
 
-    const end = this.getMonthArrayEnd();
+    const end = this.getMonthArrayEnd(year, month);
     for (let i = 0; i < end.length; i++) {
       if (i === end.length - 1) {
         end[i].setHours(23, 59, 59, 999);
@@ -606,6 +608,54 @@ class DatepickerContext {
     }
     return monthArray;
   }
+  // getMonthArrayStartDay() {
+  //   return new Date(this.getYear(), this.getMonth(), 1).getDay();
+  // }
+
+  // getMonthArrayStart() {
+  //   const monthArrayStart = [];
+  //   const [year, month] = [this.getYear(), this.getMonth()];
+  //   for (let i = 0; i < this.getMonthArrayStartDay(); i++) {
+  //     monthArrayStart.push(new Date(year, month, 0 - i));
+  //   }
+  //   return monthArrayStart;
+  // }
+
+  // getMonthArrayEndDay() {
+  //   return new Date(this.getYear(), this.getMonth() + 1, 0).getDay();
+  // }
+
+  // getMonthArrayEnd() {
+  //   const monthArrayEnd = [];
+  //   const [year, month] = [this.getYear(), this.getMonth()];
+  //   for (let i = 1; i < 7 - this.getMonthArrayEndDay(); i++) {
+  //     monthArrayEnd.push(new Date(year, +month + 1, i));
+  //   }
+  //   return monthArrayEnd;
+  // }
+
+  // getMonthArray() {
+  //   const monthArray = [];
+
+  //   const start = this.getMonthArrayStart();
+  //   for (let i = start.length - 1; i >= 0; i--) {
+  //     monthArray.push(start[i]);
+  //   }
+
+  //   const [year, month] = [this.getYear(), this.getMonth()];
+  //   for (let i = 1; i <= this.getDaysInMonth(); i++) {
+  //     monthArray.push(new Date(year, month, i));
+  //   }
+
+  //   const end = this.getMonthArrayEnd();
+  //   for (let i = 0; i < end.length; i++) {
+  //     if (i === end.length - 1) {
+  //       end[i].setHours(23, 59, 59, 999);
+  //     }
+  //     monthArray.push(end[i]);
+  //   }
+  //   return monthArray;
+  // }
 }
 
 const context = new Context();

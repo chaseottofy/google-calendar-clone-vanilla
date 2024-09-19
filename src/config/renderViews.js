@@ -14,45 +14,6 @@ import {
 } from '../utilities/helpers';
 import setViews from './setViews';
 
-class DataAttributeHandler {
-  constructor() {
-    this.prefix = 'data-';
-  }
-
-  // Query select an attribute when given a value and return the element with that value
-  querySelector(attribute, value) {
-    const selector = `[${this.prefix}${attribute}="${value}"]`;
-    return document.querySelector(selector);
-  }
-
-  // Query select attribute linked to only one element (no value given)
-  querySelectorUnique(attribute) {
-    const selector = `[${this.prefix}${attribute}]`;
-    return document.querySelector(selector);
-  }
-
-  // Query select and return all elements with a given attribute
-  querySelectorAll(attribute) {
-    const selector = `[${this.prefix}${attribute}]`;
-    return document.querySelectorAll(selector);
-  }
-
-  // Set attribute value
-  setAttribute(element, attribute, value) {
-    element.setAttribute(`${this.prefix}${attribute}`, value);
-  }
-
-  // Toggle attribute value
-  toggleAttribute(element, attribute, value1, value2) {
-    const currentValue = element.getAttribute(`${this.prefix}${attribute}`);
-    const newValue = currentValue === value1 ? value2 : value1;
-    this.setAttribute(element, attribute, newValue);
-    return newValue;
-  }
-}
-
-const attrHandler = new DataAttributeHandler();
-
 const header = document.querySelector('.h__container');
 const headerLogo = document.querySelector('.logo');
 
@@ -74,7 +35,6 @@ const sbCategoriesWrapper = document.querySelector('.sb__categories--body-form')
 const selectElement = document.querySelector('.select__modal');
 const selectOverlay = document.querySelector('.change-view--overlay');
 const optionswrapper = document.querySelector('.change-view--wrapper');
-const options = document.querySelectorAll('.view-option');
 
 const sidebar = document.querySelector('.sidebar');
 const sbFooter = document.querySelector('.sb__info');
@@ -341,7 +301,7 @@ export default function renderViews(context, datepickerContext, store) {
 
   function renderOption(option, initialRender) {
     const comp = context.getComponent();
-    const optionsList = ['day', 'week', 'month', 'year', 'list'];
+    // const optionsList = ['day', 'week', 'month', 'year', 'list'];
     if (option === 'week' || option === 'day') {
       collapsebtn.onclick = handleCollapse;
       collapsebtn.classList.remove('hide-cbt');
@@ -354,16 +314,6 @@ export default function renderViews(context, datepickerContext, store) {
     closeOptionsModal();
     context.setComponent(option);
     fullRender(option);
-    console.log(option);
-    optionswrapper.setAttribute('data-view-option-active', option);
-    // console.log(document.querySelector(`.view-option[data-view-option="${option}"]`));
-    // for (const opt of options) {
-    //   opt.classList.remove('view-option--active');
-    //   console.log(opt, option)
-    //   if (option === opt.getAttribute('data-view-option')) {
-    //     opt.classList.add('view-option--active');
-    //   }
-    // }
     optionswrapper.setAttribute('data-view-option-active', option);
     if (comp || option === 'week') {
       renderSidebarDatepicker();

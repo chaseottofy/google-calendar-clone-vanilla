@@ -14,3 +14,6 @@ todo.js
 /temp/
 /src/utilities/testing.js
 webpack.config.js
+src/scripts
+fmock
+db

@@ -37,9 +37,12 @@ export default function setMonthView(context, store, datepickerContext) {
     window.innerWidth <= 530 || window.innerHeight <= 470,
   );
 
+  const contextMonth = context.getMonth();
+  const contextDateSelected = context.getDateSelected();
+
   function renderSidebarDatepickerMonth() {
     if (!sidebar.classList.contains('hide-sidebar')) {
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+      datepickerContext.resetDate();
       context.setDateSelected(context.getDay());
       setSidebarDatepicker(context, store, datepickerContext);
     }
@@ -115,12 +118,12 @@ export default function setMonthView(context, store, datepickerContext) {
      * case 3: cell represents today
      * case 4: cell represents days within current month
     * */
-    if (day.getMonth() !== context.getMonth()) {
+    if (day.getMonth() !== contextMonth) {
       daynumber.textContent = daynumberAndMonth;
       daynumber.classList.add('monthview--daynumber-prevnext');
     } else if (day.getDate() === 1) {
       daynumber.textContent = daynumberAndMonth;
-    } else if (context.isToday(day)) {
+    } else if (compareDates(day, new Date())) {
       daynumber.textContent = day.getDate();
       daynumber.classList.add('monthview--daynumber-today');
       cell.classList.add('monthview--today');
@@ -147,7 +150,10 @@ export default function setMonthView(context, store, datepickerContext) {
     const cellContent = document.createElement('div');
     cellContent.classList.add('monthview--daycontent');
 
-    if (day.getMonth() === context.getMonth() && day.getDate() === context.getDateSelected()) {
+    if (
+      day.getMonth() === contextMonth
+      && day.getDate() === contextDateSelected
+    ) {
       dayofmonth.classList.add('monthview--dayofmonth-selected');
     }
     dayofmonth.append(createCellHeader(cell, day));

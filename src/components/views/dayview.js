@@ -27,7 +27,6 @@ import calcTime, { formatTime } from '../../utilities/timeutils';
 import fullFormConfig from '../forms/formUtils';
 import FormSetup from '../forms/setForm';
 import getEntryOptionModal from '../menus/entryOptions';
-
 // day view header (row 1)
 const dvHeaderDayNumber = document.querySelector('.dayview--header-day__title');
 const dvHeaderDayOfWeek = document.querySelector(
@@ -43,11 +42,8 @@ const dvContainer = document.querySelector('.calendar__dayview');
 const dvGrid = document.querySelector('.dayview__grid');
 const dvMainGrid = document.querySelector('.dayview--main-grid');
 
-const dvSideGridWrapper = document.querySelector('.dayview--side-grid');
-
 export default function setDayView(context, store, datepickerContext) {
-  // let entries = store.getDayEntries(context.getDate());
-  // let boxes = new Day(entries.day, entries.allDay);
+  const currDate = context.getDate();
   let entries = null;
   let boxes = null;
   let firstY = null;
@@ -57,13 +53,10 @@ export default function setDayView(context, store, datepickerContext) {
     let shortest = 100;
     for (let i = 0; i < bxs.length; i++) {
       const [tempshort, templong] = [bxs[i].coordinates.y, bxs[i].coordinates.e];
-      if (templong > longest) {
-        longest = templong;
-      }
-      if (tempshort < shortest) {
-        shortest = tempshort;
-      }
+      if (templong > longest) longest = templong;
+      if (tempshort < shortest) shortest = tempshort;
     }
+
     const [h1, h2] = [Math.floor(shortest / 4), Math.floor(longest / 4)];
     const [m1, m2] = [(shortest % 4) * 15, (longest % 4) * 15];
     const [tempdate1, tempdate2] = [
@@ -84,19 +77,19 @@ export default function setDayView(context, store, datepickerContext) {
     }
     let [endingToday, startingToday] = [0, 0];
     let tempEndCase1;
+    const currentDay = currDate.getDate();
 
     for (let i = 0; i < allboxes.length; i++) {
-      const [start, end, current] = [
+      const [start, end] = [
         new Date(allboxes[i].start),
         new Date(allboxes[i].end),
-        context.getDate(),
       ];
 
-      if (start.getDate() === current.getDate()) {
+      if (start.getDate() === currentDay) {
         startingToday++;
       }
 
-      if (end.getDate() === current.getDate()) {
+      if (end.getDate() === currentDay) {
         endingToday++;
         tempEndCase1 = allboxes[i];
       }
@@ -143,29 +136,6 @@ export default function setDayView(context, store, datepickerContext) {
     return fulltitle;
   }
 
-  function createDVSideGridCells() {
-    for (let i = 0; i < 24; i++) {
-      let hour;
-      let md;
-
-      if (i === 0) {
-        hour = '';
-        md = '';
-      } else {
-        hour = i;
-        md = 'AM';
-      }
-
-      if (hour > 12) { hour -= 12; }
-      if (i >= 12) { md = 'PM'; }
-
-      const dvSideGridCell = document.createElement('span');
-      dvSideGridCell.classList.add('dv-sidegrid--cell');
-      dvSideGridCell.textContent = `${hour} ${md}`;
-      dvSideGridWrapper.append(dvSideGridCell);
-    }
-  }
-
   function configHeader() {
     for (const el of [dvHeaderDayNumber, dvHeaderDayOfWeek, dvHeaderInfo]) {
       el.innerText = '';
@@ -194,7 +164,6 @@ export default function setDayView(context, store, datepickerContext) {
   function resetDayview() {
     dvMainGrid.innerText = '';
     dvOnTop.innerText = '';
-    dvSideGridWrapper.innerText = '';
     dvHeaderInfo.innerText = '';
     dvContainer.onmousedown = null;
     entries = null;
@@ -672,7 +641,6 @@ export default function setDayView(context, store, datepickerContext) {
           coords.h = 4;
           box.style.height = '50px';
           box.style.top = `${+coords.y * 12.5}px`;
-          // [starthour, startmin] = [starthour, 0];
           startmin = 0;
           [endhour, endmin] = [starthour + 1, 0];
           boxtime.textContent = `${formatTime(starthour, startmin)} – `;
@@ -681,7 +649,7 @@ export default function setDayView(context, store, datepickerContext) {
       }
 
       const datesData = getTempDates(
-        new Date(context.getDate()),
+        currDate,
         [starthour, endhour],
         [startmin, endmin],
       );
@@ -765,9 +733,7 @@ export default function setDayView(context, store, datepickerContext) {
   }
 
   const initDayView = () => {
-    dvSideGridWrapper.innerText = '';
-    createDVSideGridCells();
-    entries = store.getDayEntries(context.getDate());
+    entries = store.getDayEntries(currDate);
     boxes = new Day(entries.day, entries.allDay);
     renderBoxesForGrid();
     configHeader();

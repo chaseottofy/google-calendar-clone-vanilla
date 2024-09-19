@@ -45,8 +45,6 @@ const weekviewHeader = document.querySelector('.weekview--header');
 const weekviewHeaderDayNumber = document.querySelectorAll('.weekview--header-day__number');
 
 const weekviewGrid = document.querySelector('.weekview__grid');
-const weekviewSideGrid = document.querySelector('.weekview--sidebar');
-
 const topCols = document.querySelectorAll('.allday--col');
 
 const cols = document.querySelectorAll('.week--col');
@@ -65,29 +63,6 @@ export default function setWeekView(context, store, datepickerContext) {
     setViews('day', context, store, datepickerContext);
   }
 
-  function createWVSideGridCells() {
-    for (let i = 0; i < 24; i++) {
-      let hour;
-      let md;
-
-      if (i === 0) {
-        hour = '';
-        md = '';
-      } else {
-        hour = i;
-        md = 'AM';
-      }
-
-      if (hour > 12) { hour -= 12; }
-      if (i >= 12) { md = 'PM'; }
-
-      const wvSideGridCell = document.createElement('span');
-      wvSideGridCell.classList.add('sidegrid-cell');
-      wvSideGridCell.textContent = `${hour} ${md}`;
-      weekviewSideGrid.append(wvSideGridCell);
-    }
-  }
-
   function configureDaysOfWeek() {
     document.querySelector('.wv-gmt').textContent = `UTC ${context.getGmt()}`;
     let hasToday;
@@ -98,19 +73,12 @@ export default function setWeekView(context, store, datepickerContext) {
     const [ty, tm, td] = [today.getFullYear(), today.getMonth(), today.getDate()];
 
     for (const day of weekArray) {
-      const [y, m, d] = [
-        day.getFullYear(),
-        day.getMonth(),
-        day.getDate(),
-      ];
-
+      const [y, m, d] = [day.getFullYear(), day.getMonth(), day.getDate()];
       dayNumbers.push(d);
       ymd.push(`${y}-${m}-${d}`);
-
       if (d === context.getDateSelected() && m === context.getMonth()) {
         hasSelected = d;
       }
-
       if (d === td && m === tm && y === ty) {
         hasToday = d;
       }
@@ -147,7 +115,6 @@ export default function setWeekView(context, store, datepickerContext) {
     for (const col of topCols) { col.innerText = ''; }
     main.onmousedown = null;
     weekviewHeader.onclick = null;
-    weekviewSideGrid.innerText = '';
   }
 
   function renderBoxes() {
@@ -767,8 +734,6 @@ export default function setWeekView(context, store, datepickerContext) {
   }
 
   const initWeek = () => {
-    weekviewSideGrid.innerText = '';
-    createWVSideGridCells();
     configureDaysOfWeek();
     renderDataForGrid();
     main.onmousedown = delegateGridEvents;

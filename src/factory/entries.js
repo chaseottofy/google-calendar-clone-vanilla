@@ -125,26 +125,6 @@ class Week {
     return bxs.sort((a, b) => +a.coordinates.y - +b.coordinates.y);
   }
 
-  checkForCollision(col) {
-    const bxs = this.getBoxesByColumn(col);
-    const overlaps = []; // a list to store the overlapping entries
-    for (let i = 0; i < bxs.length; i++) {
-      for (let j = i + 1; j < bxs.length; j++) {
-        const e1 = bxs[i];
-        const e2 = bxs[j];
-        if (e1.coordinates.y < e2.coordinates.e && e1.coordinates.e > e2.coordinates.y) {
-          if (!overlaps.includes(e1)) {
-            overlaps.push(e1);
-          }
-          if (!overlaps.includes(e2)) {
-            overlaps.push(e2);
-          }
-        }
-      }
-    }
-    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y);
-  }
-
   updateStore(store, id, weekArray) {
     const boxEntry = this.getBox(id);
     const coords = boxEntry.coordinates;
@@ -251,28 +231,6 @@ class Day {
         return diff;
       }
     });
-  }
-
-  checkForCollision() {
-    const bxs = this.getBoxes();
-    // console.log(bxs);
-    const overlaps = []; // a list to store the overlapping entries
-    // entries.sort((a, b) => +a.coordinates.y - +b.coordinates.y)
-    for (let i = 0; i < bxs.length; i++) {
-      for (let j = i + 1; j < bxs.length; j++) {
-        const e1 = bxs[i];
-        const e2 = bxs[j];
-        if (e1.coordinates.y < e2.coordinates.e && e1.coordinates.e > e2.coordinates.y) {
-          if (!overlaps.includes(e1)) {
-            overlaps.push(e1);
-          }
-          if (!overlaps.includes(e2)) {
-            overlaps.push(e2);
-          }
-        }
-      }
-    }
-    return overlaps.sort((a, b) => +a.coordinates.y - +b.coordinates.y);
   }
 
   updateStore(store, id) {

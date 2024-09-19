@@ -140,8 +140,84 @@
 
 .rowgroup--cell__color,
 .rowgroup--cell__time,
-.rowgroup--cell__title {
+.rowgroup--cell__tFitle {
   pointer-events: none;
+}
+
+.listview-aside-btn {
+  position: absolute;
+  z-index: 980;
+  width: 110px;
+  height: 46px;
+  top: calc(100vh - 20%);
+  left: calc(100vw - 20%);
+}
+
+.lv-view-switch {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+  border-radius: 4px;
+  overflow:hidden;
+  align-items: center;
+  border: 1px solid var(--mediumgrey2);
+}
+
+.lv-view-switch span {
+  background: var(--black2);
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.lv-view-switch svg {
+  height: 22px;
+  width: 22px;
+  opacity: .9;
+  fill: var(--white1);
+}
+
+.lv-view-switch span:first-child {
+  border-right: 1px solid var(--mediumgrey2);
+}
+
+.lv-view-switch span input {
+  position: absolute;
+  z-index: -1;
+  padding: 0;
+  border: none;
+  margin: 0;
+  appearance: none;
+  outline: none;
+}
+
+.lv-view-switch span label {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.lv-view-switch span input:checked + label svg {
+  opacity: 1;
+  fill: #3092ea !important;
+}
+
+.lv-view-switch span input:checked + label {
+  background-color: #17222e !important;
+}
+
+.lv-view-switch span:hover {
+  filter:brightness(1.2);
 }
 
 /* queries */
@@ -200,4 +276,20 @@
     margin-left: 6px !important;
     width: 100% !important;
   }
+
+  .listview-aside-btn {
+    height: 100px;
+    width: 50px;
+    top: calc(100vh - 30%);
+  }
+
+  .lv-view-switch {
+    flex-direction: column;
+  }
+
+  .lv-view-switch span:first-child {
+    border-right: none;
+    border-bottom: 1px solid var(--mediumgrey2);
+  }
+  
 }

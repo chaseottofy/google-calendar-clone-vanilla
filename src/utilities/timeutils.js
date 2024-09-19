@@ -37,10 +37,6 @@ function formatStartEndTimes(hours, minutes) {
   return `${start} – ${end}`;
 }
 
-function configMinutesForStore(minutes) {
-  return minutes === 0 ? '00' : minutes;
-}
-
 function calcTime(start, length) {
   const startHours = Math.floor(+start / 4);
   const startMinutes = (+start * 15) % 60;
@@ -59,27 +55,8 @@ function calcTime(start, length) {
   return boxtime;
 }
 
-function compareTimes(time1, time2) {
-  const [hours1, minutes1] = time1.split(':');
-  const [hours2, minutes2] = time2.split(':');
-  // get time difference in minutes
-  const diff = (hours2 - hours1) * 60 + (minutes2 - minutes1);
-  let closest;
-
-  // if diff is negative, return the next closest time difference in 15 minute interval
-  if (diff < 0) {
-    closest = 15 * Math.ceil(diff / 15);
-  } else {
-    closest = true;
-  }
-
-  return [diff, closest];
-}
-
 export default calcTime;
 export {
-  compareTimes,
-  configMinutesForStore,
   formatStartEndTimes,
   formatTime,
 };

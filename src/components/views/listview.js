@@ -3,10 +3,11 @@ import locales from '../../locales/en';
 import {
   formatStartEndDate,
   getdatearray,
+  getDateFromArray,
   getDateFromAttribute,
   getFormDateObject,
   longerThanDay,
-} from '../../utilities/dateutils';
+  sortEndDateValues } from '../../utilities/dateutils';
 import {
   getClosest,
   hextorgba,
@@ -19,12 +20,12 @@ import getEntryOptionModal from '../menus/entryOptions';
 const dateTimeTitle = document.querySelector('.datetime-content--title');
 const listview = document.querySelector('.listview');
 const listviewBody = document.querySelector('.listview__body');
+const listviewSwitchBtns = document.querySelectorAll('.lv-view-input');
 
 export default function setListView(context, store, datepickerContext) {
   const { labels } = locales;
   let monthNames = labels.monthsShort.map((x) => x.toUpperCase());
   let weekDayNames = labels.weekdaysShort.map((x) => x.toUpperCase());
-  const [todayYear, todayMonth, todayDay] = getdatearray(new Date());
   /** ************************************* */
 
   /**
@@ -36,39 +37,21 @@ export default function setListView(context, store, datepickerContext) {
   function createRowGroups(entries) {
     // use count to check for first rowgroup
     let count = 1;
+
     for (const [key, value] of Object.entries(entries)) {
-
-      const tempdate = new Date(
-        key.split('-').map((x) => Number.parseInt(x, 10)),
-      );
-      // {mumber} month, {number} day of month, {number} day of week
-      const [month, day, dow] = [
-        tempdate.getMonth(),
-        tempdate.getDate(),
-        tempdate.getDay(),
-      ];
-
-      const [wn, mn] = [weekDayNames[dow], monthNames[month]];
-
+      const tempdate = getDateFromArray(key.split('-'));
       const rgheader = createRowGroupHeader(
-        wn,
-        mn,
-        day,
+        weekDayNames[tempdate.getDay()],
+        monthNames[tempdate.getMonth()],
+        tempdate.getDate(),
         key,
         count === 1,
       );
       count = null;
 
-      // sort entries by end time if there are more than one per day
-      if (value.length > 1) {
-        value.sort((a, b) => {
-          return new Date(a.end) - new Date(b.end);
-        });
-      }
-
       const rgContent = document.createElement('div');
       rgContent.classList.add('rowgroup-content');
-      for (const entry of value) {
+      for (const entry of sortEndDateValues(value)) {
         rgContent.append(createRowGroupCell(entry));
       }
 
@@ -115,9 +98,9 @@ export default function setListView(context, store, datepickerContext) {
     if (longerThanDay(start, end)) {
       let tempyear = 0;
       if (start.getFullYear() !== end.getFullYear()) {
+        console.log(start.getFullYear(), end.getFullYear());
         tempyear = +end.getFullYear() - 2000;
       }
-
       datetitle = `${monthNames[end.getMonth()]} ${end.getDate()} ${tempyear > 0 ? tempyear : ''}`;
     } else {
       datetitle = `${formatStartEndTimes(
@@ -238,74 +221,85 @@ export default function setListView(context, store, datepickerContext) {
     weekDayNames = null;
   }
 
-  const initListView = () => {
-    listviewBody.innerText = '';
-    store.setResetPreviousViewCallback(resetListview);
+  const setListViewGrouped = (groupedEntries) => {
+    let keys = Object.keys(groupedEntries);
+    const length = keys.length;
 
-    let activeEnt = store.getActiveEntries();
+    if (length === 0) {
+      dateTimeTitle.textContent = 'Schedule Clear';
+      return;
+    }
+
+    const earliestDate = getDateFromArray(keys[0].split('-'));
+    context.setDateFromDateObj(earliestDate);
+    context.setDateSelected(earliestDate.getDate());
+
+    if (context.getSidebarState === 'open') {
+      datepickerContext.setDateFromDateObj(earliestDate);
+      datepickerContext.setDateSelected(earliestDate.getDate());
+    }
+
+    dateTimeTitle.textContent = formatStartEndDate(
+      keys[0],
+      keys[length - 1],
+      true,
+    );
+
+    createRowGroups(groupedEntries);
+    groupedEntries = null;
+    keys = null;
+  };
+
+  const formatGroupEntries = (entries, startDate) => {
+    const [todayYear, todayMonth, todayDay] = getdatearray(startDate);
+    return entries.reduce((acc, curr) => {
+      const date = new Date(curr.start);
+      const [year, month, day] = getdatearray(date);
+      const datestring = `${year}-${month}-${day}`;
+      if (year < todayYear) return acc;
+      if (year === todayYear && month < todayMonth) return acc;
+      if (year === todayYear && month === todayMonth && day < todayDay) return acc;
+
+      if (!acc[datestring]) { acc[datestring] = []; }
+      acc[datestring].push(curr);
+      return acc;
+    }, {});
+  };
+
+  const setupListView = (activeEnt, entries) => {
+    listviewBody.innerText = '';
     if (activeEnt.length === 0) {
       dateTimeTitle.textContent = 'No Entries to Display';
+      return;
+    }
+
+    if (listview.getAttribute('data-listview-type') === 'tasks') {
+      setListViewGrouped(formatGroupEntries(entries, new Date()));
     } else {
+      const earliestDate = entries.length > 0 ? new Date(entries[0].start) : new Date();
+      setListViewGrouped(formatGroupEntries(entries, earliestDate));
+    }
+    activeEnt = null;
+    entries = null;
+  };
 
-      let entries = store.sortBy(activeEnt, 'start', 'desc');
-      let groupedEntries = entries.reduce((acc, curr) => {
-        const date = new Date(curr.start);
-        const [year, month, day] = getdatearray(date);
-        const datestring = `${year}-${month}-${day}`;
+  const handleReInit = (e, activeEntries, entries) => {
+    const interfaceType = e.target.value;
+    listview.setAttribute('data-listview-type', interfaceType);
+    setupListView(activeEntries, entries);
+  };
 
-        if (year < todayYear) {
-          return acc;
-        } else if (year === todayYear) {
-          if (month < todayMonth) {
-            return acc;
-          } else if (month === todayMonth && day < todayDay) {
-            return acc;
-          }
-        }
+  const initListView = () => {
+    const activeEntries = store.getActiveEntries();
+    let entries = store.sortBy(activeEntries, 'start', 'desc');
+    store.setResetPreviousViewCallback(resetListview);
+    setupListView(activeEntries, entries);
+    listview.onclick = delegateListview;
 
-        if (!acc[datestring]) { acc[datestring] = []; }
-        acc[datestring].push(curr);
-        return acc;
-      }, {});
-      let keys = Object.keys(groupedEntries);
-      const length = keys.length;
-      if (length === 0) {
-        dateTimeTitle.textContent = 'Schedule Clear';
-      } else {
-        // true will slice the year at last two digits if two years are displayed at the same time;
-        const earliestDate = new Date(keys[0].split('-').map((x) => Number.parseInt(x)));
-
-        context.setDate(
-          earliestDate.getFullYear(),
-          earliestDate.getMonth(),
-          earliestDate.getDate(),
-        );
-
-        context.setDateSelected(earliestDate.getDate());
-
-        if (context.getSidebarState === 'open') {
-          datepickerContext.setDate(
-            earliestDate.getFullYear(),
-            earliestDate.getMonth(),
-            earliestDate.getDate(),
-          );
-
-          datepickerContext.setDateSelected(earliestDate.getDate());
-        }
-
-        dateTimeTitle.textContent = formatStartEndDate(
-          keys[0],
-          keys[length - 1],
-          true,
-        );
-      }
-
-      createRowGroups(groupedEntries);
-      listview.onclick = delegateListview;
-      activeEnt = null;
-      entries = null;
-      groupedEntries = null;
-      keys = null;
+    for (const input of listviewSwitchBtns) {
+      input.onchange = (e) => {
+        handleReInit(e, activeEntries, entries);
+      };
     }
   };
 

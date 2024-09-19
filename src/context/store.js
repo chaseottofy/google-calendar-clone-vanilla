@@ -59,6 +59,7 @@ class Store {
     this.keyboardShortcuts = defautlKeyboardShortcuts;
     this.keyboardShortcutsStatus = true;
     this.animationStatus = false;
+    this.hasServerIntegration = false;
   }
 
   getInitStore() {
@@ -142,6 +143,10 @@ class Store {
 
   /* ************** */
   /* essential crud (entries) - create, read, update, delete */
+  getServerStatus() {
+    return this.hasServerIntegration;
+  }
+
   addEntry(entry) {
     this.store.push(entry);
     Store.setStore(this.store);
@@ -205,8 +210,14 @@ class Store {
   }
 
   updateEntry(id, data) {
-    let entry = this.getEntry(id);
-    entry = Object.assign(entry, data);
+    // let entry = this.getEntry(id);
+    // entry = Object.assign(this.getEntry(id), data);
+    this.store = this.store.map((entry) => {
+      if (entry.id === id) {
+        return Object.assign(entry, data);
+      }
+      return entry;
+    });
     Store.setStore(this.store);
   }
   /* ************ */
@@ -455,7 +466,6 @@ class Store {
   }
 
   getDefaultCtg() {
-    console.log(this.ctg);
     return Object.entries(this.ctg)[0];
   }
 

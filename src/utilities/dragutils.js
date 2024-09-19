@@ -1,4 +1,3 @@
-import locales from '../locales/en';
 import calcTime from './timeutils';
 /**
  * For a full explanation see readme @grid-engines
@@ -144,7 +143,7 @@ function handleOverlap(col, view, boxes) {
   if (currBoxes.length === 0) return;
 
   const collisions = groupOverlapping(currBoxes);
-  collisions.forEach((group, idx) => {
+  collisions.forEach((group) => {
     for (let i = 0; i < group.length; i++) {
       const currBox = group[i];
       const { id } = currBox;
@@ -152,10 +151,6 @@ function handleOverlap(col, view, boxes) {
 
       const currIdx = i % widthCoord.length;
       boxElement.style.zIndex = i + 1;
-      // if (i === 0) {
-      //   // boxElement.classList.remove(ontop);
-      // } else {
-      // }
       if (i > 0) {
         boxElement.classList.add(ontop);
       }
@@ -320,15 +315,6 @@ function calcNewMinuteFromCoords(h, y) {
   return Math.floor(((h + y) / 12.5) % 4) * 15;
 }
 
-function calcDateOnClick(date, start, length) {
-  const [startDate, endDate] = [new Date(date), new Date(date)];
-  startDate.setHours(Math.floor(+start / 4));
-  startDate.setMinutes((+start * 15) % 60);
-  endDate.setHours(Math.floor((start + length) / 4));
-  endDate.setMinutes(((start + length) * 15) % 60);
-  return [startDate, endDate];
-}
-
 function getOriginalBoxObject(box) {
   return {
     height: box.style.height,
@@ -346,7 +332,6 @@ function resetOriginalBox(box, boxorig) {
 
 export default handleOverlap;
 export {
-  calcDateOnClick,
   calcNewHourFromCoords,
   calcNewMinuteFromCoords,
   createBox,

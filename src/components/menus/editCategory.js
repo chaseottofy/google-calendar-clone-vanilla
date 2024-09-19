@@ -58,8 +58,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
 
   function validateNewCategory(categoryName, color) {
     let trimName = categoryName.trim().replaceAll(/[^\d\sA-Za-z]+|\s{2,}/g, ' ').trim();
-    console.log(trimName);
-
     if (isNumeric(trimName)) {
       trimName = `category ${trimName}`;
     }
@@ -103,7 +101,6 @@ export default function createCategoryForm(store, selectedCategory, editing, res
   }
 
   function closeCategoryForm() {
-    console.log(resetParent);
     if (resetParent !== null) {
       resetParent.removeAttribute('style');
     }

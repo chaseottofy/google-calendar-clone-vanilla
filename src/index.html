@@ -367,7 +367,8 @@
         </div>
 
         <div class="weekview__grid">
-          <div class="weekview--sidebar"></div>
+          <!-- <div class="weekview--sidebar"></div> -->
+          <div class="weekview--sidebar"><span class="sidegrid-cell"> </span><span class="sidegrid-cell">1 AM</span><span class="sidegrid-cell">2 AM</span><span class="sidegrid-cell">3 AM</span><span class="sidegrid-cell">4 AM</span><span class="sidegrid-cell">5 AM</span><span class="sidegrid-cell">6 AM</span><span class="sidegrid-cell">7 AM</span><span class="sidegrid-cell">8 AM</span><span class="sidegrid-cell">9 AM</span><span class="sidegrid-cell">10 AM</span><span class="sidegrid-cell">11 AM</span><span class="sidegrid-cell">12 PM</span><span class="sidegrid-cell">1 PM</span><span class="sidegrid-cell">2 PM</span><span class="sidegrid-cell">3 PM</span><span class="sidegrid-cell">4 PM</span><span class="sidegrid-cell">5 PM</span><span class="sidegrid-cell">6 PM</span><span class="sidegrid-cell">7 PM</span><span class="sidegrid-cell">8 PM</span><span class="sidegrid-cell">9 PM</span><span class="sidegrid-cell">10 PM</span><span class="sidegrid-cell">11 PM</span></div>
 
           <div class="weekview--calendar">
             <div class="week--col" data-column-index="0" data-wv-top="false"></div>
@@ -408,7 +409,8 @@
           <div class="dayview__grid">
             <div class="dayview__grid--wrapper">
               <div class="dayview--side-grid__wrapper">
-                <div class="dayview--side-grid"></div>
+                <div class="dayview--side-grid"><span class="dv-sidegrid--cell"> </span><span class="dv-sidegrid--cell">1 AM</span><span class="dv-sidegrid--cell">2 AM</span><span class="dv-sidegrid--cell">3 AM</span><span class="dv-sidegrid--cell">4 AM</span><span class="dv-sidegrid--cell">5 AM</span><span class="dv-sidegrid--cell">6 AM</span><span class="dv-sidegrid--cell">7 AM</span><span class="dv-sidegrid--cell">8 AM</span><span class="dv-sidegrid--cell">9 AM</span><span class="dv-sidegrid--cell">10 AM</span><span class="dv-sidegrid--cell">11 AM</span><span class="dv-sidegrid--cell">12 PM</span><span class="dv-sidegrid--cell">1 PM</span><span class="dv-sidegrid--cell">2 PM</span><span class="dv-sidegrid--cell">3 PM</span><span class="dv-sidegrid--cell">4 PM</span><span class="dv-sidegrid--cell">5 PM</span><span class="dv-sidegrid--cell">6 PM</span><span class="dv-sidegrid--cell">7 PM</span><span class="dv-sidegrid--cell">8 PM</span><span class="dv-sidegrid--cell">9 PM</span><span class="dv-sidegrid--cell">10 PM</span><span class="dv-sidegrid--cell">11 PM</span></div>
+                <!-- <div class="dayview--side-grid"></div> -->
               </div>
 
               <div class="dayview--main-grid" data-dv-top="false"></div>
@@ -419,9 +421,27 @@
       </div>
 
       <!-- listview -->
-      <div class="listview hide-view">
+      <div class="listview hide-view" data-listview-type="tasks">
         <div class="listview__body">
         </div>
+
+        <aside class="listview-aside-btn">
+          <div class="lv-view-switch">
+            <span>
+              <input class="lv-view-input" id="lv-view-tasks" name="lv-view-radio" type="radio" value="tasks" checked>
+              <label class="lv-view-label" for="lv-view-tasks" title="switch to tasks" aria-label="switch to tasks">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q65 0 123 19t107 53l-58 59q-38-24-81-37.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160q133 0 226.5-93.5T800-480q0-18-2-36t-6-35l65-65q11 32 17 66t6 70q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-56-216L254-466l56-56 114 114 400-401 56 56-456 457Z"/></svg>
+              </label>
+            </span>
+
+            <span>
+              <input class="lv-view-input" id="lv-view-calendar" name="lv-view-radio" type="radio" value="calendar">
+              <label class="lv-view-label" for="lv-view-calendar" title="switch to tasks" aria-label="switch to tasks">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"><path d="M320-400q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm160 0q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm160 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+              </label>
+            </span>
+          </div>
+        </aside>
       </div>
 
       <!-- stats view -->

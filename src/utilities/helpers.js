@@ -125,7 +125,7 @@ function placePopup(
   coords,
   windowCoords,
   center = false,
-  targetWidth = 0,
+  targetWidth = null,
 ) {
   const [popupW, popupH] = [popupWidth, popupHeight];
   const [x, y] = coords;

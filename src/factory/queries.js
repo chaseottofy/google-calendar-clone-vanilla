@@ -3,8 +3,6 @@ class MonthBoxQuery {
     this.flag = flag;
     this.tops = [20, 20];
     this.heights = [18, 18];
-    // this.tops = [16, 20];
-    // this.heights = [14, 18];
   }
 
   updateFlag() {

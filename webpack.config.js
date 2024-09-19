@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
-// const BundelAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const ESLintPlugin = require('eslint-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // "analyze": "webpack --profile --json > stats.json"
 // const postcssPresetEnv = require('postcss-preset-env');
 // const autoprefixer = require('autoprefixer');
@@ -49,6 +50,7 @@ module.exports = (env, argv) => {
     },
 
     plugins: [
+      // new BundleAnalyzerPlugin(),
       new WebpackManifestPlugin(
         {
           fileName: 'manifest.json',
@@ -68,6 +70,21 @@ module.exports = (env, argv) => {
         },
       }),
       new MiniCssExtractPlugin(),
+      // new ESLintPlugin({
+      //   extensions: ['js'],
+      //   failOnError: false,
+      //   failOnWarning: false,
+      //   // emitError: true,
+      //   // emitWarning: true,
+      //   fix: false,
+      // }),
+      // new BundleAnalyzerPlugin({
+      //   analyzerMode: 'static',
+      //   reportFilename: 'bundle-report.html',
+      //   openAnalyzer: false,
+      //   generateStatsFile: true,
+      //   statsFilename: 'bundle-stats.json',
+      // }),
     ],
 
     optimization: {

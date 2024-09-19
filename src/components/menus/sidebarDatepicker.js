@@ -13,12 +13,7 @@ const sbmonthpickerMonths = document.querySelectorAll('.sb-monthpicker__month');
 
 export default function setSidebarDatepicker(context, store, datepickerContext) {
 
-  datepickerContext.setDate(
-    context.getYear(),
-    context.getMonth(),
-    context.getDay(),
-  );
-
+  datepickerContext.setDate(...context.getDateArray());
   let montharray = datepickerContext.getMonthArray();
   let groupedEntries = store.getMonthEntryDates(montharray);
   let currentWeekStart = context.getWeek();

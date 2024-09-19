@@ -39,19 +39,6 @@ function getdatearray(date) {
   return [+date.getFullYear(), +date.getMonth() + 1, +date.getDate()];
 }
 
-function formatDateForDisplay(date) {
-  date = testDate(date);
-  const { labels } = locales;
-  const month = labels.monthsShort[date.getMonth()];
-  const day = date.getDate();
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  hours = hours < 10 ? `0${hours}` : hours;
-  minutes = minutes < 10 ? `0${minutes}` : minutes;
-  const hm = `${hours}:${minutes}`;
-  return `${month} ${day} ${date.getFullYear()}, (${hm}) `;
-}
-
 function compareDates(date1, date2) {
   [date1, date2] = [testDate(date1), testDate(date2)];
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
@@ -175,10 +162,8 @@ function getDateFromAttribute(target, attribute, view) {
   });
 }
 
-function getTimeFromAttribute(target, attribute) {
-  return target.getAttribute(attribute).split(':').map((x) => {
-    return Number.parseInt(x);
-  });
+function getDateFromArray(arr) {
+  return new Date(arr.map((x) => Number.parseInt(x)));
 }
 
 function getDateTimeFormatted(date, hour, minute) {
@@ -243,6 +228,16 @@ function sortDates(dates, dir) {
   });
 }
 
+function sortEndDateValues(vals) {
+  if (vals.length <= 1) return vals;
+  return vals.sort((a, b) => {
+    if ('end' in a && 'end' in b) {
+      return new Date(a.end) - new Date(b.end) || new Date(a.start) - new Date(b.start);
+    }
+    return a - b;
+  });
+}
+
 function getDurationSeconds(date1, date2) {
   return (Math.floor(date2.getTime() / 1000)) - (Math.floor(date1.getTime() / 1000));
 }
@@ -302,9 +297,7 @@ function formatEntryOptionsDate(date1, date2) {
 }
 
 function createTimestamp() {
-  const { monthsShort: monthNames } = locales;
   const date = new Date();
-  // const month = monthNames[date.getMonth()].toUpperCase();
   const day = Number.parseInt(date.getDate());
   return `${day}`;
 }
@@ -331,7 +324,6 @@ export {
   compareDates,
   createDateFromFormattedString,
   createTimestamp,
-  formatDateForDisplay,
   formatDuration,
   formatEntryOptionsDate,
   formatStartEndDate,
@@ -340,6 +332,7 @@ export {
   getdatearray,
   getDateFormatted,
   getDateForStore,
+  getDateFromArray,
   getDateFromAttribute,
   getDateTimeFormatted,
   getDayOrdinal,
@@ -347,10 +340,10 @@ export {
   getDurationSeconds,
   getFormDateObject,
   getTempDates,
-  getTimeFromAttribute,
   isBeforeDate,
   isDate,
   longerThanDay,
   sortDates,
+  sortEndDateValues,
   testDate,
 };
