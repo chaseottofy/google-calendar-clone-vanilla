@@ -202,11 +202,11 @@ export default function renderViews(context, datepickerContext, store) {
   // will also trigger in instances where the user tries to create a new entry on a blank day but no categories are selected.
   async function handleBtnMainMenu() {
     const currentSidebarState = context.getSidebarState();
-    if (currentSidebarState !== 'hide') {
-      await import('../styles/sidebar.css').then(() => {
-        console.log('sidebar loaded');
-      });
-    }
+    // if (currentSidebarState !== 'hide') {
+    //   await import('../styles/sidebar.css').then(() => {
+    //     console.log('sidebar loaded');
+    //   });
+    // }
 
     if (currentSidebarState === 'hide') {
       toggleForm.onclick = handleForm;

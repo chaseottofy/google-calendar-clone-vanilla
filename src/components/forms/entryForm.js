@@ -952,15 +952,15 @@ export default function setEntryForm(context, store, datepickerContext) {
     categoryModalIcon.firstElementChild.setAttribute('fill', categoryColor);
   }
 
-  async function initForm() {
-    if (entriesFormWrapper.getAttribute('data-has-css') === 'false') {
-      setFormInitialValues();
-      await import('../../styles/aside/form.css').then(() => {
-        entriesFormWrapper.setAttribute('data-has-css', 'true');
-      });
-    } else {
-      setFormInitialValues();
-    }
-  }
-  initForm();
+  // async function initForm() {
+  //   if (entriesFormWrapper.getAttribute('data-has-css') === 'false') {
+  //     setFormInitialValues();
+  //     await import('../../styles/aside/form.css').then(() => {
+  //       entriesFormWrapper.setAttribute('data-has-css', 'true');
+  //     });
+  //   } else {
+  //   }
+  // }
+  // initForm();
+  setFormInitialValues();
 }
