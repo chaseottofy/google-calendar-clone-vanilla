@@ -149,8 +149,10 @@
   z-index: 980;
   width: 110px;
   height: 46px;
-  top: calc(100vh - 20%);
-  left: calc(100vw - 20%);
+  top: 92px;
+  left: calc(100vw - 150px);
+  /* top: 75%; */
+  /* left: 75%; */
 }
 
 .lv-view-switch {
@@ -160,7 +162,7 @@
   height: 100%;
   flex-direction: row;
   border-radius: 4px;
-  overflow:hidden;
+  overflow: hidden;
   align-items: center;
   border: 1px solid var(--mediumgrey2);
 }
@@ -217,10 +219,9 @@
 }
 
 .lv-view-switch span:hover {
-  filter:brightness(1.2);
+  filter: brightness(1.2);
 }
 
-/* queries */
 @media screen and (max-width: 840px) {
   .listview__body {
     margin-left: 62px !important;
@@ -280,7 +281,8 @@
   .listview-aside-btn {
     height: 100px;
     width: 50px;
-    top: calc(100vh - 30%);
+    left: 80%;
+    top: 70%;
   }
 
   .lv-view-switch {
@@ -291,5 +293,4 @@
     border-right: none;
     border-bottom: 1px solid var(--mediumgrey2);
   }
-  
 }

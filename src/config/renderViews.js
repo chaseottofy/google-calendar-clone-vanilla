@@ -25,7 +25,8 @@ const form = document.querySelector('.entries__form');
 
 const datepicker = document.querySelector('.datepicker');
 const datepickeroverlay = document.querySelector('.datepicker-overlay');
-const dateTimeWrapper = document.querySelector('.datetime-wrapper');
+const btntoday = document.querySelector('.btn-today');
+const prevnext = document.querySelector('.prev-next');
 const dateTimeBtn = document.querySelector('.datetime-content');
 
 const sbDatepicker = document.querySelector('.datepicker-sidebar');
@@ -47,11 +48,11 @@ const listviewBody = document.querySelector('.listview__body');
 
 const collapsebtn = document.querySelector('.collapse-view');
 
-export default function renderViews(context, datepickerContext, store, cssImports) {
+export default function renderViews(context, datepickerContext, store) {
   async function fullRender(component) {
-    if (cssImports[component]) {
-      await cssImports[component]();
-    }
+    // if (cssImports[component]) {
+    //   await cssImports[component]();
+    // }
     setViews(component, context, store, datepickerContext);
     // if (cssImports[component]) {
     //   await cssImports[component]();
@@ -202,7 +203,9 @@ export default function renderViews(context, datepickerContext, store, cssImport
       viewsContainer.classList.remove('container__calendars-sb-active');
       sidebar.classList.add('hide-sidebar');
       toggleForm.classList.remove('hide-toggle--form');
-      dateTimeWrapper.classList.remove('datetime-inactive');
+      prevnext.classList.remove('datetime-inactive');
+      btntoday.classList.remove('datetime-inactive');
+      dateTimeBtn.classList.remove('datetime-list');
       dateTimeBtn.removeAttribute('tabindex');
       listviewBody.removeAttribute('style');
       // clear categories/datepicker content when inactive
@@ -219,7 +222,9 @@ export default function renderViews(context, datepickerContext, store, cssImport
       viewsContainer.classList.add('container__calendars-sb-active');
       sidebar.classList.remove('hide-sidebar');
       toggleForm.classList.add('hide-toggle--form');
-      dateTimeWrapper.classList.add('datetime-inactive');
+      prevnext.classList.add('datetime-inactive');
+      btntoday.classList.add('datetime-inactive');
+      dateTimeBtn.classList.add('datetime-list');
       dateTimeBtn.setAttribute('tabindex', '-1');
 
       /**
@@ -342,7 +347,7 @@ export default function renderViews(context, datepickerContext, store, cssImport
   function delegateHeaderEvents(e) {
     e.preventDefault();
     const btnMainMenu = getClosest(e, '.menu');
-    const btnToday = getClosest(e, '.btn-today');
+    const btnTodayE = getClosest(e, '.btn-today');
     const btnPrev = getClosest(e, '.prev');
     const btnNext = getClosest(e, '.next');
     const dateTime = getClosest(e, '.datetime-content');
@@ -356,7 +361,7 @@ export default function renderViews(context, datepickerContext, store, cssImport
       return;
     }
 
-    if (btnToday) {
+    if (btnTodayE) {
       handleBtnToday();
       return;
     }

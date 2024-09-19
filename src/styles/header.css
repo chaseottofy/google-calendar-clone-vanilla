@@ -243,9 +243,18 @@
 .datetime-inactive {
   pointer-events: none;
   user-select: none;
+  display:none;
 }
 
-.datetime-inactive .datetime-content::after {
+.datetime-inactive .datetime-wrapper {
+  background: green !important;
+}
+
+.datetime-list {
+  margin-left: 16px;
+}
+
+/* .datetime-inactive .datetime-content::after {
   border-color: transparent transparent transparent transparent;
 }
 
@@ -254,8 +263,12 @@
 }
 
 .datetime-inactive .datetime-wrapper {
-  transform: translateX(-25%);
+  transform: translateX(-30%);
 }
+
+.datetime-inactive .btn-today {
+  display:none;
+} */
 
 .menu,
 .settings,
@@ -347,6 +360,7 @@
   text-overflow: clip;
   white-space: nowrap;
   width: auto;
+  font-family: var(--secondaryFont);
 }
 
 .select__modal::after {
@@ -408,7 +422,7 @@
 
   .btn-today,
   .select__modal {
-    font-size: 12px;
+    font-size: 13px;
     height: 28px;
   }
 
@@ -427,10 +441,6 @@
 
   .select-wrapper {
     margin: 0 6px
-  }
-
-  .select__modal {
-    padding: 0 5px;
   }
 
   .select__modal::after {
@@ -473,16 +483,11 @@
 
   .logo::after {
     font-size: 12px;
-
-    /* line-height: 36px; */
-
-    /* text-align: center; */
-
-    /* text-indent: -.5px */
   }
 
-  .header-title {
-    font-size: 16px
+  .header-title,
+  .settings {
+    display: none
   }
 
   .prev-next svg {
@@ -503,12 +508,6 @@
   .datetime-content {
     font-size: 15px;
     padding-left: 1px
-  }
-
-  .select__modal {
-    /* font-size: 10px; */
-    height: 24px;
-    padding: 0 5px
   }
 }
 
@@ -535,16 +534,7 @@
 
   .logo::after {
     font-size: 10px;
-
-    /* letter-spacing: -.5px; */
     line-height: 32px;
-
-    /* text-indent: 0 */
-  }
-
-  .header-title,
-  .settings {
-    display: none
   }
 
   .prev-next {
@@ -558,21 +548,5 @@
 
   .datetime-content {
     font-size: 14px;
-  }
-
-  .select-wrapper {
-    margin: 0 4px 0 0;
-  }
-
-  .select__modal {
-    color: transparent;
-    font-size: 0;
-    padding: 0 4px;
-  }
-
-  .select__modal::before {
-    content: attr(data-value);
-    color: var(--white2);
-    font-size: 10px !important;
   }
 }

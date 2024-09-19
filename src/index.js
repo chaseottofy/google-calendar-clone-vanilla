@@ -25,17 +25,9 @@ import context, { datepickerContext } from './context/appContext';
 import store from './context/store';
 import { setTheme } from './utilities/helpers';
 
-const cssImports = {
-  year: () => import('./styles/yearview.css').then(() => console.log('yearview.css loaded')),
-  month: () => import('./styles/monthview.css').then(() => console.log('monthview.css loaded')),
-  week: () => import('./styles/weekview.css').then(() => console.log('weekview.css loaded')),
-  day: () => import('./styles/dayview.css').then(() => console.log('dayview.css loaded')),
-  list: () => import('./styles/listview.css').then(() => console.log('listview.css loaded')),
-};
-
 /* !*************************************! */
 setTheme(context, store);
-renderViews(context, datepickerContext, store, cssImports);
+renderViews(context, datepickerContext, store);
 
 /*
 fetch('http://localhost:3001/store')

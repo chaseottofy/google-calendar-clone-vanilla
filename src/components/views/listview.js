@@ -7,7 +7,8 @@ import {
   getDateFromAttribute,
   getFormDateObject,
   longerThanDay,
-  sortEndDateValues } from '../../utilities/dateutils';
+  sortEndDateValues,
+} from '../../utilities/dateutils';
 import {
   getClosest,
   hextorgba,
@@ -26,6 +27,17 @@ export default function setListView(context, store, datepickerContext) {
   const { labels } = locales;
   let monthNames = labels.monthsShort.map((x) => x.toUpperCase());
   let weekDayNames = labels.weekdaysShort.map((x) => x.toUpperCase());
+  const listViews = {
+    tasks: {
+      header: '',
+      dom: [],
+    },
+    calendar: {
+      header: '',
+      dom: [],
+    },
+  };
+
   /** ************************************* */
 
   /**
@@ -283,17 +295,39 @@ export default function setListView(context, store, datepickerContext) {
     entries = null;
   };
 
+  /**
+   * list propogates either all active tasks or just tasks due after current date
+   * 'listViews' stores result of both types
+   * @param {MouseEvent} e input change event
+   * @param {object} activeEntries
+   * @param {object} entries
+   */
   const handleReInit = (e, activeEntries, entries) => {
-    const interfaceType = e.target.value;
-    listview.setAttribute('data-listview-type', interfaceType);
-    setupListView(activeEntries, entries);
+    const dataType = e.target.value;
+    listview.setAttribute('data-listview-type', dataType);
+    if (listViews.calendar.dom.length > 0) {
+      listviewBody.innerText = '';
+      for (const elem of listViews[dataType].dom) {
+        listviewBody.append(elem);
+      }
+      dateTimeTitle.textContent = listViews[dataType].header;
+    } else {
+      setupListView(activeEntries, entries);
+      listViews[dataType].dom.push(...listviewBody.children);
+      listViews[dataType].header = dateTimeTitle.textContent;
+    }
   };
 
   const initListView = () => {
     const activeEntries = store.getActiveEntries();
     let entries = store.sortBy(activeEntries, 'start', 'desc');
+
     store.setResetPreviousViewCallback(resetListview);
     setupListView(activeEntries, entries);
+
+    listViews.tasks.dom.push(...listviewBody.children);
+    listViews.tasks.header = dateTimeTitle.textContent;
+
     listview.onclick = delegateListview;
 
     for (const input of listviewSwitchBtns) {

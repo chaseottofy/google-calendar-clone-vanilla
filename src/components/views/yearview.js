@@ -8,17 +8,19 @@ const yearviewGrid = document.querySelector('.calendar__yearview');
 const sidebar = document.querySelector('.sidebar');
 
 export default function setYearView(context, store, datepickerContext) {
+  const currDate = context.getDate();
+  const currDateSelected = context.getDateSelected();
 
   function renderSidebarDatepicker() {
     if (!sidebar.classList.contains('hide-sidebar')) {
-      datepickerContext.setDate(context.getYear(), context.getMonth(), context.getDay());
+      datepickerContext.setDateFromDateObj(currDate);
       setSidebarDatepicker(context, store, datepickerContext);
     }
   }
 
   function renderMonthCells() {
     yearviewGrid.innerText = '';
-    let year = context.getYear();
+    let year = currDate.getFullYear();
     let entries = store.getGroupedYearEntries(store.getYearEntries(year));
     for (let i = 0; i < 12; i++) {
       if (entries[i]) {
@@ -57,7 +59,7 @@ export default function setYearView(context, store, datepickerContext) {
     cellHeaderRowOne.classList.add('yv-monthcell__header--rowone');
     cellHeaderRowOne.textContent = labels.monthsLong[month];
 
-    if (month === context.getMonth() && year === context.getYear()) {
+    if (month === currDate.getMonth() && year === currDate.getFullYear()) {
       cellHeaderRowOne.classList.add('yvmht-current');
       cellWrapper.classList.add('cell-current');
     }
@@ -79,6 +81,7 @@ export default function setYearView(context, store, datepickerContext) {
 
     function populateMonths() {
       const prevmonthstart = daysInPrevMonth - firstDayOfMonth;
+      // console.log(prevmonthstart);
 
       const createyvcell = (day, classname, nyear, nmonth, current) => {
         const daywrapper = document.createElement('div');
@@ -88,25 +91,19 @@ export default function setYearView(context, store, datepickerContext) {
           daywrapper.classList.add(classname);
         }
 
+        daywrapper.textContent = day;
         if (current) {
           daywrapper.setAttribute('data-yv-date', `${nyear}-${nmonth}-${day}`);
-          daywrapper.textContent = day;
-          // check if day is selected
-          if (day === context.getDateSelected() && nmonth === context.getMonth() && nyear === context.getYear()) {
+          if (day === currDateSelected && nmonth === currDate.getMonth() && nyear === currDate.getFullYear()) {
             daywrapper.classList.add('yvmb-selected');
           }
-
-          // check if day is today
           if (day === td && nmonth === tm && nyear === ty) {
             daywrapper.classList.add('yvmb-today');
           }
-
-          // check if day has entry
           if (entries[day]) {
             daywrapper.classList.add('yvmb-has-entry');
           }
         }
-
         return daywrapper;
       };
 
@@ -129,6 +126,19 @@ export default function setYearView(context, store, datepickerContext) {
           true,
         ));
       }
+
+      const nextmonth = new Date(year, month + 1, 1);
+      const nextmonthend = 42 - cellBody.children.length;
+      for (let i = 0; i < nextmonthend; i++) {
+        cellBody.append(createyvcell(
+          i + 1,
+          'yvmb-prevnext',
+          nextmonth.getFullYear(),
+          nextmonth.getMonth(),
+          false,
+        ));
+      }
+      // console.log(cellBody.children.length)
     }
 
     cellHeader.append(cellHeaderRowOne, cellHeaderWeekDayNames);
@@ -162,15 +172,15 @@ export default function setYearView(context, store, datepickerContext) {
     renderMonthCells();
     yearviewGrid.onmousedown = delegateYearEvents;
     store.setResetPreviousViewCallback(resetYearview);
-    const currentmonth = document?.querySelector('.cell-current');
-    if (currentmonth) {
-      setTimeout(() => {
-        yearviewGrid.scrollTo({
-          top: Number.parseInt(currentmonth.offsetTop) - 100,
-          behavior: 'instant',
-        });
-      }, 4);
-    }
+    // const currentmonth = document?.querySelector('.cell-current');
+    // if (currentmonth) {
+    //   setTimeout(() => {
+    //     yearviewGrid.scrollTo({
+    //       top: Number.parseInt(currentmonth.offsetTop) - 100,
+    //       behavior: 'instant',
+    //     });
+    //   }, 4);
+    // }
   }
   initYearview();
 }

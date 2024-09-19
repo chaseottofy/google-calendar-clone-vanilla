@@ -22,8 +22,11 @@ export default function setHeader(context, component) {
   const configHeader = (borderstyle, componentTitle) => {
     header.style.borderBottom = borderstyle;
     dateTimeTitle.textContent = componentTitle;
-    datetimeWrapper.classList.remove('datetime-inactive');
+    // datetimeWrapper.classList.remove('datetime-inactive');
+    prevnext.classList.remove('datetime-inactive');
+    btntoday.classList.remove('datetime-inactive');
     datetimeWrapper.style.paddingRight = '0';
+    datetimeContent.classList.remove('datetime-list');
     datetimeContent.removeAttribute('style');
     prevnext.removeAttribute('style');
   };
@@ -69,7 +72,9 @@ export default function setHeader(context, component) {
       header.style.borderBottom = '1px solid var(--mediumgrey1)';
       prevnext.setAttribute('style', 'pointer-events:none;');
       // prevnext.setAttribute("style", "opacity: 0; pointer-events:none;");
-      datetimeWrapper.classList.add('datetime-inactive');
+      prevnext.classList.add('datetime-inactive');
+      btntoday.classList.add('datetime-inactive');
+      datetimeContent.classList.add('datetime-list');
       break;
     }
     default: {

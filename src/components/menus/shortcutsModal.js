@@ -3,6 +3,7 @@ const shortcutsModal = document.querySelector('.shortcuts__modal');
 const shortcutsModalContent = document.querySelector('.shortcuts-modal-content');
 const shortcutsModalClose = document.querySelector('.close-shortcuts-modal');
 const notifyShortcutsStatus = document.querySelector('.keyboard-disabled-sm-two');
+// const shortCutStyles = () => import('../../styles/aside/shortcuts.css').then(() => console.log('shortcuts.css loaded'));
 
 export default function handleShortCutsModal(store) {
   function createShortcut(key, description) {

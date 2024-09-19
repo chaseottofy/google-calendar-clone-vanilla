@@ -1,4 +1,4 @@
-.monthview__top {
+/* .monthview__top {
   border-top: 1px solid var(--mediumgrey1);
   display: flex;
   justify-content: space-between;
@@ -6,8 +6,9 @@
   align-items: center;
   text-align: center;
   width: 100%;
+  background-color: grey;
   min-width: 100%;
-}
+} */
 
 .monthview__top-weekname {
   font-weight: 500;
@@ -24,17 +25,17 @@
   border-left: var(--bordergrey);
 }
 
-.monthview--calendar {
+/* .monthview--calendar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
   height: calc(100% - 12px);
   width: 100%;
-}
+} */
 
-.five-weeks {
+/* .five-weeks {
   grid-template-rows: repeat(5, 1fr);
-}
+} */
 
 .monthview--day {
   display: grid;
@@ -417,7 +418,7 @@
   }
 
   .monthview--title {
-    font-size: 8px;
+    font-size: 9px;
   }
 }
 

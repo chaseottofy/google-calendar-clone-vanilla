@@ -33,6 +33,8 @@
 :root {
   --primaryFont: "Roboto", sans-serif, roboto, -apple-system, ui-sans-serif, system-ui, blinkmacsystemfont, segoe ui, helvetica neue, arial, noto sans, sans-serif, monospace;
   --secondaryFont: "Google Sans", sans-serif, georgia, sans-serif, -apple-system, ui-sans-serif, system-ui, blinkmacsystemfont, segoe ui, roboto, helvetica neue, arial, noto sans, sans-serif, monospace;
+  --year-dim: 260px;
+  --year-body: 240px;
   --taskcolor0: #fff;
   --primarylight1: #4c9cf8;
   --primarylight2: #4BA0F4;

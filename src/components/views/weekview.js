@@ -740,11 +740,11 @@ export default function setWeekView(context, store, datepickerContext) {
     // need to use onclick to delegate header events in order to allow for tab + enter
     weekviewHeader.onclick = delegateWvHeader;
     store.setResetPreviousViewCallback(resetWeekviewBoxes);
-    if (firstY !== null) {
-      setTimeout(() => {
-        weekviewGrid.scrollTo({ top: Math.abs((+firstY * 12.5) - 25), behavior: 'instant' });
-      }, 4);
-    }
+    // if (firstY !== null) {
+    //   setTimeout(() => {
+    //     weekviewGrid.scrollTo({ top: Math.abs((+firstY * 12.5) - 25), behavior: 'instant' });
+    //   }, 4);
+    // }
   };
 
   initWeek();

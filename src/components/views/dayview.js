@@ -718,7 +718,7 @@ export default function setDayView(context, store, datepickerContext) {
       setTimeout(() => {
         dvGrid.scrollTo({
           top: settop,
-          behavior: 'instant',
+          behavior: 'smooth',
         });
       }, 4);
     } else {
@@ -726,7 +726,7 @@ export default function setDayView(context, store, datepickerContext) {
       setTimeout(() => {
         dvGrid.scrollTo({
           top: hour - 25 <= 0 ? 0 : hour - 25,
-          behavior: 'instant',
+          behavior: 'smooth',
         });
       }, 4);
     }

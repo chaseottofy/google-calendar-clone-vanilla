@@ -1,17 +1,33 @@
 import setHeader from '../components/menus/header';
 
-const setDayView = () => import('../components/views/dayview').then((module) => module.default);
-const setListView = () => import('../components/views/listview').then((module) => module.default);
-const setMonthView = () => import('../components/views/monthview').then((module) => module.default);
-const setWeekView = () => import('../components/views/weekview').then((module) => module.default);
-const setYearView = () => import('../components/views/yearview').then((module) => module.default);
+const hasCSS = new Set();
 
 const views = {
-  year: document.querySelector('.yearview'),
-  month: document.querySelector('.monthview'),
-  week: document.querySelector('.weekview'),
-  day: document.querySelector('.dayview'),
-  list: document.querySelector('.listview'),
+  year: [
+    document.querySelector('.yearview'),
+    () => import('../components/views/yearview').then((module) => module.default),
+    () => import('../styles/yearview2.css').then(() => hasCSS.add('year')),
+  ],
+  month: [
+    document.querySelector('.monthview'),
+    () => import('../components/views/monthview').then((module) => module.default),
+    () => import('../styles/monthview.css').then(() => hasCSS.add('month')),
+  ],
+  week: [
+    document.querySelector('.weekview'),
+    () => import('../components/views/weekview').then((module) => module.default),
+    () => import('../styles/weekview.css').then(() => hasCSS.add('week')),
+  ],
+  day: [
+    document.querySelector('.dayview'),
+    () => import('../components/views/dayview').then((module) => module.default),
+    () => import('../styles/dayview.css').then(() => hasCSS.add('day')),
+  ],
+  list: [
+    document.querySelector('.listview'),
+    () => import('../components/views/listview').then((module) => module.default),
+    () => import('../styles/listview.css').then(() => hasCSS.add('list')),
+  ],
 };
 
 const viewsKeys = ['year', 'month', 'week', 'day', 'list'];
@@ -27,58 +43,45 @@ export default function setViews(
 
   function hideViews() {
     const resetPrevView = store.getResetPreviousViewCallback();
-    console.log(resetPrevView, prev1, prev2);
     if (prev1 !== null && resetPrevView !== null && prev1 !== prev2) {
       resetPrevView();
     }
 
     for (const key of viewsKeys) {
       if (key !== component) {
-        views[key].classList.add('hide-view');
+        views[key][0].classList.add('hide-view');
       }
     }
   }
 
   async function initView(comp) {
-    context.setComponent(comp);
+    const [view, setView, setCSS] = views[comp];
     setHeader(context, comp);
-    views[comp].classList.remove('hide-view');
+    context.setComponent(comp);
 
-    switch (comp) {
-      case 'day': {
-        const dayViewModule = await setDayView();
-        dayViewModule(context, store, datepickerContext);
-        break;
-      }
-      case 'week': {
-        const weekViewModule = await setWeekView();
-        weekViewModule(context, store, datepickerContext);
-        break;
-      }
-      case 'month': {
-        const monthViewModule = await setMonthView();
-        monthViewModule(context, store, datepickerContext);
-        break;
-      }
-      case 'year': {
-        const yearViewModule = await setYearView();
-        yearViewModule(context, store, datepickerContext);
-        break;
-      }
-      case 'list': {
-        const listViewModule = await setListView();
-        listViewModule(context, store, datepickerContext);
-        break;
-      }
-      default: {
-        // setMonthView(context, store, datepickerContext);
-        // monthComponent.classList.remove('hide-view');
-        break;
-      }
+    if (!hasCSS.has(comp)) {
+      await setCSS();
     }
-  }
 
+    const viewModule = await setView();
+    viewModule(context, store, datepickerContext);
+    view.classList.remove('hide-view');
+  }
   hideViews();
   document.title = context.getMonthName();
   initView(component);
 }
+// const setDayView = () => import('../components/views/dayview').then((module) => {
+//   module.default();
+// });
+// const setListView = () => import('../components/views/listview').then((module) => module.default);
+// const setMonthView = () => import('../components/views/monthview').then((module) => module.default);
+// const setWeekView = () => import('../components/views/weekview').then((module) => module.default);
+// const setYearView = () => import('../components/views/yearview').then((module) => module.default);
+// const cssImports = {
+//   year: () => import('../styles/yearview2.css').then(() => console.log('yearview.css loaded')),
+//   month: () => import('../styles/monthview.css').then(() => console.log('monthview.css loaded')),
+//   week: () => import('../styles/weekview.css').then(() => console.log('weekview.css loaded')),
+//   day: () => import('../styles/dayview.css').then(() => console.log('dayview.css loaded')),
+//   list: () => import('../styles/listview.css').then(() => console.log('listview.css loaded')),
+// };
