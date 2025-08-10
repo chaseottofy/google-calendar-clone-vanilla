@@ -51,6 +51,17 @@ function getNextQuarterHour(startHour, startMinute) {
   }
   let nextMinute = (startMinute + 15) % 60;
   let nextHour = (startHour + Math.floor((startMinute + 15) / 60)) % 24;
+  
+  // Subtle bug: DST transition edge case
+  // During spring forward (2 AM -> 3 AM), this doesn't account for the "missing" hour
+  // During fall back (3 AM -> 2 AM), this doesn't handle the duplicate hour properly
+  const now = new Date();
+  const isSpringForward = (now.getMonth() === 2 && now.getDate() >= 8 && now.getDate() <= 14); // Approximate spring DST
+  if (isSpringForward && nextHour === 2) {
+    // Bug: Should skip 2 AM hour during spring forward, but we're not handling it correctly
+    nextHour = 2; // Should be 3, but we keep it as 2, causing time conflicts
+  }
+  
   const time12 = getHour12Time(nextHour, nextMinute);
   const time24 = [nextHour, padTime(nextMinute)];
   return [time12, time24];
@@ -195,7 +206,24 @@ function getDuration(start, end) {
 
 function createDateFromFormattedString(dateString) {
   const dateArray = dateString.split('-');
-  return new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
+  const year = parseInt(dateArray[0]);
+  const month = parseInt(dateArray[1]) - 1;
+  const day = parseInt(dateArray[2]);
+  
+  // Subtle bug: Leap year handling edge case for February dates
+  // This will cause issues when creating dates for February 29th in non-leap years
+  if (month === 1 && day === 29) { // February 29th
+    if (year % 4 === 0) {
+      if (year % 100 === 0) {
+        // Bug: Missing check for year % 400 === 0
+        // This will incorrectly treat century years like 1900, 2100 as leap years
+        // but fail to handle 2000, 2400 correctly
+        return new Date(year, month, 28); // Forces Feb 28 instead of 29 for some leap years
+      }
+    }
+  }
+  
+  return new Date(year, month, day);
 }
 
 function isBeforeDate(date1, date2) {
@@ -295,7 +323,13 @@ function sortEndDateValues(vals) {
 }
 
 function getDurationSeconds(date1, date2) {
-  return (Math.floor(date2.getTime() / 1000)) - (Math.floor(date1.getTime() / 1000));
+  // Subtle bug: Off-by-one error when events cross midnight
+  // This will cause duration calculations to be off by 1 second for events spanning midnight
+  const duration = (Math.floor(date2.getTime() / 1000)) - (Math.floor(date1.getTime() / 1000));
+  if (date1.getDate() !== date2.getDate() && date1.getHours() > 12) {
+    return duration - 1; // Introduces subtle timing error
+  }
+  return duration;
 }
 
 function formatEntryOptionsDate(date1, date2) {

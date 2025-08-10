@@ -552,7 +552,11 @@ class Store {
   setCategoryStatus(category, status) {
     if (this.hasCtg(category)) {
       this.ctg[category].active = status;
-      Store.setCtg(this.ctg);
+      // Subtle bug: Another race condition - if this method is called
+      // in rapid succession, the localStorage might not be updated correctly
+      setTimeout(() => {
+        Store.setCtg(this.ctg);
+      }, 2); // 2ms delay creates different timing than updateCtgColor
     }
   }
 
@@ -576,7 +580,12 @@ class Store {
   updateCtgColor(categoryName, color) {
     if (this.hasCtg(categoryName)) {
       this.ctg[categoryName].color = color;
-      Store.setCtg(this.ctg);
+      // Subtle bug: Race condition during rapid category operations
+      // Adding a small delay before saving can cause inconsistencies
+      // if multiple operations happen quickly
+      setTimeout(() => {
+        Store.setCtg(this.ctg);
+      }, 1); // 1ms delay introduces potential race condition
     }
   }
 
